@@ -242,25 +242,29 @@ public class Dred
   {
     closeAll();
     if (sessions.isEmpty()) 
-    { sessionSocket.close();         
+    { if (sessionSocket!=null) sessionSocket.close();         
       System.exit(0); 
     }
   }
   
   /** Start a Dred server on the given port and return it; choose
-      an ephemeral port if port==0.
+      an ephemeral port if port==0 and we're not on Windows.
   */
   public static int startServer(int port)
-  {
+  { boolean pseudoServer = false;
     String user = System.getProperty("user.name");
     try
-    {
-      sessionSocket = new SessionSocket(port, prefs);
-      port = sessionSocket.getPort();
-      prefs.putInt("port", port);
-      try { prefs.sync(); } catch (BackingStoreException ex) { ex.printStackTrace(); }
-
-      final JFrame frame = new JFrame("[[[Dred serving " + user + " at " + port + "]]]");
+    { if (port>0 || (File.separator.equals("/") && port>=0))
+      { 
+        sessionSocket = new SessionSocket(port, prefs);
+        port = sessionSocket.getPort();
+        prefs.putInt("port", port);
+        try { prefs.sync(); } catch (BackingStoreException ex) { ex.printStackTrace(); }
+      }
+      else
+        pseudoServer = true;
+      
+      final JFrame frame = new JFrame(pseudoServer ? "[[[Dred]]]" : "[[[Dred serving " + user + " at " + port + "]]]");
       frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
       frame.addWindowListener(new WindowAdapter()
       {
@@ -271,9 +275,15 @@ public class Dred
       });
       frame.setLayout(new GUIBuilder.ColLayout(-1));
       
-      JLabel label = new JLabel("<html><center>Dred<br></br>serving " + user + "<br></br>at " + port+"</center></html>");
+      JLabel label = new JLabel
+      ("<html><center>Dred<br></br>serving " 
+      + user 
+      + (pseudoServer ? "" : "<br></br>at " + port)
+      +"</center></html>"
+      );
       label.setHorizontalAlignment(SwingConstants.CENTER);
       frame.add(label);
+      
       JButton button = new JButton("Open");
       button.addActionListener(new ActionListener()
       {
@@ -283,7 +293,17 @@ public class Dred
         }
       });
       frame.add(button);
-      button.setToolTipText("Open an editing session");
+      button.setToolTipText("Open an editing session on an existing file");
+      button = new JButton("New");
+      button.addActionListener(new ActionListener()
+      {
+        public void actionPerformed(ActionEvent ev)
+        {
+          startLocalSession(null);
+        }
+      });
+      frame.add(button);
+      button.setToolTipText("Open an editing session on a new file");
             
       button = new JButton("Close All");
       frame.add(button);
@@ -309,9 +329,9 @@ public class Dred
 
       frame.setIconImage(EditorFrame.dnought.getImage());
       frame.pack();
-      frame.setVisible(true);
       frame.setLocationRelativeTo(null);
-      frame.setState(JFrame.ICONIFIED);
+      frame.setVisible(true);
+      if (port!=0) frame.setState(JFrame.ICONIFIED);
     }
     catch (IOException ex)
     {
@@ -386,6 +406,8 @@ public class Dred
 
 
 }
+
+
 
 
 

@@ -65,19 +65,20 @@ filenames.
 <p>   
    Make a shortcut to Dred.jar in the distribution directory. It makes
    sense for this shortcut to be placed somewhere on your desktop. When
-   you click on the shortcut Dred will start a server associated with an
-   an iconified server control.
+   you click on the shortcut Dred will start a pseudo-server associated with an
+   an iconified server control. 
 </p>
 
 <p>   
    The shortcut should have a target of:  
 <pre>
-   java -DDREDBINDINGS=<i>the-full-path-to-your-bindings-file</i> -jar <i>the-full-path-to-</i><tt>Dred.jar</tt>
+   javaw -DDREDBINDINGS=<i>the-full-path-to-your-bindings-file</i> -jar <i>the-full-path-to-</i><tt>Dred.jar</tt>
 </pre>
 </p>
 
 <p>   
-   Use the Open Button on the server control to open files.
+   Use the Open Button on the server control to open existing files, and the New
+   button to open new files. 
 </p>
 
 <p>   
