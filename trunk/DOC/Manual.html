@@ -174,13 +174,13 @@ the <i>Find</i>, and the <i>Replace</i> texts, respectively.
 
 <p>
 The <i>FindDown</i> action selects the next (<i>FindUp</i> previous) instance of the
-<i>Find</i> text. The <i>Edit</i> menu has radiobuttons on it that
+<i>Find</i> minitext. The <i>Edit</i> menu has radiobuttons on it that
 control the interpretation of the pattern as literal or regular expression.
 </p>
 
 <p> <b>If the current selection is an instance of the Find text </b>
 then the <i>ReplaceDown</i> action saves the current selection in the
-cut-buffer and replaces it with the <i>Repl</i> text -- leaving the
+cut-buffer and replaces it with the <i>Repl</i> minitext -- leaving the
 cursor to the right of the mark. The <i>ReplaceUp</i> button does the
 same, but leaves the cursor to the left of the mark.  </p>
 
@@ -198,11 +198,10 @@ content is interpreted as a regexp substitution (<tt>$n</tt> replaces the
 then acts as the <i>FindUp</i> action.  </p>
 
 <p>The <i>ClearArgument</i> action moves the keyboard focus
-into the Argument minitext area and erases the text that is
+into the <i>Argument</i> minitext area and erases the text that is
 there. <i>ClearFind</i>, and <i>ClearRepl</i> behave analogously in the
-Find and Repl minitexts.</p>
-
-
+<i>Find</i> and <i>Repl</i> minitexts. 
+</p>
 
 <h3>Undoing</h3>
 <p>
@@ -235,6 +234,37 @@ the cursor from the document without affecting the cut buffer.
 <p>
 The  <i>Swap2</i> action swaps the two characters immediately to the left
 of the cursor without affecting the cut buffer.
+</p>
+
+<h3>
+Search and Replace in Practice
+</h3>
+<p>
+One way of replacing the next instance of
+"FOO" with "BAR" is to type the keystrokes bound to
+<pre>
+      <i>ClearFind</i> F O O <i>FindSelDown</i> <i>ClearRepl</i> B A R <i>ReplaceDown</i>
+</pre>
+Replacing the following instance just requires 
+<pre>
+      <i>FindSelDown</i> <i>ReplaceDown</i>
+</pre>
+since the <i>Find</i> and <i>Repl</i> minitexts are already 
+set to the right pattern and replacement.
+</p>
+
+<p>
+        The <i>ReplaceAll</i> action replaces (without any interaction) all
+        instances of the <i>Find</i> minitext within the current selection
+        with the <i>Repl</i> minitext, and selects the resulting transformed
+        text. The original selection is preserved in the cut buffer, so
+        this action can be undone with <i>SwapSel</i>.        
+</p>
+<p>
+        If you want to "approve" each replacement interactively,
+        then just use <i>FindSelDown</i> <i>ReplaceDown</i> in sequence
+        repeatedly, undoing any replacement you don't approve of with
+        <i>SwapSel</i>. 
 </p>
 
 <h2>Opening and saving files</h2>
@@ -306,6 +336,7 @@ using the encoding selector provided in the file browser.
 <b>$Date$</b>
 </pre>
 </body>
+
 
 
 

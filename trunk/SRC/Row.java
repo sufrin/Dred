@@ -14,9 +14,10 @@ import  javax.swing.*;
         @version $Id$
 */
 public class Row extends JPanel
-{ public Row() { setLayout(new RowLayout()); }
+{ public Row() { setLayout(new RowLayout(-1, true)); }
   public Row(double just) { super(); setLayout(new RowLayout(just)); }
 }
+
 
 
 

@@ -1,6 +1,10 @@
 
 package org.sufrin.dred;
 
+import GUIBuilder.*;
+import java.awt.BorderLayout;
+import java.awt.event.*;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
@@ -8,6 +12,7 @@ import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
+import javax.swing.JWindow;
 import GUIBuilder.Col;
 
 /**
@@ -23,7 +28,7 @@ public class StyleFrame extends JFrame
   
   private final EditorFrame session;
 
-  JPanel col = null;
+  JPanel col = null, row = null;
   
   protected boolean colDefined()
   { if (col==null) 
@@ -33,50 +38,69 @@ public class StyleFrame extends JFrame
     return true;
   }
 
-  JTabbedPane pane      = new JTabbedPane();
-  JMenuBar    bar       = new JMenuBar();
+  JTabbedPane pane      = new JTabbedPane(JTabbedPane.TOP, JTabbedPane.WRAP_TAB_LAYOUT);
+  JPanel      bar       = new Row();
+  JPanel      base      = new JPanel();
   CheckItem   checkItem = null;
-
+  
+  public void setIconified(boolean iconified)
+  { if (iconified) 
+       setVisible(false); 
+    else 
+       setVisible(checkItem.getState());  
+  }
+  
   public StyleFrame(EditorFrame frame, CheckItem checkItem)
-  {
-    super("Styles");
+  { super(frame.doc.getFileName().getName()+" (styles)");
+    // setUndecorated(true);
     session = frame;
     this.checkItem = checkItem;
-    setDefaultCloseOperation(EditorFrame.DO_NOTHING_ON_CLOSE);
-    setIconImage(EditorFrame.dnought.getImage());
-    add(pane);
-    setJMenuBar(bar);
+    base.setLayout(new BorderLayout());
+    base.add(pane, "Center");
+    base.setBorder(BorderFactory.createTitledBorder("Styles"));
+    base.add(bar, "South");
+    add(base);
     addMenus();
     addBindings();
+    addWindowListener
+    (new WindowAdapter()
+    { public void windowIconified(WindowEvent e)
+      {
+        StyleFrame.this.checkItem.doClick();
+      }
+    }
+    );
     pack();
   }
   
   protected void addMenus()
-  { JMenu menu = new JMenu("Frame");
-    menu.setToolTipText("Styleframe actions");
-    bar.add(menu);
-    menu.add
+  { 
+    bar.setToolTipText("Styleframe actions");
+    bar.add(new JButton
     ( new Act("Close", "Close this style panel")
       { public void run() { checkItem.doClick(); }
       }
-    );
-    menu.add
-    ( new Act("Place", "Put this panel next to its frame")
+    ));
+    bar.add(new JButton
+    ( new Act("Frame", "Put this panel next to its frame")
       { public void run() { checkItem.doClick(); checkItem.doClick(); }
       }
-    );
+    ));
   }
   
   public void addBindings()
   { if (EditorFrame.protoBindings != null)
     for (Bindings.Binding binding: EditorFrame.protoBindings)
     { int len=binding.length();
+      if (binding.matches("style", "---")  && colDefined())
+         newRow();
+      else
       if (binding.matches("style", "-")  && colDefined())
-         col.add(new JSeparator());
+         row.add(new JSeparator());
       else
       if (binding.matches("style", "--") && colDefined())
-      {  col.add(new JSeparator());
-         col.add(new JSeparator());
+      {  row.add(new JSeparator());
+         row.add(new JSeparator());
       }
       else
       if (len>2 && binding.matches("style", "sheet"))
@@ -84,42 +108,42 @@ public class StyleFrame extends JFrame
       else
       if (len>2 && binding.matches("style", "block") && colDefined())
       {  
-        col.add(formatButton(binding, true, 2));
+        row.add(formatButton(binding, true, 2));
       }
       else
       if (len>2 && binding.matches("style", "line") && colDefined())
       {  
-        col.add(formatButton(binding, false, 2));
+        row.add(formatButton(binding, false, 2));
       }
       else
       if (len>3 && binding.matches("style", "latex", "env") && colDefined())
       { 
-        col.add(formatButton(binding, true, 3, "\\begin{%ARG%}", "\\end{%ARG%}"));
+        row.add(formatButton(binding, true, 3, "\\begin{%ARG%}", "\\end{%ARG%}"));
       }
       else
       if (len>3 && binding.matches("style", "latex", "macro") && colDefined())
       { 
-        col.add(formatButton(binding, false, 3, "\\%ARG%{", "}"));
+        row.add(formatButton(binding, false, 3, "\\%ARG%{", "}"));
       }
       else
       if (len>3 && binding.matches("style", "xml", "block") && colDefined())
       { 
-        col.add(formatButton(binding, true, 3, "<%ARG%>", "</%ARG%>"));
+        row.add(formatButton(binding, true, 3, "<%ARG%>", "</%ARG%>"));
       }
       else
       if (len>3 && binding.matches("style", "xml", "line") && colDefined())
       { 
-        col.add(formatButton(binding, false, 3, "<%ARG%>", "</%ARG%>"));
+        row.add(formatButton(binding, false, 3, "<%ARG%>", "</%ARG%>"));
       }
       else
       if (len>3 && binding.matches("style", "form", "block") && colDefined())
-      { col.add
+      { row.add
         (  formatForm(binding, true, 3)
         );
       }
       else
       if (len>3 && binding.matches("style", "form", "line") && colDefined())
-      { col.add
+      { row.add
         (  formatForm(binding, false, 3)
         );
       }
@@ -135,7 +159,14 @@ public class StyleFrame extends JFrame
   void newCol(String title)
   {
     col = new Col(-1);
+    row = col;
     pane.add(title, col);
+  }
+  
+  void newRow()
+  {
+    row = new Row();
+    col.add(row);
   }
 
   protected JButton formatButton(Bindings.Binding b, boolean block, int fromField)
@@ -228,6 +259,7 @@ public class StyleFrame extends JFrame
      ); 
   }
 }
+
 
 
 

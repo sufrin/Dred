@@ -284,7 +284,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       });      
 
       toolMenu = menu = addMenu("Tools");
-      menu.add(new CheckItem("Style Buttons", false)
+      menu.add(new CheckItem("Styles", false)
       {
         public void run()
         {
@@ -294,8 +294,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
           }
           if (styleFrame!=null) 
           {  styleFrame.setVisible(state);
-             if (state)
-             styleFrame.setExtendedState(EditorFrame.NORMAL);
+             if (state) styleFrame.setExtendedState(EditorFrame.NORMAL);
              
              Rectangle b = session.getBounds();
              Insets i = session.getInsets();
@@ -525,11 +524,14 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   
   @ActionMethod(label="Undent", tip="Remove a leading space from each line of the selection")
   public void doUndent() { doShiftLeft(" "); }
+  
   @ActionMethod(label="Indent", tip="Add a leading space to each line of the selection")
   public void doIndent() { doShiftRight(" "); }
-  @ActionMethod(label="Undent", tip="Remove the text in .... from the start of each line of the selection")
+  
+  @ActionMethod(label="UnPrefix", tip="Remove the text in .... from the start of each line of the selection")
   public void doUnPrefix() { doShiftLeft(text.argument.getText()); }
-  @ActionMethod(label="Indent", tip="Add the text in .... to the start of each line of the selection")
+  
+  @ActionMethod(label="Prefix", tip="Add the text in .... to the start of each line of the selection")
   public void doPrefix() { doShiftRight(text.argument.getText()); }
   
   @ActionMethod(label="Next bracket", tip="Find next (balanced) bracket that matches the opening bracket at the cursor")
@@ -538,7 +540,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   @ActionMethod(label="Prev bracket", tip="Find previous (balanced) bracket that matches the opening bracket at the cursor")
   public void doMatchUp() { doc.matchUp(); }
   
-  @ActionMethod(label="Unicode Character", tip="Insert Unicode character whose (hex) code is in ....")
+  @ActionMethod(label="Unicode -> Character", tip="Insert Unicode character whose (hex) code is in ....")
   public void doUnicode()
   { ed.doInsertUnicode(text.argument.getText()); 
     edFocus(); 
@@ -609,7 +611,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   /** File has changed since it was saved or loaded */
   protected boolean safe = false;
 
-  JFrame styleFrame = null;
+  StyleFrame styleFrame = null;
 
   /** The TextBar */
   TextBar text = new TextBar();
@@ -702,6 +704,16 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       public void windowClosing(WindowEvent e)
       {
         doQuit();
+      }
+      
+      public void windowDeiconified(WindowEvent e)
+      { 
+        if (styleFrame != null) styleFrame.setIconified(false);
+      }
+      
+      public void windowIconified(WindowEvent e)
+      {
+        if (styleFrame != null) styleFrame.setIconified(true);
       }
     });
     
@@ -1067,10 +1079,22 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
 
   /** Transform the current selection using the specified TextTransform */
   public void doTransformSelection(TextTransform tr)
-  { Document.Region region       = doc.selectedRegion;
-    String          selection    = hasNonemptySelection() ? doc.getSelection() : "";
-    String          startContext = doc.lineAt(region.starty).toString().substring(0, region.startx);
-    String          endContext   = doc.lineAt(region.endy).toString().substring(region.endx);
+  { 
+    Document.Region region = doc.selectedRegion.copy();
+    int             starty = region.starty, startx = region.startx, 
+                    endy   = region.endy,   endx   = region.endx;
+    String          selection = null;
+    if (hasNonemptySelection()) 
+    {  
+      selection = doc.getSelection();
+    }
+    else 
+    { endy = starty = doc.getY();
+      endx = startx = doc.getX();
+      selection = "";
+    }
+    String          startContext = doc.lineAt(starty).toString().substring(0, startx);
+    String          endContext   = doc.lineAt(endy).toString().substring(endx);
     if (hasNonemptySelection()) clippedSelection();
     doc.pasteAndSelect(tr.transform(startContext, selection, endContext), true);
   }
@@ -1788,6 +1812,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
 
 
 
