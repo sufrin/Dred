@@ -2,8 +2,8 @@
 <head>
     <title>
         Dred -- under the hood
-        <link rel="shortcut icon" href="favicon.png" type="image/png" ></link></head>
     </title>
+    <link rel="shortcut icon" href="favicon.png" type="image/png" ></link></head>
 </head>
 <body>
         
@@ -85,6 +85,17 @@ provide a port number (####) in the Argument minitext), and connect to it as
 <tt>localhost:####/</tt>. You'll get back a panel (implemented as an HTML
 form) that lets you control the level of detail of the logging output,
 and lets you inspect the last few thousand logging events incrementally.
+
+<h3>Windows</h3>
+<p> It's possible, though not much use, to run Dred in server mode on
+Windows. By preventing the opening of local ports without administrator
+permission XP Service pack 2 makes it slightly tedious to do this.
+The best thing to do (if you are sure you want a proper server and not a
+pseudo-server) is to allocate a fixed port for Dred and make appropriate
+arrangements with the administrator to unblock that port. If your
+administrator wants to know why this is secure, explain that Dred only
+accepts connections from the host on which it's running.  </p>
+
 <pre>
 <b>Bernard Sufrin</b>
 <b>$Revision$</b>
@@ -92,5 +103,6 @@ and lets you inspect the last few thousand logging events incrementally.
 </pre>
 </body>
 </html>
+
 
 

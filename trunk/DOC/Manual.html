@@ -62,28 +62,14 @@ filenames.
 
 <h2>Windows Usage</h2>
 
-<p>   
-   Make a shortcut to Dred.jar in the distribution directory. It makes
-   sense for this shortcut to be placed somewhere on your desktop. When
-   you click on the shortcut Dred will start a pseudo-server associated with an
-   an iconified server control. 
-</p>
+After installing Dred using the standard installer you'll find a shortcut
+to Dred.jar in the installation directory (and perhaps on your Desktop).
+This shortcut starts a pseudo-server from which you will be able to
+start editing sessions.
 
-<p>   
-   The shortcut should have a target of:  
-<pre>
-   javaw -DDREDBINDINGS=<i>the-full-path-to-your-bindings-file</i> -jar <i>the-full-path-to-</i><tt>Dred.jar</tt>
-</pre>
-</p>
-
-<p>   
-   Use the Open Button on the server control to open existing files, and the New
-   button to open new files. 
-</p>
-
-<p>   
-Don't (yet) try to use the formatting entries on the Etc menu.
-</p>
+<p> You will almost certainly want to edit the <tt>dred.bindings</tt>
+file in the installation directory once you have found out a bit more
+about bindings.  </p>
 
 
 <h2>The Dred Editing Session Window</h2>
@@ -243,6 +229,38 @@ The  <i>Swap2</i> action swaps the two characters immediately to the left
 of the cursor without affecting the cut buffer.
 </p>
 
+<h2>Opening and saving files</h2>
+
+<h3>Saving</h3>
+When you have finished editing a file, you can save it using the <b>File/Save</b>,
+or <b>File/Save&nbsp;As</b> menu entries or the corresponding shortcuts.
+Dred saves a backup copy of the file in a file whose path is
+made by appending a tilde "<tt>~</tt>" to the path of the original
+file. If the "secondary backups" preference is enabled, and the single-tilde
+backup file exists, then a double-tilde backup file is written. 
+
+<p>
+Dred is quite cautious about saving a file. If it looks like the file has
+been written during the period that it has been being edited, then Dred will
+warn you and ask you what to do. Likewise, if you <b>"Save&nbsp;As"</b> using the
+name of an existing file, Dred will ask whether you really mean it.
+</p>
+
+<h3>Opening</h3>
+Use the <b>File/Edit&nbsp;....</b> menu entry with the name of
+the file in the argument minitext, or use the <b>File/Edit&nbsp;(browse)</b> 
+menu entry to start a new editing session. 
+
+<p> The "filename completion" shortcut in the argument minitext causes
+the filename in that minitext to change to the longest common prefix of
+all the files in the current scope that start with the existing value of
+the minitext. The current scope is the current session working directory
+(the directory from which the currently-being-edited file was taken)
+if the minitext value doesn't look like an absolute filename. Otherwise
+it is the directory component of the current mintext value.
+</p>
+
+
 <h2>Reference</h2>
 <p>The Dred document editing model is essentially that established in my
 (1981) Science of Computer Programming paper: 
@@ -255,6 +273,8 @@ of the cursor without affecting the cut buffer.
 <b>$Date$</b>
 </pre>
 </body>
+
+
 
 
 
