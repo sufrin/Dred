@@ -8,7 +8,7 @@
 
         <property name="SOURCE"       value="SRC"/>
         <property name="DOC"          value="DOC"/>
-        <property name="FRONTEND"     value="PY"/>
+        <property name="FRONTEND"     value="SH"/>
         <property name="BINDINGS"     value="BINDINGS"/>
         <property name="BUILD"        value="BUILD"/>
         <property name="HOME"         value="${user.home}"/>
@@ -79,9 +79,8 @@
         
         <target name = "install" depends="Dred">
                <copy todir ="${HOME}/bin"               file="${BUILD}/Dred.jar"/>
-               <copy tofile="${HOME}/bin/dredserver"    file="${FRONTEND}/dredserver"/>
-               <copy tofile="${HOME}/bin/dred"          file="${FRONTEND}/dred.py"/>
-               <copy tofile="${HOME}/bin/ted"           file="${FRONTEND}/dred.py"/>
+               <copy tofile="${HOME}/bin/dred"          file="${FRONTEND}/dred.sh"/>
+               <copy tofile="${HOME}/bin/ted"           file="${FRONTEND}/ted.sh"/>
                
                <chmod file="${HOME}/bin/ted"            perm="ugo+rx" verbose="yes"/>
                <chmod file="${HOME}/bin/dred"           perm="ugo+rx" verbose="yes"/>
@@ -121,6 +120,7 @@
                 <delete dir="${BUILD}" />
         </target>
 </project>
+
 
 
 

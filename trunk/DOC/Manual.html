@@ -18,31 +18,35 @@ editor, written in Java 1.5.
 
 <h2>Unix/Linux Usage</h2>
 <pre>
-        java -jar Dred.jar [-bindings=url] [filenames]  
+        java -jar Dred.jar [--bindings=<i>bindings-url</i>] --wait [filenames] 
+</pre> 
+or 
+<pre>
+        java -jar Dred.jar [--bindings=<i>bindings-url</i>] -w [filenames] 
+</pre>
+or        
+<pre>
+        ted [--bindings=<i>bindings-url</i>] [filenames]
+</pre>  
+<p> This starts edit sessions (using the bindings specified in the file
+at the given url, or the default bindings if none are specified) for
+each of the given filenames.  The program exits when the last session
+terminates.  </p>
+<pre>
+        java -jar Dred.jar [--bindings=<i>bindings-url</i>] [filenames]  &amp;
+</pre>  
+or        
+<pre>
+        dred [--bindings=<i>bindings-url</i>] [filenames]
 </pre>  
 <p>
-This starts edit sessions (using the bindings specified, or the default
-bindings if none are specified) for each of the given filenames.
-The program exits when the last session terminates.
+This starts edit sessions for each of the given filenames, using an
+existing Dred server if one is running, then exits immediately. If no
+server is running then it starts itself in server mode, puts up an
+(iconified) server control, and starts edit sessions for the
+filenames. 
 </p>
-
-<p>If the Dred launcher (ted/dred) has been installed then the
-following commands are available:</p>
-<pre>
-        dred [filenames]      
-</pre>      
-<p>
-This starts edit sessions for the named files using the Dred server.
-The <tt>dred</tt> command exits immediately; the server continues.
-</p>
-                             
-<pre>
-        ted  [filename]
-</pre>
-<p>
-This starts an edit session for the named file using the Dred server.
-The ted command exits when the session terminates.     
-</p>
+      
 <p>
 (see also <A href="#hood">Under the Hood</A>)
 </p>
@@ -54,52 +58,52 @@ The ted command exits when the session terminates.
    sense for this shortcut to be placed somewhere on your desktop.
 </p>
 
-<p>   Make sure that the ''Start in'' directory in the shortcut is something
+<p>   Make sure that the &quot;Start in&quot; directory in the shortcut is something
    sensible (your desktop, for example).
 </p>
 
 <p>   
-Don't (yet) try to use the shell or formatting entries on the Etc menu.
+Don't (yet) try to use the formatting entries on the Etc menu.
 </p>
 
 
-<h2>The Dred Window</h2>
-<p>
-In the Dred window you will see the main document-editing component at the bottom, with
-three ''minitext''-editing components in a row above it. The minitexts are labelled
-''....'' (pronounced ''Argument''), ''Find'' and ''Repl''. Many of the editing
-commands described below can also be used on the minitexts.
-</p>
+<h2>The Dred Editing Session Window</h2>
+<p> In each editing session window you will see the main document-editing
+component at the bottom, with three &quot;minitext&quot;-editing components
+in a row above it. The minitexts are labelled &quot;....&quot; (pronounced
+&quot;Argument&quot;), &quot;Find&quot; and &quot;Repl&quot;. Many of the editing commands
+described below can also be used on the minitexts.  </p>
 
-<p>
-The <i>Argument</i> minitext provides arguments for many of the other editing
-commands, including those on the <i>File</i> menu which start new editing
-sessions, allow the document to be saved in a different file, and
-so forth.
-</p>
+<p> The <i>Find</i> and <i>Replace</i> minitexts provide arguments for
+the actions of the same name.  </p>
 
-<p>Dred shows which of its (mini-)text windows has the keyboard focus by showing
-its cursor in red. A text window with a greyed-out cursor doesn't have the keyboard focus.
-Focus usually moves into a text window as the mouse-cursor moves into it; occasionally
-it's necessary to force the issue by clicking in the desired window. 
-</p>
+<p> The <i>Argument</i> minitext provides arguments for many of the other
+editing commands, including those on the <i>File</i> menu which start
+new editing sessions, allow the document to be saved in a different file,
+and so forth.  </p>
 
+<p>Dred shows which of its (mini-)text windows has the keyboard focus
+by showing its cursor in red. A text window with a greyed-out cursor
+doesn't have the keyboard focus.  Focus usually moves into a text window
+as the mouse-cursor moves into it, but occasionally it's necessary to force
+the issue by clicking in the desired window.  </p>
 
 <h2>Editing Model</h2>
 
-<p>
-At any stage, the document may have a <i>selection</i> (which is
-a contiguous region of the document).  It is bounded at one end by the
-<i>document cursor</i> -- which is shown as a thin red rectangle --
-and at the other end by the <i>mark</i> -- which is shown as a thin
-green rectangle. When the cursor and mark are in the same position only
-the cursor is shown, and the selection is effectively empty.
-</p>
+<p> At any stage, the document in a window (minitext or main) may have
+a <i>selection</i> (which is a contiguous region of the document).
+It is bounded at one end by the <i>document cursor</i> -- which is shown
+as a thin red rectangle -- and at the other end by the <i>mark</i> --
+which is shown as a thin green rectangle. When the cursor and mark are
+in the same position only the cursor is shown, and the selection (in that
+document) is effectively empty.</p>
+
 
 <p>The document cursor is moved by the arrow keys. It can be placed
-anywhere in the document by clicking with the left mouse-button with the
-mouse-cursor in the  intended position.  The mark can be placed anywhere
-in the document by clicking on the right mouse button.</p>
+anywhere in the document by clicking with the left mouse-button.  The mark
+can be placed anywhere in the document by clicking on the right mouse
+button. </p>
+
 
 <p>The selection is always shown on a grey background.</p>
 
@@ -117,9 +121,9 @@ the system clipboard by another application is accessible through the
 cut buffer.  </p>
 
 
-<p>Typing new characters removes the mark, and thus deselect the
+<p>Typing new characters removes the mark, and thus deselects the
 <i>selection</i>, but does not delete the selected material. This is
-deliberate: the ''typing deletes selection'' behaviour that  most
+deliberate: the &quot;typing deletes selection&quot; behaviour that  most
 people have come to expect of editors leads to many irritating little
 accidents.</p>
 
@@ -188,21 +192,21 @@ when the selection is non-null:
 </p>
 
 <pre>
-        <i>Cut</i>             is undone by <i>Paste</i> 
+        <i>Cut</i>      is undone by <i>Paste</i> 
                 
-        <i>Swap Clipboard</i>  is undone by <i>Swap Clipboard</i>
+        <i>SwapSel</i>  is undone by <i>SwapSel</i>
 </pre>
  
 and, whether or not the selection is null:     
 <pre>
-        <i>Paste</i>           is undone by <i>Cut</i> 
+        <i>Paste</i>    is undone by <i>Cut</i> 
 </pre>
 <p>
 Moreover if the selection is an instance of the Find text then 
 </p>
 
 <pre>
-        <i>Replace</i>         is undone by <i>Swap Clipboard</i>
+        <i>Replace</i>         is undone by <i>SwapSel</i>
 </pre>
 <p>
 The  <i>Delete</i> action simply removes the character to the left of
@@ -218,7 +222,7 @@ of the cursor without affecting the cut buffer.
 Dred has extensive provisions for extensibility: these will be documented
 in due course.
 <p>     Dred's built-in components and extensions are configured from
-        ''bindings'' files that take a standard form. The most important
+        &quot;bindings&quot; files that take a standard form. The most important
         function of configuration (for most users) is the association
         of keystrokes with editing actions.
 </p>
@@ -230,7 +234,7 @@ switch
 
 <pre>
 <code>
-        -bindings=<i>url</i>
+        --bindings=<i>bindings-url</i>
 </code>
 </pre>
 it attempts to read a bindings file from the first of the following url-specified
@@ -238,13 +242,14 @@ files that exists:
 
 <pre>
 <code>
-        $(DREDBINDINGS)                         (<i>if the environment variable <tt>DREDBINDINGS</tt> exists</i>)
+        <i><b>url</b></i>                                     (<i>if the environment variable <tt>DREDBINDINGS</tt> is set to <b>url</b></i>)
+        <i><b>url</b></i>                                     (<i>if the Java virtual machine has its DREDBINDINGS property set to <b>url</b></i>)
         file:$(HOME)/.dred/dred.bindings        (<i><tt>$(HOME)</tt> stands for the user's desktop in Windows</i>)
 </code>
 </pre>
 <p>
 If it cannot do so, then it issues a warning on the console and
-uses its inbuilt ''fallback'' bindings. Most people will find that
+uses its inbuilt &quot;fallback&quot; bindings. Many people will find that
 these bindings do not suit them. 
 </p>
 
@@ -270,13 +275,11 @@ these bindings do not suit them.
         at unicode <i>XXXX</i>.
 </p>
 
-<p>     Extensions are expected to provide their own documentation
-        of the way in which they use bindings,
-        but (in general) the first field of a binding indicates the
+<p>     In general the first field of a binding indicates the
         name of the extension (or component) that is expected to
         interpret it, the second field of a binding indicates the
         type of interpretation, and subsequent fields are there
-        to be interpreted.
+        to be interpreted. 
 </p>
 
 <p>     
@@ -306,7 +309,7 @@ these bindings do not suit them.
         action finds finds the longest abbreviation match that ends at the
         cursor, and replaces it with the corresponding insertion text.   
         The third associates the given keystroke with the insertion of a specific
-        piece of text. It is intended to support the insertion of ''national characters''
+        piece of text. It is intended to support the insertion of &quot;national characters&quot;
         when Dred is run on an operating system that doesn't provide built-in support for
         special character input. The final form combines the effect of the second and third
         forms in a single binding, <i>i.e.</i> it both defines an abbreviation and binds a
@@ -341,8 +344,8 @@ these bindings do not suit them.
         in the document-editing window as well as in the minitexts. The
         second form binds only in the minitext windows. Its principal
         purpose is to enable <tt>TAB</tt> to be used as a ''filepath
-        completion'' key in the minitext windows but to insert spaces
-        in the main document-editing window.
+        completion'' key in the session window minitexts 
+        but to insert spaces when used  elsewhere.
         
         <p><i>  The document-editing window inherits the text action and
         text abbreviation bindings, but not the minitext-specific
@@ -354,17 +357,18 @@ these bindings do not suit them.
 <pre>
 <code>
    text   action doAbbrev         ESCAPE
-   text   action doInsertTab      TAB           # insert spaces up to next tab position
-   text   action doIndentNewline  ENTER         # insert newline and indent to current margin
-   text   action doInsertNewline  ctrl ENTER    # insert newline stay at left margin     
-   text   abbrev forall           \u2200        meta shift A # ∀   
-   text   abbrev exists           \u2203        meta shift E # ∃      
-   text   key    \u03B3   meta G                # (gamma) γ       
-   text   key    \u0393   meta shift G          # (Gamma) Γ        
+   text   action doInsertTab      TAB                           # insert spaces up to next tab position
+   text   action doIndentNewline  ENTER                         # insert newline and indent to current margin
+   text   action doInsertNewline  ctrl ENTER                    # insert newline stay at left margin     
+   text   abbrev forall           \u2200        meta shift A    # ∀   
+   text   abbrev exists           \u2203        meta shift E    # ∃    
+     
+   text   key                     \u03B3        meta G          # (gamma) γ       
+   text   key                     \u0393        meta shift G    # (Gamma) Γ        
 
-   editor minitext action doComplete   TAB      # not in the main window
-   editor          action doFindDown   F9
-   editor          action doFindUp     shift F9
+   editor minitext action doComplete            TAB             # not in the main window
+   editor          action doFindDown            F9
+   editor          action doFindUp              shift F9
 </code>
 </pre>
 <a name="bindings"/>
@@ -384,21 +388,25 @@ Keystroke specifications take the form of zero or more optional modifiers follow
 <pre>
                 <code> [ctrl][alt][meta][shift][altGraph] <i>key specification</i></code>
 </pre>
+<p>
 A <i>key specification</i> takes one of the forms
 given in the documentation for <tt>java.awt.event.KeyEvent</tt>, but without the
-<tt>VK_</tt> prefix. Be aware of peculiarities of keyboard interpretation
-that mean that to specify a modified variant of a character that appears 
-in the shift position on a key, you have to specify the
-shifted variant of the character that appears in the unshifted position.
+<tt>VK_</tt> prefix. 
+</p>
+<p>
+To specify a modified variant of a character that appears 
+in the shift position on a keytop, you have to specify the
+<tt>shift</tt> with the character that appears in the unshifted position
+on the keytop.
 For example: <code>alt LEFT_PARENTHESIS</code> is an invalid 
 keystroke specification, and the keystroke you get by pressing <tt>alt</tt> with <tt>(</tt> 
 has to be expressed as <code>alt shift 9</code>.
-
-Also beware that on some keyboards the <tt>alt</tt> and
+</p>
+<p>
+Beware that on some keyboards the <tt>alt</tt> and
 <tt>meta</tt> keys are indistinguishable, and that some X window managers
 pre-empt some keystroke combinations for their own purposes.
-
-<h3>Alternative and Additional Bindings</h3>
+</p>
 
 <h2>
 <A name="hood"> 
@@ -407,185 +415,70 @@ Under the hood
 </h2>
 <h3>Server Mode</h3>
 <p>
-The program can be started in ''server'' mode, by invoking:
-</p>
-        
-<pre>
-        java -jar Dred.jar -socket=####
-</pre>
-<p>
-in which case it listens to the socket with the given number for
+In server mode the program listens for
 HTTP1.0 requests to start editing sessions. 
 </p>
 
-<p>A request takes the form:
+<p>A request takes one of the forms:
 </p>
 
 <pre>
+        GET /edit?CWD=workingdirectory&amp;FILE=absolutefilename&amp;WAIT=true
         GET /edit?CWD=workingdirectory&amp;FILE=absolutefilename
 </pre>
 
 <p>
-The server starts an editing session for the given file using the
+The server responds by starting an editing session for the given file using the
 given working directory as the session's effective working directory.
 </p>
-
-<p>When the session is terminated an HTTP response is generated.
-A process that listens for the HTTP response can be sure that the
-editing session has terminated when it gets it, but there's no
-need for the invoking process to wait.
+<p>
+If the first form is used, then when the session is terminated an HTTP response 
+is generated; otherwise the HTTP response is generated immediately.
 </p>
 
-<p> The python script: led/ted is a (fairly) good example of a program
-that provides a simple command-line interface for the Dred server.  </p>
+The program can be started in server mode by invoking:
+</p>
+        
+<pre>
+        java -jar Dred.jar [--port=####] --serve 
+</pre>
+<p>
+If the <tt>--port</tt> specification doesn't appear then
+the server listens at the user's default Dred port number. If it does
+appear then the user's default port is set (and retained) before the
+server starts listening. The default port can also be set by using the
+<b><tt>File/Preferences/Default Port ....</tt></b> menu button in a running Dred session.
+</p>
+
+<p>
+To discover what the default port it, use the command
+<pre>
+        java -jar Dred.jar --port 
+</pre>
+which outputs the port on its standard output stream.
+</p>
+
+<p>
+To discover whether there really is a Dred server active at the default port,
+use the command
+<pre>
+        java -jar Dred.jar --serving
+</pre>
+which succeeds (Unix exit 0) if there is, and fails (Unix exit 1) otherwise.
+</p>
 
 <h2>Reference</h2>
 <p>The Dred document editing model is essentially that established in my
 (1981) Science of Computer Programming paper: 
-''Formal Specification of a Display-Oriented Text Editor''.
+&quot;Formal Specification of a Display-Oriented Text Editor&quot;.
 </p>
-
-<h3>Can you eat glass?</h3>
-A sampler of various Unicode pages. 
-<pre>
-# (Ki)Swahili: Naweza kula bilauri na sikunyui.
-# Afrikaans: Ek kan glas eet, maar dit doen my nie skade nie.
-# Albanian: Unë mund të ha qelq dhe nuk më gjen gjë.
-# Allemannisch: I kaun Gloos essen, es tuat ma ned weh.
-# Anglo-Saxon (Latin): Ic mæg glæs eotan ond hit ne hearmiað me.
-# Anglo-Saxon (Runes): ᛁᚳ᛫ᛗᚨᚷ᛫ᚷᛚᚨᛋ᛫ᛖᚩᛏᚪᚾ᛫ᚩᚾᛞ᛫ᚻᛁᛏ᛫ᚾᛖ᛫ᚻᛖᚪᚱᛗᛁᚪᚧ᛫ᛗᛖ᛬
-# Arabic(2): أنا قادر على أكل الزجاج و هذا لا يؤلمني.
-# Aragones: Puedo minchar beire, no me'n fa mal .
-# Armenian: Կրնամ ապակի ուտել և ինծի անհանգիստ չըներ։
-# Bangla / Bengali: আমি কাঁচ খেতে পারি, তাতে আমার কোনো ক্ষতি হয় না।
-# Basque: Kristala jan dezaket, ez dit minik ematen.
-# Bayrisch / Bavarian: I koh Glos esa, und es duard ma ned wei.
-# Belarusian (Cyrillic): Я магу есці шкло, яно мне не шкодзіць.
-# Belarusian (Lacinka): Ja mahu jeści škło, jano mne ne škodzić.
-# Bislama: Mi save kakae glas, hemi no save katem mi.
-# Brazilian Portuguese: Posso comer vidro, não me machuca.
-# Bulgarian: Мога да ям стъкло, то не ми вреди.
-# Caboverdiano: M' podê cumê vidru, ca ta maguâ-m'.
-# Catalan: Puc menjar vidre que no em fa mal.
-# Chamorro: Siña yo' chumocho krestat, ti ha na'lalamen yo'.
-# Chinese (Traditional): 我能吞下玻璃而不傷身體。
-# Chinese: 我能吞下玻璃而不伤身体。
-# Chinook Jargon: Naika məkmək kakshət labutay, pi weyk ukuk munk-sik nay.
-# Classical Greek: ὕαλον ϕαγεῖν δύναμαι· τοῦτο οὔ με βλάπτει.
-# Cornish: Mý a yl dybry gwéder hag éf ny wra ow ankenya.
-# Croatian: Ja mogu jesti staklo i ne boli me.
-# Czech: Mohu jíst sklo, neublíží mi.
-# Dansk / Danish: Jeg kan spise glas, det gør ikke ondt på mig.
-# Deutsch / German: Ich kann Glas essen, ohne mir weh zu tun.
-# English (Braille): ⠊⠀⠉⠁⠝⠀⠑⠁⠞⠀⠛⠇⠁⠎⠎⠀⠁⠝⠙⠀⠊⠞⠀⠙⠕⠑⠎⠝⠞⠀⠓⠥⠗⠞⠀⠍⠑
-# English (IPA): [aɪ kæn iːt glɑːs ænd ɪt dɐz nɒt hɜːt miː] (Received Pronunciation)
-# English: I can eat glass and it doesn't hurt me.
-# Erzian: Мон ярсан суликадо, ды зыян эйстэнзэ а ули.
-# Esperanto: Mi povas manĝi vitron, ĝi ne damaĝas min.
-# Estonian: Ma võin klaasi süüa, see ei tee mulle midagi.
-# Farsi / Persian: .من می توانم بدونِ احساس درد شيشه بخورم
-# French: Je peux manger du verre, ça ne me fait pas de mal.
-# Frysk / Frisian: Ik kin glês ite, it docht me net sear.
-# Galician: Eu podo xantar cristais e non cortarme.
-# Georgian: მინას ვჭამ და არა მტკივა.
-# Gothic (4): 𐌼𐌰𐌲 𐌲𐌻𐌴𐍃 𐌹̈𐍄𐌰𐌽, 𐌽𐌹 𐌼𐌹𐍃 𐍅𐌿 𐌽𐌳𐌰𐌽 𐌱𐍂𐌹𐌲𐌲𐌹𐌸.
-# Greek: Μπορώ να φάω σπασμένα γυαλιά χωρίς να πάθω τίποτα.
-# Hausa (Ajami) (2): إِنا إِىَ تَونَر غِلَاشِ كُمَ إِن غَمَا لَافِىَا
-# Hausa (Latin): Inā iya taunar gilāshi kuma in gamā lāfiyā.
-# Hawaiian: Hiki iaʻu ke ʻai i ke aniani; ʻaʻole nō lā au e ʻeha.
-# Hebrew(2): אני יכול לאכול זכוכית וזה לא מזיק לי.
-# Hindi: मैं काँच खा सकता हूँ, मुझे उस से कोई पीडा नहीं होती.
-# Hungarian: Meg tudom enni az üveget, nem lesz tőle bajom.
-# Irish: Is féidir liom gloinne a ithe. Ní dhéanann sí dochar ar bith dom.
-# Íslenska / Icelandic: Ég get etið gler án þess að meiða mig.
-# Italian: Posso mangiare il vetro e non mi fa male.
-# Japanese: 私はガラスを食べられます。それは私を傷つけません。
-# Javanese: Aku isa mangan beling tanpa lara.
-# Kirchröadsj/Bôchesserplat: Iech ken glaas èèse, mer 't deet miech jing pieng.
-# Korean: 나는 유리를 먹을 수 있어요. 그래도 아프지 않아요
-# Kreyòl Ayisyen: Mwen kap manje vè, li pa blese'm.
-# Lalland Scots / Doric: Ah can eat gless, it disnae hurt us.
-# Latin: Vitrum edere possum; mihi non nocet.
-# Latvian: Es varu ēst stiklu, tas man nekaitē.
-# Lausitzer Mundart ("Lusatian"): Ich koann Gloos assn und doas dudd merr ni wii.
-# Lithuanian: Aš galiu valgyti stiklą ir jis manęs nežeidžia
-# Lojban: mi kakne le nu citka le blaci .iku'i le se go'i na xrani mi
-# Lëtzebuergescht / Luxemburgish: Ech kan Glas iessen, daat deet mir nët wei.
-# Macedonian: Можам да јадам стакло, а не ме штета.
-# Malay: Saya boleh makan kaca dan ia tidak mencederakan saya.
-# Manx Gaelic: Foddym gee glonney agh cha jean eh gortaghey mee.
-# Marathi: मी काच खाऊ शकतो, मला ते दुखत नाही.
-# Marquesan: E koʻana e kai i te karahi, mea ʻā, ʻaʻe hauhau.
-# Middle English: Ich canne glas eten and hit hirtiþ me nouȝt.
-# Milanese: Sôn bôn de magnà el véder, el me fa minga mal.
-# Mongolian (Classic) (5): ᠪᠢ ᠰᠢᠯᠢ ᠢᠳᠡᠶᠦ ᠴᠢᠳᠠᠨᠠ ᠂ ᠨᠠᠳᠤᠷ ᠬᠣᠤᠷᠠᠳᠠᠢ ᠪᠢᠰᠢ
-# Mongolian (Cyrillic): Би шил идэй чадна, надад хортой биш
-# Napoletano: M' pozz magna' o'vetr, e nun m' fa mal.
-# Navajo: Tsésǫʼ yishą́ągo bííníshghah dóó doo shił neezgai da.
-# Nederlands / Dutch: Ik kan glas eten, het doet mĳ geen kwaad.
-# Norsk / Norwegian (Bokmål): Jeg kan spise glass uten å skade meg.
-# Norsk / Norwegian (Nynorsk): Eg kan eta glas utan å skada meg.
-# Nórdicg: Ljœr ye caudran créneþ ý jor cẃran.
-# Old French: Je puis mangier del voirre. Ne me nuit.
-# Old Irish (Latin): Con·iccim ithi nglano. Ním·géna.
-# Old Irish (Ogham): ᚛᚛ᚉᚑᚅᚔᚉᚉᚔᚋ ᚔᚈᚔ ᚍᚂᚐᚅᚑ ᚅᚔᚋᚌᚓᚅᚐ᚜
-# Old Norse (Latin): Ek get etið gler án þess að verða sár.
-# Old Norse (Runes): ᛖᚴ ᚷᛖᛏ ᛖᛏᛁ ᚧ ᚷᛚᛖᚱ ᛘᚾ ᚦᛖᛋᛋ ᚨᚧ ᚡᛖ ᚱᚧᚨ ᛋᚨᚱ
-# Papiamentu: Ami por kome glas anto e no ta hasimi daño.
-# Pashto(2): زه شيشه خوړلې شم، هغه ما نه خوږوي
-# Pfälzisch: Isch konn Glass fresse ohne dasses mer ebbes ausmache dud.
-# Picard: Ch'peux mingi du verre, cha m'foé mie n'ma.
-# Polska / Polish: Mogę jeść szkło i mi nie szkodzi.
-# Portuguese: Posso comer vidro, não me faz mal.
-# Provençal / Occitan: Pòdi manjar de veire, me nafrariá pas.
-# Québécois: J'peux manger d'la vitre, ça m'fa pas mal.
-# Roman: Me posso magna' er vetro, e nun me fa male.
-# Romanian: Pot să mănânc sticlă și ea nu mă rănește.
-# Ruhrdeutsch: Ich kann Glas verkasematuckeln, ohne dattet mich wat jucken tut.
-# Russian: Я могу есть стекло, оно мне не вредит.
-# Sami (Northern): Sáhtán borrat lása, dat ii leat bávččas.
-# Sanskrit (standard transcription): kācaṃ śaknomyattum; nopahinasti mām.
-# Sanskrit: काचं शक्नोम्यत्तुम् । नोपहिनस्ति माम् ॥
-# Schwyzerdütsch: Ich chan Glaas ässe, das tuet mir nöd weeh.
-# Schwäbisch / Swabian: I kå Glas frässa, ond des macht mr nix!
-# Scottish Gaelic: S urrainn dhomh gloinne ithe; cha ghoirtich i mi.
-# Serbian (Cyrillic): Могу јести стакло а да ми не шкоди.
-# Serbian (Latin): Mogu jesti staklo a da mi ne škodi.
-# Sicilian: Puotsu mangiari u vitru, nun mi fa mali.
-# Slovak: Môžem jesť sklo. Nezraní ma.
-# Slovenian: Lahko jem steklo, ne da bi mi škodovalo.
-# Soenderjysk: Æ ka æe glass uhen at det go mæ naue.
-# Spanish: Puedo comer vidrio, no me hace daño.
-# Suomi / Finnish: Voin syödä lasia, se ei vahingoita minua.
-# Svenska / Swedish: Jag kan äta glas utan att skada mig.
-# Sächsisch / Saxon: 'sch kann Glos essn, ohne dass'sch mer wehtue.
-# Tagalog: Kaya kong kumain nang bubog at hindi ako masaktan.
-# Taiwanese(6): Góa ē-tàng chia̍h po-lê, mā bē tio̍h-siong.
-# Tamil: நான் கண்ணாடி சாப்பிடுவேன், அதனால் எனக்கு ஒரு கேடும் வராது.
-# Thai: ฉันกินกระจกได้ แต่มันไม่ทำให้ฉันเจ็บ
-# Tibetan: ཤེལ་སྒོ་ཟ་ནས་ང་ན་གི་མ་རེད།
-# Turkish (Ottoman): جام ييه بلورم بڭا ضررى طوقونمز
-# Turkish: Cam yiyebilirim, bana zararı dokunmaz.
-# Twi: Metumi awe tumpan, ɜnyɜ me hwee.
-# Ukrainian: Я можу їсти шкло, й воно мені не пошкодить.
-# Urdu(2): میں کانچ کھا سکتا ہوں اور مجھے تکلیف نہیں ہوتی ۔
-# Venetian: Mi posso magnare el vetro, no'l me fa mae.
-# Vietnamese (nôm) (4): 些 𣎏 世 咹 水 晶 𦓡 空 𣎏 害 咦
-# Vietnamese (quốc ngữ): Tôi có thể ăn thủy tinh mà không hại gì.
-# Walloon: Dji pou magnî do vêre, çoula m' freut nén må.
-# Welsh: Dw i'n gallu bwyta gwydr, 'dyw e ddim yn gwneud dolur i mi.
-# Yiddish(2): איך קען עסן גלאָז און עס טוט מיר נישט װײ.
-# Yoruba(3): Mo lè je̩ dígí, kò ní pa mí lára.
-# Zeneise (Genovese): Pòsso mangiâ o veddro e o no me fà mâ.
-</pre>
-
-
 
 <pre>
 <b>Bernard Sufrin (Oxford, March 2005)</b>
 <b>$Revision$</b>
 </pre>
 </body>
+
 
 
 
