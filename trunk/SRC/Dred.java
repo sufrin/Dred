@@ -289,7 +289,7 @@ public class Dred
       {
         public void actionPerformed(ActionEvent ev)
         {
-          EditorFrame.openSession(frame, new File(System.getProperty("user.home")));
+          EditorFrame.openSession(frame, null);
         }
       });
       frame.add(button);
@@ -406,6 +406,7 @@ public class Dred
 
 
 }
+
 
 
 

@@ -252,13 +252,27 @@ the file in the argument minitext, or use the <b>File/Edit&nbsp;(browse)</b>
 menu entry to start a new editing session. 
 
 <p> The "filename completion" shortcut in the argument minitext causes
-the filename in that minitext to change to the longest common prefix of
-all the files in the current scope that start with the existing value of
-the minitext. The current scope is the current session working directory
-(the directory from which the currently-being-edited file was taken)
-if the minitext value doesn't look like an absolute filename. Otherwise
-it is the directory component of the current mintext value.
+the text in that minitext to change to the longest common prefix of
+all the files in the <i>current scope</i> that start with the existing value of
+the minitext. 
 </p>
+<ul>
+     <li>
+     If the minitext is empty, then a browser is opened in the current
+     working directory (the directory from which the session was started).
+     </li>
+     
+     <li>
+     If the minitext looks like a relative path then the current scope
+     is interpreted <i>relative to the parent 
+     path of the file being edited</i>.
+     </li>
+           
+     <li>
+     If the minitext is an absolute path then the current scope is the parent 
+     of that path.
+     </li>
+</ul>
 
 
 <h2>Reference</h2>
@@ -273,6 +287,7 @@ it is the directory component of the current mintext value.
 <b>$Date$</b>
 </pre>
 </body>
+
 
 
 

@@ -984,7 +984,8 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   
   /** Browse for a file to open and start a new session. */
   public static void openSession(JFrame frame, File cwd)
-  {
+  { if (cwd==null) cwd = fileChooser.getCurrentDirectory(); 
+    if (cwd==null) cwd = new File(System.getProperty("user.home"));
     fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
     fileChooser.setCurrentDirectory(cwd); // doc.getFileName().getParentFile());
     fileChooser.setFileHidingEnabled(false);
@@ -1772,6 +1773,8 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
+
 
 
 
