@@ -4,8 +4,8 @@
 style sheet <...>       #####################################
 style xml  block p
 style xml  block pre
-style line img   <image\salt="[IMG]"\ssrc="     ">
-style line link  <a\shref="[XXXX]">             </a>
+style line img   <image\salt="[IMG]"\ssrc="%SEL%">
+style line link  <a\shref="[XXXX]">%SEL%</a>
 style --
 style xml block ul
 style xml block li
@@ -22,11 +22,11 @@ style xml block h3
 style xml block h4
 style xml block h5
 style --
-style form ? <%s> </%s> line
-style form ? <%s> </%s> line
+style form line ? <%ARG%>%SEL%</%ARG%> 
+style form line ? <%ARG%>%SEL%</%ARG%> 
 style --
-style form ? <%s> </%s> block
-style form ? <%s> </%s> block
+style form block ? <%ARG%>%SEL%</%ARG%>
+style form block ? <%ARG%>%SEL%</%ARG%>
 
 
 style sheet \...{       #####################################
@@ -67,22 +67,28 @@ style --
 style latex env itemize
 style latex env enumerate
 style line  \item   \item\s
-style block tabular \begin{tabular}{XXX}        \end{tabular}
-style block array   \begin{array}{XXX}          \end{array}
-style block figure  \begin{figure}[ht]          \caption{...}\n\label{...}\n\end{figure}
+style block tabular \begin{tabular}{XXX}%SEL%\end{tabular}
+style block array   \begin{array}{XXX}%SEL%\end{array}
+style block figure  \begin{figure}[ht]%SEL%\caption{...}\n\label{...}\n\end{figure}
 style --
 style latex env smaller
 style latex env center
 style latex env foil
-style form  ? \begin{%s} \end{%s} block
-style form  ? \begin{%s} \end{%s} block
+style form  block ? \begin{%ARG%}%SEL%\end{%ARG%} 
+style form  block ? \begin{%ARG%}%SEL%\end{%ARG%} 
 
-style sheet \document   #####################################
-style block article    \documentclass[11pt]{article}\n\begin{document} \end{document} 
-style block letter     \documentclass[11pt,wor,lab]{letter}\n\To{}\n\Dear[]{}\n\Re{}\n\Cc{} \Sign[Yours\ssincerely]{Bernard\sSufrin}
-style block foil       \documentclass{foil}\n%\\usepackage{RCS}\n%\RCS\s$Id$\n\\title{}\n\author{}\n\date{}\n%\n\begin{document}\n\maketitle \end{document}
-style block html       <html>\n<head>\n\s\s\s\s<title>\n\s\s\s\s</title>\n</head>\n<body> </body>\n</html>
+style sheet \document  #####################################
+style block article    \documentclass[11pt]{article}\n\begin{document}%SEL%\end{document} 
+style block letter     \documentclass[11pt,wor,lab]{letter}\n\To{}\n\Dear[]{}\n\Re{}\n\Cc{}%SEL%\Sign[Yours\ssincerely]{Bernard\sSufrin}
+style block foil       \documentclass{foil}\n%\\usepackage{RCS}\n%\RCS\s$I\u0064: $\n\\title{}\n\author{}\n\date{}\n%\n\begin{document}\n\maketitle%SEL%\end{document}
+style block html       <html>\n<head>\n\s\s\s\s<title>\n\s\s\s\s</title>\n</head>\n<body>%SEL%</body>\n</html>
 
+#
+#       A bit silly, really!
+#
+style sheet java                #####################################
+style form  block class         /**\s\s\s*/\npublic\sclass\s%ARG%\n{\n\s\s\spublic\s%ARG%()\s{\s}%SEL%}  
+style form  block method        /**\s\s\s*/\npublic\sTYPE\s%ARG%()\n{%SEL%}  
 
 
 

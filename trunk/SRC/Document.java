@@ -631,7 +631,7 @@ public class Document
    { int y = getY();
      int top=y, bot=hasSelection()?marky:y, len=length();
      if (top>bot) { int t=top; top=bot; bot=t; }
-     while (top!=0 && !isEmpty(top)) top--;
+     while (top>0 && !isEmpty(top-1)) top--;
      while (bot<len && !isEmpty(bot)) bot++;
      if (y-top > bot-y)  { int t=top; top=bot; bot=t; }
      setCursorAndMark(0, top, 0, bot);
@@ -825,6 +825,7 @@ public class Document
       for (FocusEavesdropper d: eavesdroppers) d.focusGained(this);
     }
 }
+
 
 
 

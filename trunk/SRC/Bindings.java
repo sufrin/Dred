@@ -74,6 +74,7 @@ public class Bindings implements Iterable<Bindings.Binding>
         case '#' : b.append("#");  i++; break;
         case 't' : b.append("\t"); i++; break;
         case 'n' : b.append("\n"); i++; break;
+        case ' ' : 
         case 's' : b.append(" ");  i++; break;
         case 'u' : 
         case 'U' : 
@@ -187,8 +188,13 @@ public class Bindings implements Iterable<Bindings.Binding>
       return b.toString();
     }
     
+    public Binding split(int n, String pattern) 
+    { 
+      return new Binding(getFields(n).split(pattern));
+    }
+    
     public String toKey(int n)    { return toKey(n, fields); }
-                
+                    
     static public String toKey(int n, String[] spec)
     { String s = " "+spec[spec.length-1].toUpperCase()
                .replace("[",           "OPEN_BRACKET")
@@ -228,6 +234,7 @@ public class Bindings implements Iterable<Bindings.Binding>
     }
   }
 }
+
 
 
 

@@ -290,7 +290,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
         {
           if (state && styleFrame == null)
           {
-            styleFrame = new StyleFrame(EditorFrame.this);
+            styleFrame = new StyleFrame(EditorFrame.this, this);
           }
           if (styleFrame!=null) 
           {  styleFrame.setVisible(state);
@@ -1065,25 +1065,14 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       tempCaption("Pattern not found");
   }
 
-  /**
-   * Format the current selection 
-   */
-  public void doFormatSelection(String open, String close, boolean block)
-  { Document.Region region = doc.selectedRegion;
-    String          ins    = hasNonemptySelection() ? doc.getSelection() : "";
-    // Calculations must be done before the selection is clipped!
-    if (debug) log.fine("%s: %s", region, ins);
-    if (block)
-    { if (!ins.startsWith("\n")) open  +='\n';
-      if (!ins.endsWith("\n"))   close ='\n'+close;
-      if (region.startx!=0)     open  = "\n"+open;
-      
-      CharSequence line = doc.lineAt(region.endy);
-      if (region.endx!=line.length()) close +='\n';
-    }
-    if (debug) log.fine("%s", open+ins+close);
+  /** Transform the current selection using the specified TextTransform */
+  public void doTransformSelection(TextTransform tr)
+  { Document.Region region       = doc.selectedRegion;
+    String          selection    = hasNonemptySelection() ? doc.getSelection() : "";
+    String          startContext = doc.lineAt(region.starty).toString().substring(0, region.startx);
+    String          endContext   = doc.lineAt(region.endy).toString().substring(region.endx);
     if (hasNonemptySelection()) clippedSelection();
-    doc.pasteAndSelect(open+ins+close, true);
+    doc.pasteAndSelect(tr.transform(startContext, selection, endContext), true);
   }
 
   // ////////////////////////////////////////////////////////////////////
@@ -1524,7 +1513,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     }
   }
 
-  /** View the output of the most recent doTranslate. */
+  /** View the output of the most recent Latex translation. */
   public void doView(String spec)
   {
     Pipe.Continue cont = new Pipe.Continue()
@@ -1799,6 +1788,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
 
 
 
