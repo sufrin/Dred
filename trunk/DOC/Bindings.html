@@ -1,0 +1,207 @@
+<html>
+<head>
+    <title>
+    Dred -- Bindings
+    <link rel="shortcut icon" href="favicon.png" type="image/png" ></link></head>
+    </title>
+</head>
+<body>
+
+<h1>Bindings, and Customizeability</h1>
+
+<b><A href="index.html">Back to Dred Resources Index</A></b>                
+
+<p>     Dred's built-in components and extensions are configured from
+        &quot;bindings&quot; files that take a standard form. The most important
+        function of configuration (for most users) is the association
+        of keystrokes with editing actions.
+</p>
+
+
+<h3>Initial Bindings</h3>
+When the program starts, then if no bindings file is specified on its command line with the
+switch
+
+<pre>
+<code>
+        --bindings=<i>bindings-url</i>
+</code>
+</pre>
+it attempts to read a bindings file from the first of the following url-specified
+files that exists:
+
+<pre>
+<code>
+        <i><b>url</b></i>                                     (<i>if the environment variable <tt>DREDBINDINGS</tt> is set to <b>url</b></i>)
+        <i><b>url</b></i>                                     (<i>if the Java virtual machine has its DREDBINDINGS property set to <b>url</b></i>)
+        file:$(HOME)/.dred/dred.bindings        (<i><tt>$(HOME)</tt> stands for the user's desktop in Windows</i>)
+</code>
+</pre>
+<p>
+If it cannot do so, then it issues a warning on the console and
+uses its inbuilt &quot;fallback&quot; bindings. Many people will find that
+these bindings do not suit them. 
+</p>
+
+<p>     A Bindings file is <tt>UTF8</tt>-encoded and contains a sequence of <tt>Binding</tt>
+        descriptions together with some comments. 
+</p>   
+<p>    
+        A comment is a line whose first non-blank character is <code>#</code>
+</p>
+
+<p>        
+        A binding description is a sequence of binding fields separated
+        by spaces and followed by an optional comment that starts with <code>#</code>
+        and extends to the end of the line. 
+</p>
+
+<p>     A binding field is a sequence of non-space characters. Within
+        a binding field: <code>\#</code> stands for <code>#</code>,
+        <code>\s</code> stands for space, <code>\t</code> stands for a
+        tab character, <code>\n</code> stands for a newline character,
+        and a sequence of the form <code>\u</code><i>XXXX</i> (where
+        <i>XXXX</i> are hexadecimal characters) stands for the character
+        at unicode <i>XXXX</i>.
+</p>
+
+<p>     In general the first field of a binding indicates the
+        name of the extension (or component) that is expected to
+        interpret it, the second field of a binding indicates the
+        type of interpretation, and subsequent fields are there
+        to be interpreted. 
+</p>
+
+<p>     
+        The principal built-in component types are 
+</p>
+<ul>    <li>Text-editing windows. There are at least four of
+        these per editing session, namely the document-editing
+        window and the <tt>....</tt> (<tt>Argument</tt>),
+        <tt>Find</tt>, and <tt>Repl</tt> minitexts. (Others may
+        appear on customizeable buttons on the style-buttons tool and
+        other extensions.)   Their behaviour is defined by the class
+        <tt>org.sufrin.dred.SimpleEditor</tt>.       
+        Bindings take one of the forms
+        <pre>
+        <code>text action</code> <i>TextActionName</i> <i>keystroke description</i>
+        <code>text abbrev</code> <i>abbreviation</i>   <i>insertion</i>
+        <code>text key</code>    <i>insertion</i>      <i>keystroke description</i>
+        <code>text abbrev</code> <i>abbreviation</i>   <i>insertion</i> <i>keystroke description</i>
+        </pre>        
+        
+        
+        <p>
+        The first of these forms binds the specified text action to the given keystroke
+        in all editing components (including the main document
+        editor and the minitexts). The second
+        form associates an abbreviation with an insertion. The text <tt>doAbbrev</tt>
+        action finds finds the longest abbreviation match that ends at the
+        cursor, and replaces it with the corresponding insertion text.   
+        The third associates the given keystroke with the insertion of a specific
+        piece of text. It is intended to support the insertion of &quot;national characters&quot;
+        when Dred is run on an operating system that doesn't provide built-in support for
+        special character input. The final form combines the effect of the second and third
+        forms in a single binding, <i>i.e.</i> it both defines an abbreviation and binds a
+        single keystroke to it.
+        </p>
+                 
+        <p>
+        Although they inherit the bindings of text-editing windows, minitexts
+        have three additional possible bindings that override these, whose
+        default forms are shown below:
+        <pre>
+        <code>minitext action doTellBig   ENTER</code>  
+        <code>minitext action doBig       ctrl  ENTER</code> 
+        <code>minitext action doClear     ctrl  U</code> 
+        </pre>   
+        The first of these binds ENTER to a warning that a minitext has
+        a single-line-view editor. The second binds control-ENTER to an action
+        that attaches a multiline-view editor to the minitext.
+        </p>
+        </li>
+        
+        <br></br>
+        
+        <li>The main editing session window. There
+        is just one of these per editing session; its behaviour is defined by the class
+        <tt>org.sufrin.dred.EditorFrame</tt>. Bindings take one of the forms
+        <pre>
+        <code>editor          action</code> <i>EditorActionName</i> <i>keystroke description</i>
+        <code>editor minitext action</code> <i>EditorActionName</i> <i>keystroke description</i>
+        </pre>
+        The first of these binds the same keystroke to the given editor action
+        in the document-editing window as well as in the minitexts. The
+        second form binds only in the minitext windows. Its principal
+        purpose is to enable <tt>TAB</tt> to be used as a ''filepath
+        completion'' key in the session window minitexts 
+        but to insert spaces when used  elsewhere.
+        
+        <p><i>  The document-editing window inherits the text action and
+        text abbreviation bindings, but not the minitext-specific
+        bindings.  </i></p>
+        </li>     
+</ul>
+
+<h4>A few example Bindings</h4>
+<pre><code>
+   text   action doAbbrev         ESCAPE
+   text   action doInsertTab      TAB                           # insert spaces up to next tab position
+   text   action doIndentNewline  ENTER                         # insert newline and indent to current margin
+   text   action doInsertNewline  ctrl ENTER                    # insert newline stay at left margin     
+   text   abbrev forall           \u2200        meta shift A    # ∀   
+   text   abbrev exists           \u2203        meta shift E    # ∃    
+     
+   text   key                     \u03B3        meta G          # (gamma) γ       
+   text   key                     \u0393        meta shift G    # (Gamma) Γ        
+
+   editor minitext action doComplete            TAB             # not in the main window
+   editor          action doFindDown            F9
+   editor          action doFindUp              shift F9
+</code></pre>
+
+<A name="bindings"></A>
+<h4>Further documentation of Bindings</h4>
+        Clicking on the <b>Help/Show&nbsp;Bindings</b> menu item provides
+        documentation for the built-in actions. Clicking on the
+        <b>Help/Insert&nbsp;Bindings</b> menu item inserts the prototype
+        of a bindings file into the document currently being edited. This
+        is intended to make it easy to construct an alternative bindings
+        file. The prototype shows the existing bindings, and can be
+        edited into the right form and saved in the right place.
+
+
+<h4>Keystroke Specifications</h4>
+Keystroke specifications take the form of zero or more optional modifiers followed by a 
+<i>key specification</i>:
+<pre>
+                <code> [ctrl][alt][meta][shift][altGraph] <i>key specification</i></code>
+</pre>
+<p>
+A <i>key specification</i> takes one of the forms
+given in the documentation for <tt>java.awt.event.KeyEvent</tt>, but without the
+<tt>VK_</tt> prefix. 
+</p>
+<p>
+To specify a modified variant of a character that appears 
+in the shift position on a keytop, you have to specify the
+<tt>shift</tt> with the character that appears in the unshifted position
+on the keytop.
+For example: <code>alt LEFT_PARENTHESIS</code> is an invalid 
+keystroke specification, and the keystroke you get by pressing <tt>alt</tt> with <tt>(</tt> 
+has to be expressed as <code>alt shift 9</code>.
+</p>
+<p>
+Beware that on some keyboards the <tt>alt</tt> and
+<tt>meta</tt> keys are indistinguishable, and that some X window managers
+pre-empt some keystroke combinations for their own purposes.
+</p>
+
+<pre>
+<b>Bernard Sufrin</b>
+<b>$Revision$</b>
+<b>$Date$</b>
+</pre>
+
+</body>
+</html>

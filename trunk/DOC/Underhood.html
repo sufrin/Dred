@@ -1,0 +1,66 @@
+<html>
+<head>
+    <title>
+        Dred -- under the hood
+        <link rel="shortcut icon" href="favicon.png" type="image/png" ></link></head>
+    </title>
+</head>
+<body>
+        
+<h1>
+        Dred -- under the hood
+</h1>
+<b><A href="index.html">Back to Dred Resources Index</A></b>                
+
+<h3>Server Mode</h3>
+<p>
+In server mode the program listens for
+HTTP1.0 requests to start editing sessions. 
+</p>
+
+<p>A request takes one of the forms:
+</p>
+
+<pre>
+        GET /edit?CWD=workingdirectory&amp;FILE=absolutefilename&amp;WAIT=true
+        GET /edit?CWD=workingdirectory&amp;FILE=absolutefilename
+</pre>
+
+<p>
+The server responds by starting an editing session for the given file using the
+given working directory as the session's effective working directory.
+</p>
+<p>
+If the first form is used, then when the session is terminated an HTTP response 
+is generated; otherwise the HTTP response is generated immediately.
+</p>
+
+The program can be started in server mode by invoking:
+</p>
+        
+<pre>
+        java -jar Dred.jar --serve[=####]
+</pre>
+<p>
+If the port number (=####) appears, and the given port is not currently in use,
+then the program starts serving the current user 
+on that port; otherwise it finds an unused port, 
+and starts serving on that port.
+</p>
+
+<p>
+To discover what port the most-recently activated Dred server is 
+active on use the command
+<pre>
+        java -jar Dred.jar --serving
+</pre>
+which succeeds (Unix exit 0) and outputs the port number
+if there is an active server, and fails (Unix exit 1) and outputs 0 otherwise.
+</p>
+<pre>
+<b>Bernard Sufrin</b>
+<b>$Revision$</b>
+<b>$Date$</b>
+</pre>
+</body>
+</html>
