@@ -81,8 +81,8 @@ implements DocListener,
    /** Current physical dimensions. */
    protected Dimension dim = new Dimension(0,0), preferred = new Dimension(0,0);  
    
-   public Dimension getMinimumSize()   { return preferred; }
-   public Dimension getMaximumSize()   { return dim; }
+   public Dimension getMinimumSize()   { return new Dimension(50, 50); }
+   public Dimension getMaximumSize()   { return new Dimension(2048, 2048); }
    public Dimension getPreferredSize() { return preferred; }
 
    /** Set physical dimensions. */
@@ -106,7 +106,13 @@ implements DocListener,
      rows = h / fontHeight;
      cols = w / fontEmWidth;
      textWidth = w+xborder/2;
-     if (debug) log.finer(String.format("setSize(%d:%d,%d:%d)", w, cols, h, rows));   
+     if (debug) log.finer(String.format("setSize(%d:%d,%d:%d)", w, cols, h, rows));  
+     if (doc!=null && chooseOrigin()) repaint();
+   }
+   
+   public void setBounds(int x, int y, int w, int h)
+   { super.setBounds(x, y, w, h);
+     setSize(w, h);
    }
 
    /** Set the font; resizing the display as necessary to accomodate
@@ -573,6 +579,7 @@ implements DocListener,
    public void dragBy(int dx, int dy) {}
 
 }
+
 
 
 

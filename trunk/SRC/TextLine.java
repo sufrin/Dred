@@ -108,7 +108,8 @@ public class TextLine extends JPanel
   */
   @ActionMethod(label="MultiLine", tip="to make a multiline-view minitext of this \none-line-view minitext")
   public void doBig()
-  { if (auxFrame != null) return;
+  { // Perhaps this should be simplified: just increase the size of the Display!
+    if (auxFrame != null) return;
     auxFrame = new JFrame(TextLine.this.title);
     final SimpleEditor ned = new SimpleEditor(cols, 3, true);
     ned.setDoc(doc);
@@ -171,6 +172,7 @@ public class TextLine extends JPanel
   }
  
 }
+
 
 
 

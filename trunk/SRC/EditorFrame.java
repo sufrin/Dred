@@ -1,5 +1,7 @@
 package org.sufrin.dred;
 
+import GUIBuilder.RowLayout;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Insets;
@@ -472,12 +474,12 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   // ////////////////////////////////////////////////////////////////////////////////////////////
   
   /** Add a component to the Menubar: used by extensions  */
-  public void addToMenuBar(JComponent c)
-  { session.validate(); menuBar.add(c); menuBar.refresh(); }
+  public void addToToolBar(JComponent c)
+  { session.validate(); toolbars.add(c); toolbars.invalidate(); session.validate(); menuBar.refresh(); }
 
   /** Remove a component from the Menubar: used by extensions  */
-  public void removeFromMenuBar(JComponent c)
-  { session.validate(); menuBar.remove(c); menuBar.refresh(); }
+  public void removeFromToolBar(JComponent c)
+  { session.validate(); toolbars.remove(c); toolbars.invalidate(); session.validate(); menuBar.refresh(); }
 
   /** Add a component to the tool Menu: used by extensions  */
   public void addTool(JComponent c)
@@ -680,7 +682,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     feedback.add(labelR);
 
     bars.setLayout(new BoxLayout(bars, BoxLayout.Y_AXIS));
-    toolbars.setLayout(new BoxLayout(toolbars, BoxLayout.X_AXIS));
+    toolbars.setLayout(new RowLayout(-1, true)); // (new BoxLayout(toolbars, BoxLayout.X_AXIS));
     bars.add(toolbars);
     bars.add(text);
 
@@ -1764,6 +1766,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
 
 
 

@@ -33,7 +33,7 @@ public class LatexTool extends RunTool
   
     public LatexToolBar(EditorFrame session)
     {
-      super(10, null, true);
+      super(20, null, true);
       this.session = session;
       JMenuBar bar = new JMenuBar();
       // Eliminate input maps (pro-tem) to avoid spurious
@@ -109,6 +109,7 @@ public class LatexTool extends RunTool
   }
 
 }
+
 
 
 

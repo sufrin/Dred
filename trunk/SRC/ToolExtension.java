@@ -27,12 +27,13 @@ public abstract class ToolExtension extends Extension
         public void run()
         {
           if (state)
-            session.addToMenuBar(theTool);
+            session.addToToolBar(theTool);
           else 
-            session.removeFromMenuBar(theTool);
+            session.removeFromToolBar(theTool);
         }
    }
 }
+
 
 
 

@@ -16,13 +16,13 @@ public abstract class RunTool extends ToolExtension
     }
     
     public Tool(String label, 
-                final String cmd, 
-                final boolean noSelection, 
-                final EditorFrame session, 
+                final  String cmd, 
+                final  boolean noSelection, 
+                final  EditorFrame session, 
                 String buttonTip, 
                 String argTip)
     {
-      super(10, new JButton(), true);
+      super(20, new JButton(), true);
       JButton but = (JButton) getLabel();
       but.setAction(new Act(label)
       {
@@ -40,4 +40,6 @@ public abstract class RunTool extends ToolExtension
     }
   }
 }
+
+
 
