@@ -462,7 +462,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   JLabel labelC, labelL, labelR;
   
   /** The file chooser */
-  JFileChooser fileChooser = new JFileChooser();
+  protected static JFileChooser fileChooser = new JFileChooser();
     
   /** The MenuBar */
   MenuBar menuBar = new MenuBar();
@@ -979,10 +979,16 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   @ActionMethod(label="Edit (browse)", tip="Browse for a file and start editing it")
   public void doEditChoose()
   {
+    openSession(this, cwd);
+  }
+  
+  /** Browse for a file to open and start a new session. */
+  public static void openSession(JFrame frame, File cwd)
+  {
     fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
     fileChooser.setCurrentDirectory(cwd); // doc.getFileName().getParentFile());
     fileChooser.setFileHidingEnabled(false);
-    int res = fileChooser.showOpenDialog(this);
+    int res = fileChooser.showOpenDialog(frame);
     if (res == JFileChooser.APPROVE_OPTION)
       Dred.startLocalSession(fileChooser.getSelectedFile().getAbsolutePath());
   }
@@ -1766,6 +1772,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
 
 
 

@@ -12,7 +12,9 @@ import java.util.prefs.*;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
 
 import org.sufrin.urlfactory.*;
 import org.sufrin.logging.Logging;
@@ -258,7 +260,7 @@ public class Dred
       prefs.putInt("port", port);
       try { prefs.sync(); } catch (BackingStoreException ex) { ex.printStackTrace(); }
 
-      final JFrame frame = new JFrame("[[[Dred Server " + user + "@" + port + "]]]");
+      final JFrame frame = new JFrame("[[[Dred serving " + user + " at " + port + "]]]");
       frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
       frame.addWindowListener(new WindowAdapter()
       {
@@ -268,17 +270,22 @@ public class Dred
         }
       });
       frame.setLayout(new GUIBuilder.ColLayout(-1));
-      JButton button = new JButton("Exit Server: " + user + "@" + port);
-      frame.add(button);
+      
+      JLabel label = new JLabel("<html><center>Dred<br></br>serving " + user + "<br></br>at " + port+"</center></html>");
+      label.setHorizontalAlignment(SwingConstants.CENTER);
+      frame.add(label);
+      JButton button = new JButton("Open");
       button.addActionListener(new ActionListener()
       {
         public void actionPerformed(ActionEvent ev)
         {
-          closeServer();
+          EditorFrame.openSession(frame, new File(System.getProperty("user.home")));
         }
       });
-      button.setToolTipText("Close all current sessions, and shut down the server.");
-      button = new JButton("Close all sessions");
+      frame.add(button);
+      button.setToolTipText("Open an editing session");
+            
+      button = new JButton("Close All");
       frame.add(button);
       button.addActionListener(new ActionListener()
       {
@@ -287,7 +294,19 @@ public class Dred
           closeAll();
         }
       });
-      button.setToolTipText("Close all current sessions, but keep the server running.");
+      button.setToolTipText("Close all editing sessions but keep the server running.");
+      
+      button = new JButton("Exit Server");
+      frame.add(button);
+      button.addActionListener(new ActionListener()
+      {
+        public void actionPerformed(ActionEvent ev)
+        {
+          closeServer();
+        }
+      });
+      button.setToolTipText("Close all editing sessions and shut down the server.");
+
       frame.setIconImage(EditorFrame.dnought.getImage());
       frame.pack();
       frame.setVisible(true);
@@ -367,6 +386,8 @@ public class Dred
 
 
 }
+
+
 
 
 

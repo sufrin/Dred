@@ -10,6 +10,7 @@ import java.util.prefs.*;
 
 import org.sufrin.nanohttp.NanoHTTPD;
 import org.sufrin.nanohttp.Response;
+import org.sufrin.logging.*;
 
 /**
  * A SessionSocket listens for (HTTP) connections
@@ -38,6 +39,9 @@ public class SessionSocket extends NanoHTTPD
   protected Preferences prefs = null;
   public final static String IPV6LOOP = "/0:0:0:0:0:0:0:1",
                              IPV4LOOP = "/127.0.0.1";
+                             
+  public final static Logging log   = Logging.getLog("SessionSocket");
+  public final static boolean debug = log.isLoggable("FINE");
 
   public Response    serve
          (String     uri, 
@@ -48,7 +52,7 @@ public class SessionSocket extends NanoHTTPD
          ) 
   throws IOException, UnsupportedEncodingException
   { String addr = header.get("REMOTE_ADDR");
-    
+    if (debug) log.fine("%s %s %s %s", method, uri, params, header);
     if (!(addr.equals(IPV6LOOP) || addr.equals(IPV4LOOP)))
     { 
        return new Response(HTTP_FORBIDDEN, MIME_PLAINTEXT, 
@@ -123,6 +127,7 @@ public class SessionSocket extends NanoHTTPD
 
   
 }
+
 
 
 
