@@ -1,0 +1,3 @@
+echo "[Dred Server]"
+exec java -jar $HOME/bin/Dred.jar $1 &
+

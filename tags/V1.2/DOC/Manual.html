@@ -1,0 +1,504 @@
+<!--
+%
+%       $Id$
+%
+-->
+<head>
+<title>Dred</title>
+</head>
+
+<body>  
+<h1>
+Dred 
+</h1>
+
+<p> Dred is an lightweight, customizeable, and extensible Unicode text
+editor, written in Java 1.5.  
+</p>
+
+<h2>Unix/Linux Usage</h2>
+<pre>
+        java -jar Dred.jar [--bindings=<i>bindings-url</i>] --wait [filenames] 
+</pre> 
+or 
+<pre>
+        java -jar Dred.jar [--bindings=<i>bindings-url</i>] -w [filenames] 
+</pre>
+or        
+<pre>
+        ted [--bindings=<i>bindings-url</i>] [filenames]
+</pre>  
+<p> This starts edit sessions (using the bindings specified in the file
+at the given url, or the default bindings if none are specified) for
+each of the given filenames.  The program exits when the last session
+terminates.  </p>
+<pre>
+        java -jar Dred.jar [--bindings=<i>bindings-url</i>] [filenames]  &amp;
+</pre>  
+or        
+<pre>
+        dred [--bindings=<i>bindings-url</i>] [filenames]
+</pre>  
+<p>
+This starts edit sessions for each of the given filenames, using an
+existing Dred server if one is running, then exits immediately. If no
+server is running then it starts itself in server mode, puts up an
+(iconified) server control, and starts edit sessions for the
+filenames. 
+</p>
+      
+<p>
+(see also <A href="#hood">Under the Hood</A>)
+</p>
+                
+<h2>Windows Usage
+</h2>
+
+<p>   Make a shortcut to Dred.jar in the distribution directory. It makes
+   sense for this shortcut to be placed somewhere on your desktop.
+</p>
+
+<p>   Make sure that the &quot;Start in&quot; directory in the shortcut is something
+   sensible (your desktop, for example).
+</p>
+
+<p>   
+Don't (yet) try to use the formatting entries on the Etc menu.
+</p>
+
+
+<h2>The Dred Editing Session Window</h2>
+<p> In each editing session window you will see the main document-editing
+component at the bottom, with three &quot;minitext&quot;-editing components
+in a row above it. The minitexts are labelled &quot;....&quot; (pronounced
+&quot;Argument&quot;), &quot;Find&quot; and &quot;Repl&quot;. Many of the editing commands
+described below can also be used on the minitexts.  </p>
+
+<p> The <i>Find</i> and <i>Replace</i> minitexts provide arguments for
+the actions of the same name.  </p>
+
+<p> The <i>Argument</i> minitext provides arguments for many of the other
+editing commands, including those on the <i>File</i> menu which start
+new editing sessions, allow the document to be saved in a different file,
+and so forth.  </p>
+
+<p>Dred shows which of its (mini-)text windows has the keyboard focus
+by showing its cursor in red. A text window with a greyed-out cursor
+doesn't have the keyboard focus.  Focus usually moves into a text window
+as the mouse-cursor moves into it, but occasionally it's necessary to force
+the issue by clicking in the desired window.  </p>
+
+<h2>Editing Model</h2>
+
+<p> At any stage, the document in a window (minitext or main) may have
+a <i>selection</i> (which is a contiguous region of the document).
+It is bounded at one end by the <i>document cursor</i> -- which is shown
+as a thin red rectangle -- and at the other end by the <i>mark</i> --
+which is shown as a thin green rectangle. When the cursor and mark are
+in the same position only the cursor is shown, and the selection (in that
+document) is effectively empty.</p>
+
+
+<p>The document cursor is moved by the arrow keys. It can be placed
+anywhere in the document by clicking with the left mouse-button.  The mark
+can be placed anywhere in the document by clicking on the right mouse
+button. </p>
+
+
+<p>The selection is always shown on a grey background.</p>
+
+<p> After every editing action the position of the document in the
+editor window is adjusted automatically so that <i>the document cursor
+is visible.</i> Between editing commands the position of the  document
+in the window can be adjusted manually by the scroll bars, and this can
+make the document cursor disappear temporarily.  </p>
+
+
+<p> There is a <i>cut-buffer</i> which holds at most one text. It is
+implemented by the system clipboard, and material placed in the cut
+buffer is also available in the clipboard. Moreover, material placed in
+the system clipboard by another application is accessible through the
+cut buffer.  </p>
+
+
+<p>Typing new characters removes the mark, and thus deselects the
+<i>selection</i>, but does not delete the selected material. This is
+deliberate: the &quot;typing deletes selection&quot; behaviour that  most
+people have come to expect of editors leads to many irritating little
+accidents.</p>
+
+<h2>Editing Actions</h2>
+<p> The editing actions described below are a small selection of the
+actions provided by the editor. Brief documentation for <i>all</i> the actions,
+and indications of their current binding(s) to keys and/or Menu buttons
+can be seen by pressing the <tt>Help/Show Bindings</tt> menu item. 
+</p>
+(see also <A href="#bindings">Further documentation of bindings</A>)
+
+
+<h3>Cut and Paste</h3>
+<p>The <i>Cut</i> action removes the selection from the document and puts
+it in the cut-buffer.  The <i>Paste</i> action reinserts the content of
+the cut-buffer into the document and re-selects it. The <i>Copy</i> action
+replaces the cut-buffer with the selection (if there is a selection),
+and the <i>SwapSel</i> action exchanges the selection and the cut-buffer (except
+that if the selection is null, then the cut-buffer doesn't change).  The
+<i>SwapCursorAndMark</i> action does what its name suggests.
+</p>
+
+<h3>Search and Replace</h3>
+<p>
+The three minitexts at the top of an editing window are called the <i>....</i>
+(or <i>Argument</i>),
+the <i>Find</i>, and the <i>Replace</i> texts, respectively.
+</p>
+
+<p>
+The <i>FindDown</i> action selects the next (<i>FindUp</i> previous) instance of the
+<i>Find</i> text. The <i>Edit</i> menu has radiobuttons on it that
+control the interpretation of the pattern as literal or regular expression.
+</p>
+
+<p> <b>If the current selection is an instance of the Find text </b>
+then the <i>ReplaceDown</i> action saves the current selection in the
+cut-buffer and replaces it with the <i>Repl</i> text -- leaving the
+cursor to the right of the mark. The <i>ReplaceUp</i> button does the
+same, but leaves the cursor to the left of the mark.  </p>
+
+<p>The <i>FindUp</i> action is usually bound to the SHIFTED key that
+the <i>FindDown</i> action is bound to; likewise the <i>ReplaceUp</i>
+action is usually bound to the SHIFTED <i>ReplaceDown</i> key.  </p>
+
+<p>The <i>Literal Replace</i> button on the Edit menu controls whether the
+content is interpreted as a regexp substitution (<tt>$n</tt> replaces the
+<tt>n</tt>th bracketed expression in the pattern) or as a literal.  </p>
+
+<p> The <i>FindSelDown</i> action makes the current selection the
+<i>Find</i> text, then acts as the <i>FindDown</i> action. Likewise
+<i>FindSelUp</i> makes the current selection the <i>Find</i> text,
+then acts as the <i>FindUp</i> action.  </p>
+
+<p>The <i>ClearArgument</i> action moves the keyboard focus
+into the Argument minitext area and erases the text that is
+there. <i>ClearFind</i>, and <i>ClearRepl</i> behave analogously in the
+Find and Repl minitexts.</p>
+
+
+
+<h3>Undoing</h3>
+<p>
+For the moment there is no <i>general</i> mechanism for undoing. But
+when the selection is non-null:
+</p>
+
+<pre>
+        <i>Cut</i>      is undone by <i>Paste</i> 
+                
+        <i>SwapSel</i>  is undone by <i>SwapSel</i>
+</pre>
+ 
+and, whether or not the selection is null:     
+<pre>
+        <i>Paste</i>    is undone by <i>Cut</i> 
+</pre>
+<p>
+Moreover if the selection is an instance of the Find text then 
+</p>
+
+<pre>
+        <i>Replace</i>         is undone by <i>SwapSel</i>
+</pre>
+<p>
+The  <i>Delete</i> action simply removes the character to the left of
+the cursor from the document without affecting the cut buffer.
+</p>
+
+<p>
+The  <i>Swap2</i> action swaps the two characters immediately to the left
+of the cursor without affecting the cut buffer.
+</p>
+
+<h2>Bindings, Extensibility and Customizeability</h2>
+Dred has extensive provisions for extensibility: these will be documented
+in due course.
+<p>     Dred's built-in components and extensions are configured from
+        &quot;bindings&quot; files that take a standard form. The most important
+        function of configuration (for most users) is the association
+        of keystrokes with editing actions.
+</p>
+
+
+<h3>Initial Bindings</h3>
+When the program starts, then if no bindings file is specified on its command line with the
+switch
+
+<pre>
+<code>
+        --bindings=<i>bindings-url</i>
+</code>
+</pre>
+it attempts to read a bindings file from the first of the following url-specified
+files that exists:
+
+<pre>
+<code>
+        <i><b>url</b></i>                                     (<i>if the environment variable <tt>DREDBINDINGS</tt> is set to <b>url</b></i>)
+        <i><b>url</b></i>                                     (<i>if the Java virtual machine has its DREDBINDINGS property set to <b>url</b></i>)
+        file:$(HOME)/.dred/dred.bindings        (<i><tt>$(HOME)</tt> stands for the user's desktop in Windows</i>)
+</code>
+</pre>
+<p>
+If it cannot do so, then it issues a warning on the console and
+uses its inbuilt &quot;fallback&quot; bindings. Many people will find that
+these bindings do not suit them. 
+</p>
+
+<p>     A Bindings file is <tt>UTF8</tt>-encoded and contains a sequence of <tt>Binding</tt>
+        descriptions together with some comments. 
+</p>   
+<p>    
+        A comment is a line whose first non-blank character is <code>#</code>
+</p>
+
+<p>        
+        A binding description is a sequence of binding fields separated
+        by spaces and followed by an optional comment that starts with <code>#</code>
+        and extends to the end of the line. 
+</p>
+
+<p>     A binding field is a sequence of non-space characters. Within
+        a binding field: <code>\#</code> stands for <code>#</code>,
+        <code>\s</code> stands for space, <code>\t</code> stands for a
+        tab character, <code>\n</code> stands for a newline character,
+        and a sequence of the form <code>\u</code><i>XXXX</i> (where
+        <i>XXXX</i> are hexadecimal characters) stands for the character
+        at unicode <i>XXXX</i>.
+</p>
+
+<p>     In general the first field of a binding indicates the
+        name of the extension (or component) that is expected to
+        interpret it, the second field of a binding indicates the
+        type of interpretation, and subsequent fields are there
+        to be interpreted. 
+</p>
+
+<p>     
+        The principal built-in component types are 
+</p>
+<ul>    <li>Text-editing windows. There are at least four of
+        these per editing session, namely the document-editing
+        window and the <tt>....</tt> (<tt>Argument</tt>),
+        <tt>Find</tt>, and <tt>Repl</tt> minitexts. (Others may
+        appear on customizeable buttons on the style-buttons tool and
+        other extensions.)   Their behaviour is defined by the class
+        <tt>org.sufrin.dred.SimpleEditor</tt>.       
+        Bindings take one of the forms
+        <pre>
+        <code>text action</code> <i>TextActionName</i> <i>keystroke description</i>
+        <code>text abbrev</code> <i>abbreviation</i>   <i>insertion</i>
+        <code>text key</code>    <i>insertion</i>      <i>keystroke description</i>
+        <code>text abbrev</code> <i>abbreviation</i>   <i>insertion</i> <i>keystroke description</i>
+        </pre>        
+        
+        
+        <p>
+        The first of these forms binds the specified text action to the given keystroke
+        in all editing components (including the main document
+        editor and the minitexts). The second
+        form associates an abbreviation with an insertion. The text <tt>doAbbrev</tt>
+        action finds finds the longest abbreviation match that ends at the
+        cursor, and replaces it with the corresponding insertion text.   
+        The third associates the given keystroke with the insertion of a specific
+        piece of text. It is intended to support the insertion of &quot;national characters&quot;
+        when Dred is run on an operating system that doesn't provide built-in support for
+        special character input. The final form combines the effect of the second and third
+        forms in a single binding, <i>i.e.</i> it both defines an abbreviation and binds a
+        single keystroke to it.
+        </p>
+                 
+        <p>
+        Although they inherit the bindings of text-editing windows, minitexts
+        have three additional possible bindings that override these, whose
+        default forms are shown below:
+        <pre>
+        <code>minitext action doTellBig   ENTER</code>  
+        <code>minitext action doBig       ctrl  ENTER</code> 
+        <code>minitext action doClear     ctrl  U</code> 
+        </pre>   
+        The first of these binds ENTER to a warning that a minitext has
+        a single-line-view editor. The second binds control-ENTER to an action
+        that attaches a multiline-view editor to the minitext.
+        </p>
+        </li>
+        
+        <br></br>
+        
+        <li>The main editing session window. There
+        is just one of these per editing session; its behaviour is defined by the class
+        <tt>org.sufrin.dred.EditorFrame</tt>. Bindings take one of the forms
+        <pre>
+        <code>editor          action</code> <i>EditorActionName</i> <i>keystroke description</i>
+        <code>editor minitext action</code> <i>EditorActionName</i> <i>keystroke description</i>
+        </pre>
+        The first of these binds the same keystroke to the given editor action
+        in the document-editing window as well as in the minitexts. The
+        second form binds only in the minitext windows. Its principal
+        purpose is to enable <tt>TAB</tt> to be used as a ''filepath
+        completion'' key in the session window minitexts 
+        but to insert spaces when used  elsewhere.
+        
+        <p><i>  The document-editing window inherits the text action and
+        text abbreviation bindings, but not the minitext-specific
+        bindings.  </i></p>
+        </li>     
+</ul>
+
+<h4>A few example Bindings</h4>
+<pre>
+<code>
+   text   action doAbbrev         ESCAPE
+   text   action doInsertTab      TAB                           # insert spaces up to next tab position
+   text   action doIndentNewline  ENTER                         # insert newline and indent to current margin
+   text   action doInsertNewline  ctrl ENTER                    # insert newline stay at left margin     
+   text   abbrev forall           \u2200        meta shift A    # ∀   
+   text   abbrev exists           \u2203        meta shift E    # ∃    
+     
+   text   key                     \u03B3        meta G          # (gamma) γ       
+   text   key                     \u0393        meta shift G    # (Gamma) Γ        
+
+   editor minitext action doComplete            TAB             # not in the main window
+   editor          action doFindDown            F9
+   editor          action doFindUp              shift F9
+</code>
+</pre>
+<A name="bindings"></A>
+<h4>Further documentation of Bindings</h4>
+<p>     Clicking on the <tt>Help/Show Bindings</tt> menu item provides
+        documentation for the built-in actions. Clicking on the
+        <code>Help/Insert Bindings</code> menu item inserts the prototype
+        of a bindings file into the document currently being edited. This
+        is intended to make it easy to construct an alternative bindings
+        file. The prototype shows the existing bindings, and can be
+        edited into the right form and saved in the right place.
+</p>
+
+<h4>Keystroke Specifications</h4>
+Keystroke specifications take the form of zero or more optional modifiers followed by a 
+<i>key specification</i>:
+<pre>
+                <code> [ctrl][alt][meta][shift][altGraph] <i>key specification</i></code>
+</pre>
+<p>
+A <i>key specification</i> takes one of the forms
+given in the documentation for <tt>java.awt.event.KeyEvent</tt>, but without the
+<tt>VK_</tt> prefix. 
+</p>
+<p>
+To specify a modified variant of a character that appears 
+in the shift position on a keytop, you have to specify the
+<tt>shift</tt> with the character that appears in the unshifted position
+on the keytop.
+For example: <code>alt LEFT_PARENTHESIS</code> is an invalid 
+keystroke specification, and the keystroke you get by pressing <tt>alt</tt> with <tt>(</tt> 
+has to be expressed as <code>alt shift 9</code>.
+</p>
+<p>
+Beware that on some keyboards the <tt>alt</tt> and
+<tt>meta</tt> keys are indistinguishable, and that some X window managers
+pre-empt some keystroke combinations for their own purposes.
+</p>
+
+<h2>
+<A name="hood"> 
+Under the hood
+</A>
+</h2>
+<h3>Server Mode</h3>
+<p>
+In server mode the program listens for
+HTTP1.0 requests to start editing sessions. 
+</p>
+
+<p>A request takes one of the forms:
+</p>
+
+<pre>
+        GET /edit?CWD=workingdirectory&amp;FILE=absolutefilename&amp;WAIT=true
+        GET /edit?CWD=workingdirectory&amp;FILE=absolutefilename
+</pre>
+
+<p>
+The server responds by starting an editing session for the given file using the
+given working directory as the session's effective working directory.
+</p>
+<p>
+If the first form is used, then when the session is terminated an HTTP response 
+is generated; otherwise the HTTP response is generated immediately.
+</p>
+
+The program can be started in server mode by invoking:
+</p>
+        
+<pre>
+        java -jar Dred.jar [--port=####] --serve 
+</pre>
+<p>
+If the <tt>--port</tt> specification doesn't appear then
+the server listens at the user's default Dred port number. If it does
+appear then the user's default port is set (and retained) before the
+server starts listening. The default port can also be set by using the
+<b><tt>File/Preferences/Default Port ....</tt></b> menu button in a running Dred session.
+</p>
+
+<p>
+To discover what the default port it, use the command
+<pre>
+        java -jar Dred.jar --port 
+</pre>
+which outputs the port on its standard output stream.
+</p>
+
+<p>
+To discover whether there really is a Dred server active at the default port,
+use the command
+<pre>
+        java -jar Dred.jar --serving
+</pre>
+which succeeds (Unix exit 0) if there is, and fails (Unix exit 1) otherwise.
+</p>
+
+<h2>Reference</h2>
+<p>The Dred document editing model is essentially that established in my
+(1981) Science of Computer Programming paper: 
+&quot;Formal Specification of a Display-Oriented Text Editor&quot;.
+</p>
+
+<pre>
+<b>Bernard Sufrin (Oxford, March 2005)</b>
+<b>$Revision$</b>
+</pre>
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
