@@ -166,8 +166,6 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       bind("doSavePrefs", "File/Prefs");
       menu.addSeparator();
       bind("doLogger", "File/Prefs");
-      menu.addSeparator();
-      bind("doDefaultServer");
 
       menu = addMenu("Edit");
       bind("doReplaceAll");
@@ -537,18 +535,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   { ed.doInsertUnicode(text.argument.getText()); 
     edFocus(); 
   } 
-  
-  @ActionMethod(label="Default Port ....", tip="Set (from ....) the default port to be used when Dred is started as a server")
-  public void doDefaultServer()
-  { String port = text.argument.getText(); 
-    if (port.matches("[0-9]+"))
-    { prefs.putInt("defaultport", Integer.parseInt(port));
-      doSavePrefs();
-    }
-    else
-      Dred.showWarning("Default server port must be a number between 1024 and 65535"); 
-  } 
-  
+    
   protected static Bindings protoBindings = null;
   public    static void  setBindings(Bindings thePrototype) { protoBindings = thePrototype; }
   
@@ -839,10 +826,11 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     String message = "<html>Dred $Revision$<br>"
                      + "(C) 2004, 2005 Bernard Sufrin<br>"
                      + "Bernard.Sufrin@sufrin.org.uk<br>"
-                     + ("Default server port for "+System.getProperty("user.name")+" is "+prefs.get("defaultport", "unset"))
+                     + "<br></br>"
                      + (Dred.sessionSocket == null
                        ? ""
                        : ("Serving on port: " + Dred.sessionSocket.getPort()))
+                     + "<br></br>"
                      + (Dred.loggingSocket == null
                        ? ""
                        : ("Logging on port: " + Dred.loggingSocket.getPort()))
@@ -1110,7 +1098,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   public void doHelp()
   {
     WebBrowser b = showBrowser("Dred Help");
-    b.showDocument(Dred.class.getResource("Manual.html"));
+    b.showDocument(Dred.class.getResource("index.html"));
   }
   
   @ActionMethod(label="Show bindings", tip="Show the current bindings and abbreviations in a window")
@@ -1766,6 +1754,8 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
+
 
 
 

@@ -140,6 +140,14 @@ public class NanoHTTPD implements HTTP
     return new Response(HTTP_OK, "text/plain", reflect);
 
   }
+  
+  /** Find a socket on a free port */
+  
+  public static ServerSocket findSocket() throws IOException
+  { ServerSocket socket = new ServerSocket();
+    socket.bind(null); // find an ephemeral port
+    return socket;
+  }
 
   public static String flattenProps(String caption, Properties params)
   {
@@ -170,10 +178,11 @@ public class NanoHTTPD implements HTTP
    * Throws an IOException if the socket is already in use
    */
   public NanoHTTPD(int port) throws IOException
-  {
-    this.port = port;
+  { 
+    serverSocket = port==0 ? findSocket() : new ServerSocket(port);
+    
+    this.port = serverSocket.getLocalPort();   
 
-    serverSocket = new ServerSocket(this.port);
     Thread t = new Thread()
     {
       public void run()
@@ -609,3 +618,4 @@ public class NanoHTTPD implements HTTP
   }
 
 }
+

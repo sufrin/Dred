@@ -121,7 +121,7 @@ public class Bindings implements Iterable<Bindings.Binding>
              try { read(new URL(url, fields[1])); } catch (Exception ex) {}
           else
           if (fields.length>1 && fields[0].equalsIgnoreCase("show"))
-             System.err.println("[DRED: "+binding.getFields(1)+"]");
+             System.err.println("[Dred: "+binding.getFields(1)+"]");
         }
       }
     }
@@ -227,6 +227,7 @@ public class Bindings implements Iterable<Bindings.Binding>
     }
   }
 }
+
 
 
 

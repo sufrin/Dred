@@ -77,24 +77,17 @@ public class Dred
       for (String arg : args)
         if (arg.equals("-w") || arg.equals("--wait"))
           wait=true;
-        else
-        if (arg.equals("--port"))
-        { 
-          String port = prefs.get("defaultport", "0");
-          System.out.println(port);
-          System.exit(0);
-        }
         else if (arg.equals("--serving"))
-        { 
+        { System.out.println(prefs.getInt("port", 0));
           System.exit(isServing() ? 0 : 1);
         }
-        else if (arg.startsWith("--port="))
-        { int port = Integer.parseInt(arg.substring("--port=".length()));
-          prefs.putInt("defaultport", port);
-          try { prefs.sync(); } catch (BackingStoreException ex) { ex.printStackTrace(); }
+        else if (arg.startsWith("--serve="))
+        { int port = Integer.parseInt(arg.substring("--serve=".length()));
+          startServer(port);
         }
-        else if (arg.equals("--serve") && prefs.getInt("defaultport", 0)!=0)
-          startServer(prefs.getInt("defaultport", 0));          
+        else if (arg.equals("--serve"))
+        { startServer(0);       
+        }   
         else if (arg.startsWith("--logger="))
           startLogger(Integer.parseInt(arg.substring(8)));
         else if (arg.startsWith("--logger"))
@@ -162,7 +155,7 @@ public class Dred
   public synchronized static void startSession()
   { if (bindings.isEmpty())
     {
-      String rootBindings = System.getProperty("REDBINDINGS");
+      String rootBindings = System.getProperty("DREDBINDINGS");
       if (rootBindings==null) rootBindings = System.getenv("DREDBINDINGS");
       if (rootBindings==null) rootBindings = System.getProperty("user.home")+File.separator+".dred"+File.separator+"dred.bindings";
       if (new File(rootBindings).canRead())
@@ -208,15 +201,8 @@ public class Dred
         File   file = new File(path);
         int    port = prefs.getInt("port", 0);  
         if (port==0) 
-        {  port = prefs.getInt("defaultport", 0);
-           if (port==0)
-           {  System.err.printf("[Dred: Editing locally. Use --port=#### to set default]%n", port);
-              startLocalSession(path);
-              return;
-           }
-           else
-           {  startServer(port);
-           }
+        {  port = startServer(port);
+           System.err.printf("[Dred: started server on port %d]%n", port);
         }
         
         int retries = 1;
@@ -230,7 +216,9 @@ public class Dred
           return;
         }
         catch (ConnectException ex)
-        { startServer(port);
+        { 
+          System.err.println("[DRED: NO SERVER AT: "+port+" STARTING ANOTHER]"); 
+          port = startServer(0);
           retries--;
         }
   }
@@ -255,13 +243,19 @@ public class Dred
     }
   }
   
-  /** Start a Dred server on the given port */
-  public static void startServer(int port)
+  /** Start a Dred server on the given port and return it; choose
+      an ephemeral port if port==0.
+  */
+  public static int startServer(int port)
   {
     String user = System.getProperty("user.name");
     try
     {
       sessionSocket = new SessionSocket(port, prefs);
+      port = sessionSocket.getPort();
+      prefs.putInt("port", port);
+      try { prefs.sync(); } catch (BackingStoreException ex) { ex.printStackTrace(); }
+
       final JFrame frame = new JFrame("[[[Dred Server " + user + "@" + port + "]]]");
       frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
       frame.addWindowListener(new WindowAdapter()
@@ -303,6 +297,7 @@ public class Dred
       System.err.println("[Dred: cannot start server on port "+port+"]");
       System.exit(1);
     }
+    return port;
   }
   
   /** Start the HTTP logger interface on the given port */  
@@ -370,6 +365,9 @@ public class Dred
 
 
 }
+
+
+
 
 
 

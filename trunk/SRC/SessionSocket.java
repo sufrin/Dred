@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URL;
+import java.net.*;
 import java.util.prefs.*;
 
 import org.sufrin.nanohttp.NanoHTTPD;
@@ -28,13 +28,11 @@ import org.sufrin.nanohttp.Response;
 
 public class SessionSocket extends NanoHTTPD
 { /** Make a session socket and publish (via preferences) its port. */
-
+  
   public SessionSocket(int port, Preferences prefs) throws IOException
-  {
+  { 
     super(port);
     this.prefs=prefs;
-    prefs.putInt("port", port);
-    try { prefs.sync(); } catch (BackingStoreException ex) { ex.printStackTrace(); }
   }
   
   protected Preferences prefs = null;
@@ -122,8 +120,11 @@ public class SessionSocket extends NanoHTTPD
                            String.format("%s %s %s", HTTP_FORBIDDEN, "GET", uri));
     }
   }
+
   
 }
+
+
 
 
 
