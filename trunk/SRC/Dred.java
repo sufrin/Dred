@@ -89,9 +89,16 @@ public class Dred
         }
         else if (arg.equals("--serve"))
         { startServer(0);       
-        }   
+        }
+        else if (arg.startsWith("--enc="))
+        { String name = arg.substring("--enc=".length());
+          if (EditorFrame.fileChooser.getCodings().contains(name))
+             EncodingName = name;
+          else
+             showWarning(name+" is not a recognised encoding!");
+        }
         else if (arg.startsWith("--logger="))
-          startLogger(Integer.parseInt(arg.substring(8)));
+          startLogger(Integer.parseInt(arg.substring("--logger=".length())));
         else if (arg.startsWith("--logger"))
           startLogger("60001");
         else if (arg.equals("--bindings="))
@@ -216,7 +223,7 @@ public class Dred
         while (retries>=0)
         try
         {
-          URL              url    = new URL("http", "localhost", port, "/edit?FILE="+file.getAbsolutePath()+"&CWD="+cwd);
+          URL              url    = new URL("http", "localhost", port, "/edit?FILE="+file.getAbsolutePath()+"&CWD="+cwd+"&ENCODING="+EncodingName);
           LineNumberReader reader = new LineNumberReader(new InputStreamReader(url.openStream(), "UTF8")); 
           reader.close();
           return;
@@ -249,6 +256,20 @@ public class Dred
     }
   }
   
+  /** Returns the name of my host */
+  public static String currentHost()
+  {
+     try
+     {
+        java.net.InetAddress localMachine = java.net.InetAddress.getLocalHost();    
+        return localMachine.getHostName();
+     }
+     catch(java.net.UnknownHostException uhe)
+     {
+        return "";
+     }
+  }
+  
   /** Start a Dred server on the given port and return it; choose
       an ephemeral port if port==0 and we're not on Windows.
   */
@@ -266,7 +287,7 @@ public class Dred
       else
         pseudoServer = true;
       
-      final JFrame frame = new JFrame(pseudoServer ? "[[[Dred]]]" : "[[[Dred serving " + user + " at " + port + "]]]");
+      final JFrame frame = new JFrame(pseudoServer ? "[[[Dred]]]" : "[[[Dred " + user + "@"+currentHost()+ "]]]");
       frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
       frame.addWindowListener(new WindowAdapter()
       {
@@ -278,9 +299,10 @@ public class Dred
       frame.setLayout(new GUIBuilder.ColLayout(-1));
       
       JLabel label = new JLabel
-      ("<html><center>Dred<br></br>serving " 
+      ("<html><center>Dred<br></br> " 
       + user 
-      + (pseudoServer ? "" : "<br></br>at " + port)
+      + "@" + currentHost()
+      + (pseudoServer ? "" : (":"+ port))
       +"</center></html>"
       );
       label.setHorizontalAlignment(SwingConstants.CENTER);
@@ -408,6 +430,7 @@ public class Dred
 
 
 }
+
 
 
 
