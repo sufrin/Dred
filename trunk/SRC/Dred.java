@@ -92,6 +92,8 @@ public class Dred
           startLogger(Integer.parseInt(arg.substring(8)));
         else if (arg.startsWith("--logger"))
           startLogger("60001");
+        else if (arg.equals("--bindings="))
+          bindings.clear();
         else if (arg.startsWith("--bindings="))
           readBindings(arg.substring("-bindings=".length()), true);
         else if (wait) 
@@ -365,6 +367,7 @@ public class Dred
 
 
 }
+
 
 
 

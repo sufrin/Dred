@@ -299,6 +299,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       
       menu = addMenu("Help");
       bind("doHelp");
+      if (Dred.sessionSocket != null) bind("doMozilla");
       menu.addSeparator();
       bind("doCurrentBindings");
       bind("doCommands");
@@ -542,20 +543,20 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   protected void bindKeys()
   { if (protoBindings==null || protoBindings.isEmpty())
     {
-      bindAll("ESCAPE",                 "doClearArgument");
-      bindAll("INSERT",                 "doClearFind");
-      bindAll("alt INSERT",             "doClearRepl");
+      bindAll("ctrl INSERT",            "doClearArgument");
+      bindAll("ctrl alt INSERT",        "doClearFind");
+      bindAll("ctrl alt shift INSERT",  "doClearRepl");
       bindAll("control E",              "doEdit");
       bindAll("TAB",                    "doComplete", false); // Don't override TAB in main
-      bindAll("F9",                     "doFindDown");
-      bindAll("shift F9",               "doFindUp");
-      bindAll("alt F9",                 "doFindSelDown");
-      bindAll("alt shift F9",           "doFindSelUp");
+      bindAll("ctrl F",                 "doFindDown");
+      bindAll("ctrl shift F",           "doFindUp");
+      bindAll("ctrl alt F",             "doFindSelDown");
+      bindAll("ctrl alt shift F",       "doFindSelUp");
       bindAll("control G",              "doGoToXY");
-      bindAll("control C",              "doKillProcess");
+      bindAll("control K",              "doKillProcess");
       bindAll("control Q",              "doQuit");
-      bindAll("F10",                    "doReplaceDown");
-      bindAll("shift F10",              "doReplaceUp");
+      bindAll("ctrl R",                 "doReplaceDown");
+      bindAll("ctrl shift R",           "doReplaceUp");
       bindAll("control S",              "doSave");     
       bindAll("control alt LEFT",       "doUnPrefix");
       bindAll("control LEFT",           "doUndent");
@@ -1094,9 +1095,9 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     doc.pasteAndSelect(getBindingsText(), false);    
   }
 
-  @ActionMethod(label="Help", tip="Show the help text")
+  @ActionMethod(label="Browse Help", tip="Browse Dred help using Dred's built-in browser")
   public void doHelp()
-  {
+  {     
     WebBrowser b = showBrowser("Dred Help");
     b.showDocument(Dred.class.getResource("index.html"));
   }
@@ -1107,6 +1108,17 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     showBrowser("Current Dred Bindings", bindings);
   }
 
+  @ActionMethod(label="Browse Help with Mozilla", tip="Browse the help text (from Dred's built-in server) using mozilla.")
+  public void doMozilla()
+  {
+        { try
+           {  Runtime.getRuntime().exec(String.format("mozilla http://localhost:%d/index.html", Dred.sessionSocket.getPort()));
+           }
+           catch (IOException ex)
+           { ex.printStackTrace();
+           }
+         }  
+  }
   
   /** Returns HTML text describing the current bindings and abbreviations
    */
@@ -1155,7 +1167,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
        public void run() { f.dispose(); }
      }
     );
-    menu.add(quit);
+    menu.add(quit);    
     WebBrowser b = new WebBrowser(); 
     for (String h:html) b.showHtmlText(h);
     f.add(b.getScrolledComponent());
@@ -1194,7 +1206,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   {
     ed.doLoad(path);
   }
-
+    
   /**
    * Swap the current selection with its lowercased
    * translation.
@@ -1754,6 +1766,11 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
+
+
+
+
 
 
 

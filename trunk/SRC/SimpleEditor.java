@@ -267,6 +267,7 @@ class SimpleEditor implements InteractionListener
   { if (protoBindings==null || protoBindings.isEmpty())
     {  abbrs.clear();
        keys.clear();
+       bind("ESCAPE",              "doAbbrev");
        bind("TAB",                 "doInsertTab");
        bind("ENTER",               "doIndentNewline");
        bind("control ENTER",       "doInsertNewline");
@@ -276,11 +277,12 @@ class SimpleEditor implements InteractionListener
        bind("DOWN",                "doDownMove");
        bind("HOME",                "doHomeMove");
        bind("END",                 "doEndMove");
-       bind("F12",                 "doSwapCursorAndMark");
-       bind("F1",                  "doCut");
-       bind("F2",                  "doPaste");
-       bind("F3",                  "doCopy");
-       bind("F4",                  "doSwapSel");
+       bind("ctrl S",              "doSwapCursorAndMark");
+       bind("ctrl X",              "doCut");
+       bind("ctrl shift C",        "doSwapSel");
+       bind("ctrl V",              "doPaste");
+       bind("ctrl C",              "doCopy");
+       bind("ctrl shift C",        "doSwapSel");
        bind("DELETE",              "doLeftDelete");
        bind("BACK_SPACE",          "doLeftDelete");
        bind("alt DELETE",          "doSwap2");
@@ -592,6 +594,8 @@ class SimpleEditor implements InteractionListener
     frame.setVisible(true);
   }
 }
+
+
 
 
 

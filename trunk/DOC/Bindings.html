@@ -43,7 +43,83 @@ uses its inbuilt &quot;fallback&quot; bindings. Many people will find that
 these bindings do not suit them. 
 </p>
 
-<p>     A Bindings file is <tt>UTF8</tt>-encoded and contains a sequence of <tt>Binding</tt>
+<h4>The Fallback Bindings</h4>
+<pre>
+editor minitext action doComplete    TAB                  # complete the filename in the Argument minitext
+editor action   doAbout              #keystroke#          # Show version details of the currently-running Dred
+editor action   doCWD                #keystroke#          # Change the directory of this session to the directory named in the ... field
+editor action   doChooseCWD          #keystroke#          # Browse for a directory then change directory to it
+editor action   doClearArgument      ctrl  INSERT         # Clear the .... field and send focus there
+editor action   doClearFind          ctrl alt  INSERT     # Clear the find field and send focus there
+editor action   doClearRepl          shift ctrl alt  INSERT # Clear the repl field and send focus there
+editor action   doCommands           #keystroke#          # Insert (and select) the skeleton of a bindings file (showing current bindings) into the current document.
+editor action   doComplete           TAB                  # Try to complete the filename in the .... field
+editor action   doCurrentBindings    #keystroke#          # Show the current bindings and abbreviations in a window
+editor action   doEdit               ctrl  E              # Edit the file named in the ... field
+editor action   doEditChoose         #keystroke#          # Browse for a file and start editing it
+editor action   doFindDown           ctrl  F              # Find the next instance of the pattern in the Find field
+editor action   doFindSelDown        ctrl alt  F          # Set the find field to the selection, then find its next instance
+editor action   doFindSelUp          shift ctrl alt  F    # Set the find field to the selection, then find its previous instance
+editor action   doFindUp             shift ctrl  F        # Find the previous instance of the pattern in the Find field
+editor action   doGoToXY             ctrl  G              # Go to the row.col specified by the .... field
+editor action   doHelp               #keystroke#          # Browse Dred help using Dred's built-in browser
+editor action   doIndent             ctrl  RIGHT          # Add a leading space to each line of the selection
+editor action   doKillProcess        ctrl  K              # Kill any currently-running background process
+editor action   doLogger             #keystroke#          # Start the HTTP logging interface at the port number specified in ....
+editor action   doLowercase          #keystroke#          # Swap the current selection with its lowercased translation
+editor action   doMatchDown          ctrl  OPEN_BRACKET   # Find next (balanced) bracket that matches the opening bracket at the cursor
+editor action   doMatchUp            ctrl  CLOSE_BRACKET  # Find previous (balanced) bracket that matches the opening bracket at the cursor
+editor action   doMozilla            #keystroke#          # Browse the help text (from Dred's built-in server) using mozilla.
+editor action   doNewView            #keystroke#          # Open another view on the document being edited
+editor action   doPrefix             ctrl alt  RIGHT      # Add the text in .... to the start of each line of the selection
+editor action   doQuit               ctrl  Q              # Quit the current file-editing window. Offers a dialogue if the document being edited has channged since it was last saved.
+editor action   doReplaceAll         #keystroke#          # Replace all instances of the Find pattern within the selection with the Repl text.
+editor action   doReplaceDown        ctrl  R              # Replace the current instance of the find pattern with the replacement text
+editor action   doReplaceUp          shift ctrl  R        # Replace the current instance of the find pattern with the replacement text
+editor action   doSave               ctrl  S              # Save the document being edited if it has changed since it was last saved
+editor action   doSaveAs             #keystroke#          # Save the document being edited in the file named by the .... field
+editor action   doSaveAsChoose       #keystroke#          # Browse for a filename in which to save the document being edited
+editor action   doSavePrefs          #keystroke#          # Save the current state of all preferences now
+editor action   doShell              #keystroke#          # Pipe the current selection through the shell command given in the .... field
+editor action   doUnPrefix           ctrl alt  LEFT       # Remove the text in .... from the start of each line of the selection
+editor action   doUndent             ctrl  LEFT           # Remove a leading space from each line of the selection
+editor action   doUnicode            alt  U               # Insert Unicode character whose (hex) code is in ....
+editor action   doUppercase          #keystroke#          # Swap the current selection with its uppercased translation
+text action     doAbbrev             ESCAPE               # Find the longest abbreviation that matches text at the left of the cursor and insert the corresponding insertion text. This is undone by doSwapSel.
+text action     doCopy               ctrl  C              # Set the system clipboard from the document selection
+text action     doCut                ctrl  X              # Set the system clipboard from the document selection, and remove the document selection
+text action     doDeleteLineLeft     ctrl  U              # Delete the line to the left of the cursor
+text action     doDownMove           DOWN                 # Move cursor down (in the same column if possible)
+text action     doEndMove            END                  # Move cursor to the start of the last line of the document
+text action     doHomeMove           HOME                 # Move cursor to the start of the document
+text action     doIndentNewline      ENTER                # Insert a newline and copy current indentation
+text action     doInsertNewline      ctrl  ENTER          # Insert a newline without copying current indentation
+text action     doInsertTab          TAB                  # Simulate the insertion of a tab character
+                                                          # (Tabs never appear in Dred documents)
+text action     doLeftDelete         BACK_SPACE           # Delete the character to the left of the cursor
+text action     doLeftDelete         DELETE               # Delete the character to the left of the cursor
+text action     doLeftMove           LEFT                 # Move cursor to the previous location in the document
+text action     doPaste              ctrl  V              # Insert the system clipboard into the document at the cursor, and select it
+text action     doRightMove          RIGHT                # Move cursor to the next location in the document
+text action     doSelectLine         ctrl  L              # Select the line under the cursor (also triple-click)
+text action     doSelectParagraph    ctrl  P              # Select the paragraph(s) that contain the selection or cursor
+text action     doSelectWord         ctrl  W              # Select the word under the cursor (also double-click)
+text action     doSwap2              alt  BACK_SPACE      # Swap the two characters preceding the cursor
+text action     doSwap2              alt  DELETE          # Swap the two characters preceding the cursor
+text action     doSwapCursorAndMark  ctrl  S              # Swap the cursor and the mark
+text action     doSwapSel            shift ctrl  C        # Swap the system clipboard with the document selection
+text action     doUpMove             UP                   # Move cursor up (in the same column if possible)
+minitext action doBig                ctrl  ENTER          # to make a multiline-view minitext of this one-line-view minitext
+minitext action doClear              ctrl  U              # Clear this text field
+minitext action doTellBig            ENTER                # Tell the user how to make a new big window onto this text field
+</pre>
+
+
+<h4>
+Specifying Bindings
+</h4>
+<p>     Bindings are specified by bindings files, which are 
+        <tt>UTF8</tt>-encoded and contain a sequence of <tt>Binding</tt>
         descriptions together with some comments. 
 </p>   
 <p>    
@@ -143,19 +219,16 @@ these bindings do not suit them.
         </li>     
 </ul>
 
-<h4>A few example Bindings</h4>
+<h4>Example Bindings</h4>
+The fallback bindings shown above are in the form they might appear
+in a Bindings file. Here are a few other examples:
 <pre><code>
-   text   action doAbbrev         ESCAPE
-   text   action doInsertTab      TAB                           # insert spaces up to next tab position
-   text   action doIndentNewline  ENTER                         # insert newline and indent to current margin
-   text   action doInsertNewline  ctrl ENTER                    # insert newline stay at left margin     
    text   abbrev forall           \u2200        meta shift A    # ∀   
    text   abbrev exists           \u2203        meta shift E    # ∃    
      
    text   key                     \u03B3        meta G          # (gamma) γ       
    text   key                     \u0393        meta shift G    # (Gamma) Γ        
 
-   editor minitext action doComplete            TAB             # not in the main window
    editor          action doFindDown            F9
    editor          action doFindUp              shift F9
 </code></pre>
@@ -178,9 +251,13 @@ Keystroke specifications take the form of zero or more optional modifiers follow
                 <code> [ctrl][alt][meta][shift][altGraph] <i>key specification</i></code>
 </pre>
 <p>
-A <i>key specification</i> takes one of the forms
-given in the documentation for <tt>java.awt.event.KeyEvent</tt>, but without the
-<tt>VK_</tt> prefix. 
+A <i>key specification</i> takes one of the forms given in the
+documentation for <tt>java.awt.event.KeyEvent</tt>, but without the
+<tt>VK_</tt> prefix. If you don't want to bother looking these up,
+then check the <b>Tools/Keystroke&nbsp;Tool</b> checkbox.  This puts up
+a keystroke tool -- if you type anything when the mouse cursor is over
+this tool, then a specification of the key you typed will be placed in
+the current document.
 </p>
 <p>
 To specify a modified variant of a character that appears 
@@ -205,3 +282,5 @@ pre-empt some keystroke combinations for their own purposes.
 
 </body>
 </html>
+
+
