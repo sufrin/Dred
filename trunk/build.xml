@@ -44,7 +44,7 @@
         <target name = "Dred" depends="compile">
             <jar    basedir  ="${BUILD}" 
                     destfile ="${BUILD}/Dred.jar"
-                    includes = "**/*.class **/*.jpg **/*.html **/*.bindings"
+                    includes = "**/*.class **/*.jpg **/*.png **/*.html **/*.bindings"
                     excludes = "org/sufrin/nanohttp/NanoHTTPDServer.class"
                     >                    
                <manifest>
@@ -107,10 +107,12 @@
                   <arg value="../${SOURCE}"/>
                 </exec>
                 
-                <copy todir="${BUILD}/org/sufrin/dred" file="${SOURCE}/dnought.jpg"/>
-                <copy todir="${BUILD}/org/sufrin/dred" file="${DOC}/Manual.html"/>
+                <copy todir="${BUILD}/org/sufrin/dred">
+                   <fileset dir="${DOC}" includes="*.*"/>
+                </copy>
                 <copy todir="${BUILD}/org/sufrin/dred">
                    <fileset dir="${BINDINGS}"/>
+                   <fileset dir="${SOURCE}" includes="*.jpg"/>
                 </copy>
 
 
@@ -120,6 +122,9 @@
                 <delete dir="${BUILD}" />
         </target>
 </project>
+
+
+
 
 
 

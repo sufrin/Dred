@@ -1,8 +1,11 @@
 package org.sufrin.dred;
 
 import java.io.File;
+import java.io.InputStream;
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
 import java.util.prefs.*;
 
 import org.sufrin.nanohttp.NanoHTTPD;
@@ -71,9 +74,28 @@ public class SessionSocket extends NanoHTTPD
       return new Response(HTTP_OK, MIME_PLAINTEXT,
                           String.format("Dred %s in %s ", fileName,startCWD));
     }
-    return new Response(HTTP_FORBIDDEN,
-                        MIME_PLAINTEXT,
-                        String.format("%s %s %s", HTTP_FORBIDDEN, method, uri));
+    else
+    if (method.equalsIgnoreCase("GET") && uri.toUpperCase().startsWith("/HELP"))
+    { URL url = Dred.class.getResource("index.html");
+      return new Response(HTTP_OK, MIME_HTML, url.openStream());
+    }
+    else
+    if (method.equalsIgnoreCase("GET") && uri.equals("/favicon.ico"))
+    { return serveURL("class://org.sufrin.dred.Dred/favicon.png", "image/png");
+    }
+    else
+    if (method.equalsIgnoreCase("GET") && uri.endsWith(".png"))
+    { return serveURL("class://org.sufrin.dred.Dred"+uri, "image/png");
+    }
+    else
+    if (method.equalsIgnoreCase("GET") && uri.endsWith(".html"))
+    { 
+      return serveURL("class://org.sufrin.dred.Dred"+uri, "text/html");
+    }
+    else
+      return new Response(HTTP_FORBIDDEN,
+                          MIME_PLAINTEXT,
+                          String.format("%s %s %s", HTTP_FORBIDDEN, method, uri));
   }
   
   public void close() 
@@ -82,7 +104,33 @@ public class SessionSocket extends NanoHTTPD
     super.close();
     
   }
+  
+  public Response serveURL(String uri, String kind)
+  { try
+    { URL         url    = new URL(uri);
+      InputStream is     = new BufferedInputStream(url.openStream());
+      int         length = is.available();
+      Response r = new Response(HTTP_OK, kind, is);
+      r.addHeader("Content-length", "" + length);
+      // System.err.printf("[%s %d]%n", uri, length);
+      return r;
+    }
+    catch (Exception ex)
+    {  ex.printStackTrace();
+       return new Response(HTTP_FORBIDDEN,
+                           MIME_PLAINTEXT,
+                           String.format("%s %s %s", HTTP_FORBIDDEN, "GET", uri));
+    }
+  }
+  
 }
+
+
+
+
+
+
+
 
 
 
