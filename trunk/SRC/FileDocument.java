@@ -38,7 +38,7 @@ public class FileDocument extends SearchableDocument
   
   
   
-  /** Construct an anonymous document. */
+  /** Construct an anonymous document */
   public  FileDocument(String encoding)
   { lastModified=0;
     anonymous=true;
@@ -61,8 +61,8 @@ public class FileDocument extends SearchableDocument
     }
   }
   
-  /** Load the document from the file with the given name. 
-      Assume (pro-tem) the coding is UTF8.
+  /** Load the document from the file with the given name using the charset encoding associated with
+   *  the FileDocument
   */
   public void doLoad(String name)
   { fileName = new File(name).getAbsoluteFile();
@@ -141,13 +141,15 @@ public class FileDocument extends SearchableDocument
   }
   
   public boolean secondaryBackups = false;
+  
+  protected final int bufferSize = 32768;
 
   /** Generate a copy of the associated file in the same directory as the
       associated file; the name of the copy is derived from the name
       of the associated file by appending a tilde to it.  If a file
       with that name exists already then it is deleted beforehand.
       
-      TODO: change line-by-line backup to bulk byte backup
+      DONE (Apr 05 05): change line-by-line backup to bulk byte backup
   */
   public boolean backup()
   { if (!fileName.exists() && fileName.canRead())
@@ -155,8 +157,7 @@ public class FileDocument extends SearchableDocument
        return false;
     }
     try
-    { BufferedReader r = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), encoding));
-      File           b;
+    { File           b;
       try 
       {
         b = File.createTempFile("DRED-", ".tmp", fileName.getParentFile());
@@ -165,11 +166,14 @@ public class FileDocument extends SearchableDocument
       { fileReport("Cannot create temporary backup file ("+ex.getMessage()+")\nDirectory: "+fileName.getParentFile());
         return false;
       }
-      PrintWriter p = new PrintWriter(new OutputStreamWriter(new FileOutputStream(b), encoding));
       log.fine("writing to %s", b);
-      String line=null;
-      while ((line=r.readLine())!=null) p.println(line);
-      p.close();
+      // We handle our own buffering, thereby avoiding the complexities of BufferedI/OStream
+      InputStream  r = new FileInputStream(fileName);
+      OutputStream w = new FileOutputStream(b);
+      byte [] buffer = new byte[bufferSize];
+      int count = 0;
+      while (0<=(count=r.read(buffer))) w.write(buffer, 0, count);
+      w.close();
       log.fine("closed %s", b);
       // This is where to generate multiple backup files
       File back = new File(fileName.getAbsolutePath()+"~");
