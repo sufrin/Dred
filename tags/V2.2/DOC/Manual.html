@@ -1,0 +1,297 @@
+<!--
+%
+%       $Id: Manual.html 23 2005-04-04 16:18:32Z sufrin $
+%
+-->
+<head>
+        <title>Dred</title>
+        <link rel="shortcut icon" href="favicon.png" type="image/png" ></link></head>
+</head>
+
+<body>  
+<center>
+        <image alt="" src="dnought.png"></image>
+        <h1>Dred </h1>
+</center>
+
+
+
+
+<p> Dred is an lightweight, customizeable, and extensible Unicode text
+editor, written in Java 1.5.  
+</p>
+
+<h2>Unix/Linux Usage</h2>
+<pre>
+        java -jar Dred.jar [--bindings=<i>bindings-url</i>] --wait [filenames] 
+</pre> 
+or 
+<pre>
+        java -jar Dred.jar [--bindings=<i>bindings-url</i>] -w [filenames] 
+</pre>
+or        
+<pre>
+        ted [--bindings=<i>bindings-url</i>] [filenames]
+</pre>  
+<p> This starts edit sessions (using the bindings specified in the file
+at the given url, or the default bindings if none are specified) for
+each of the given filenames.  The program exits when the last session
+terminates.  </p>
+<pre>
+        java -jar Dred.jar [--bindings=<i>bindings-url</i>] [filenames]  &amp;
+</pre>  
+or        
+<pre>
+        dred [--bindings=<i>bindings-url</i>] [filenames]
+</pre>  
+<p>
+This starts edit sessions for each of the given filenames, using an
+existing Dred server if one is running, then exits immediately. If no
+server is running then it starts itself in server mode, puts up an
+(iconified) server control, and starts edit sessions for the
+filenames. 
+</p>
+      
+<p>
+(see also <A href="Bindings.html">Specifying Bindings</A> and <A href="Underhood.html">Under the Hood</A>)
+</p>
+
+<br></br>
+<b><A href="index.html">Back to Dred Help Index</A></b>                
+<br></br>
+
+<h2>Windows Usage</h2>
+
+After installing Dred using the standard installer you'll find a shortcut
+to Dred.jar in the installation directory (and perhaps on your Desktop).
+This shortcut starts a pseudo-server from which you will be able to
+start editing sessions.
+
+<p> You will almost certainly want to edit the <tt>dred.bindings</tt>
+file in the installation directory once you have found out a bit more
+about bindings.  </p>
+
+
+<h2>The Dred Editing Session Window</h2>
+<p> In each editing session window you will see the main text editing
+component at the bottom, with three &quot;minitext&quot;-editing
+components in a row above it. The minitexts are labelled
+&quot;....&quot; (pronounced &quot;Argument&quot;), &quot;Find&quot;
+and &quot;Repl&quot;. 
+
+<p> The <i>Find</i> and <i>Replace</i> minitexts provide arguments for
+the actions of the same name.  </p>
+
+<p> The <i>Argument</i> minitext provides arguments for many of the other
+editing commands, including those on the <i>File</i> menu which start
+new editing sessions, allow the document to be saved in a different file,
+and so forth.  </p>
+
+<p>
+Many of the editing commands described below 
+are bound to keys, and can also be used on the minitexts.
+</p>
+
+</p>
+<p>Dred shows which of its (mini-)text windows has the keyboard focus
+by showing its cursor in red. A text window with a greyed-out cursor
+doesn't have the keyboard focus.  Focus usually moves into a text window
+as the mouse-cursor moves into it, but occasionally it's necessary to force
+the issue by clicking in the desired window.  </p>
+
+<h2>Editing Model</h2>
+
+<p> At any stage, the document in a window (minitext or main) may have
+a <i>selection</i> (which is a contiguous region of the document).
+It is bounded at one end by the <i>document cursor</i> -- which is shown
+as a thin red rectangle -- and at the other end by the <i>mark</i> --
+which is shown as a thin green rectangle. When the cursor and mark are
+in the same position only the cursor is shown, and the selection (in that
+document) is effectively empty.</p>
+
+
+<p>The document cursor is moved by the arrow keys. It can be placed
+anywhere in the document by clicking with the left mouse-button.  The mark
+can be placed anywhere in the document by clicking on the right mouse
+button. </p>
+
+
+<p>The selection is always shown on a grey background.</p>
+
+<p> After every editing action the position of the document in the
+editor window is adjusted automatically so that <i>the document cursor
+is visible.</i> Between editing commands the position of the  document
+in the window can be adjusted manually by the scroll bars, and this can
+make the document cursor disappear temporarily.  </p>
+
+
+<p> There is a <i>cut-buffer</i> which holds at most one text. It is
+implemented by the system clipboard, and material placed in the cut
+buffer is also available in the clipboard. Moreover, material placed in
+the system clipboard by another application is accessible through the
+cut buffer.  </p>
+
+
+<p>Typing new characters removes the mark, and thus deselects the
+<i>selection</i>, but does not delete the selected material. This is
+deliberate: the &quot;typing deletes selection&quot; behaviour that  most
+people have come to expect of editors leads to many irritating little
+accidents.</p>
+
+<h2>Editing Actions</h2>
+<p> The editing actions described below are a small selection of the
+actions provided by the editor. Brief documentation for <i>all</i> the actions,
+and indications of their current binding(s) to keys and/or Menu buttons
+can be seen by pressing the <b>Help/Show Bindings</b> menu item. 
+</p>
+(see also <A href="Bindings.html">Further documentation of bindings</A>)
+
+
+<h3>Cut and Paste</h3>
+<p>The <i>Cut</i> action removes the selection from the document and puts
+it in the cut-buffer.  The <i>Paste</i> action reinserts the content of
+the cut-buffer into the document and re-selects it. The <i>Copy</i> action
+replaces the cut-buffer with the selection (if there is a selection),
+and the <i>SwapSel</i> action exchanges the selection and the cut-buffer (except
+that if the selection is null, then the cut-buffer doesn't change).  The
+<i>SwapCursorAndMark</i> action does what its name suggests.
+</p>
+
+<h3>Search and Replace</h3>
+<p>
+The three minitexts at the top of an editing window are called the <i>....</i>
+(or <i>Argument</i>),
+the <i>Find</i>, and the <i>Replace</i> texts, respectively.
+</p>
+
+<p>
+The <i>FindDown</i> action selects the next (<i>FindUp</i> previous) instance of the
+<i>Find</i> text. The <i>Edit</i> menu has radiobuttons on it that
+control the interpretation of the pattern as literal or regular expression.
+</p>
+
+<p> <b>If the current selection is an instance of the Find text </b>
+then the <i>ReplaceDown</i> action saves the current selection in the
+cut-buffer and replaces it with the <i>Repl</i> text -- leaving the
+cursor to the right of the mark. The <i>ReplaceUp</i> button does the
+same, but leaves the cursor to the left of the mark.  </p>
+
+<p>The <i>FindUp</i> action is usually bound to the SHIFTED key that
+the <i>FindDown</i> action is bound to; likewise the <i>ReplaceUp</i>
+action is usually bound to the SHIFTED <i>ReplaceDown</i> key.  </p>
+
+<p>The <i>Literal Replace</i> button on the Edit menu controls whether the
+content is interpreted as a regexp substitution (<tt>$n</tt> replaces the
+<tt>n</tt>th bracketed expression in the pattern) or as a literal.  </p>
+
+<p> The <i>FindSelDown</i> action makes the current selection the
+<i>Find</i> text, then acts as the <i>FindDown</i> action. Likewise
+<i>FindSelUp</i> makes the current selection the <i>Find</i> text,
+then acts as the <i>FindUp</i> action.  </p>
+
+<p>The <i>ClearArgument</i> action moves the keyboard focus
+into the Argument minitext area and erases the text that is
+there. <i>ClearFind</i>, and <i>ClearRepl</i> behave analogously in the
+Find and Repl minitexts.</p>
+
+
+
+<h3>Undoing</h3>
+<p>
+For the moment there is no <i>general</i> mechanism for undoing. But
+when the selection is non-null:
+</p>
+
+<pre>
+        <i>Cut</i>      is undone by <i>Paste</i> 
+                
+        <i>SwapSel</i>  is undone by <i>SwapSel</i>
+</pre>
+ 
+and, whether or not the selection is null:     
+<pre>
+        <i>Paste</i>    is undone by <i>Cut</i> 
+</pre>
+<p>
+Moreover if the selection is an instance of the Find text then 
+</p>
+
+<pre>
+        <i>Replace</i>         is undone by <i>SwapSel</i>
+</pre>
+<p>
+The  <i>Delete</i> action simply removes the character to the left of
+the cursor from the document without affecting the cut buffer.
+</p>
+
+<p>
+The  <i>Swap2</i> action swaps the two characters immediately to the left
+of the cursor without affecting the cut buffer.
+</p>
+
+<h2>Opening and saving files</h2>
+
+<h3>Saving</h3>
+When you have finished editing a file, you can save it using the <b>File/Save</b>,
+or <b>File/Save&nbsp;As</b> menu entries or the corresponding shortcuts.
+Dred saves a backup copy of the file in a file whose path is
+made by appending a tilde "<tt>~</tt>" to the path of the original
+file. If the "secondary backups" preference is enabled, and the single-tilde
+backup file exists, then a double-tilde backup file is written. 
+
+<p>
+Dred is quite cautious about saving a file. If it looks like the file has
+been written during the period that it has been being edited, then Dred will
+warn you and ask you what to do. Likewise, if you <b>"Save&nbsp;As"</b> using the
+name of an existing file, Dred will ask whether you really mean it.
+</p>
+
+<h3>Opening</h3>
+Use the <b>File/Edit&nbsp;....</b> menu entry with the name of
+the file in the argument minitext, or use the <b>File/Edit&nbsp;(browse)</b> 
+menu entry to start a new editing session. 
+
+<p> The "filename completion" shortcut in the argument minitext causes
+the text in that minitext to change to the longest common prefix of
+all the files in the <i>current scope</i> that start with the existing value of
+the minitext. 
+</p>
+<ul>
+     <li>
+     If the minitext is empty, then a browser is opened in the current
+     working directory (the directory from which the session was started).
+     </li>
+     
+     <li>
+     If the minitext looks like a relative path then the current scope
+     is interpreted <i>relative to the parent 
+     path of the file being edited</i>.
+     </li>
+           
+     <li>
+     If the minitext is an absolute path then the current scope is the parent 
+     of that path.
+     </li>
+</ul>
+
+
+<h2>Reference</h2>
+<p>The Dred document editing model is essentially that established in my
+(1981) Science of Computer Programming paper: 
+&quot;Formal Specification of a Display-Oriented Text Editor&quot;.
+</p>
+
+<pre>
+<b>Bernard Sufrin</b>
+<b>$Revision$</b>
+<b>$Date$</b>
+</pre>
+</body>
+
+
+
+
+
+
+
+

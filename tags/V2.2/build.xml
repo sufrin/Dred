@@ -1,0 +1,142 @@
+<?xml version="1.0"?>
+<!-- 
+        $Id$ 
+-->
+<project        name    ="Dred" 
+                default ="Dred">
+
+
+        <property name="SOURCE"       value="SRC"/>
+        <property name="DOC"          value="DOC"/>
+        <property name="FRONTEND"     value="SH"/>
+        <property name="BINDINGS"     value="BINDINGS"/>
+        <property name="BUILD"        value="BUILD"/>
+        <property name="HOME"         value="${user.home}"/>
+
+        <target name    = "all" 
+                depends = "Dred,
+                           Server,
+                           Reflect
+                          "/>
+                                  
+        <target name = "compile" depends="prepare">
+            <depend srcdir ="${BUILD}" 
+                    destdir="${BUILD}"
+                    cache  ="${BUILD}/dependencies"
+                    closure= "true"/>
+            <javac srcdir    = "${BUILD}" 
+                   debug     = "true"
+                   debuglevel= "lines,vars,source"
+                   classpath = "${CLASSPATH}"
+                   source    = "1.5"
+                   > 
+               <compilerarg line="-Xlint:unchecked"/>
+               <include name="**/*.java"/>
+            </javac> 
+        </target>
+        
+        <target name="test" depends="Dred">
+           <java jar="${BUILD}/Dred.jar" fork="true">
+             <arg file="testfile"/>
+           </java>
+        </target>
+
+        <target name = "Dred" depends="compile">
+            <jar    basedir  ="${BUILD}" 
+                    destfile ="${BUILD}/Dred.jar"
+                    includes = "**/*.class **/*.jpg **/*.png **/*.html **/*.bindings"
+                    excludes = "org/sufrin/nanohttp/NanoHTTPDServer.class"
+                    >                    
+               <manifest>
+                 <attribute name="Main-Class" value="org.sufrin.dred.Dred"/>
+               </manifest>               
+           </jar>
+        </target>
+        
+        <target name = "Server" depends="compile">
+            <jar    basedir  ="${BUILD}" 
+                    destfile ="${BUILD}/Server.jar"
+                    includes = "org/sufrin/nanohttp/*.class"
+                    excludes = ""
+                    >                    
+               <manifest>
+                 <attribute name="Main-Class" value="org.sufrin.nanohttp.NanoHTTPDServer"/>
+               </manifest>               
+           </jar>
+        </target>
+
+        <target name = "Reflect" depends="compile">
+            <jar    basedir  ="${BUILD}" 
+                    destfile ="${BUILD}/Reflect.jar"
+                    includes = "org/sufrin/nanohttp/*.class"
+                    excludes = ""
+                    >                    
+               <manifest>
+                 <attribute name="Main-Class" value="org.sufrin.nanohttp.NanoHTTPD"/>
+               </manifest>               
+           </jar>
+        </target>
+        
+        <target name = "install" depends="Dred">
+               <copy todir ="${HOME}/bin"               file="${BUILD}/Dred.jar"/>
+               <copy tofile="${HOME}/bin/dred"          file="${FRONTEND}/dred.sh"/>
+               <copy tofile="${HOME}/bin/ted"           file="${FRONTEND}/ted.sh"/>
+               
+               <chmod file="${HOME}/bin/ted"            perm="ugo+rx" verbose="yes"/>
+               <chmod file="${HOME}/bin/dred"           perm="ugo+rx" verbose="yes"/>
+               <chmod file="${HOME}/bin/dredserver"     perm="ugo+rx" verbose="yes"/>
+        </target>
+
+        <target name ="prepare" >
+        <!-- Distribute the Java source files into the directories
+             from which they should be compiled. Directories are
+             determined by the package information found in the
+             source files.
+
+             This should be a built-in ANT task, but I
+             haven't found one that does it, so  it's implemented
+             by a little Python script.
+        -->
+                
+                
+                <mkdir dir="${BUILD}"/>
+                <exec os         = "Linux,SunOS"
+                      dir        = "${BUILD}"
+                      executable = "python">
+                  <arg value="../${SOURCE}/javatree"/>
+                  <arg value="../${SOURCE}"/>
+                </exec>
+                
+                <copy todir="${BUILD}/org/sufrin/dred">
+                   <fileset dir="${DOC}" includes="*.*"/>
+                </copy>
+                <copy todir="${BUILD}/org/sufrin/dred">
+                   <fileset dir="${BINDINGS}"/>
+                   <fileset dir="${SOURCE}" includes="*.jpg"/>
+                </copy>
+
+
+        </target>
+        
+        <target name ="clean" >
+                <delete dir="${BUILD}" />
+        </target>
+</project>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

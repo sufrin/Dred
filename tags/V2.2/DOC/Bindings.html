@@ -1,0 +1,288 @@
+<html>
+<head>
+    <title>
+    Dred -- Bindings
+    </title>
+    <link rel="shortcut icon" href="favicon.png" type="image/png" ></link>
+</head>
+<body>
+
+<h1>Bindings, and Customizeability</h1>
+
+<b><A href="index.html">Back to Dred Help Index</A></b>                
+
+<p>     Dred's built-in components and extensions are configured from
+        &quot;bindings&quot; files that take a standard form. The most important
+        function of configuration (for most users) is the association
+        of keystrokes with editing actions.
+</p>
+
+
+<h3>Initial Bindings</h3>
+When the program starts, then if no bindings file is specified on its command line with the
+switch
+
+<pre>
+<code>
+        --bindings=<i>bindings-url</i>
+</code>
+</pre>
+it attempts to read a bindings file from the first of the following url-specified
+files that exists:
+
+<pre>
+<code>
+        <i><b>url</b></i>                                     (<i>if the environment variable <tt>DREDBINDINGS</tt> is set to <b>url</b></i>)
+        <i><b>url</b></i>                                     (<i>if the Java virtual machine has its DREDBINDINGS property set to <b>url</b></i>)
+        file:$(HOME)/.dred/dred.bindings        (<i><tt>$(HOME)</tt> stands for the user's desktop in Windows</i>)
+</code>
+</pre>
+<p>
+If it cannot do so, then it issues a warning on the console and
+uses its inbuilt &quot;fallback&quot; bindings. Many people will find that
+these bindings do not suit them. 
+</p>
+
+<h4>The Fallback Bindings</h4>
+<pre>
+editor minitext action doComplete    TAB                  # complete the filename in the Argument minitext
+editor action   doAbout              #keystroke#          # Show version details of the currently-running Dred
+editor action   doCWD                #keystroke#          # Change the directory of this session to the directory named in the ... field
+editor action   doChooseCWD          #keystroke#          # Browse for a directory then change directory to it
+editor action   doClearArgument      ctrl  INSERT         # Clear the .... field and send focus there
+editor action   doClearFind          ctrl alt  INSERT     # Clear the find field and send focus there
+editor action   doClearRepl          shift ctrl alt  INSERT # Clear the repl field and send focus there
+editor action   doCommands           #keystroke#          # Insert (and select) the skeleton of a bindings file (showing current bindings) into the current document.
+editor action   doComplete           TAB                  # Try to complete the filename in the .... field
+editor action   doCurrentBindings    #keystroke#          # Show the current bindings and abbreviations in a window
+editor action   doEdit               ctrl  E              # Edit the file named in the ... field
+editor action   doEditChoose         #keystroke#          # Browse for a file and start editing it
+editor action   doFindDown           ctrl  F              # Find the next instance of the pattern in the Find field
+editor action   doFindSelDown        ctrl alt  F          # Set the find field to the selection, then find its next instance
+editor action   doFindSelUp          shift ctrl alt  F    # Set the find field to the selection, then find its previous instance
+editor action   doFindUp             shift ctrl  F        # Find the previous instance of the pattern in the Find field
+editor action   doGoToXY             ctrl  G              # Go to the row.col specified by the .... field
+editor action   doHelp               #keystroke#          # Browse Dred help using Dred's built-in browser
+editor action   doIndent             ctrl  RIGHT          # Add a leading space to each line of the selection
+editor action   doKillProcess        ctrl  K              # Kill any currently-running background process
+editor action   doLogger             #keystroke#          # Start the HTTP logging interface at the port number specified in ....
+editor action   doLowercase          #keystroke#          # Swap the current selection with its lowercased translation
+editor action   doMatchDown          ctrl  OPEN_BRACKET   # Find next (balanced) bracket that matches the opening bracket at the cursor
+editor action   doMatchUp            ctrl  CLOSE_BRACKET  # Find previous (balanced) bracket that matches the opening bracket at the cursor
+editor action   doMozilla            #keystroke#          # Browse the help text (from Dred's built-in server) using mozilla.
+editor action   doNewView            #keystroke#          # Open another view on the document being edited
+editor action   doPrefix             ctrl alt  RIGHT      # Add the text in .... to the start of each line of the selection
+editor action   doQuit               ctrl  Q              # Quit the current file-editing window. Offers a dialogue if the document being edited has channged since it was last saved.
+editor action   doReplaceAll         #keystroke#          # Replace all instances of the Find pattern within the selection with the Repl text.
+editor action   doReplaceDown        ctrl  R              # Replace the current instance of the find pattern with the replacement text
+editor action   doReplaceUp          shift ctrl  R        # Replace the current instance of the find pattern with the replacement text
+editor action   doSave               ctrl  S              # Save the document being edited if it has changed since it was last saved
+editor action   doSaveAs             #keystroke#          # Save the document being edited in the file named by the .... field
+editor action   doSaveAsChoose       #keystroke#          # Browse for a filename in which to save the document being edited
+editor action   doSavePrefs          #keystroke#          # Save the current state of all preferences now
+editor action   doShell              #keystroke#          # Pipe the current selection through the shell command given in the .... field
+editor action   doUnPrefix           ctrl alt  LEFT       # Remove the text in .... from the start of each line of the selection
+editor action   doUndent             ctrl  LEFT           # Remove a leading space from each line of the selection
+editor action   doUnicode            alt  U               # Insert Unicode character whose (hex) code is in ....
+editor action   doUppercase          #keystroke#          # Swap the current selection with its uppercased translation
+text action     doAbbrev             ESCAPE               # Find the longest abbreviation that matches text at the left of the cursor and insert the corresponding insertion text. This is undone by doSwapSel.
+text action     doCopy               ctrl  C              # Set the system clipboard from the document selection
+text action     doCut                ctrl  X              # Set the system clipboard from the document selection, and remove the document selection
+text action     doDeleteLineLeft     ctrl  U              # Delete the line to the left of the cursor
+text action     doDownMove           DOWN                 # Move cursor down (in the same column if possible)
+text action     doEndMove            END                  # Move cursor to the start of the last line of the document
+text action     doHomeMove           HOME                 # Move cursor to the start of the document
+text action     doIndentNewline      ENTER                # Insert a newline and copy current indentation
+text action     doInsertNewline      ctrl  ENTER          # Insert a newline without copying current indentation
+text action     doInsertTab          TAB                  # Simulate the insertion of a tab character
+                                                          # (Tabs never appear in Dred documents)
+text action     doLeftDelete         BACK_SPACE           # Delete the character to the left of the cursor
+text action     doLeftDelete         DELETE               # Delete the character to the left of the cursor
+text action     doLeftMove           LEFT                 # Move cursor to the previous location in the document
+text action     doPaste              ctrl  V              # Insert the system clipboard into the document at the cursor, and select it
+text action     doRightMove          RIGHT                # Move cursor to the next location in the document
+text action     doSelectLine         ctrl  L              # Select the line under the cursor (also triple-click)
+text action     doSelectParagraph    ctrl  P              # Select the paragraph(s) that contain the selection or cursor
+text action     doSelectWord         ctrl  W              # Select the word under the cursor (also double-click)
+text action     doSwap2              alt  BACK_SPACE      # Swap the two characters preceding the cursor
+text action     doSwap2              alt  DELETE          # Swap the two characters preceding the cursor
+text action     doSwapCursorAndMark  ctrl  S              # Swap the cursor and the mark
+text action     doSwapSel            shift ctrl  C        # Swap the system clipboard with the document selection
+text action     doUpMove             UP                   # Move cursor up (in the same column if possible)
+minitext action doBig                ctrl  ENTER          # to make a multiline-view minitext of this one-line-view minitext
+minitext action doClear              ctrl  U              # Clear this text field
+minitext action doTellBig            ENTER                # Tell the user how to make a new big window onto this text field
+</pre>
+
+
+<h4>
+Specifying Bindings
+</h4>
+<p>     Bindings are specified by bindings files, which are 
+        <tt>UTF8</tt>-encoded and contain a sequence of <tt>Binding</tt>
+        descriptions together with some comments. 
+</p>   
+<p>    
+        A comment is a line whose first non-blank character is <code>#</code>
+</p>
+
+<p>        
+        A binding description is a sequence of binding fields separated
+        by spaces and followed by an optional comment that starts with <code>#</code>
+        and extends to the end of the line. 
+</p>
+
+<p>     A binding field is a sequence of non-space characters. Within
+        a binding field: <code>\#</code> stands for <code>#</code>,
+        <code>\s</code> stands for space, <code>\t</code> stands for a
+        tab character, <code>\n</code> stands for a newline character,
+        and a sequence of the form <code>\u</code><i>XXXX</i> (where
+        <i>XXXX</i> are hexadecimal characters) stands for the character
+        at unicode <i>XXXX</i>.
+</p>
+
+<p>     In general the first field of a binding indicates the
+        name of the extension (or component) that is expected to
+        interpret it, the second field of a binding indicates the
+        type of interpretation, and subsequent fields are there
+        to be interpreted. 
+</p>
+
+<p>     
+        The principal built-in component types are 
+</p>
+<ul>    <li>Text-editing windows. There are at least four of
+        these per editing session, namely the document-editing
+        window and the <tt>....</tt> (<tt>Argument</tt>),
+        <tt>Find</tt>, and <tt>Repl</tt> minitexts. (Others may
+        appear on customizeable buttons on the style-buttons tool and
+        other extensions.)   Their behaviour is defined by the class
+        <tt>org.sufrin.dred.SimpleEditor</tt>.       
+        Bindings take one of the forms
+        <pre>
+        <code>text action</code> <i>TextActionName</i> <i>keystroke description</i>
+        <code>text abbrev</code> <i>abbreviation</i>   <i>insertion</i>
+        <code>text key</code>    <i>insertion</i>      <i>keystroke description</i>
+        <code>text abbrev</code> <i>abbreviation</i>   <i>insertion</i> <i>keystroke description</i>
+        </pre>        
+        
+        
+        <p>
+        The first of these forms binds the specified text action to the given keystroke
+        in all editing components (including the main document
+        editor and the minitexts). The second
+        form associates an abbreviation with an insertion. The text <tt>doAbbrev</tt>
+        action finds finds the longest abbreviation match that ends at the
+        cursor, and replaces it with the corresponding insertion text.   
+        The third associates the given keystroke with the insertion of a specific
+        piece of text. It is intended to support the insertion of &quot;national characters&quot;
+        when Dred is run on an operating system that doesn't provide built-in support for
+        special character input. The final form combines the effect of the second and third
+        forms in a single binding, <i>i.e.</i> it both defines an abbreviation and binds a
+        single keystroke to it.
+        </p>
+                 
+        <p>
+        Although they inherit the bindings of text-editing windows, minitexts
+        have three additional possible bindings that override these, whose
+        default forms are shown below:
+        <pre>
+        <code>minitext action doTellBig   ENTER</code>  
+        <code>minitext action doBig       ctrl  ENTER</code> 
+        <code>minitext action doClear     ctrl  U</code> 
+        </pre>   
+        The first of these binds ENTER to a warning that a minitext has
+        a single-line-view editor. The second binds control-ENTER to an action
+        that attaches a multiline-view editor to the minitext.
+        </p>
+        </li>
+        
+        <br></br>
+        
+        <li>The main editing session window. There
+        is just one of these per editing session; its behaviour is defined by the class
+        <tt>org.sufrin.dred.EditorFrame</tt>. Bindings take one of the forms
+        <pre>
+        <code>editor          action</code> <i>EditorActionName</i> <i>keystroke description</i>
+        <code>editor minitext action</code> <i>EditorActionName</i> <i>keystroke description</i>
+        </pre>
+        The first of these binds the same keystroke to the given editor action
+        in the document-editing window as well as in the minitexts. The
+        second form binds only in the minitext windows. Its principal
+        purpose is to enable <tt>TAB</tt> to be used as a ''filepath
+        completion'' key in the session window minitexts 
+        but to insert spaces when used  elsewhere.
+        
+        <p><i>  The document-editing window inherits the text action and
+        text abbreviation bindings, but not the minitext-specific
+        bindings.  </i></p>
+        </li>     
+</ul>
+
+<h4>Example Bindings</h4>
+The fallback bindings shown above are in the form they might appear
+in a Bindings file. Here are a few other examples:
+<pre><code>
+   text   abbrev forall           \u2200        meta shift A    # ∀   
+   text   abbrev exists           \u2203        meta shift E    # ∃    
+     
+   text   key                     \u03B3        meta G          # (gamma) γ       
+   text   key                     \u0393        meta shift G    # (Gamma) Γ        
+
+   editor          action doFindDown            F9
+   editor          action doFindUp              shift F9
+</code></pre>
+
+<A name="bindings"></A>
+<h4>Further documentation of Bindings</h4>
+        Clicking on the <b>Help/Show&nbsp;Bindings</b> menu item provides
+        documentation for the built-in actions. Clicking on the
+        <b>Help/Insert&nbsp;Bindings</b> menu item inserts the prototype
+        of a bindings file into the document currently being edited. This
+        is intended to make it easy to construct an alternative bindings
+        file. The prototype shows the existing bindings, and can be
+        edited into the right form and saved in the right place.
+
+
+<h4>Keystroke Specifications</h4>
+Keystroke specifications take the form of zero or more optional modifiers followed by a 
+<i>key specification</i>:
+<pre>
+                <code> [ctrl][alt][meta][shift][altGraph] <i>key specification</i></code>
+</pre>
+<p>
+A <i>key specification</i> takes one of the forms given in the
+documentation for <tt>java.awt.event.KeyEvent</tt>, but without the
+<tt>VK_</tt> prefix. If you don't want to bother looking these up,
+then check the <b>Tools/Keystroke&nbsp;Tool</b> checkbox.  This puts up
+a keystroke tool -- if you type anything when the mouse cursor is over
+this tool, then a specification of the key you typed will be placed in
+the current document.
+</p>
+<p>
+To specify a modified variant of a character that appears 
+in the shift position on a keytop, you have to specify the
+<tt>shift</tt> with the character that appears in the unshifted position
+on the keytop.
+For example: <code>alt LEFT_PARENTHESIS</code> is an invalid 
+keystroke specification, and the keystroke you get by pressing <tt>alt</tt> with <tt>(</tt> 
+has to be expressed as <code>alt shift 9</code>.
+</p>
+<p>
+Beware that on some keyboards the <tt>alt</tt> and
+<tt>meta</tt> keys are indistinguishable, and that some X window managers
+pre-empt some keystroke combinations for their own purposes.
+</p>
+
+<pre>
+<b>Bernard Sufrin</b>
+<b>$Revision$</b>
+<b>$Date$</b>
+</pre>
+
+</body>
+</html>
+
+
+
+

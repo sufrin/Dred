@@ -1,0 +1,108 @@
+<html>
+<head>
+    <title>
+        Dred -- under the hood
+    </title>
+    <link rel="shortcut icon" href="favicon.png" type="image/png" ></link></head>
+</head>
+<body>
+        
+<center><h1>Dred -- under the hood</h1></center>
+<b><A href="index.html">Back to Dred Help Index</A></b>                
+
+<h3>Unix Scripts</h3>
+The scripts <tt>dred</tt> and <tt>ted</tt> are very simple, and 
+I don't much care what you decide to call them.
+<pre>
+        #!/bin/sh
+        # usage: dred [switches] filenames
+        exec java -jar $HOME/bin/Dred.jar "$@" &
+</pre>
+<pre>
+        #!/bin/sh
+        # usage: ted [switches] filenames
+        exec java -jar $HOME/bin/Dred.jar --wait "$@" 
+</pre>
+
+<h3>Starting in Server Mode</h3>
+
+In server mode the program listens for
+HTTP1.0 requests to start editing sessions. 
+
+The program can be started in server mode by invoking:
+</p>
+        
+<pre>
+        java -jar Dred.jar --serve[=####]
+</pre>
+<p>
+If the port number (=####) appears, and the given port is not currently in use,
+then the program starts serving the current user on that port; otherwise it finds an unused port, 
+and starts serving on that.
+</p>
+
+<p>
+To discover what port the most-recently activated Dred server is 
+active on use the command
+<pre>
+        java -jar Dred.jar --serving
+</pre>
+which succeeds (Unix exit 0) and outputs the port number
+if there is an active server, and fails (Unix exit 1) and outputs 0 otherwise.
+</p>
+
+<h3>Server Requests</h3>
+
+<p>
+        An editing request takes one of the forms:
+</p>
+
+<pre>
+        GET /edit?CWD=workingdirectory&amp;FILE=absolutefilename&amp;WAIT=true
+        GET /edit?CWD=workingdirectory&amp;FILE=absolutefilename
+</pre>
+
+<p>
+The server responds by starting an editing session for the given file using the
+given working directory as the session's effective working directory.
+</p>
+<p>
+If the first form is used, then when the session is terminated an HTTP response 
+is generated; otherwise the HTTP response is generated immediately.
+</p>
+
+<p>The server also honours requests for Dred's documentation files. The 
+<b>Help/Browse Help with Mozilla</b> (etc) menu actions are implemented
+by aiming the browser at Dred's built-in server port.
+</p>
+
+<h3>Logging Server</h3>
+Dred has an internal event-logging system that is intended to be
+used when debugging without an IDE. The system can be controlled
+from a browser.  You can start Dred's internal logging server
+from the <b>File/Preferences/Start&nbsp;Log"</b> menu (you need to
+provide a port number (####) in the Argument minitext), and connect to it as
+<tt>localhost:####/</tt>. You'll get back a panel (implemented as an HTML
+form) that lets you control the level of detail of the logging output,
+and lets you inspect the last few thousand logging events incrementally.
+
+<h3>Windows</h3>
+<p> It's possible, though not much use, to run Dred in server mode on
+Windows. By preventing the opening of local ports without administrator
+permission XP Service pack 2 makes it slightly tedious to do this.
+The best thing to do (if you are sure you want a proper server and not a
+pseudo-server) is to allocate a fixed port for Dred and make appropriate
+arrangements with the administrator to unblock that port. If your
+administrator wants to know why this is secure, explain that Dred only
+accepts connections from the host on which it's running.  </p>
+
+<pre>
+<b>Bernard Sufrin</b>
+<b>$Revision$</b>
+<b>$Date$</b>
+</pre>
+</body>
+</html>
+
+
+
