@@ -341,6 +341,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     Extension.register(new AntTool());
     Extension.register(new MakeTool());
     Extension.register(new ShellTool());
+    Extension.register(new CutRingTool());
     Extension.register(new KeystrokeTool());
     File extensions = null;
     try
@@ -1812,6 +1813,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
 
 
 

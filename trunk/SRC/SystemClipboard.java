@@ -31,7 +31,31 @@ public class SystemClipboard
      }
      return result;
    }
+   
+   static protected int      ringSize = 20, last = 0;
+   static protected String[] cutRing = new String[ringSize];
+   
+   static int    getRingSize() { return ringSize; }
+
+   static String get(int i)
+   { 
+     return cutRing[(last+i) % ringSize];
+   }
+      
+   static public void setRingSize(int _ringSize) 
+   { if (_ringSize<ringSize) return;
+     String[] _cutRing = new String[_ringSize];
+     for (int i=0; i<ringSize; i++) _cutRing[i] = get(i);
+     ringSize = _ringSize; 
+     cutRing  = _cutRing;     
+   }
+   
+   static public void addToRing(String sel)
+   { cutRing[last] = sel;
+     last = (last+1) % ringSize;
+   }
 
 }
+
 
 
