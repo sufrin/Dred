@@ -12,7 +12,7 @@ import java.util.*;
         (for simplicity) shows TAB-characters as if they were of fixed width.
         
         <PRE>
-        $Id: Display.java,v 1.21 2005/03/25 13:08:40 sufrin Exp $
+        $Id$
         </PRE>
 */
 

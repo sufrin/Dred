@@ -4,7 +4,7 @@ package GUIBuilder;
     Extra width is distributed between the glue components.
     Ordinary components can be treated as glue, if required.
     
-    @version $Id: RowLayout.java,v 1.3 2005/02/05 22:40:21 sufrin Exp $
+    @version $Id$
 */
 import  java.awt.*;
 import  javax.swing.*;

@@ -11,7 +11,7 @@ import  javax.swing.*;
 
         Extra width is distributed between the glue components.
         
-        @version $Id: Row.java,v 1.2 2005/03/07 13:05:36 sufrin Exp $
+        @version $Id$
 */
 public class Row extends JPanel
 { public Row() { setLayout(new RowLayout()); }

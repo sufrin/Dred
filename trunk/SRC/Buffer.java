@@ -8,7 +8,7 @@ import java.nio.*;
  * 
  * <PRE>
  * 
- * $Id: Buffer.java,v 1.3 2005/03/07 13:05:35 sufrin Exp $
+ * $Id$
  * 
  * </PRE>
  <PRE>

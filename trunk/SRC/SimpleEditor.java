@@ -24,7 +24,7 @@ import org.sufrin.logging.Logging;
 /**
         A simple editor.
 
-        <PRE>$Id: SimpleEditor.java,v 1.40 2005/04/01 17:25:16 sufrin Exp $</PRE>
+        <PRE>$Id$</PRE>
 */
 
 class SimpleEditor implements InteractionListener

@@ -12,7 +12,7 @@ import  javax.swing.*;
 
         Extra height is distributed between the glue components.
         
-        @version $Id: Col.java,v 1.2 2005/03/07 13:05:35 sufrin Exp $
+        @version $Id$
 */
 public class Col extends JPanel
 { public Col() { setLayout(new ColLayout()); }

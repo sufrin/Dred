@@ -8,7 +8,7 @@ import org.sufrin.logging.Logging;
 /** 
         Convenience class -- a display with possibly-attached scrollbars.
 
-        <PRE>$Id: ScrolledDisplay.java,v 1.7 2005/03/13 19:30:04 sufrin Exp $</PRE>
+        <PRE>$Id$</PRE>
 */
 public class ScrolledDisplay extends JPanel implements DisplayComponent
 { 

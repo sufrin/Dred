@@ -290,7 +290,7 @@ style form  ? \begin{%s} \end{%s} block
 style sheet \document   #####################################
 style block article    \documentclass[11pt]{article}\n\begin{document} \end{document} 
 style block letter     \documentclass[11pt,wor,lab]{letter}\n\To{}\n\Dear[]{}\n\Re{}\n\Cc{} \Sign[Yours\ssincerely]{Bernard\sSufrin}
-style block foil       \documentclass{foil}\n%\\usepackage{RCS}\n%\RCS\s$Id: dred-bs.bindings,v 1.11 2005/04/01 18:46:04 sufrin Exp $\n\\title{}\n\author{}\n\date{}\n%\n\begin{document}\n\maketitle \end{document}
+style block foil       \documentclass{foil}\n%\\usepackage{RCS}\n%\RCS\s$Id$\n\\title{}\n\author{}\n\date{}\n%\n\begin{document}\n\maketitle \end{document}
 style block html       <html>\n<head>\n\s\s\s\s<title>\n\s\s\s\s</title>\n</head>\n<body> </body>\n</html>
 
 

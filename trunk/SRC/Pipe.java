@@ -5,7 +5,7 @@ import java.io.*;
 /** This module provides the means by which operating system commands
     can be invoked. Its methods are all static.
     
-    $Id: Pipe.java,v 1.8 2005/03/30 23:06:25 sufrin Exp $
+    $Id$
 */
 
 public class Pipe

@@ -41,7 +41,7 @@ import org.sufrin.logging.LoggingSocket;
   </ul>
  * 
  * <PRE> 
- * $Id: Dred.java,v 1.79 2005/04/02 01:03:12 sufrin Exp $
+ * $Id$
  * </PRE>
  * 
  */

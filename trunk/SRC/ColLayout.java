@@ -4,7 +4,7 @@ package GUIBuilder;
     Extra height is distributed between the glue components.
     Ordinaty components can be treated as glue if required.
     
-    @version $Id: ColLayout.java,v 1.2 2005/01/29 17:01:50 sufrin Exp $
+    @version $Id$
 */
 
 import  java.awt.*;

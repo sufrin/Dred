@@ -12,7 +12,7 @@ import java.awt.event.*;
         when a client component requests it.
 
         <PRE>
-        $Id: ScrollableDisplay.java,v 1.7 2005/03/30 23:06:25 sufrin Exp $
+        $Id$
         </PRE>
 */
 

@@ -6,7 +6,7 @@ package org.sufrin.dred;
         only interested in the first and last lines of the scope
         of a change.
 
-        <PRE>$Id: DocListener.java,v 1.2 2005/01/04 18:50:02 sufrin Exp $</PRE>
+        <PRE>$Id$</PRE>
 */
 public interface DocListener
 {

@@ -40,7 +40,7 @@ import java.util.logging.*;
 
 
         <PRE>
-        $Id: Logging.java,v 1.12 2005/03/17 18:49:50 sufrin Exp $
+        $Id$
         </PRE>
 
 */

@@ -11,7 +11,7 @@ import org.sufrin.logging.Logging;
 
         The selected region is between the ``mark'' and the ``cursor''.
 
-        <PRE>$Id: Document.java,v 1.19 2005/03/30 23:06:25 sufrin Exp $</PRE>
+        <PRE>$Id$</PRE>
 */
 
 public class Document
