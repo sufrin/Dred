@@ -45,18 +45,19 @@ public class SessionSocket extends NanoHTTPD
          ) 
   throws IOException, UnsupportedEncodingException
   { 
-    if (!("/127.0.0.1".equals(header.get("REMOTE_ADDR")))) 
+    if (!("localhost".equals(header.get("REMOTE_HOST")))) 
     { 
        return new Response(HTTP_FORBIDDEN, MIME_PLAINTEXT, 
                            String.format("%s %s %s", HTTP_FORBIDDEN, method, uri)); 
     }
+    
     if (method.equalsIgnoreCase("GET") && uri.equalsIgnoreCase("/serving"))
     {
       return new Response(HTTP_OK, MIME_PLAINTEXT, "OK");
     }
     else
     if (method.equalsIgnoreCase("FORM") && uri.equalsIgnoreCase("/edit"))
-    {
+    { 
       final File startCWD       = new File(params.get("CWD"));
       final String fileName     = params.get("FILE");
       final EditorFrame session = Dred.startLocalSession(fileName);
@@ -79,5 +80,7 @@ public class SessionSocket extends NanoHTTPD
     
   }
 }
+
+
 
 
