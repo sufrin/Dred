@@ -1,0 +1,57 @@
+#
+#       Most functions bound to control keys -- much the same as the fallback bindings 
+#
+
+editor action   doClearArgument      ctrl  INSERT
+editor action   doClearFind          ctrl alt  INSERT
+editor action   doClearRepl          shift ctrl alt  INSERT
+editor action   doEdit               ctrl  E
+editor action   doFindDown           ctrl  F
+editor action   doFindSelDown        ctrl alt  F
+editor action   doFindSelUp          shift ctrl alt  F
+editor action   doFindUp             shift ctrl  F
+editor action   doGoToXY             ctrl  G
+editor action   doIndent             ctrl  RIGHT
+editor action   doKillProcess        ctrl  K
+editor action   doMatchDown          ctrl  OPEN_BRACKET
+editor action   doMatchUp            ctrl  CLOSE_BRACKET
+editor action   doPrefix             ctrl alt  RIGHT
+editor action   doQuit               ctrl  Q
+editor action   doReplaceDown        ctrl  R
+editor action   doReplaceDown        ctrl  A          # replAce or Accept
+editor action   doReplaceUp          shift ctrl  R
+editor action   doReplaceUp          shift ctrl  A
+editor action   doSave               ctrl  S
+editor action   doUnPrefix           ctrl alt  LEFT
+editor action   doUndent             ctrl  LEFT
+editor action   doUnicode            alt  U
+text action     doAbbrev             ESCAPE
+text action     doCopy               ctrl  C
+text action     doCut                ctrl  X
+text action     doDeleteLineLeft     ctrl  U
+text action     doDownMove           DOWN
+text action     doEndMove            END
+text action     doHomeMove           HOME
+text action     doIndentNewline      ENTER
+text action     doInsertNewline      ctrl  ENTER
+text action     doInsertTab          TAB
+editor minitext action doComplete    TAB
+
+text action     doLeftDelete         BACK_SPACE
+text action     doLeftDelete         DELETE
+text action     doLeftMove           LEFT
+text action     doPaste              ctrl  V
+text action     doRightMove          RIGHT
+text action     doSelectLine         ctrl  L
+text action     doSelectParagraph    ctrl  P
+text action     doSelectWord         ctrl  W
+text action     doSwap2              ctrl  BACK_SPACE
+text action     doSwap2              ctrl  DELETE
+text action     doSwapCursorAndMark  ctrl  S
+text action     doSwapSel            shift ctrl  V
+text action     doUpMove             UP
+
+minitext action doBig                ctrl  ENTER
+minitext action doClear              ctrl  U
+minitext action doTellBig            ENTER
+

@@ -68,6 +68,9 @@ public class Dred
     Extension.sessionOpened(session);
   }
   
+  /** True if forced to use fallback bindings */
+  protected static boolean fallBack = false;
+  
   /**
    * Start a session (or listener) for each argument, or an
    * anonymous session if there are no arguments.
@@ -102,7 +105,7 @@ public class Dred
         else if (arg.startsWith("--logger"))
           startLogger("60001");
         else if (arg.equals("--bindings="))
-          bindings.clear();
+          fallBack=true;
         else if (arg.startsWith("--bindings="))
           readBindings(arg.substring("-bindings=".length()), true);
         else if (wait) 
@@ -164,7 +167,7 @@ public class Dred
   }
 
   public synchronized static void loadBindings()
-  { if (bindings.isEmpty())
+  { if (!fallBack && bindings.isEmpty())
     {
       String rootBindings = System.getProperty("DREDBINDINGS");
       if (rootBindings==null) rootBindings = System.getenv("DREDBINDINGS");
@@ -430,6 +433,7 @@ public class Dred
 
 
 }
+
 
 
 

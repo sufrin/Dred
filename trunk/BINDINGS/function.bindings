@@ -1,0 +1,60 @@
+#
+#      Many commands bound to function keys
+#
+editor minitext action doComplete       TAB
+minitext action doBig ctrl shift B
+     
+editor action doClearArgument           ctrl INSERT
+editor action doClearFind               INSERT
+editor action doClearRepl               alt INSERT
+editor action doEdit                    ctrl E
+editor action doFindDown                F9
+editor action doFindSelDown             alt F9
+editor action doFindSelUp               alt shift F9
+editor action doFindUp                  shift F9
+editor action doGoToXY                  ctrl G
+editor action doIndent                  ctrl RIGHT
+editor action doKillProcess             ctrl C
+editor action doMatchDown               ctrl [
+editor action doMatchUp                 ctrl ]
+editor action doPrefix                  ctrl alt RIGHT
+editor action doQuit                    ctrl Q
+editor action doReplaceDown             F10
+editor action doReplaceUp               shift F10
+editor action doSave                    ctrl S
+editor action doUnPrefix                ctrl alt LEFT
+editor action doUndent                  ctrl LEFT
+editor action doUnicode                 alt U
+
+#
+#       Commands in minitexts
+#
+text   action doAbbrev                  ESCAPE
+text   action doCopy                    F3
+text   action doCopy                    ctrl C
+text   action doCut                     F1
+text   action doCut                     ctrl X
+text   action doDeleteLineLeft          ctrl U
+text   action doDownMove                DOWN
+text   action doEndMove                 END
+text   action doHomeMove                HOME
+text   action doIndentNewline           ENTER
+text   action doInsertNewline           ctrl ENTER
+text   action doInsertTab               TAB
+text   action doLeftDelete              BACK_SPACE
+text   action doLeftDelete              DELETE
+text   action doLeftMove                LEFT
+text   action doPaste                   F2
+text   action doPaste                   ctrl V
+text   action doRightMove               RIGHT
+text   action doSelectLine              ctrl L
+text   action doSelectParagraph         ctrl P
+text   action doSelectWord              ctrl W
+text   action doSwap2                   ctrl BACK_SPACE
+text   action doSwap2                   ctrl DELETE
+text   action doSwapCursorAndMark       F12
+text   action doSwapSel                 F4
+text   action doSwapSel                 ctrl shift V
+text   action doUpMove                  UP
+
+

@@ -7,7 +7,8 @@ import java.util.*;
 import org.sufrin.logging.*;
 
 public class DredLoader extends ClassLoader
-{ static Logging log = Logging.getLog("DredLoader");
+{ public static Logging log = Logging.getLog("DredLoader");
+  public static boolean debug = log.isLoggable("FINE");
   
   protected Hashtable<String,Class> classes = new Hashtable<String,Class>();
   
@@ -139,6 +140,7 @@ public class DredLoader extends ClassLoader
     return klass;
   }
 }
+
 
 
 

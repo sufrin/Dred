@@ -21,7 +21,8 @@ import org.sufrin.logging.Logging;
 public class Bindings implements Iterable<Bindings.Binding>
 { Vector<Binding> bindings;
 
-  static Logging log = Logging.getLog();
+  static Logging log = Logging.getLog("Bindings");
+  public static boolean debug = log.isLoggable("FINE");
   
   public Iterator<Binding> iterator() { return bindings.iterator(); }
   
@@ -227,6 +228,7 @@ public class Bindings implements Iterable<Bindings.Binding>
     }
   }
 }
+
 
 
 

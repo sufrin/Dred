@@ -1,0 +1,141 @@
+#
+#       Common symbol abbreviations
+#
+text    abbrev forall           \u2200  meta shift A 
+text    abbrev exists           \u2203  meta shift E
+text    abbrev notexists        \u2204  
+text    abbrev ~\u2203          \u2204  # notexists as ~∃
+text    abbrev leq              \u2264  meta shift COMMA 
+text    abbrev geq              \u2265  meta shift PERIOD 
+text    abbrev <-               \u2190  meta COMMA
+text    abbrev uparrow          \u2191  meta shift 6
+text    abbrev ->               \u2192  meta PERIOD
+text    abbrev downarrow        \u2193  meta shift 1
+text    abbrev <->              \u2194  
+    
+text    abbrev +>       \u219b    
+text    abbrev ->>      \u21a0          # ↠
+text    abbrev >->      \u21a3
+text    abbrev mapsto   \u21a6
+text    abbrev |->      \u21a6
+    
+text    abbrev zz       \u21af meta Z   # ↯ 
+    
+text    abbrev <=       \u21D0
+text    abbrev Uparrow  \u21D1
+text    abbrev =>       \u21D2
+text    abbrev Downarrow \u21D3
+text    abbrev <->      \u2194
+text    abbrev iff      \u21D4
+text    abbrev <=>      \u21D4
+    
+text    abbrev <==      \u21DA
+text    abbrev ==>      \u21DB
+text    abbrev <~~      \u21DC
+text    abbrev ~~>      \u21DD
+    
+text    abbrev lwa      \u21E6  # ⇦ 
+text    abbrev uwa      \u21E7  # ⇧ 
+text    abbrev rwa      \u21E8  # ⇨ 
+text    abbrev dwa      \u21E9  # ⇩ 
+    
+text    abbrev endproof \u220E                  # ∎  
+text    abbrev compose  \u2218  meta o          # ∘ 
+text    abbrev dot      \u2219  meta PERIOD     # ∙ 
+text    abbrev par      \u2225                  # ∥ 
+    
+text    abbrev land     \u2227
+text    abbrev lor      \u2228
+text    abbrev cup      \u2229
+text    abbrev cap      \u222a
+    
+text    abbrev so       \u2234  # ∴ 
+text    abbrev coz      \u2235  # ∵ 
+    
+text    abbrev becomes  \u2254  # ≔ 
+text    abbrev :=       \u2254  
+    
+text    abbrev defs     \u2258  # ≘ 
+text    abbrev equiv    \u2261  # ≡ 
+text    abbrev ==       \u2261  # ≡ 
+    
+text    abbrev alpha    \u03B1
+text    abbrev beta     \u03B2
+text    abbrev gamma    \u03B3
+text    abbrev delta    \u03B4
+text    abbrev epsilon  \u03B5
+text    abbrev zeta     \u03B6
+text    abbrev eta      \u03B7
+text    abbrev theta    \u03B8
+text    abbrev iota     \u03B9
+text    abbrev kappa    \u03BA
+text    abbrev lambda   \u03BB
+text    abbrev mu       \u03BC
+text    abbrev nu       \u03BD
+text    abbrev xi       \u03BE
+text    abbrev omicron  \u03BF
+text    abbrev pi       \u03C0
+text    abbrev rho      \u03C1
+text    abbrev finalsigma \u03C2
+text    abbrev sigma    \u03C3
+text    abbrev tau      \u03C4
+text    abbrev upsilon  \u03C5
+text    abbrev phi      \u03C6
+text    abbrev chi      \u03C7
+text    abbrev psi      \u03C8
+text    abbrev omega    \u03C9
+    
+text    abbrev Alpha    \u0391
+text    abbrev Beta     \u0392
+text    abbrev Gamma    \u0393
+text    abbrev Delta    \u0394
+text    abbrev Epsilon  \u0395
+text    abbrev Zeta     \u0396
+text    abbrev Eta      \u0397
+text    abbrev Theta    \u0398
+text    abbrev Iota     \u0399
+text    abbrev Kappa    \u039A
+text    abbrev Lambda   \u039B
+text    abbrev Mu       \u039C
+text    abbrev Nu       \u039D
+text    abbrev Xi       \u039E
+text    abbrev Omicron  \u039F
+text    abbrev Pi       \u03A0
+text    abbrev Rho      \u03A1
+text    abbrev Finalsigma \u03A2
+text    abbrev Sigma    \u03A3
+text    abbrev Tau      \u03A4
+text    abbrev Upsilon  \u03A5
+text    abbrev Phi      \u03A6
+text    abbrev Chi      \u03A7
+text    abbrev Psi      \u03A8
+text    abbrev Omega    \u03A9
+    
+text    abbrev alef     \u05D0
+text    abbrev beth     \u05D1
+text    abbrev gimel    \u05D2
+text    abbrev dalet    \u05D3
+text    abbrev he       \u05D4
+text    abbrev vav      \u05D5
+text    abbrev vov      \u05D5
+text    abbrev zayin    \u05D6
+text    abbrev het      \u05D7
+text    abbrev tet      \u05D8
+text    abbrev yod      \u05D9
+text    abbrev finalkaf \u05DA  # ך 
+text    abbrev kaf      \u05DB  # כ 
+text    abbrev lamed    \u05DC  # ל 
+text    abbrev mem      \u05DE
+text    abbrev finalnun \u05DF
+text    abbrev nun      \u05E0
+text    abbrev samekh   \u05E1
+text    abbrev ayin     \u05E2
+text    abbrev finalpe  \u05E3
+text    abbrev pe       \u05E4
+text    abbrev finaltsadi \u05E5
+text    abbrev tsadi    \u05E6
+text    abbrev qof      \u05E7
+text    abbrev resh     \u05E8
+text    abbrev shin     \u05E9
+text    abbrev tav      \u05EA
+

@@ -41,7 +41,7 @@ public class SessionSocket extends NanoHTTPD
                              IPV4LOOP = "/127.0.0.1";
                              
   public final static Logging log   = Logging.getLog("SessionSocket");
-  public final static boolean debug = log.isLoggable("FINE");
+  public static boolean debug = log.isLoggable("FINE");
 
   public Response    serve
          (String     uri, 
@@ -91,6 +91,13 @@ public class SessionSocket extends NanoHTTPD
     { return serveURL("class://org.sufrin.dred.Dred"+uri, "image/png");
     }
     else
+    if (method.equalsIgnoreCase("GET") && uri.equals("/current.bindings.html"))
+    { EditorFrame caller = EditorFrame.whoCalledBrowser;
+      String bindings = caller == null ? "<html><body>No bindings</body></html>" : caller.getBindingsHTML();
+      Response r = new Response(HTTP_OK, HTTP_OK, bindings);
+      return r;
+    }
+    else
     if (method.equalsIgnoreCase("GET") && uri.endsWith(".html"))
     { 
       return serveURL("class://org.sufrin.dred.Dred"+uri, "text/html");
@@ -128,6 +135,10 @@ public class SessionSocket extends NanoHTTPD
 
   
 }
+
+
+
+
 
 
 

@@ -50,8 +50,8 @@ import org.sufrin.logging.Logging;
  */
 public class EditorFrame extends JFrame implements FileDocument.Listener
 { 
-  static Logging log   = Logging.getLog("EditorFrame");
-  static boolean debug = log.isLoggable("FINE");
+  public static Logging log   = Logging.getLog("EditorFrame");
+  public static boolean debug = log.isLoggable("FINE");
 
   EditorFrame session = this;
   
@@ -573,6 +573,8 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       bindAll("control Q",              "doQuit");
       bindAll("ctrl R",                 "doReplaceDown");
       bindAll("ctrl shift R",           "doReplaceUp");
+      bindAll("ctrl A",                 "doReplaceDown");
+      bindAll("ctrl shift A",           "doReplaceUp");
       bindAll("control S",              "doSave");     
       bindAll("control alt LEFT",       "doUnPrefix");
       bindAll("control LEFT",           "doUndent");
@@ -1135,13 +1137,16 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   public void doMozilla()
   {
         { try
-           {  Runtime.getRuntime().exec(String.format("mozilla http://localhost:%d/index.html", Dred.sessionSocket.getPort()));
+           { whoCalledBrowser = this; 
+             Runtime.getRuntime().exec(String.format("mozilla http://localhost:%d/index.html", Dred.sessionSocket.getPort()));              
            }
            catch (IOException ex)
            { ex.printStackTrace();
            }
          }  
   }
+  
+  protected static EditorFrame whoCalledBrowser = null;
   
   /** Returns HTML text describing the current bindings and abbreviations
    */
@@ -1166,6 +1171,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
          + actions.getBindingsHTML("<b>Main Window Actions (document and minitexts)</b>", this, false)
          + "</center><br></br><center>"
          + text.argument.getBindingsHTML("<b>Minitext-specific Actions</b>", true)
+         + "<br><b><A href=\"index.html\">Back to Dred Help Index</A></b></br>"                
          + "</center></body></html>"
          ;
   }
@@ -1304,6 +1310,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     else dispose();
     Extension.sessionQuit(this);
     if (syncPrefs) doSavePrefs();
+    whoCalledBrowser = null;
   }
 
   /**
@@ -1792,6 +1799,11 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
+
+
+
+
 
 
 

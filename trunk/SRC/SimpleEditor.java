@@ -279,14 +279,13 @@ class SimpleEditor implements InteractionListener
        bind("END",                 "doEndMove");
        bind("ctrl S",              "doSwapCursorAndMark");
        bind("ctrl X",              "doCut");
-       bind("ctrl shift C",        "doSwapSel");
        bind("ctrl V",              "doPaste");
        bind("ctrl C",              "doCopy");
-       bind("ctrl shift C",        "doSwapSel");
+       bind("ctrl shift V",        "doSwapSel");
        bind("DELETE",              "doLeftDelete");
        bind("BACK_SPACE",          "doLeftDelete");
-       bind("alt DELETE",          "doSwap2");
-       bind("alt BACK_SPACE",      "doSwap2");
+       bind("ctrl DELETE",         "doSwap2");
+       bind("ctrl BACK_SPACE",     "doSwap2");
        bind("control W",           "doSelectWord");
        bind("control L",           "doSelectLine");
        bind("control P",           "doSelectParagraph");
@@ -594,6 +593,7 @@ class SimpleEditor implements InteractionListener
     frame.setVisible(true);
   }
 }
+
 
 
 

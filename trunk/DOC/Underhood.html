@@ -54,26 +54,35 @@ if there is an active server, and fails (Unix exit 1) and outputs 0 otherwise.
 <h3>Server Requests</h3>
 
 <p>
-        An editing request takes one of the forms:
+        An editing request takes the form
 </p>
 
 <pre>
-        GET /edit?CWD=workingdirectory&amp;FILE=absolutefilename&amp;WAIT=true
-        GET /edit?CWD=workingdirectory&amp;FILE=absolutefilename
+        GET /edit?CWD=<i>workingdirectory</i>&amp;FILE=<i>absolutefilename</i>&amp;WAIT=<b>true</b><i> or </i><b>false</b>&amp;ENCODING=<i>encoding name</i>
 </pre>
 
+<p>
+The <tt>WAIT</tt> and <tt>ENCODING</tt> parameters can be omitted, in which case they
+are taken, respectively, to be <tt><b>false</b></tt>, and <tt><b>UTF8</b></tt>.
+</p>
 <p>
 The server responds by starting an editing session for the given file using the
 given working directory as the session's effective working directory.
 </p>
 <p>
-If the first form is used, then when the session is terminated an HTTP response 
+If <tt>WAIT</tt> is true, then when the session is terminated an HTTP response 
 is generated; otherwise the HTTP response is generated immediately.
+</p>
+<p>
+The given <tt>ENCODING</tt> is taken to be the encoding of the file. 
 </p>
 
 <p>The server also honours requests for Dred's documentation files. The 
 <b>Help/Browse Help with Mozilla</b> (etc) menu actions are implemented
-by aiming the browser at Dred's built-in server port.
+by aiming the browser at Dred's built-in server port (<i>####</i>), using the command:
+<pre>
+        mozilla http://localhost:<i>####</i>/index.html
+</pre>
 </p>
 
 <h3>Logging Server</h3>
@@ -103,6 +112,9 @@ accepts connections from the host on which it's running.  </p>
 </pre>
 </body>
 </html>
+
+
+
 
 
 
