@@ -103,7 +103,7 @@ public class Dred
         else 
           startRemoteSession(arg);
     else 
-      startLocalSession(null);
+      startServer(0);
   }
   
   /** Return true if there's REALLY a server running */
@@ -386,6 +386,7 @@ public class Dred
 
 
 }
+
 
 
 

@@ -9,12 +9,13 @@
 </head>
 
 <body>  
+<center>
+        <image alt="" src="dnought.png"></image>
+        <h1>Dred </h1>
+</center>
 
-<h1>
-        Dred 
-</h1>
 
-<center><image alt="" src="dnought.png"></image></center>
+
 
 <p> Dred is an lightweight, customizeable, and extensible Unicode text
 editor, written in Java 1.5.  
@@ -55,16 +56,28 @@ filenames.
 (see also <A href="Bindings.html">Specifying Bindings</A> and <A href="Underhood.html">Under the Hood</A>)
 </p>
 
-<b><A href="index.html">Back to Dred Resources Index</A></b>                
-<h2>Windows Usage
-</h2>
+<br></br>
+<b><A href="index.html">Back to Dred Help Index</A></b>                
+<br></br>
 
-<p>   Make a shortcut to Dred.jar in the distribution directory. It makes
-   sense for this shortcut to be placed somewhere on your desktop.
+<h2>Windows Usage</h2>
+
+<p>   
+   Make a shortcut to Dred.jar in the distribution directory. It makes
+   sense for this shortcut to be placed somewhere on your desktop. When
+   you click on the shortcut Dred will start a server associated with an
+   an iconified server control.
 </p>
 
-<p>   Make sure that the &quot;Start in&quot; directory in the shortcut is something
-   sensible (your desktop, for example).
+<p>   
+   The shortcut should have a target of:  
+<pre>
+   java -DDREDBINDINGS=<i>the-full-path-to-your-bindings-file</i> -jar <i>the-full-path-to-</i><tt>Dred.jar</tt>
+</pre>
+</p>
+
+<p>   
+   Use the Open Button on the server control to open files.
 </p>
 
 <p>   
@@ -241,5 +254,8 @@ of the cursor without affecting the cut buffer.
 <b>$Date$</b>
 </pre>
 </body>
+
+
+
 
 
