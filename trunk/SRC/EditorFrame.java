@@ -163,9 +163,9 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
           doc.secondaryBackups = state;
         }
       });
-      bind("doSavePrefs", "File/Prefs");
       menu.addSeparator();
-      bind("doLogger", "File/Prefs");
+      bind("doSavePrefs", "File/Prefs");
+      bind("doLogger",    "File/Prefs");
 
       menu = addMenu("Edit");
       bind("doReplaceAll");
@@ -233,30 +233,37 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
 
       menu = addMenu("Etc");
       bind("doShell");
-      menu.add(new Act("fmt -75 -c  < sel'n", "Use an external formatter (fmt) to format the current selection")
+      if (File.separator.equals("/")) // Unix -- pathetic really, but ...
       {
-        public void run()
-        {
-          doShell("fmt -c");
-        }
-      });
-      menu.add(new Act("fmt -60 -c  < sel'n")
-      {
-        public void run()
-        {
-          doShell("fmt -60 -c");
-        }
-      });
-      menu.add(new Act("fmt -40 -c  < sel'n")
-      {
-        public void run()
-        {
-          doShell("fmt -40 -c");
-        }
-      });
+         menu.addSeparator();
+         menu.add(new Act("fmt -75 -c  < sel'n", "Use an external formatter (fmt) to format the current selection")
+         {
+           public void run()
+           {
+             doShell("fmt -c");
+           }
+         });
+         menu.add(new Act("fmt -60 -c  < sel'n")
+         {
+           public void run()
+           {
+             doShell("fmt -60 -c");
+           }
+         });
+         menu.add(new Act("fmt -40 -c  < sel'n")
+         {
+           public void run()
+           {
+             doShell("fmt -40 -c");
+           }
+         });
+      }
       menu.addSeparator();
       bind("doUppercase");
       bind("doLowercase");
+      menu.addSeparator();
+      bind("doUnicode");
+      bind("doDeUnicode");
       menu.addSeparator();
       menu.add
       (new Act("Insert Unicode Range", 
@@ -535,6 +542,15 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   public void doUnicode()
   { ed.doInsertUnicode(text.argument.getText()); 
     edFocus(); 
+  } 
+    
+  @ActionMethod(label="Character -> Unicode", tip="Set .... to hex unicode of character at left of cursor")
+  public void doDeUnicode()
+  { String s=doc.stringLeft();
+    if (s.length()>0) 
+    { int c = (int) s.charAt(s.length()-1);
+      text.argument.setText(String.format("%h", c)); 
+    }
   } 
     
   protected static Bindings protoBindings = null;
@@ -1773,6 +1789,8 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
+
 
 
 
