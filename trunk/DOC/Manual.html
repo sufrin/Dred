@@ -1,6 +1,6 @@
 <!--
 %
-%       $Id: Manual.html 23 2005-04-04 16:18:32Z sufrin $
+%       $Id$
 %
 -->
 <head>
@@ -23,26 +23,26 @@ editor, written in Java 1.5.
 
 <h2>Unix/Linux Usage</h2>
 <pre>
-        java -jar Dred.jar [--bindings=<i>bindings-url</i>] --wait [filenames] 
+        java -jar Dred.jar [--enc=<i>encoding</i>] [--bindings=<i>bindings-url</i>] --wait [filenames] 
 </pre> 
 or 
 <pre>
-        java -jar Dred.jar [--bindings=<i>bindings-url</i>] -w [filenames] 
+        java -jar Dred.jar [--enc=<i>encoding</i>] [--bindings=<i>bindings-url</i>] -w [filenames] 
 </pre>
 or        
 <pre>
-        ted [--bindings=<i>bindings-url</i>] [filenames]
+        ted [--enc=<i>encoding</i>] [--bindings=<i>bindings-url</i>] [filenames]
 </pre>  
-<p> This starts edit sessions (using the bindings specified in the file
-at the given url, or the default bindings if none are specified) for
-each of the given filenames.  The program exits when the last session
-terminates.  </p>
+<p> This starts edit sessions for each of the given filenames.  The
+program exits when the last session terminates.  
+</p>
+
 <pre>
-        java -jar Dred.jar [--bindings=<i>bindings-url</i>] [filenames]  &amp;
+        java -jar Dred.jar [--enc=<i>encoding</i>] [--bindings=<i>bindings-url</i>] [filenames]  &amp;
 </pre>  
 or        
 <pre>
-        dred [--bindings=<i>bindings-url</i>] [filenames]
+        dred [--enc=<i>encoding</i>] [--bindings=<i>bindings-url</i>] [filenames]
 </pre>  
 <p>
 This starts edit sessions for each of the given filenames, using an
@@ -50,6 +50,14 @@ existing Dred server if one is running, then exits immediately. If no
 server is running then it starts itself in server mode, puts up an
 (iconified) server control, and starts edit sessions for the
 filenames. 
+</p>
+
+<p>
+If  <tt>--bindings=...</tt>
+is specified then the editor's bindings are taken from the file
+specified by the given URL; otherwise the default bindings
+are used. If <tt>--enc=...</tt> is specified, then
+the files are assumed to use the specified encoding; otherwise UTF8 is assumed.
 </p>
       
 <p>
@@ -246,6 +254,13 @@ warn you and ask you what to do. Likewise, if you <b>"Save&nbsp;As"</b> using th
 name of an existing file, Dred will ask whether you really mean it.
 </p>
 
+<h4>Character Set Encoding</h4>
+A file is usually saved in the character set encoding that it
+originated in. It may be saved in a different encoding by
+using the <b>File/Save&nbsp;As&nbsp;(Browse)</b> menu entry
+and changing the encoding using the encoding selector provided
+in the file browser.
+
 <h3>Opening</h3>
 Use the <b>File/Edit&nbsp;....</b> menu entry with the name of
 the file in the argument minitext, or use the <b>File/Edit&nbsp;(browse)</b> 
@@ -274,6 +289,10 @@ the minitext.
      </li>
 </ul>
 
+<h4>Character Set Encoding</h4>
+A file may be loaded using a specified encoding by using the
+<b>File/Edit&nbsp;(Browse)</b> menu entry and changing the encoding
+using the encoding selector provided in the file browser.
 
 <h2>Reference</h2>
 <p>The Dred document editing model is essentially that established in my
@@ -287,6 +306,7 @@ the minitext.
 <b>$Date$</b>
 </pre>
 </body>
+
 
 
 
