@@ -101,7 +101,7 @@ public class Bindings implements Iterable<Bindings.Binding>
     readURLs.add(url);
   }
     
-  public void read(InputStream is, URL url) throws IOException
+  public void read(InputStream is, URL url) 
   { LineNumberReader reader = null;
     try 
     { reader = new LineNumberReader(new InputStreamReader(is, "UTF8")); 

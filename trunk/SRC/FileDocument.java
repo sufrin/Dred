@@ -31,11 +31,19 @@ public class FileDocument extends SearchableDocument
   /** Is logging happening above the level of INFO? */
   public static boolean  debug = log.isLoggable("FINE");
 
+  /** The Unicode encoding used for this document */
+  protected String encoding = "UTF8"; 
+  public void setEncoding(String encoding) { this.encoding=encoding; }
+  public String getEncoding() { return encoding; }
+  
+  
+  
   /** Construct an anonymous document. */
-  public  FileDocument()
+  public  FileDocument(String encoding)
   { lastModified=0;
     anonymous=true;
     fileName=new File("Anonymous");
+    this.encoding = encoding;
     canonicalizeFileName();
   }
 
@@ -63,7 +71,7 @@ public class FileDocument extends SearchableDocument
     fileNameSet();
     if (fileName.exists() && fileName.canRead())
     try
-    { BufferedReader r = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), "UTF8"));
+    { BufferedReader r = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), encoding));
       doLoad(r);
       setCursorXY(0, 0);
       setMark(0, 0);
@@ -112,7 +120,7 @@ public class FileDocument extends SearchableDocument
     }
     if (!fileName.exists() || backup()) 
     try
-    { PrintWriter p = new PrintWriter(new OutputStreamWriter(new FileOutputStream(fileName), "UTF8"));
+    { PrintWriter p = new PrintWriter(new OutputStreamWriter(new FileOutputStream(fileName), encoding));
       output(p);
       p.close();
       setChanged(false);
@@ -126,8 +134,9 @@ public class FileDocument extends SearchableDocument
   }
 
   /** Change the path to the associated file, and save the document in it. */
-  public void doSaveAs(File aFileName)
+  public void doSaveAs(File aFileName, String encoding)
   { setFileName(aFileName);
+    setEncoding(encoding);
     doSave();
   }
   
@@ -137,6 +146,8 @@ public class FileDocument extends SearchableDocument
       associated file; the name of the copy is derived from the name
       of the associated file by appending a tilde to it.  If a file
       with that name exists already then it is deleted beforehand.
+      
+      TODO: change line-by-line backup to bulk byte backup
   */
   public boolean backup()
   { if (!fileName.exists() && fileName.canRead())
@@ -144,7 +155,7 @@ public class FileDocument extends SearchableDocument
        return false;
     }
     try
-    { BufferedReader r = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), "UTF8"));
+    { BufferedReader r = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), encoding));
       File           b;
       try 
       {
@@ -154,7 +165,7 @@ public class FileDocument extends SearchableDocument
       { fileReport("Cannot create temporary backup file ("+ex.getMessage()+")\nDirectory: "+fileName.getParentFile());
         return false;
       }
-      PrintWriter p = new PrintWriter(new OutputStreamWriter(new FileOutputStream(b), "UTF8"));
+      PrintWriter p = new PrintWriter(new OutputStreamWriter(new FileOutputStream(b), encoding));
       log.fine("writing to %s", b);
       String line=null;
       while ((line=r.readLine())!=null) p.println(line);

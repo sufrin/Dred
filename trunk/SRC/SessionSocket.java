@@ -68,7 +68,8 @@ public class SessionSocket extends NanoHTTPD
     { 
       final File startCWD       = new File(params.get("CWD"));
       final String fileName     = params.get("FILE");
-      final EditorFrame session = Dred.startLocalSession(fileName);
+      final String encoding     = params.get("ENCODING");
+      final EditorFrame session = Dred.startLocalSession(fileName, encoding==null?"UTF8":encoding);
       final String waitParam    = params.get("WAIT");
       final boolean wait        = waitParam!=null && waitParam.equals("true");
       session.setCWD(startCWD);

@@ -373,7 +373,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     public ProcessFrame(String command)
     {
       super(80, 24, command);
-      setDoc(new FileDocument());
+      setDoc(new FileDocument("UTF8"));
       menuBar.add(clearButton);
       this.command = command;
     }
@@ -469,7 +469,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   JLabel labelC, labelL, labelR;
   
   /** The file chooser */
-  protected static JFileChooser fileChooser = new JFileChooser();
+  protected static DFileChooser fileChooser = new DFileChooser();
     
   /** The MenuBar */
   MenuBar menuBar = new MenuBar();
@@ -548,7 +548,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   public void doDeUnicode()
   { String s=doc.stringLeft();
     if (s.length()>0) 
-    { int c = (int) s.charAt(s.length()-1);
+    { int c = s.charAt(s.length()-1);
       text.argument.setText(String.format("%h", c)); 
     }
   } 
@@ -846,7 +846,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
                      + "<br></br>"
                      + (Dred.sessionSocket == null
                        ? ""
-                       : ("Serving on port: " + Dred.sessionSocket.getPort()))
+                       : ("Serving "+System.getProperty("user.name")+" on port: " + Dred.sessionSocket.getPort()))
                      + "<br></br>"
                      + (Dred.loggingSocket == null
                        ? ""
@@ -985,7 +985,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       return;
     }
     File file = new File(name);
-    Dred.startLocalSession(file.getAbsolutePath());
+    Dred.startLocalSession(file.getAbsolutePath(), Dred.EncodingName);
   }
 
   /**
@@ -1007,7 +1007,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     fileChooser.setFileHidingEnabled(false);
     int res = fileChooser.showOpenDialog(frame);
     if (res == JFileChooser.APPROVE_OPTION)
-      Dred.startLocalSession(fileChooser.getSelectedFile().getAbsolutePath());
+      Dred.startLocalSession(fileChooser.getSelectedFile().getAbsolutePath(), fileChooser.getCoding());
   }
 
   @ActionMethod(label="Find next", tip="Find the next instance of the pattern in the Find field")
@@ -1393,7 +1393,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   {
     String name = desugarFilename(text.argument.getText());
     File file = new File(name).getAbsoluteFile();
-    doSaveItAs(file);
+    doSaveItAs(file, doc.getEncoding());
   }
 
   /**
@@ -1406,9 +1406,10 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
     fileChooser.setCurrentDirectory(cwd); // doc.getFileName().getParentFile());
     fileChooser.setFileHidingEnabled(true);
+    fileChooser.setCoding(doc.getEncoding());
     int res = fileChooser.showSaveDialog(this);
     if (res == JFileChooser.APPROVE_OPTION)
-      doSaveItAs(fileChooser.getSelectedFile().getAbsoluteFile());
+      doSaveItAs(fileChooser.getSelectedFile().getAbsoluteFile(), fileChooser.getCoding());
   }
 
   /**
@@ -1418,7 +1419,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
    * document has been changed since it was loaded or
    * saved in this session.
    */
-  public void doSaveItAs(File file)
+  public void doSaveItAs(File file, String encoding)
   {
     boolean save = true;
     if (file.exists())
@@ -1432,7 +1433,9 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       save = 0 == Dred.showWarning(this, msg, 1, options);
     }
     if (save)
-      doc.doSaveAs(file);
+    { doc.doSaveAs(file, encoding);
+      showDocFeedback();
+    }
   }
 
   /**
@@ -1713,7 +1716,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     int length = doc == null ? 0 : doc.length();
     int x = doc == null ? 0 : doc.getX();
     int y = doc == null ? 0 : doc.getY();
-    String feedbackText = String.format("%d.%d/%d", y, x, length);
+    String feedbackText = String.format("[%s] %d.%d/%d", doc.getEncoding(), y, x, length);
     labelR.setText(feedbackText);
   }
 

@@ -1,12 +1,14 @@
 package org.sufrin.dred;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.net.URL;
-import javax.swing.*;
+
+import javax.swing.ImageIcon;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.KeyStroke;
 
 /**
         A tool that inserts keystroke names into the document

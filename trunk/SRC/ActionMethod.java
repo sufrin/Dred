@@ -165,7 +165,7 @@ import javax.swing.KeyStroke;
         {
            Set<String> keys     = act.getKeyNames();
            String      tip      = act.getTip();
-           String      shortcut = act.getKeyNames().toString().replace("[","").replace("]","").replace(",","<br></br>");
+           String      shortcut = keys.toString().replace("[","").replace("]","").replace(",","<br></br>");
            String      menuItem = act.isActivatedByMenu() ? "<b>"+act.getMenu()+"</b><br></br>"+act.getLabel() : "";
            b.append(String.format("<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>%n", act.getName(), shortcut, tip, menuItem));
         }

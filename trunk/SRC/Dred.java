@@ -99,7 +99,7 @@ public class Dred
         else if (arg.startsWith("--bindings="))
           readBindings(arg.substring("-bindings=".length()), true);
         else if (wait) 
-          startLocalSession(arg); 
+          startLocalSession(arg, EncodingName); 
         else 
           startRemoteSession(arg);
     else 
@@ -156,27 +156,30 @@ public class Dred
     sessions.remove(session);
   }
 
-  public synchronized static void startSession()
+  public synchronized static void loadBindings()
   { if (bindings.isEmpty())
     {
       String rootBindings = System.getProperty("DREDBINDINGS");
       if (rootBindings==null) rootBindings = System.getenv("DREDBINDINGS");
       if (rootBindings==null) rootBindings = System.getProperty("user.home")+File.separator+".dred"+File.separator+"dred.bindings";
+      if (rootBindings==null) rootBindings = System.getProperty("user.home")+File.separator+"DRED"+File.separator+"dred.bindings";
       if (new File(rootBindings).canRead())
           readBindings("file:"+rootBindings, true);
       else
-         System.err.printf("[DRED WARNING: cannot read bindings %s; using built-in fallback bindings.]%n", rootBindings);
+          showWarning(String.format("[DRED WARNING: cannot read bindings %s; using built-in fallback bindings.]%n", rootBindings));
     }
   }
+  
+  protected static String EncodingName = "UTF8";
  
   /**
    * Construct a new Editor session editing the document
    * with the given path (or an anonymous document if the
    * given path is null)
    */
-  public synchronized static EditorFrame startLocalSession(final String path)
-  { startSession();
-    FileDocument doc = new FileDocument();
+  public synchronized static EditorFrame startLocalSession(final String path, String encoding)
+  { loadBindings();
+    FileDocument doc = new FileDocument(encoding);
     EditorFrame f = path == null ? new EditorFrame(80, 24)
                                  : new EditorFrame(80, 24, new File(path).getName());
     try
@@ -213,8 +216,7 @@ public class Dred
         while (retries>=0)
         try
         {
-          URL           url = new URL("http", "localhost", port, "/edit?FILE="+file.getAbsolutePath()+"&CWD="+cwd);
-          URLConnection con = url.openConnection();
+          URL              url    = new URL("http", "localhost", port, "/edit?FILE="+file.getAbsolutePath()+"&CWD="+cwd);
           LineNumberReader reader = new LineNumberReader(new InputStreamReader(url.openStream(), "UTF8")); 
           reader.close();
           return;
@@ -299,7 +301,7 @@ public class Dred
       {
         public void actionPerformed(ActionEvent ev)
         {
-          startLocalSession(null);
+          startLocalSession(null, EncodingName);
         }
       });
       frame.add(button);
