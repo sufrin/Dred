@@ -164,6 +164,8 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       bind("doSavePrefs", "File/Prefs");
       menu.addSeparator();
       bind("doLogger", "File/Prefs");
+      menu.addSeparator();
+      bind("doDefaultServer");
 
       menu = addMenu("Edit");
       bind("doReplaceAll");
@@ -534,6 +536,17 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     edFocus(); 
   } 
   
+  @ActionMethod(label="Default Port ....", tip="Set (from ....) the default port to be used when Dred is started as a server")
+  public void doDefaultServer()
+  { String port = text.argument.getText(); 
+    if (port.matches("[0-9]+"))
+    { prefs.putInt("defaultport", Integer.parseInt(port));
+      doSavePrefs();
+    }
+    else
+      Dred.showWarning("Default server port must be a number between 1024 and 65535"); 
+  } 
+  
   protected static Bindings protoBindings = null;
   public    static void  setBindings(Bindings thePrototype) { protoBindings = thePrototype; }
   
@@ -824,9 +837,13 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     String message = "<html>Dred $Revision$<br>"
                      + "(C) 2004, 2005 Bernard Sufrin<br>"
                      + "Bernard.Sufrin@sufrin.org.uk<br>"
+                     + ("Default server port for "+System.getProperty("user.name")+" is "+prefs.get("defaultport", "unset"))
+                     + (Dred.sessionSocket == null
+                       ? ""
+                       : ("Serving on port: " + Dred.sessionSocket.getPort()))
                      + (Dred.loggingSocket == null
                        ? ""
-                       : ("Logger Port: " + Dred.loggingSocket.getPort()))
+                       : ("Logging on port: " + Dred.loggingSocket.getPort()))
                      + "</html>";
     JOptionPane.showMessageDialog(this, message, "About Dred", JOptionPane.PLAIN_MESSAGE, dnought);
   }
@@ -961,7 +978,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       return;
     }
     File file = new File(name);
-    Dred.session(file.getAbsolutePath());
+    Dred.startLocalSession(file.getAbsolutePath());
   }
 
   /**
@@ -976,7 +993,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     fileChooser.setFileHidingEnabled(false);
     int res = fileChooser.showOpenDialog(this);
     if (res == JFileChooser.APPROVE_OPTION)
-      Dred.session(fileChooser.getSelectedFile().getAbsolutePath());
+      Dred.startLocalSession(fileChooser.getSelectedFile().getAbsolutePath());
   }
 
   @ActionMethod(label="Find next", tip="Find the next instance of the pattern in the Find field")
@@ -1747,6 +1764,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
 
 
 

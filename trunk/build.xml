@@ -34,6 +34,12 @@
                <include name="**/*.java"/>
             </javac> 
         </target>
+        
+        <target name="test" depends="Dred">
+           <java jar="${BUILD}/Dred.jar" fork="true">
+             <arg file="testfile"/>
+           </java>
+        </target>
 
         <target name = "Dred" depends="compile">
             <jar    basedir  ="${BUILD}" 
@@ -115,6 +121,7 @@
                 <delete dir="${BUILD}" />
         </target>
 </project>
+
 
 
 

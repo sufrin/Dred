@@ -3,6 +3,7 @@ package org.sufrin.dred;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.prefs.*;
 
 import org.sufrin.nanohttp.NanoHTTPD;
 import org.sufrin.nanohttp.Response;
@@ -23,11 +24,17 @@ import org.sufrin.nanohttp.Response;
  */
 
 public class SessionSocket extends NanoHTTPD
-{
-  public SessionSocket(int port) throws IOException
+{ /** Make a session socket and publish (via preferences) its port. */
+
+  public SessionSocket(int port, Preferences prefs) throws IOException
   {
     super(port);
+    this.prefs=prefs;
+    prefs.putInt("port", port);
+    try { prefs.sync(); } catch (BackingStoreException ex) { ex.printStackTrace(); }
   }
+  
+  protected Preferences prefs = null;
 
   public Response    serve
          (String     uri, 
@@ -37,24 +44,40 @@ public class SessionSocket extends NanoHTTPD
           LineReader reader
          ) 
   throws IOException, UnsupportedEncodingException
-  {
+  { 
     if (!("/127.0.0.1".equals(header.get("REMOTE_ADDR")))) 
     { 
        return new Response(HTTP_FORBIDDEN, MIME_PLAINTEXT, 
                            String.format("%s %s %s", HTTP_FORBIDDEN, method, uri)); 
     }
+    if (method.equalsIgnoreCase("GET") && uri.equalsIgnoreCase("/serving"))
+    {
+      return new Response(HTTP_OK, MIME_PLAINTEXT, "OK");
+    }
+    else
     if (method.equalsIgnoreCase("FORM") && uri.equalsIgnoreCase("/edit"))
     {
-      final File startCWD = new File(params.get("CWD"));
-      final String fileName = params.get("FILE");
-      final EditorFrame session = Dred.session(fileName);
+      final File startCWD       = new File(params.get("CWD"));
+      final String fileName     = params.get("FILE");
+      final EditorFrame session = Dred.startLocalSession(fileName);
+      final String waitParam    = params.get("WAIT");
+      final boolean wait        = waitParam!=null && waitParam.equals("true");
       session.setCWD(startCWD);
-      session.await();
+      if (wait) session.await();
       return new Response(HTTP_OK, MIME_PLAINTEXT,
-                          String.format("Edited %s in %s ", fileName,startCWD));
+                          String.format("Dred %s in %s ", fileName,startCWD));
     }
     return new Response(HTTP_FORBIDDEN,
                         MIME_PLAINTEXT,
                         String.format("%s %s %s", HTTP_FORBIDDEN, method, uri));
   }
+  
+  public void close() 
+  { prefs.putInt("port", 0);
+    try { prefs.sync(); } catch (BackingStoreException ex) { ex.printStackTrace(); }
+    super.close();
+    
+  }
 }
+
+

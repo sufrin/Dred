@@ -5,10 +5,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
+import java.io.*;
+import java.net.*;
 import java.util.Vector;
+import java.util.prefs.*;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -65,43 +65,63 @@ public class Dred
     // Tell the extensions
     Extension.sessionOpened(session);
   }
-
-  public static void closeAll()
-  {
-    for (EditorFrame frame : new Vector<EditorFrame>(sessions))
-    {
-      frame.doQuit();
-    }
-  }
-
+  
   /**
    * Start a session (or listener) for each argument, or an
    * anonymous session if there are no arguments.
    */
   public static void main(String[] args) throws Exception
   { URL.setURLStreamHandlerFactory(new ClassURLFactory());
+    boolean wait = false;
     if (args.length > 0)
       for (String arg : args)
-        if (arg.startsWith("-socket="))
-          startSocketListener(arg.substring(8));
-        else if (arg.startsWith("-socket"))
-          startSocketListener("65000");
-        else if (arg.startsWith("-logger="))
-          startLogger(arg.substring(8));
-        else if (arg.startsWith("-logger"))
-          startLogger("65001");
-        else if (arg.startsWith("-bindings="))
+        if (arg.equals("-w") || arg.equals("--wait"))
+          wait=true;
+        else
+        if (arg.equals("--port"))
+        { 
+          String port = prefs.get("defaultport", "0");
+          System.out.println(port);
+          System.exit(0);
+        }
+        else if (arg.equals("--serving"))
+        { 
+          System.exit(isServing() ? 0 : 1);
+        }
+        else if (arg.startsWith("--port="))
+        { int port = Integer.parseInt(arg.substring("--port=".length()));
+          prefs.putInt("defaultport", port);
+          try { prefs.sync(); } catch (BackingStoreException ex) { ex.printStackTrace(); }
+        }
+        else if (arg.equals("--serve") && prefs.getInt("defaultport", 0)!=0)
+          startServer(prefs.getInt("defaultport", 0));          
+        else if (arg.startsWith("--logger="))
+          startLogger(Integer.parseInt(arg.substring(8)));
+        else if (arg.startsWith("--logger"))
+          startLogger("60001");
+        else if (arg.startsWith("--bindings="))
           readBindings(arg.substring("-bindings=".length()), true);
-        else if (arg.startsWith("-newbindings="))
-        { bindings.clear();
-          readBindings(arg.substring("-newbindings=".length()), true);
-        }
-        else if (arg.startsWith("-fallbackbindings"))
-        { bindings.clear();
-          System.err.printf("[DRED WARNING: Using fallback bindings]%n");
-        }
-        else session(arg);
-    else session(null);
+        else if (wait) 
+          startLocalSession(arg); 
+        else 
+          startRemoteSession(arg);
+    else 
+      startLocalSession(null);
+  }
+  
+  /** Return true if there's REALLY a server running */
+  public static boolean isServing()
+  { int port = prefs.getInt("port", 0);
+    if (port==0) return false;
+    try
+    {
+      URL url = new URL("http", "localhost", port, "/serving");
+      url.openStream().close();
+      return true;
+    }
+    catch (IOException ex)
+    { return false;
+    }
   }
   
   protected static Bindings bindings = new Bindings();
@@ -151,13 +171,13 @@ public class Dred
          System.err.printf("[DRED WARNING: cannot read bindings %s; using built-in fallback bindings.]%n", rootBindings);
     }
   }
-  
+ 
   /**
    * Construct a new Editor session editing the document
    * with the given path (or an anonymous document if the
    * given path is null)
    */
-  public synchronized static EditorFrame session(final String path)
+  public synchronized static EditorFrame startLocalSession(final String path)
   { startSession();
     FileDocument doc = new FileDocument();
     EditorFrame f = path == null ? new EditorFrame(80, 24)
@@ -178,7 +198,139 @@ public class Dred
     return f;
   }
 
-  /**
+  protected static Preferences prefs = Preferences.userRoot().node("Dred");
+  
+  /** After starting a server (if there is none running) on the default
+      server port, start a remote editing session for the given path.
+   */
+  public static void startRemoteSession(String path) throws Exception
+  {     String cwd  = System.getProperty("user.dir");
+        File   file = new File(path);
+        int    port = prefs.getInt("port", 0);  
+        if (port==0) 
+        {  port = prefs.getInt("defaultport", 0);
+           if (port==0)
+           {  System.err.printf("[Dred: Editing locally. Use --port=#### to set default]%n", port);
+              startLocalSession(path);
+              return;
+           }
+           else
+           {  startServer(port);
+           }
+        }
+        
+        int retries = 1;
+        while (retries>=0)
+        try
+        {
+          URL           url = new URL("http", "localhost", port, "/edit?FILE="+file.getAbsolutePath()+"&CWD="+cwd);
+          URLConnection con = url.openConnection();
+          LineNumberReader reader = new LineNumberReader(new InputStreamReader(url.openStream(), "UTF8")); 
+          reader.close();
+          return;
+        }
+        catch (ConnectException ex)
+        { startServer(port);
+          retries--;
+        }
+  }
+
+  
+  /** Close all the editing sessions */
+  public static void closeAll()
+  {
+    for (EditorFrame frame : new Vector<EditorFrame>(sessions))
+    {
+      frame.doQuit();
+    }
+  }
+  
+  /** Close all the editing sessions, and quit the server */
+  public static void closeServer()
+  {
+    closeAll();
+    if (sessions.isEmpty()) 
+    { sessionSocket.close();         
+      System.exit(0); 
+    }
+  }
+  
+  /** Start a Dred server on the given port */
+  public static void startServer(int port)
+  {
+    String user = System.getProperty("user.name");
+    try
+    {
+      sessionSocket = new SessionSocket(port, prefs);
+      final JFrame frame = new JFrame("[[[Dred Server " + user + "@" + port + "]]]");
+      frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+      frame.addWindowListener(new WindowAdapter()
+      {
+        public void windowClosed(WindowEvent e)
+        {
+          closeServer();
+        }
+      });
+      frame.setLayout(new GUIBuilder.ColLayout(-1));
+      JButton button = new JButton("Exit Server: " + user + "@" + port);
+      frame.add(button);
+      button.addActionListener(new ActionListener()
+      {
+        public void actionPerformed(ActionEvent ev)
+        {
+          closeServer();
+        }
+      });
+      button.setToolTipText("Close all current sessions, and shut down the server.");
+      button = new JButton("Close all sessions");
+      frame.add(button);
+      button.addActionListener(new ActionListener()
+      {
+        public void actionPerformed(ActionEvent ev)
+        {
+          closeAll();
+        }
+      });
+      button.setToolTipText("Close all current sessions, but keep the server running.");
+      frame.setIconImage(EditorFrame.dnought.getImage());
+      frame.pack();
+      frame.setVisible(true);
+      frame.setLocationRelativeTo(null);
+      frame.setState(JFrame.ICONIFIED);
+    }
+    catch (IOException ex)
+    {
+      System.err.println("[Dred: cannot start server on port "+port+"]");
+      System.exit(1);
+    }
+  }
+  
+  /** Start the HTTP logger interface on the given port */  
+  static void startLogger(String port) { startLogger(Integer.parseInt(port)); }
+  
+  /** Start the HTTP logger interface on the given port */
+  static void startLogger(int port)
+  {
+    if (loggingSocket != null)
+    {
+      showWarning("Logger port: " + loggingSocket.getPort());
+    }
+    else try
+    {
+      loggingSocket = new LoggingSocket(port);
+    }
+    catch (IOException ex)
+    {
+      showWarning("Cannot open logger port " + port + ": " + ex.getMessage());
+    }
+    catch (NumberFormatException ex)
+    {
+      showWarning("Logger port must be between 1024 and 65535");
+    }
+  }
+
+  
+   /**
    * Show a warning message in a dialogue window with
    * various option buttons. When a button is pressed return
    * its number. The default button (the one fired by
@@ -216,80 +368,10 @@ public class Dred
     return showWarning(null, msg, dflt, options);
   }
 
-  static void startLogger(String port)
-  {
-    if (loggingSocket != null)
-    {
-      showWarning("Logger port: " + loggingSocket.getPort());
-    }
-    else try
-    {
-      loggingSocket = new LoggingSocket(Integer.parseInt(port));
-    }
-    catch (IOException ex)
-    {
-      showWarning("Cannot open logger port " + port + ": " + ex.getMessage());
-    }
-    catch (NumberFormatException ex)
-    {
-      showWarning("Logger port must be between 8000 and 65535");
-    }
-  }
-
-  public static void startSocketListener(String socket)
-  {
-    if (!socket.matches("[0-9]+"))
-      return;
-    if (sessionSocket != null)
-      return;
-    String user = System.getProperty("user.name");
-    try
-    {
-      sessionSocket = new SessionSocket(Integer.parseInt(socket));
-      final JFrame frame = new JFrame("[[[[[[[[[ Dred: " + user + " ]]]]]]]]]");
-      frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-      frame.addWindowListener(new WindowAdapter()
-      {
-        public void windowClosed(WindowEvent e)
-        {
-          sessionSocket.close();
-        }
-      });
-      frame.setLayout(new GUIBuilder.ColLayout(-1));
-      JButton button = new JButton("Exit Server: " + user + "@" + socket);
-      frame.add(button);
-      button.addActionListener(new ActionListener()
-      {
-        public void actionPerformed(ActionEvent ev)
-        {
-          closeAll();          
-          if (sessions.isEmpty()) { frame.dispose(); System.exit(0); }
-        }
-      });
-      button.setToolTipText("Close all current sessions, and shut down the server.");
-      button = new JButton("Close all sessions");
-      frame.add(button);
-      button.addActionListener(new ActionListener()
-      {
-        public void actionPerformed(ActionEvent ev)
-        {
-          closeAll();
-        }
-      });
-      button.setToolTipText("Close all current sessions, but keep the server running.");
-      frame.setIconImage(EditorFrame.dnought.getImage());
-      frame.pack();
-      frame.setVisible(true);
-      frame.setLocationRelativeTo(null);
-      frame.setState(JFrame.ICONIFIED);
-    }
-    catch (IOException ex)
-    {
-      ex.printStackTrace();
-    }
-  }
 
 }
+
+
 
 
 
