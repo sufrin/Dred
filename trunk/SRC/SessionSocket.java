@@ -35,6 +35,8 @@ public class SessionSocket extends NanoHTTPD
   }
   
   protected Preferences prefs = null;
+  public final static String IPV6LOOP = "/0:0:0:0:0:0:0:1",
+                             IPV4LOOP = "/127.0.0.1";
 
   public Response    serve
          (String     uri, 
@@ -44,8 +46,9 @@ public class SessionSocket extends NanoHTTPD
           LineReader reader
          ) 
   throws IOException, UnsupportedEncodingException
-  { 
-    if (!("localhost".equals(header.get("REMOTE_HOST")))) 
+  { String addr = header.get("REMOTE_ADDR");
+    
+    if (!(addr.equals(IPV6LOOP) || addr.equals(IPV4LOOP)))
     { 
        return new Response(HTTP_FORBIDDEN, MIME_PLAINTEXT, 
                            String.format("%s %s %s", HTTP_FORBIDDEN, method, uri)); 
@@ -80,6 +83,7 @@ public class SessionSocket extends NanoHTTPD
     
   }
 }
+
 
 
 
