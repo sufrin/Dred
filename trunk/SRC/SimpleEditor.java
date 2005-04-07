@@ -126,6 +126,12 @@ class SimpleEditor implements InteractionListener
     bind(keyPress(key), act);
   }
   
+  /** Set the number of lines of the display */
+  public void setLines(int n)
+  {
+     display.setLines(n);  
+  }
+  
   /*
    * Get the named action
    */
@@ -143,8 +149,7 @@ class SimpleEditor implements InteractionListener
   protected void bind(KeyStroke key, Action action) 
   { keyBindings.put(key, action); 
     if (action instanceof ActionMethod.Action) ((ActionMethod.Action) action).activatedBy(key);
-  }
-  
+  }  
   
   /** Maps a KeyStroke to the corresponding Action. */
   protected HashMap<KeyStroke, Action> keyBindings = new HashMap<KeyStroke, Action>();

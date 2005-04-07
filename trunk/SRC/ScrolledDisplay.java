@@ -58,6 +58,11 @@ public class ScrolledDisplay extends JPanel implements DisplayComponent
   { 
     this(cols, rows, true);
   }
+  
+  /** Set the number of lines on the display */
+  public void setLines(int n)
+  { display.setLines(n);
+  }
 
   public void addInteractionListener(InteractionListener listener)
   { 

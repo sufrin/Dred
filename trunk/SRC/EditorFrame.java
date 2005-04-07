@@ -814,13 +814,16 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
    * 
    * <pre>
    * 
-   *  
-   *   
-   *        Replace &tilde;/    with the user's home directory, and
-   *        ./    with the current directory of the current editing session
-   *        ../   with the parent directory of the current editing session
-   *        Prefix an ``orphaned'' filename with the parent directory of the current document
+   *        Replace a leading &tilde;/ with the user's home directory, or
+   *        a leading ./ or ../ with the current directory of the current 
+   *        editing session. 
    *        
+   *        Prefix a filename that has no explicit directory 
+   *        with the parent directory of the current document.
+   *        
+   *        If the current document was accessed via a URL, then it
+   *        has no "parent directory"; in that case we prefix the
+   *        filename with current directory of the current editing session.
    *   
    *  
    * </pre>

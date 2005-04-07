@@ -139,6 +139,16 @@ implements DocListener,
    }
    
    /**
+    * Set the number of lines shown on the display (largely for minitexts)
+    */
+   public void setLines(int n)
+   {
+     this.rows=n;
+     setFont(font);
+     preferred = dim;
+   }
+   
+   /**
       Decouple the given document from this Display.
    */
    public void removeDoc()

@@ -37,6 +37,9 @@ public interface DisplayComponent
   
   /** Set a tooltip */
   public void setToolTipText(String tip);
+  
+  /** Set the number of lines of the display */
+  public void setLines(int n);
 
 }
 

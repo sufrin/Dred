@@ -1,10 +1,12 @@
 package org.sufrin.dred;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.BorderLayout;
 import java.awt.Point;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -23,26 +25,31 @@ public class TextLine extends JPanel
   int          cols;
   String       title;
   JComponent   label;
+  String       tip;
+  boolean      border;
   
   public TextLine(int cols, String title)
-  { this(cols, new JLabel(title), true); }
+  { this(cols, new JLabel(title), true, title); }
   
   public void setToolTipText(String tip)
   { super.setToolTipText(tip);
     ed.setToolTipText(tip);
+    this.tip=tip;
   }
   
-  public TextLine(int cols, JComponent label, boolean border)
+  public TextLine(int cols, JComponent label, boolean border, String title)
   { setLayout(new RowLayout(-1, true).fix(0)); 
     this.label=label;
     this.cols=cols;
-    doc = new Document();
-    ed  = new SimpleEditor(new Display(cols, 1));
+    this.border = border;
+    this.doc = new Document();
+    this.title = title;
+    this.ed  = new SimpleEditor(new Display(cols, 1));
     ed.actions.register(this);
     // Register default actions
-    bind("ENTER",         "doTellBig"); 
-    bind("control U",     "doClear");
-    bind("control ENTER", "doBig"); 
+    bind("ENTER",               "doTellBig"); 
+    bind("control U",           "doClear");
+    bind("control ENTER",       "doBig"); 
     // Register user-specified bindings
     if (protoBindings!=null)
        for (Bindings.Binding binding: protoBindings)
@@ -64,7 +71,7 @@ public class TextLine extends JPanel
     else
     { JComponent p = ed.getComponent();
       add(p, "Center");
-    }
+    }  
   }
   
   public JComponent getLabel()                 { return label; }
@@ -101,7 +108,8 @@ public class TextLine extends JPanel
     return ed.actions.getBindingsHTML(prefix, this, local);
   }
 
-  JFrame auxFrame;
+  JFrame       auxFrame;
+  SimpleEditor auxEd;
   
   /** Make an additional, large,  editor for this text line
       (so multi-line texts can be edited).
@@ -109,30 +117,42 @@ public class TextLine extends JPanel
   @ActionMethod(label="MultiLine", tip="to make a multiline-view minitext of this \none-line-view minitext")
   public void doBig()
   { // Perhaps this should be simplified: just increase the size of the Display!
+    if (true)
+    {
     if (auxFrame != null) return;
     auxFrame = new JFrame(TextLine.this.title);
-    final SimpleEditor ned = new SimpleEditor(cols, 3, true);
-    ned.setDoc(doc);
+    auxEd = new SimpleEditor(cols, 3, true);
+    auxEd.setDoc(doc);
     
     auxFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
     auxFrame.addWindowListener
     ( new WindowAdapter()
       {
         public void windowClosing(WindowEvent e)
-        { ned.removeDoc();
-          auxFrame.dispose();
-          auxFrame=null;
+        { doClose();
         }
       }
     );
-    auxFrame.add(ned.getComponent());
+    auxFrame.setLayout(new BorderLayout());
+    auxFrame.add(new JButton(new Act("Close", "Close this view of the "+TextLine.this.title+"minitext.")
+    {
+      public void run() { doClose(); }
+    }), "North");
+    auxFrame.add(auxEd.getComponent(), "Center");
     auxFrame.pack();
     auxFrame.setLocationRelativeTo(TextLine.this);
     Point loc = auxFrame.getLocation();
     loc.translate(0, 90);
     auxFrame.setLocation(loc);
-    
     auxFrame.setVisible(true);
+    }
+    else
+    { // why doesn't this work?
+    System.err.println("BIG");
+    ed.setLines(3);
+    validate();
+    invalidate();
+    }
   }
   
   /** Tell the user that control-B makes a new big window onto this text field. */
@@ -151,6 +171,16 @@ public class TextLine extends JPanel
   @ActionMethod(tip="Clear this text field")
   public void doClear()
   { setText("");
+  }
+  
+  /** Close the auxiliary editor */
+  @ActionMethod(tip="Close any auxiliary frame associated with this minitext")
+  public void doClose()
+  { if (auxFrame!=null)
+    { auxEd.removeDoc();
+      auxFrame.dispose();
+      auxFrame=null;
+    }
   }
    
   /** Bind a key to an action */

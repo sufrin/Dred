@@ -10,7 +10,7 @@ public abstract class ArgTool extends TextLine implements Runnable
 {
   public ArgTool(String label)
   {
-    super(6, new JButton(), false);
+    super(6, new JButton(), false, label);
     JButton but = (JButton) getLabel();
     but.setAction(new Act(label)
     {

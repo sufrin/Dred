@@ -22,7 +22,7 @@ public abstract class RunTool extends ToolExtension
                 String buttonTip, 
                 String argTip)
     {
-      super(20, new JButton(), true);
+      super(20, new JButton(), true, label);
       JButton but = (JButton) getLabel();
       but.setAction(new Act(label)
       {
