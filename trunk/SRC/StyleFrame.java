@@ -51,7 +51,7 @@ public class StyleFrame extends JFrame
   }
   
   public StyleFrame(EditorFrame frame, CheckItem checkItem)
-  { super(frame.doc.getFileName().getName()+" (styles)");
+  { super(frame.doc.getFileName()+" (styles)");
     // setUndecorated(true);
     session = frame;
     this.checkItem = checkItem;

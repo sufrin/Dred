@@ -832,8 +832,10 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       name = System.getProperty("user.home") + name.substring(1);
     else
     // transform relative addresses to ``relative to cwd''
-    if (name.startsWith(".." + File.separator)
-        || name.startsWith("." + File.separator))
+    if (   name.startsWith(".." + File.separator)
+        || name.startsWith("." + File.separator)
+        || doc.getFileTitle().matches("[A-Za-z]+://.*")
+       )
       name = cwd.toString() + File.separator + name;
     File file = new File(name);
     // orphan filename has same parent as current document
@@ -1663,10 +1665,10 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
    * Invoked by the associated document when its file name
    * is set.
    */
-  public void fileNameSet(File file)
+  public void fileNameSet(File file, String title)
   {
     setTitle(file.getName());
-    setCaption(file.toString());
+    setCaption(title);
     safe = true;
     showDocFeedback();
   }
@@ -1685,10 +1687,10 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
   /** Invoked by the associated document when it is saved. */
-  public void fileSaved(File file)
+  public void fileSaved(File file, String fileTitle)
   {
     setTitle(file.getName());
-    setCaption(file.toString());
+    setCaption(fileTitle);
     labelC.setForeground(Color.GREEN);
     labelC.setText("(saved)");
     safe = true;

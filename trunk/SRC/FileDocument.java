@@ -246,8 +246,8 @@ public class FileDocument extends SearchableDocument
   */
   public static interface Listener
   {
-        void fileNameSet(File file);
-        void fileSaved(File file);
+        void fileNameSet(File file, String fileTitle);
+        void fileSaved(File file, String fileTitle);
         void fileBacked(File file);
         void fileChanged(File file);
         void fileReport(String report);
@@ -259,7 +259,7 @@ public class FileDocument extends SearchableDocument
   /** Register a listener */
   protected void addListener(Listener l)    
   { listeners.add(l); 
-    l.fileNameSet(fileName);
+    l.fileNameSet(fileName, fileTitle);
   }
   
   /** Unregister a listener */
@@ -274,13 +274,13 @@ public class FileDocument extends SearchableDocument
   /** Inform registered FileDocument.Listeners after a change in filename. */
   protected void fileNameSet()              
   { 
-    for (Listener l:listeners) l.fileNameSet(fileName);
+    for (Listener l:listeners) l.fileNameSet(fileName, fileTitle);
   }
   
   /** Inform registered FileDocument.Listeners after a (successful) save. */
   protected void fileSaved()              
   { 
-    for (Listener l:listeners) l.fileSaved(fileName);
+    for (Listener l:listeners) l.fileSaved(fileName, fileTitle);
   }
   
   /** Inform registered FileDocument.Listeners after a change in the document. */
