@@ -1,4 +1,5 @@
 package org.sufrin.dred;
+import java.net.*;
 import java.io.*;
 import java.util.*;
 
@@ -11,6 +12,10 @@ import org.sufrin.logging.Logging;
 public class FileDocument extends SearchableDocument
 { /** Path to the associated file in the filestore. */
   protected File fileName;
+  
+  /** Path to the associated file in the filestore, or raw URL. */
+  protected String fileTitle;
+  
   /** Time the associated file was last modified in the filestore. 
       This is determined when the document is loaded or saved.
   */
@@ -23,6 +28,10 @@ public class FileDocument extends SearchableDocument
   
   /** Returns the path to the associated file. */
   public File getFileName()   { return fileName; }
+  
+  /** Returns the title of the associated file. */
+  public String getFileTitle()   { return fileTitle; }
+  
   /** Returns the modifiecation time of the associated file. */  
   public long lastModified()  { return lastModified; }
   
@@ -68,6 +77,7 @@ public class FileDocument extends SearchableDocument
     catch (IOException ex)
     {
     }
+    fileTitle = fileName.toString();
   }
   
   /** Load the document from the file with the given name using the charset encoding associated with
@@ -80,19 +90,40 @@ public class FileDocument extends SearchableDocument
     fileNameSet();
     if (fileName.exists() && fileName.canRead())
     try
-    { BufferedReader r = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), encoding));
-      doLoad(r);
-      setCursorXY(0, 0);
-      setMark(0, 0);
-      setChanged(false);
-      lastModified = fileName.lastModified();
-      fileNameSet();
+    { Reader r = (new InputStreamReader(new FileInputStream(fileName), encoding));
+      readFrom(r);
     }
     catch (Exception ex)
     {  anonymous = true;
        if (debug) ex.printStackTrace();
        throw new RuntimeException(ex.getMessage());
     }
+    else
+    if (name.matches("[A-Za-z]+://.*"))
+    try
+    { URL url   = new URL(name);
+      anonymous = true;
+      fileTitle = url.toString();
+      fileName  = new File(name);
+      Reader r  = (new InputStreamReader(url.openStream(), encoding));
+      readFrom(r);
+    }
+    catch (Exception ex)
+    {  anonymous = true;
+       if (debug) ex.printStackTrace();
+       throw new RuntimeException("Cannot open url: "+ ex.getMessage());
+    }    
+  }
+  
+  /** Load this document from the given reader */
+  public void readFrom(Reader r) throws Exception
+  {
+      doLoad(r);
+      setCursorXY(0, 0);
+      setMark(0, 0);
+      setChanged(false);
+      lastModified = fileName.lastModified();
+      fileNameSet();
   }
 
   /** Set the path to the associated file. */
@@ -264,6 +295,7 @@ public class FileDocument extends SearchableDocument
     for (Listener l:listeners) l.fileBacked(backup);
   }
 }
+
 
 
 

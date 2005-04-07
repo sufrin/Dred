@@ -677,8 +677,9 @@ public class Document
    {}
 
    /** Load the document from the given reader. */
-   public void doLoad(BufferedReader reader)
-   {  String line=null;
+   public void doLoad(Reader theReader)
+   {  BufferedReader reader = new BufferedReader(theReader);
+      String line=null;
       try
       {
         while ((line=reader.readLine())!=null)
@@ -694,8 +695,9 @@ public class Document
    }
    
    /** Append lines from the given reader to the document. */
-   public void doAppend(BufferedReader reader)
-   {  String line=null;
+   public void doAppend(Reader theReader)
+   {  BufferedReader reader = new BufferedReader(theReader);
+      String line=null;
       try
       {
         while ((line=reader.readLine())!=null)
@@ -825,6 +827,7 @@ public class Document
       for (FocusEavesdropper d: eavesdroppers) d.focusGained(this);
     }
 }
+
 
 
 

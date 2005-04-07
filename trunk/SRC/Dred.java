@@ -191,7 +191,7 @@ public class Dred
   { loadBindings();
     FileDocument doc = new FileDocument(encoding);
     EditorFrame f = path == null ? new EditorFrame(80, 24)
-                                 : new EditorFrame(80, 24, new File(path).getName());
+                                 : new EditorFrame(80, 24, path);
     try
     {
       if (path != null)
@@ -433,6 +433,7 @@ public class Dred
 
 
 }
+
 
 
 

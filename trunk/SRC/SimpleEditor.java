@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.io.Reader;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.Comparator;
@@ -526,12 +527,12 @@ class SimpleEditor implements InteractionListener
     doc.doLoad(fileName);
   }
    
-  public void doLoad(BufferedReader stream)
+  public void doLoad(Reader stream)
   {
     doc.doLoad(stream);
   }
 
-  public void doAppend(BufferedReader stream)
+  public void doAppend(Reader stream)
   {
     doc.doAppend(stream);
   }
@@ -597,6 +598,7 @@ class SimpleEditor implements InteractionListener
     frame.setVisible(true);
   }
 }
+
 
 
 

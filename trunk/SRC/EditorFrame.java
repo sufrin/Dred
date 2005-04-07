@@ -677,10 +677,13 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
      bindAll(key, act, true);
   }
   
+  static protected String getName(String path)
+  { return new File(path).getName();
+  }
 
   public EditorFrame(int cols, int rows, String title)
   {
-    super(title);
+    super(getName(title));
     setIconImage(dnought.getImage());
     frames++;
     setLayout(new BorderLayout());
@@ -1001,14 +1004,17 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   public void doEdit()
   { 
     String name = text.argument.getText();
-    name = desugarFilename(name);
-    if ("".equals(name))
+    if (!name.matches("[A-Za-z]+://.*"))
     {
-      doEditChoose();
-      return;
+       name = desugarFilename(name);
+       if ("".equals(name))
+       {
+         doEditChoose();
+         return;
+       }
+       name = new File(name).getAbsolutePath();
     }
-    File file = new File(name);
-    Dred.startLocalSession(file.getAbsolutePath(), Dred.EncodingName);
+    Dred.startLocalSession(name, Dred.EncodingName);
   }
 
   /**
@@ -1821,6 +1827,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
 
 
 
