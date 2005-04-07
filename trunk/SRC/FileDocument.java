@@ -46,6 +46,15 @@ public class FileDocument extends SearchableDocument
     this.encoding = encoding;
     canonicalizeFileName();
   }
+  
+  /** Construct an anonymous document */
+  public  FileDocument(String encoding, File theFileName)
+  { lastModified=0;
+    anonymous=false;
+    fileName=theFileName;
+    this.encoding = encoding;
+    canonicalizeFileName();
+  }
 
   /** Canonicalize the filename if possible; otherwise leave it
       as an absolute path.
@@ -255,6 +264,7 @@ public class FileDocument extends SearchableDocument
     for (Listener l:listeners) l.fileBacked(backup);
   }
 }
+
 
 
 

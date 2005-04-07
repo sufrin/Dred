@@ -257,7 +257,7 @@ class SimpleEditor implements InteractionListener
   {
     String sel = doc.getSelection();
     SystemClipboard.set(sel);
-    if (recordCuts) SystemClipboard.addToRing(sel);
+    if (recordCuts) CutRingTool.addToRing(sel);
     doc.cutSelection();
     return sel;
   }
@@ -467,9 +467,6 @@ class SimpleEditor implements InteractionListener
     if (doc.hasNonemptySelection())
     {
       reversed = doc.getSelectedRegion().reversed;
-      //lastSel = doc.getSelection();
-      //SystemClipboard.set(lastSel);
-      //doc.cutSelection();
       lastSel = clippedSelection();
       doc.pasteAndSelect(clip, reversed);
     }
@@ -494,9 +491,6 @@ class SimpleEditor implements InteractionListener
       if (debug)
         log.fine("cut");
       reversed = doc.getSelectedRegion().reversed;
-      //lastSel = doc.getSelection();
-      //SystemClipboard.set(lastSel);
-      //doc.cutSelection();
       lastSel = clippedSelection();
     }
   }
@@ -517,6 +511,7 @@ class SimpleEditor implements InteractionListener
       reversed = doc.getSelectedRegion().reversed;
       lastSel = doc.getSelection();
       SystemClipboard.set(lastSel);
+      if (recordCuts) CutRingTool.addToRing(lastSel);
     }
   }
   
@@ -602,6 +597,7 @@ class SimpleEditor implements InteractionListener
     frame.setVisible(true);
   }
 }
+
 
 
 

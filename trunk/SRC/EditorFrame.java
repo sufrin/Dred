@@ -341,7 +341,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     Extension.register(new AntTool());
     Extension.register(new MakeTool());
     Extension.register(new ShellTool());
-    Extension.register(new CutRingTool());
+    Extension.register(new CutRingTool(prefs));
     Extension.register(new KeystrokeTool());
     File extensions = null;
     try
@@ -495,9 +495,17 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   public void removeTool(JComponent c)
   { toolMenu.remove(c); }
   
+  /** Mapping from menu names to JMenus */
+  protected Map<String, JMenu> menus = new LinkedHashMap<String, JMenu>();
+  
   /** Return a menu with a specific name; make one of that name if it doesn't exist. */
   public JMenu addMenu(String name)
-  { return menuBar.addMenu(name); 
+  { JMenu m = menus.get(name);
+    if (m==null) 
+    { m = menuBar.addMenu(name); 
+      menus.put(name, m);
+    }
+    return m;
   }
 
   // ////////////////////////////////////////////////////////////////////////////////////////////
@@ -1813,6 +1821,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
 
 
 
