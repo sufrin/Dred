@@ -122,6 +122,8 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       bind("doSaveAsChoose");
       bind("doChooseCWD");
       menu.addSeparator();
+      bind("doChooseBindings");
+      menu.addSeparator();
       bind("doQuit");
       menu.addSeparator();
       JMenu menu2 = new JMenu("Preferences");
@@ -1043,6 +1045,21 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     if (res == JFileChooser.APPROVE_OPTION)
       Dred.startLocalSession(fileChooser.getSelectedFile().getAbsolutePath(), fileChooser.getCoding());
   }
+  
+  /**
+   * Interactively choose the path to a bindings file 
+   */
+  @ActionMethod(label="Bindings (browse)", tip="Browse for a bindings file to use for future sessions")
+  public void doChooseBindings()
+  {
+    fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+    fileChooser.setCurrentDirectory(cwd); // doc.getFileName().getParentFile());
+    fileChooser.setFileHidingEnabled(false);
+    int res = fileChooser.showOpenDialog(this);
+    if (res == JFileChooser.APPROVE_OPTION)  
+    { Dred.readBindings(fileChooser.getSelectedFile().getAbsolutePath(), true);
+    }
+  }
 
   @ActionMethod(label="Find next", tip="Find the next instance of the pattern in the Find field")
   public void doFindDown() { doFind(false); }
@@ -1832,6 +1849,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
 
 
 

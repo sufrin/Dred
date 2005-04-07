@@ -141,13 +141,24 @@ public class Dred
     { readBindings(new URL(url)); }
     catch (Exception ex)
     { if (warn) 
-      { System.err.printf("[DRED WARNING: Cannot read bindings %s]%n", ex.getMessage());
-        if (bindings.isEmpty()) System.err.printf("[DRED WARNING: Using fallback bindings]%n");        
+      { showWarning("Cannot read bindings from: "+url);
+        if (bindings.isEmpty()) 
+           showWarning("Using fallback bindings.");        
       }
     }
   }
   
   public static void readBindings(URL url) throws Exception
+  {  if (url!=null)
+     { bindings.read(url);
+       SimpleEditor.setBindings(bindings);
+       EditorFrame.setBindings(bindings);
+       TextLine.setBindings(bindings);
+       Extension.setBindings(bindings);
+     }
+  }
+  
+  public static void resetBindings(URL url) throws Exception
   {  if (url!=null)
      { bindings.read(url);
        SimpleEditor.setBindings(bindings);
@@ -176,7 +187,7 @@ public class Dred
       if (new File(rootBindings).canRead())
           readBindings("file:"+rootBindings, true);
       else
-          showWarning(String.format("[DRED WARNING: cannot read bindings %s; using built-in fallback bindings.]%n", rootBindings));
+          showWarning(String.format("Cannot read bindings %s; using built-in fallback bindings.", rootBindings));
     }
   }
   
@@ -321,6 +332,7 @@ public class Dred
       });
       frame.add(button);
       button.setToolTipText("Open an editing session on an existing file");
+      
       button = new JButton("New");
       button.addActionListener(new ActionListener()
       {
@@ -433,6 +445,7 @@ public class Dred
 
 
 }
+
 
 
 
