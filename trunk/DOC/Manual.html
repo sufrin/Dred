@@ -292,7 +292,7 @@ Any single character insertion can be undone by the <i>Delete</i> action.
 <p>
 When there is a nonempty selection in typing-cuts-selection mode,
 the <i>Delete</i> action behaves exactly like the <i>Cut</i> action, and
-can therefore be undone by the <i>Paste<i> action.
+can therefore be undone by the <i>Paste</i> action.
 In all other circumstances it removes the character to the left of
 the cursor from the document without affecting the cut buffer.
 In any case the mark is removed, thereby deselecting the selection.
@@ -391,7 +391,10 @@ the minitext.
      from that URL (Note that Dred cannot yet <i>save</i> documents to locations 
      specified by a URL).       
      <br></br>
-           As well as the usual range of protocols, Dred has a protocol
+     Protocols known to work (providing no credentials are required
+     for the file) are <tt>ftp:</tt> and <tt>http:</tt>
+     <br></br>
+           Dred has an additional protocol
            that gives it access to resources (such as documentation and pre-designed
            bindings files) that come packaged in its .jar file. To access such a file
            one prefixes its name with <tt>class://org/sufrin.dred.Dred/</tt>. Specific
@@ -427,6 +430,7 @@ using the encoding selector provided in the file browser.
 <b>$Date$</b>
 </pre>
 </body>
+
 
 
 
