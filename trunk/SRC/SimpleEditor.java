@@ -41,6 +41,38 @@ class SimpleEditor implements InteractionListener
    /** True if the last selection had the mark before the cursor */
    protected boolean           reversed;
    
+   /** True if all sessions are in "type-over" mode */
+   static protected boolean   typeOver;
+   
+   /** True if THIS editor pays attention to the idea of typeover */
+   protected boolean allowsTypeOver = true;
+   
+   /** Sets whether THIS session pays attention to the notion of typeover or not.
+   */
+   protected void allowTypeOver(boolean b) { allowsTypeOver = b; }
+   
+   /** Set "type-over" mode */
+   static public void setTypeOver(boolean mode) 
+   { typeOver = mode; 
+     Display.typeOver = mode;
+   };
+   
+   /** Indicate that the selection just made was deliberate (not automatic) */
+   protected void deliberateSelection()
+   { if (allowsTypeOver && typeOver) doc.deliberateSelection();
+   }
+   
+   /** Remove a nonempty deliberate selection made in typeover mode.
+       Return true iff the selection was removed.
+   */
+   protected boolean typeOver()
+   { if (allowsTypeOver && typeOver && doc.wasDeliberateSelection() && doc.hasNonemptySelection())
+     { lastSel = clippedSelection();
+       return true;
+     }
+     return false;
+   }
+   
    /** Log for debugging output */
    protected static Logging log   = Logging.getLog("SimpleEditor");
    
@@ -201,31 +233,31 @@ class SimpleEditor implements InteractionListener
   
   @ActionMethod(label="InsertTab", tip="Simulate the insertion of a tab character\n(Tabs never appear in Dred documents)")
   public void doInsertTab()
-  { doc.insert('\t'); }
+  { typeOver(); doc.insert('\t'); }
   
   @ActionMethod(label="InsertNewline", tip="Insert a newline without copying current indentation")
   public void doInsertNewline()
-  { doc.insert('\n'); }
+  { typeOver(); doc.insert('\n'); }
   
   @ActionMethod(label="IndentNewline", tip="Insert a newline and copy current indentation")
   public void doIndentNewline()
-  { doc.indentNewline(); }
+  { typeOver(); doc.indentNewline(); }
   
   @ActionMethod(label="Left", tip="Move cursor to the previous location in the document")
   public void doLeftMove()
-  { doc.leftMove(); }
+  { doc.leftMove(); doc.deliberateSelection(); }
   
   @ActionMethod(label="Right", tip="Move cursor to the next location in the document")
   public void doRightMove()
-  { doc.rightMove(); }
+  { doc.rightMove(); deliberateSelection(); }
   
   @ActionMethod(label="Up", tip="Move cursor up (in the same column if possible)")
   public void doUpMove()
-  { doc.setCursor(doc.getX(), doc.getY()-1); }
+  { doc.setCursor(doc.getX(), doc.getY()-1); deliberateSelection(); }
   
   @ActionMethod(label="Down", tip="Move cursor down (in the same column if possible)")
   public void doDownMove()
-  { doc.setCursor(doc.getX(), doc.getY()+1); }
+  { doc.setCursor(doc.getX(), doc.getY()+1); deliberateSelection(); }
   
   @ActionMethod(label="Home", tip="Move cursor to the start of the document")
   public void doHomeMove()
@@ -241,19 +273,19 @@ class SimpleEditor implements InteractionListener
   
   @ActionMethod(label="Delete", tip="Delete the character to the left of the cursor")
   public void doLeftDelete()
-  { doc.leftDel(); } 
+  { if (!typeOver()) doc.leftDel(); } 
 
   @ActionMethod(label="SelectWord", tip="Select the word under the cursor (also double-click)")
   public void doSelectWord()
-  { doc.selectWord(doc.getX(), doc.getY()); }  
+  { doc.selectWord(doc.getX(), doc.getY()); deliberateSelection(); }  
   
   @ActionMethod(label="SelectLine", tip="Select the line under the cursor (also triple-click)")
   public void doSelectLine()
-  { doc.selectLine(doc.getX(), doc.getY()); }  
+  { doc.selectLine(doc.getX(), doc.getY()); deliberateSelection(); }  
   
   @ActionMethod(label="SelectParagraph", tip="Select the paragraph(s) that contain the selection or cursor")
   public void doSelectParagraph()
-  { doc.selectParagraph(); }  
+  { doc.selectParagraph(); deliberateSelection(); }  
 
   /**
    * Returns the current selection after placing it on the
@@ -340,7 +372,7 @@ class SimpleEditor implements InteractionListener
   { 
     return new Act("Insert "+string, "Insert a string")
     {
-      public void run() { doc.insert(string); }
+      public void run() { typeOver(); doc.insert(string); }
     };
   }
    
@@ -365,7 +397,7 @@ class SimpleEditor implements InteractionListener
     {
       char c = e.getKeyChar();
       if (c != KeyEvent.CHAR_UNDEFINED && c >= ' ')
-        doc.insert(c);
+      { typeOver(); doc.insert(c); }
       else
       {
         if (debug)
@@ -398,22 +430,29 @@ class SimpleEditor implements InteractionListener
     {
       case 1:
         if (e.isControlDown())
+        { 
           doc.setCursor(p.x, p.y);
+          deliberateSelection();
+        }
         else switch (e.getClickCount())
         {
           case 1:
+            deliberateSelection();
             doc.setCursorAndMark(p.x, p.y);
           break;
           case 2:
             doc.selectWord(p.x, p.y);
+            deliberateSelection();
           break;
           case 3:
             doc.selectLine(p.x, p.y);
+            deliberateSelection();
           break;
         }
       break;
       case 3:
         doc.setMark(p.x, p.y);
+        deliberateSelection();
       break;
       case 2:
         lastX = e.getX();
@@ -441,9 +480,11 @@ class SimpleEditor implements InteractionListener
     {
       case 1:
         doc.setCursor(p.x, p.y);
+        deliberateSelection();
       break;
       case 3:
         doc.setMark(p.x, p.y);
+        deliberateSelection();
       break;
       case 2:
         int dx = e.getX() - lastX,
@@ -463,20 +504,6 @@ class SimpleEditor implements InteractionListener
   public void mouseMoved(MouseEvent e)     { }
   public void mouseClicked(MouseEvent e)   { }
 
-
-  @ActionMethod(label="Swap Clipboard", tip="Swap the system clipboard with the document selection")
-  public void doSwapSel()
-  {
-    String clip = SystemClipboard.get();
-    if (clip == null)
-      clip = "";
-    if (doc.hasNonemptySelection())
-    {
-      reversed = doc.getSelectedRegion().reversed;
-      lastSel = clippedSelection();
-      doc.pasteAndSelect(clip, reversed);
-    }
-  }
 
   @ActionMethod(label="Swap 2 characters", tip="Swap the two characters preceding the cursor")
   public void doSwap2()
@@ -504,9 +531,13 @@ class SimpleEditor implements InteractionListener
   @ActionMethod(label="Paste", tip="Insert the system clipboard into the document at the cursor, and select it")
   public void doPaste()
   {
-    lastSel = SystemClipboard.get();
-    if (lastSel != null)
-      doc.pasteAndSelect(lastSel, reversed);
+    String curSel = SystemClipboard.get();
+    lastSel = curSel;
+    typeOver();
+    if (curSel != null)
+       { doc.pasteAndSelect(curSel, reversed);
+         deliberateSelection(); // SPECIAL CASE
+       }
   }
    
   @ActionMethod(label="Copy", tip="Set the system clipboard from the document selection")
@@ -521,8 +552,22 @@ class SimpleEditor implements InteractionListener
     }
   }
   
+  @ActionMethod(label="Swap Clipboard", tip="Swap the system clipboard with the document selection")
+  public void doSwapSel()
+  {
+    String clip = SystemClipboard.get();
+    if (clip == null)
+      clip = "";
+    if (doc.hasNonemptySelection())
+    {
+      reversed = doc.getSelectedRegion().reversed;
+      lastSel = clippedSelection();
+      doc.pasteAndSelect(clip, reversed);
+    }
+  }
+
   public void doInsertUnicode(String hexcode)
-  { 
+  { typeOver();
     try { doc.insert((char) Integer.parseInt(hexcode, 16)); } 
     catch (Exception ex) {}
   }
@@ -603,6 +648,8 @@ class SimpleEditor implements InteractionListener
     frame.setVisible(true);
   }
 }
+
+
 
 
 

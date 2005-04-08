@@ -15,10 +15,13 @@ import org.sufrin.logging.Logging;
 */
 
 public class Document
-{  /** Lines (newline-free) strictly above the cursor.*/
+{  
+   /** Lines (newline-free) strictly above the cursor.*/
    protected LinkedList<String>  above;
+   
    /** Lines (newline-free) strictly below the cursor.*/
    protected LinkedList<String>  below;
+   
    /** The cursor is on this line. */
    protected LineBuffer          current;
 
@@ -88,6 +91,7 @@ public class Document
      for (DocListener listener: docListeners) listener.docChanged(first, last);
      lastx     = getX();
      lasty     = getY();
+     wasDeliberateSelection = false;
    }
    
    /** Called when the document content has changed a lot. 
@@ -101,6 +105,7 @@ public class Document
      for (DocListener listener: docListeners) listener.docChanged(first, last);
      lastx     = getX();
      lasty     = getY();
+     wasDeliberateSelection = false;
    }
    
    /** Called when the cursor has changed. Calculates the scope
@@ -114,6 +119,7 @@ public class Document
      for (DocListener listener: docListeners) listener.cursorChanged(first, last);
      lastx = getX();
      lasty = getY();
+     wasDeliberateSelection = false;
    }
    
    /** Called when the mark has changed. Calculates the scope
@@ -129,7 +135,20 @@ public class Document
      lastmarky = marky;
      lastx = getX();
      lasty = getY();
+     wasDeliberateSelection = false;
    }
+   
+   /** Was the last selection made deliberately? */
+   protected boolean wasDeliberateSelection = false;
+   
+   /** Assert that the last selection was made deliberately */
+   public void    deliberateSelection()    { wasDeliberateSelection = true; }
+   
+   /** Assert that the last selection was made deliberately */
+   public void    tentativeSelection()    { wasDeliberateSelection = false; }
+   
+   /** Was the last selection made deliberately? */
+   public boolean wasDeliberateSelection() { return wasDeliberateSelection; }
 
    /** Construct a new, empty, document */
    public Document()
@@ -827,6 +846,8 @@ public class Document
       for (FocusEavesdropper d: eavesdroppers) d.focusGained(this);
     }
 }
+
+
 
 
 

@@ -20,6 +20,7 @@ public class FileDocument extends SearchableDocument
       This is determined when the document is loaded or saved.
   */
   protected long lastModified;
+  
   /** There is no associated file in the filestore. */
   protected boolean anonymous;
   
@@ -49,17 +50,18 @@ public class FileDocument extends SearchableDocument
   
   /** Construct an anonymous document */
   public  FileDocument(String encoding)
-  { lastModified=0;
-    anonymous=true;
-    fileName=new File("Anonymous");
-    this.encoding = encoding;
-    canonicalizeFileName();
+  { this(encoding, new File("Anonymous"), true);
   }
   
-  /** Construct an anonymous document */
+  /** Construct a named document */
   public  FileDocument(String encoding, File theFileName)
+  { this(encoding, theFileName, false);
+  }
+  
+  /** Construct a possibly-anonymous document */
+  public  FileDocument(String encoding, File theFileName, boolean anonymous)
   { lastModified=0;
-    anonymous=false;
+    this.anonymous=anonymous;
     fileName=theFileName;
     this.encoding = encoding;
     canonicalizeFileName();
@@ -77,7 +79,7 @@ public class FileDocument extends SearchableDocument
     catch (IOException ex)
     {
     }
-    fileTitle = fileName.toString();
+    fileTitle = anonymous ? fileName.getName() : fileName.toString();
   }
   
   /** Load the document from the file with the given name using the charset encoding associated with
@@ -248,8 +250,8 @@ public class FileDocument extends SearchableDocument
   {
         void fileNameSet(File file, String fileTitle);
         void fileSaved(File file, String fileTitle);
-        void fileBacked(File file);
-        void fileChanged(File file);
+        void fileBacked(File file, String fileTitle);
+        void fileChanged(File file, String fileTitle);
         void fileReport(String report);
   }
   
@@ -286,15 +288,18 @@ public class FileDocument extends SearchableDocument
   /** Inform registered FileDocument.Listeners after a change in the document. */
   protected void fileChanged()              
   { 
-    for (Listener l:listeners) l.fileChanged(fileName);
+    for (Listener l:listeners) l.fileChanged(fileName, fileTitle);
   }
   
   /** Inform registered FileDocument.Listeners after the document is backed-up. */
   protected void fileBacked(File backup)              
   { 
-    for (Listener l:listeners) l.fileBacked(backup);
+    for (Listener l:listeners) l.fileBacked(backup, fileTitle);
   }
 }
+
+
+
 
 
 

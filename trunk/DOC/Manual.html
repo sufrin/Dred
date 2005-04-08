@@ -135,16 +135,9 @@ make the document cursor disappear temporarily.  </p>
 
 <p> There is a <i>cut-buffer</i> which holds at most one text. It is
 implemented by the system clipboard, and material placed in the cut
-buffer is also available in the clipboard. Moreover, material placed in
+buffer is also available in the clipboard. Material placed in
 the system clipboard by another application is accessible through the
 cut buffer.  </p>
-
-
-<p>Typing new characters removes the mark, and thus deselects the
-<i>selection</i>, but does not delete the selected material. This is
-deliberate: the &quot;typing deletes selection&quot; behaviour that  most
-people have come to expect of editors leads to many irritating little
-accidents.</p>
 
 <h2>Editing Actions</h2>
 <p> The editing actions described below are a small selection of the
@@ -203,6 +196,56 @@ there. <i>ClearFind</i>, and <i>ClearRepl</i> behave analogously in the
 <i>Find</i> and <i>Repl</i> minitexts. 
 </p>
 
+<h3>Treatment of the Selection</h3>
+Dred offers two modes of treating the selection. Most users will
+decide on one of them and stick to it forever.
+<ol>
+       <li>
+       <b>Typing-cuts-selection:</b> Typing new material automatically
+       cuts the selection into the cut buffer. This is the behaviour
+       that most people have come to expect of editors. 
+       <br></br>
+       In this mode Dred distinguish between three types of selection: 
+       <ul>
+         <li>
+           <i>definite selections</i>: which are those made "manually"
+           by the user with the mouse or cursor movement actions.
+         </li>
+         
+         <li>
+           <i>tentative selections</i>: which are those made automatically
+           by Dred when its automatic bracket-matching is enabled. 
+           A tentative selection is shown with a slightly
+           lighter grey background than definite selections have.
+         </li>
+         
+         <li>
+           <i>mixed selections</i>: which arise when a tentative selection is
+           extended manually. A mixed selection may be shown with a mix
+           of backgrounds, or with the same colour background as
+           definite selections have.
+         </li>
+       </ul>
+       <br></br>
+       Tentative selections are not cut when new
+       characters are typed, whereas  mixed and definite selections are
+       automatically cut when characters are typed.
+       </li>
+              
+       <br></br>
+
+       <li>
+       <b>Typing-removes-mark:</b> Typing new characters removes the mark,
+       and thus deselects the <i>selection</i>, but does not delete the
+       selected material. In this mode Dred does not distinguish between
+       tentative and definite selections.
+       </li>
+</ol>
+
+The choice between treatments is made using the <b>File/Preferences/Typing&nbsp;Removes&nbsp;Selection</b>
+checkbox. As with all other preferences its value is preserved between 
+Dred invocations.
+
 <h3>Undoing and the Cut Ring</h3>
 <p>
 Dred has no <i>general</i> mechanism for undoing, but all the commands
@@ -227,28 +270,32 @@ Moreover if the selection is an instance of the Find text then
 </p>
 
 <pre>
-        <i>Replace</i>         is undone by <i>SwapSel</i>
+        <i>Replace</i>  is undone by <i>SwapSel</i>
 </pre>
 
-<p>
-The <i>Cut Ring</i> records the last few pieces of material that found
-their way into the cut buffer (the number is adjustable).  The cut
-ring can be accessed by opening the <i>Cut Ring Editor</i>: this is a
-specialized  editor session that <i>always</i> shows the cut ring. This
-editor session behaves in most respects like an ordinary editing session
-so material can be transferred from it to any other text window using
-<i>Copy</i> and <i>Paste</i>. Its main difference with ordinary editing sessions
-is that it doesn't send material to the cut ring.
+<p> The <i>Cut Ring</i> records the last few pieces of material
+that found their way into the cut buffer (the number is adjustable).
+The cut ring can be accessed by opening the <i>Cut Ring Editor</i>:
+this is a specialized  editor session that normally shows the content
+of the cut ring. This editor session behaves in most respects like an
+ordinary editing session so material can be transferred from it to any
+other text window using <i>Copy</i> and <i>Paste</i>. (Of course the 
+Cut Ring Editor  doesn't itself send material to the cut ring!)  
 </p>
+
 
 <h3>"Small" Changes</h3>
 <p>
-Any single character insertion can be undone by <i>Delete</i>.
+Any single character insertion can be undone by the <i>Delete</i> action.
 </p>
 
 <p>
-The  <i>Delete</i> removes the character to the left of
-the cursor from the document but does not affect the cut buffer.
+When there is a nonempty selection in typing-cuts-selection mode,
+the <i>Delete</i> action behaves exactly like the <i>Cut</i> action, and
+can therefore be undone by the <i>Paste<i> action.
+In all other circumstances it removes the character to the left of
+the cursor from the document without affecting the cut buffer.
+In any case the mark is removed, thereby deselecting the selection.
 </p>
 
 <p>
@@ -380,6 +427,8 @@ using the encoding selector provided in the file browser.
 <b>$Date$</b>
 </pre>
 </body>
+
+
 
 
 

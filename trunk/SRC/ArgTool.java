@@ -8,10 +8,14 @@ import javax.swing.border.BevelBorder;
  */
 public abstract class ArgTool extends TextLine implements Runnable
 {
-  public ArgTool(String label)
+  public ArgTool(String label) { this(label, ""); }
+  
+  public ArgTool(String label, String tip)
   {
     super(6, new JButton(), false, label);
     JButton but = (JButton) getLabel();
+    but.setToolTipText(tip);
+    setToolTipText(tip);
     but.setAction(new Act(label)
     {
       public void run()
@@ -24,3 +28,4 @@ public abstract class ArgTool extends TextLine implements Runnable
 
   abstract public void run();
 }
+

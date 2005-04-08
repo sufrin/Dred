@@ -39,6 +39,8 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JSeparator;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
@@ -129,6 +131,18 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       JMenu menu2 = new JMenu("Preferences");
       menu.add(menu2);
       menu=menu2;
+      menu.add
+      (new CheckItem
+           ("Typing Removes Selection", 
+            false, 
+            "Typing removes a nonempty selection from the document",
+            prefs)
+      { { run(); }
+        public void run()
+        {
+          SimpleEditor.setTypeOver(state);
+        }
+      });
       menu.add
       (new CheckItem
            ("Tooltips enabled", 
@@ -314,7 +328,6 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       menu.addSeparator();
       bind("doAbout");
       
-      add(Box.createHorizontalGlue());
 
       // Eliminate input maps (pro-tem) to avoid spurious shortcut effects
       setInputMap(JComponent.WHEN_FOCUSED, null);
@@ -362,7 +375,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
    */
   protected class ProcessFrame extends EditorFrame
   {
-    JButton clearButton = new JButton(new Act("Clear", "Clear the log window")
+    JButton clearButton = new JButton(new Act("Clear", "Clear this process log.")
     {
       public void run()
       {
@@ -375,7 +388,8 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     public ProcessFrame(String command)
     {
       super(80, 24, command);
-      setDoc(new FileDocument("UTF8"));
+      setDoc(new FileDocument("UTF8", new File("Process Log"), true));
+      menuBar.add(Box.createHorizontalGlue());
       menuBar.add(clearButton);
       this.command = command;
     }
@@ -393,6 +407,11 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
      */
     public void enableDocFeedback()
     {
+    }
+    
+    /** NO-OP: we don't report changes in a Process Window */
+    public void fileChanged(File file, String fileTitle)
+    { setCaption(command);
     }
 
     public void setCommand(String command)
@@ -481,11 +500,11 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   
   // ////////////////////////////////////////////////////////////////////////////////////////////
   
-  /** Add a component to the Menubar: used by extensions  */
+  /** Add a component to the Toolbar: used by extensions  */
   public void addToToolBar(JComponent c)
   { session.validate(); toolbars.add(c); toolbars.invalidate(); session.validate(); menuBar.refresh(); }
 
-  /** Remove a component from the Menubar: used by extensions  */
+  /** Remove a component from the Toolbar: used by extensions  */
   public void removeFromToolBar(JComponent c)
   { session.validate(); toolbars.remove(c); toolbars.invalidate(); session.validate(); menuBar.refresh(); }
 
@@ -496,18 +515,10 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   /** Remove a component from the tool Menu: used by extensions  */
   public void removeTool(JComponent c)
   { toolMenu.remove(c); }
-  
-  /** Mapping from menu names to JMenus */
-  protected Map<String, JMenu> menus = new LinkedHashMap<String, JMenu>();
-  
+    
   /** Return a menu with a specific name; make one of that name if it doesn't exist. */
   public JMenu addMenu(String name)
-  { JMenu m = menus.get(name);
-    if (m==null) 
-    { m = menuBar.addMenu(name); 
-      menus.put(name, m);
-    }
-    return m;
+  { return menuBar.addMenu(name); 
   }
 
   // ////////////////////////////////////////////////////////////////////////////////////////////
@@ -1657,10 +1668,10 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
    * Invoked by the associated document when its backup
    * file has been written.
    */
-  public void fileBacked(File file)
+  public void fileBacked(File file, String fileTitle)
   {
     setTitle(file.getName());
-    setCaption(file.toString());
+    setCaption(fileTitle);
     labelC.setForeground(Color.GREEN);
     labelC.setText("backed");
   }
@@ -1669,12 +1680,12 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
    * Invoked by the associated document when it is
    * changed.
    */
-  public void fileChanged(File file)
+  public void fileChanged(File file, String fileTitle)
   {
     if (safe)
     {
       setTitle(file.getName() + " (!)");
-      setCaption(file.toString());
+      setCaption(fileTitle);
       labelC.setForeground(Color.RED);
       labelC.setText(doc.isAnonymous() ? "(needs naming)" : "!");
       safe = false;
@@ -1849,6 +1860,8 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
+
 
 
 

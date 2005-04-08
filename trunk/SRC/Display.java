@@ -84,6 +84,9 @@ implements DocListener,
    public Dimension getMinimumSize()   { return new Dimension(50, 50); }
    public Dimension getMaximumSize()   { return new Dimension(2048, 2048); }
    public Dimension getPreferredSize() { return preferred; }
+   
+   /** Is the editor in TypeOver mode */
+   protected static boolean typeOver = false;
 
    /** Set physical dimensions. */
    public void setSize(Dimension d)   
@@ -253,6 +256,8 @@ implements DocListener,
 
      int drawn=0; 
      Color selColour   = getBackground().darker();
+     if (typeOver && doc.wasDeliberateSelection()) selColour = selColour.darker();
+     
      Color panColour   = Color.YELLOW;
      Color plainColour = Color.WHITE;
      
@@ -589,6 +594,7 @@ implements DocListener,
    public void dragBy(int dx, int dy) {}
 
 }
+
 
 
 

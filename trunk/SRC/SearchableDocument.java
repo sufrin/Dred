@@ -502,8 +502,9 @@ public class SearchableDocument extends Document
        opening bracket (if there is one)
    */
    public void insert(char c)
-   { super.insert(c);
-     if (matchBra) matchUp();
+   { 
+     super.insert(c);
+     if (matchBra) { matchUp(); tentativeSelection(); }
    }
 
    /** Reposition cursor and mark, then move the mark to the matching closing bracket if
@@ -514,7 +515,10 @@ public class SearchableDocument extends Document
    */
    public void setCursorAndMark(int x, int y)
    { super.setCursorAndMark(x, y);
-     if (matchBra) { if (!matchUp()) matchDown(); }
+     if (matchBra) 
+     { if (matchUp() || matchDown()) 
+          tentativeSelection();
+     }     
    }
 
    /////////////////////// Fast character-specified bracket matching //////////////
@@ -620,6 +624,7 @@ public class SearchableDocument extends Document
      }
    }
 }
+
 
 
 
