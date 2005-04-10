@@ -4,6 +4,8 @@ import GUIBuilder.RowLayout;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Frame;
 import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
@@ -12,8 +14,11 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -40,11 +45,17 @@ import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
+import javax.swing.LookAndFeel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
+import javax.swing.UIManager;
+import javax.swing.UIDefaults;
 
 import org.sufrin.logging.Logging;
+
+import javax.swing.plaf.*;
+import javax.swing.plaf.metal.*;
 
 
 /**
@@ -69,7 +80,6 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   
   protected static boolean syncPrefs = true;
   
-
   /** A local class that defines the menu bar. */
   protected class MenuBar extends JMenuBar
   {
@@ -1731,8 +1741,28 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   {
     return doc.hasSelection() && !"".equals(doc.getSelection());
   }
+  
+  // ////////////////////////////////////////////////////////////////////////////////////////////
 
-
+  protected static LookAndFeel standardLookAndFeel = UIManager.getLookAndFeel();
+    
+  public static void resetLookAndFeel()
+  { if (UIManager.getLookAndFeel()!=standardLookAndFeel)
+       setLookAndFeel(standardLookAndFeel);
+  }
+  
+  public static void setLookAndFeel(LookAndFeel lNf)
+  {
+     try   
+     { UIManager.setLookAndFeel(lNf);
+       for (Component f: Frame.getFrames())
+           SwingUtilities.updateComponentTreeUI(f);
+     }
+     catch (Exception ex) 
+     { Dred.showWarning(ex.toString());  
+     }  
+  }
+    
   // ////////////////////////////////////////////////////////////////////////////////////////////
 
   /** Request the keyboard focus. */
@@ -1860,6 +1890,8 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
+
 
 
 

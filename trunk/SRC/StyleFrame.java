@@ -2,6 +2,7 @@
 package org.sufrin.dred;
 
 import GUIBuilder.*;
+import java.util.regex.*;
 import java.awt.BorderLayout;
 import java.awt.event.*;
 import javax.swing.BorderFactory;
@@ -57,8 +58,8 @@ public class StyleFrame extends JFrame
     this.checkItem = checkItem;
     base.setLayout(new BorderLayout());
     base.add(pane, "Center");
-    base.setBorder(BorderFactory.createTitledBorder("Styles"));
-    base.add(bar, "South");
+    bar.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+    base.add(bar, "North");
     add(base);
     addMenus();
     addBindings();
@@ -146,6 +147,39 @@ public class StyleFrame extends JFrame
       { row.add
         (  formatForm(binding, false, 3)
         );
+      }
+      else
+      if (len>2 && binding.matches("style", "transform") && colDefined())
+      { String name          = binding.getField(2);
+        final String pattern = binding.optField(3);
+        final String repl    = binding.optField(4);
+        try
+        { 
+          Pattern.compile(pattern);
+        }
+        catch (PatternSyntaxException ex)
+        { String pre  = pattern.substring(0, ex.getIndex());
+          String post = pattern.substring(ex.getIndex());
+          if (!post.equals("")) post="<>"+post;
+          Dred.showWarning(String.format("%s: %s%s", ex.getDescription(), pre, post));
+          continue;
+        }
+        row.add
+        (  new JButton(new Act(name, pattern +" -> "+repl)
+           {
+             public void run()
+             {
+                StyleFrame.this.session.doTransformSelection
+                ( new TextTransform()
+                  { public String transform(String left, String ins, String right)
+                    { 
+                      return ins.replaceAll(pattern, repl);
+                    }
+                  }
+                );
+             }
+           }
+        ));
       }
       else
       if (binding.matches("style")) 
@@ -259,6 +293,7 @@ public class StyleFrame extends JFrame
      ); 
   }
 }
+
 
 
 

@@ -615,10 +615,12 @@ public class Document
      CharSequence left  = current.leftSeq();
      CharSequence right = current.rightSeq();
      int rc=0;
-     while (rc<right.length() && Character.isLetter(right.charAt(rc))) rc++;
+     while (rc<right.length() && Character.isLetterOrDigit(right.charAt(rc))) 
+           rc++;
      // 0<=rc<right.length
      int lc=left.length()-1;
-     while (lc>=0 && Character.isLetter(left.charAt(lc))) lc--;
+     while (lc>=0 && Character.isLetterOrDigit(left.charAt(lc))) 
+           lc--;
      lc = left.length()-lc;
      if (rc>0)
      { setCursorXY(x+rc, y);
@@ -846,6 +848,7 @@ public class Document
       for (FocusEavesdropper d: eavesdroppers) d.focusGained(this);
     }
 }
+
 
 
 

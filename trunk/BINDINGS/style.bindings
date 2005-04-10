@@ -2,6 +2,8 @@
 #       Miscellaneous style-sheet bindings
 #
 style sheet <...>       #####################################
+style transform <>...</>→... (?s)^<[^>]+>(.*)</[^>]+>$ $1
+style --
 style xml  block p
 style xml  block pre
 style line img   <image\salt="[IMG]"\ssrc="%SEL%">
@@ -49,6 +51,8 @@ style latex macro       section
 style latex macro       chapter
 
 style sheet \begin      #####################################
+style transform \\begin...\\end→... (?s)^\\\\begin\\{[^\\}]+\\}(.*)\\\\end\\{[^\\}]+\\}$ $1
+style --
 style latex env note 
 style latex env ex 
 style latex env ex** 
@@ -90,6 +94,7 @@ style block html       <html>\n<head>\n\s\s\s\s<title>\n\s\s\s\s</title>\n</head
 style sheet java                #####################################
 style form  block class         /**\s\s\s*/\npublic\sclass\s%ARG%\n{\n\s\s\spublic\s%ARG%()\s{\s}%SEL%}  
 style form  block method        /**\s\s\s*/\npublic\sTYPE\s%ARG%()\n{%SEL%}  
+
 
 
 
