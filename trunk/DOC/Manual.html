@@ -150,7 +150,7 @@ can be seen by pressing the <b>Help/Show Bindings</b> menu item.
 
 <h3>Cut and Paste</h3>
 <p>The <i>Cut</i> action removes the selection from the document and puts
-it in the cut-buffer.  The <i>Paste</i> action reinserts the content of
+it in the cut-buffer.  The <i>Paste</i> action inserts the content of
 the cut-buffer into the document and re-selects it. The <i>Copy</i> action
 replaces the cut-buffer with the selection (if there is a selection),
 and the <i>SwapSel</i> action exchanges the selection and the cut-buffer (except
@@ -159,6 +159,9 @@ that if the selection is null, then the cut-buffer doesn't change).  The
 </p>
 
 <h3>Search and Replace</h3>
+<h4>
+Search and Replace Basics
+</h4>
 <p>
 The three minitexts at the top of an editing window are called the <i>....</i>
 (or <i>Argument</i>),
@@ -167,9 +170,10 @@ the <i>Find</i>, and the <i>Replace</i> texts, respectively.
 
 <p>
 The <i>FindDown</i> action selects the next (<i>FindUp</i> previous) instance of the
-<i>Find</i> minitext. The <i>Edit</i> menu has radiobuttons on it that
-control the interpretation of the pattern as literal or regular expression.
+<i>Find</i> minitext. 
 </p>
+The <b>Edit/Literal&nbsp;Find</b> checkbox
+controls the interpretation of the pattern as literal or regular expression.
 
 <p> <b>If the current selection is an instance of the Find text </b>
 then the <i>ReplaceDown</i> action saves the current selection in the
@@ -181,9 +185,11 @@ same, but leaves the cursor to the left of the mark.  </p>
 the <i>FindDown</i> action is bound to; likewise the <i>ReplaceUp</i>
 action is usually bound to the SHIFTED <i>ReplaceDown</i> key.  </p>
 
-<p>The <i>Literal Replace</i> button on the Edit menu controls whether the
-content is interpreted as a regexp substitution (<tt>$n</tt> replaces the
-<tt>n</tt>th bracketed expression in the pattern) or as a literal.  </p>
+<p>The <b>Edit/Literal&nbsp;Replace</b> checkbox controls the
+interpretation of the <i>Repl</i> minitext
+ as a literal or regexp substitution (<tt>$n</tt> replaces the
+<tt>n</tt>th bracketed expression in the pattern).
+</p>
 
 <p> The <i>FindSelDown</i> action makes the current selection the
 <i>Find</i> text, then acts as the <i>FindDown</i> action. Likewise
@@ -194,6 +200,37 @@ then acts as the <i>FindUp</i> action.  </p>
 into the <i>Argument</i> minitext area and erases the text that is
 there. <i>ClearFind</i>, and <i>ClearRepl</i> behave analogously in the
 <i>Find</i> and <i>Repl</i> minitexts. 
+</p>
+
+<h4>
+Search and Replace in Practice
+</h4>
+<p>
+One way of replacing the next instance of
+"FOO" with "BAR" is to type the keystrokes bound to
+<pre>
+      <i>ClearFind</i> F O O <i>FindSelDown</i> <i>ClearRepl</i> B A R <i>ReplaceDown</i>
+</pre>
+Replacing the following instance just requires 
+<pre>
+      <i>FindSelDown</i> <i>ReplaceDown</i>
+</pre>
+since the <i>Find</i> and <i>Repl</i> minitexts are already 
+set to the right pattern and replacement.
+</p>
+
+<p>
+        The <i>ReplaceAll</i> action replaces (without any interaction) all
+        instances of the <i>Find</i> minitext within the current selection
+        with the <i>Repl</i> minitext, and selects the resulting transformed
+        text. The original selection is preserved in the cut buffer, so
+        this action can be undone with <i>SwapSel</i>.        
+</p>
+<p>
+        If you want to "approve" each replacement interactively,
+        then just use <i>FindSelDown</i> <i>ReplaceDown</i> in sequence
+        repeatedly, undoing any replacement you don't approve of with
+        <i>SwapSel</i>. 
 </p>
 
 <h3>Treatment of the Selection</h3>
@@ -303,36 +340,6 @@ The  <i>Swap2</i> action swaps the two characters immediately to the left
 of the cursor without affecting the cut buffer. It undoes itself.
 </p>
 
-<h3>
-Search and Replace in Practice
-</h3>
-<p>
-One way of replacing the next instance of
-"FOO" with "BAR" is to type the keystrokes bound to
-<pre>
-      <i>ClearFind</i> F O O <i>FindSelDown</i> <i>ClearRepl</i> B A R <i>ReplaceDown</i>
-</pre>
-Replacing the following instance just requires 
-<pre>
-      <i>FindSelDown</i> <i>ReplaceDown</i>
-</pre>
-since the <i>Find</i> and <i>Repl</i> minitexts are already 
-set to the right pattern and replacement.
-</p>
-
-<p>
-        The <i>ReplaceAll</i> action replaces (without any interaction) all
-        instances of the <i>Find</i> minitext within the current selection
-        with the <i>Repl</i> minitext, and selects the resulting transformed
-        text. The original selection is preserved in the cut buffer, so
-        this action can be undone with <i>SwapSel</i>.        
-</p>
-<p>
-        If you want to "approve" each replacement interactively,
-        then just use <i>FindSelDown</i> <i>ReplaceDown</i> in sequence
-        repeatedly, undoing any replacement you don't approve of with
-        <i>SwapSel</i>. 
-</p>
 
 <h2>Opening and saving files</h2>
 
@@ -430,6 +437,7 @@ using the encoding selector provided in the file browser.
 <b>$Date$</b>
 </pre>
 </body>
+
 
 
 
