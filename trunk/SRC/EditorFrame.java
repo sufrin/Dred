@@ -189,6 +189,18 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
           doc.secondaryBackups = state;
         }
       });
+      menu.add
+      (new CheckItem
+           ("Flat L&F",
+            false,
+            "Use the flat L&F",
+            prefs)
+      { { run(); }
+        public void run()
+        {
+          setLookAndFeel(state ? "flat" : "standard");
+        }
+      });
       menu.addSeparator();
       bind("doSavePrefs", "File/Prefs");
       bind("doLogger",    "File/Prefs");
@@ -1744,23 +1756,34 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   
   // ////////////////////////////////////////////////////////////////////////////////////////////
 
-  protected static LookAndFeel standardLookAndFeel = UIManager.getLookAndFeel();
-    
-  public static void resetLookAndFeel()
-  { if (UIManager.getLookAndFeel()!=standardLookAndFeel)
-       setLookAndFeel(standardLookAndFeel);
+  
+  static MetalTheme theme = new MetalTheme();
+      
+  public static void setLookAndFeel(String lNf)
+  { theme.install(lNf.equals("flat")); 
+    setLookAndFeel(new MetalLookAndFeel());
   }
   
   public static void setLookAndFeel(LookAndFeel lNf)
-  {
+  {  
      try   
-     { UIManager.setLookAndFeel(lNf);
+     { 
+       UIManager.setLookAndFeel(lNf);
        for (Component f: Frame.getFrames())
            SwingUtilities.updateComponentTreeUI(f);
      }
      catch (Exception ex) 
      { Dred.showWarning(ex.toString());  
      }  
+  }
+  
+  public static LookAndFeel standardLnF()
+  { String s = UIManager.getCrossPlatformLookAndFeelClassName();
+    try
+    { return (LookAndFeel) Class.forName(s).newInstance();
+    }
+    catch (Exception ex)
+    { return UIManager.getLookAndFeel(); }
   }
     
   // ////////////////////////////////////////////////////////////////////////////////////////////

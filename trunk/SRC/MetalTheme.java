@@ -39,12 +39,12 @@ public class MetalTheme extends DefaultMetalTheme
 
     protected  ColorUIResource primary1     = super.getPrimary1();
     protected  ColorUIResource primary2     = super.getPrimary2();
-    protected  ColorUIResource primary3     = super.getPrimary2();
+    protected  ColorUIResource primary3     = super.getPrimary3();
 
     
     protected  ColorUIResource secondary1   = super.getSecondary1();
     protected  ColorUIResource secondary2   = super.getSecondary2();
-    protected  ColorUIResource secondary3   = super.getSecondary3();
+    protected  ColorUIResource secondary3   = new ColorUIResource(220, 220, 230); //super.getSecondary3();
     
     protected  ColorUIResource theBlack   = super.getBlack();
     protected  ColorUIResource theWhite   = super.getWhite();
@@ -103,6 +103,7 @@ public class MetalTheme extends DefaultMetalTheme
     }
 
 }
+
 
 
 

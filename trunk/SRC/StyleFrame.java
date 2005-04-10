@@ -58,7 +58,7 @@ public class StyleFrame extends JFrame
     this.checkItem = checkItem;
     base.setLayout(new BorderLayout());
     base.add(pane, "Center");
-    bar.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+    bar.setBorder(BorderFactory.createEmptyBorder(0, 5, 10, 5));
     base.add(bar, "North");
     add(base);
     addMenus();
@@ -193,6 +193,7 @@ public class StyleFrame extends JFrame
   void newCol(String title)
   {
     col = new Col(-1);
+    col.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
     row = col;
     pane.add(title, col);
   }
@@ -293,6 +294,7 @@ public class StyleFrame extends JFrame
      ); 
   }
 }
+
 
 
 

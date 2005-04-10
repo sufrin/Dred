@@ -3,30 +3,30 @@
 #
 style sheet <...>       #####################################
 style transform <>...</>→... (?s)^<[^>]+>(.*)</[^>]+>$ $1
-style --
+style -
 style xml  block p
 style xml  block pre
 style line img   <image\salt="[IMG]"\ssrc="%SEL%">
 style line link  <a\shref="[XXXX]">%SEL%</a>
-style --
+style -
 style xml block ul
 style xml block li
 style xml block ol
-style --
+style -
 style xml line i
 style xml line b
 style xml line tt
 style xml line code
-style --
+style -
 style xml block h1
 style xml block h2
 style xml block h3
 style xml block h4
 style xml block h5
-style --
+style -
 style form line ? <%ARG%>%SEL%</%ARG%> 
 style form line ? <%ARG%>%SEL%</%ARG%> 
-style --
+style -
 style form block ? <%ARG%>%SEL%</%ARG%>
 style form block ? <%ARG%>%SEL%</%ARG%>
 
@@ -37,13 +37,13 @@ style latex macro       textit
 style latex macro       textrm
 style latex macro       textsl
 style latex macro       texttt
-style --
+style -
 style latex macro       mathbf
 style latex macro       mathit
 style latex macro       mathrm
 style latex macro       mathsl
 style latex macro       mathtt
-style --
+style -
 style latex macro       paragraph
 style latex macro       subsubsection
 style latex macro       subsection
@@ -52,33 +52,33 @@ style latex macro       chapter
 
 style sheet \begin      #####################################
 style transform \\begin...\\end→... (?s)^\\\\begin\\{[^\\}]+\\}(.*)\\\\end\\{[^\\}]+\\}$ $1
-style --
+style -
 style latex env note 
 style latex env ex 
 style latex env ex** 
 style latex env ans 
 style latex env ans*
-style --
+style -
 style latex env java
 style latex env class
 style latex env hideclass
-style --
+style -
 style latex env alltt
 style latex env smalltt
 style latex env comment
 style latex env verbatim
-style --
+style -
 style latex env itemize
 style latex env enumerate
 style line  \item   \item\s
 style block tabular \begin{tabular}{XXX}%SEL%\end{tabular}
 style block array   \begin{array}{XXX}%SEL%\end{array}
 style block figure  \begin{figure}[ht]%SEL%\caption{...}\n\label{...}\n\end{figure}
-style --
+style -
 style latex env smaller
 style latex env center
 style latex env foil
-style --
+style -
 style form  block ? \begin{%ARG%}%SEL%\end{%ARG%} 
 style form  block ? \begin{%ARG%}%SEL%\end{%ARG%} 
 
@@ -94,6 +94,9 @@ style block html       <html>\n<head>\n\s\s\s\s<title>\n\s\s\s\s</title>\n</head
 style sheet java                #####################################
 style form  block class         /**\s\s\s*/\npublic\sclass\s%ARG%\n{\n\s\s\spublic\s%ARG%()\s{\s}%SEL%}  
 style form  block method        /**\s\s\s*/\npublic\sTYPE\s%ARG%()\n{%SEL%}  
+
+
+
 
 
 
