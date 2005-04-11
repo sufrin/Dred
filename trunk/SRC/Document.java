@@ -930,9 +930,17 @@ public class Document
     
     /** The last few notable positions */
     protected LinkedList<Position> positions = new LinkedList<Position>();
+    protected LinkedList<Position> removed   = new LinkedList<Position>();
     
     /** Clear the position ring  */
     protected void clearPositions() { positions.clear(); }
+    
+    /** Remove the removed positions from the positions */
+    protected void removePositions()
+    { positions.removeAll(removed);
+      removed.clear();
+    }
+
     
     /** Transform positions so they make sense in the document after the specified deletion.
     */
@@ -947,9 +955,10 @@ public class Document
           else
           if (p.y>endy) p.y=p.y-endy+starty;
           else
-          positions.remove(p);
+          removed.add(p);
       }
       if (debug && !positions.isEmpty()) log.fine("%s", positions);
+      removePositions();
     }
     
     /** Transform positions so they make sense in the document after the specified insertion.
@@ -990,23 +999,25 @@ public class Document
           if (p.y==starty)
              if (p.x<startx) continue;
              else
-             if (p.x==startx) positions.remove(p);
+             if (p.x==startx) removed.add(p);
              else
              if (p.x>startx) p.x--;
           else
              continue;
+      removePositions();
       if (debug && !positions.isEmpty()) log.fine("(%d,%d) %s", starty, startx, positions);
     }
     
     protected void deleteTopCorrection()
     {  for (Position p: positions) 
-           if (p.x==0 && p.y==0) positions.remove(p);
+           if (p.x==0 && p.y==0) removed.add(p);
     }
     
     protected void deleteBottomCorrection()
     {  int boty=length(), botx = lineAt(boty-1).length();
        for (Position p: positions) 
-           if (p.x==botx && p.y==boty) positions.remove(p);
+           if (p.x==botx && p.y==boty) removed.add(p);
+       removePositions();
     }
     
     /** The last position in the ring. */
@@ -1037,28 +1048,4 @@ public class Document
       }
     }      
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

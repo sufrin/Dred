@@ -807,7 +807,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
    * system clipboard and cutting it from the document.
    */ 
   public String clippedSelection()
-  {
+  { doMarkPosition();
     return ed.clippedSelection();
   }
 
@@ -1227,6 +1227,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       SystemClipboard.set(doc.getSelection());
       doc.cutSelection();
     }
+    doMarkPosition();
     doc.pasteAndSelect(getBindingsText(), false);    
   }
 
@@ -1354,7 +1355,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   public void doLowercase()
   {
     if (hasNonemptySelection())
-    {
+    { doMarkPosition();
       doc.pasteAndSelect(clippedSelection().toLowerCase(), true);
     }
   }
@@ -1367,7 +1368,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   public void doUppercase()
   {
     if (hasNonemptySelection())
-    {
+    { doMarkPosition();
       doc.pasteAndSelect(clippedSelection().toUpperCase(), true);
     }
   }
@@ -1450,12 +1451,14 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       tempCaption(doc.regexError());
       return;
     }
+    doMarkPosition();
     doc.setReplacement(text.repl.getText());
     edFocus();
     String lastSel = doc.replaceAll();
     if (lastSel == null)
       tempCaption(doc.regexError());
     else SystemClipboard.set(lastSel);
+    doMarkPosition();
   }
 
   /**
@@ -1557,7 +1560,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
 
   /**
    * Pipe the current selection (if any) through the
-   * program specified in the textline labelled (....).
+   * program specified i nthe textline labelled (....).
    */
   @ActionMethod(label="sh .... < sel'n", tip="Pipe the current selection through the shell command given in the .... field")
   public void doShell()
@@ -1940,6 +1943,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
 
 
 
