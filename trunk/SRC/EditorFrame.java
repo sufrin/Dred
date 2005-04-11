@@ -189,6 +189,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
           doc.secondaryBackups = state;
         }
       });
+      if (false) // PRO TEM
       menu.add
       (new CheckItem
            ("Flat L&F",
@@ -1943,6 +1944,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
 
 
 

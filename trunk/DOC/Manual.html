@@ -320,6 +320,17 @@ other text window using <i>Copy</i> and <i>Paste</i>. (Of course the
 Cut Ring Editor  doesn't itself send material to the cut ring!)  
 </p>
 
+<h3>The Position Ring</h3>
+Whenever a "big" movement action is executed , the position at which it was 
+executed is appended to the <i>cut ring</i>. The <i>Prev Position</i> action moves the 
+cursor to the last position in the ring and rotates the ring by one step.
+The <i>Next Position</i> action is its inverse.
+
+<h3>Markers</h3>
+The special "marker" characters with Unicodes <tt>fff0</tt> ... <tt>fffa</tt> 
+are shown (in red) as ❶, ❷, ... ❿. They are removed from the document
+as it is saved, but otherwise treated the same as ordinary characters. They
+can be used to mark places in the document to which you may wish to return.
 
 <h3>"Small" Changes</h3>
 <p>
@@ -437,6 +448,9 @@ using the encoding selector provided in the file browser.
 <b>$Date$</b>
 </pre>
 </body>
+
+
+
 
 
 
