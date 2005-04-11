@@ -36,12 +36,15 @@
             </javac> 
         </target>
         
-        <target name="doc" depends="compile">
+        <target name="javadoc" depends="compile">
           <javadoc Encoding     = "UTF-8"
                    source       = "1.5"
-                   destdir      = "DOC"
+                   destdir      = "JAVADOC"
                    >
-             <fileset dir="${SOURCE}" includes="*.java"/>
+             <fileset   dir     ="${SOURCE}" 
+                        includes="*.java" 
+                        excludes="NanoHTTPDServer.java"
+                        />
           </javadoc>
         </target>
         

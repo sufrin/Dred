@@ -1147,7 +1147,10 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       tempCaption("Pattern not found");
   }
 
-  /** Transform the current selection using the specified TextTransform */
+  /** Cut, and replace the current selection 
+      with the result of transforming it 
+      by the specified TextTransform. 
+  */
   public void doTransformSelection(TextTransform tr)
   { 
     Document.Region region = doc.selectedRegion.copy();
@@ -1913,6 +1916,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
 
 
 
