@@ -218,7 +218,7 @@ implements DocListener,
    protected int charToPixelX(int ox, int x, int y)
    { CharSequence line = doc.lineAt(y);
      int pixel = 0;
-     for (int i=x-1; i>=ox; i--) pixel+=metrics.charWidth(line.charAt(i));
+     for (int i=x-1; i>=ox; i--) pixel+=metrics.charWidth(doc.transChar(line.charAt(i)));
      return pixel;
    }
 
@@ -305,7 +305,15 @@ implements DocListener,
          {  ch[0]=line.charAt(c);
             if (ch[0]=='\t')
             {
-               g.drawRect(x, baseLine-3, 6, 6); x+=6;
+               g.drawRect(x, baseLine-4, 6, 6); x+=6;
+            }
+            else 
+            if (doc.isMark(ch[0]))
+            {  g.setColor(Color.RED);
+               ch[0]=doc.transChar(ch[0]);
+               g.drawString(new String(ch), x, baseLine);
+               // g.drawRect(x, baseLine-4, 6, 6); x+=6;
+               g.setColor(getForeground());
             }
             else
                g.drawString(new String(ch), x, baseLine);
@@ -486,7 +494,7 @@ implements DocListener,
      int          px     = 0;
      int          i      = originx;
      while (i<length)
-     { px += metrics.charWidth(line.charAt(i));
+     { px += metrics.charWidth(doc.transChar(line.charAt(i)));
        if (x<px) { return (px-x)<=(x-lx) ? i+1 : i; }
        i++;
        lx=px;
@@ -594,6 +602,7 @@ implements DocListener,
    public void dragBy(int dx, int dy) {}
 
 }
+
 
 
 

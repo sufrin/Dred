@@ -2,6 +2,11 @@
 #       Bernard's bindings are the distributed ones
 #
 show    built in bs-bindings
+text abbrev mark1 \ufff0 ctrl 1
+text abbrev mark2 \ufff1 ctrl 2
+text abbrev mark3 \ufff2 ctrl 3
+text abbrev mark4 \ufff3 ctrl 4
+text abbrev mark5 \ufff4 ctrl 5
 include class://org.sufrin.dred.Dred/function.bindings
 include class://org.sufrin.dred.Dred/ctrl.bindings
 include class://org.sufrin.dred.Dred/symbols.bindings
@@ -9,4 +14,5 @@ include class://org.sufrin.dred.Dred/style.bindings
 #
 #
 #
+
 

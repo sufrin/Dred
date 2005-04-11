@@ -16,11 +16,12 @@ import org.sufrin.logging.Logging;
 
 public class Document
 {  
+   
    /** Lines (newline-free) strictly above the cursor.*/
-   protected LinkedList<String>  above;
+   protected Lines  above;
    
    /** Lines (newline-free) strictly below the cursor.*/
-   protected LinkedList<String>  below;
+   protected Lines  below;
    
    /** The cursor is on this line. */
    protected LineBuffer          current;
@@ -152,8 +153,8 @@ public class Document
 
    /** Construct a new, empty, document */
    public Document()
-   { above   = new LinkedList<String>();
-     below   = new LinkedList<String>();
+   { above   = new Lines();
+     below   = new Lines();
      current = new LineBuffer();
      current.setLine("");
      current.moveTo(0);
@@ -561,14 +562,50 @@ public class Document
    /** Is the cursor at the very end of the document? */
    public boolean atEnd()     { return atBottom() && current.atRight(); }
 
-   /** Output the document to the given PrintWriter. */
+   /** Output the document (without marks) to the given PrintWriter. */
    public void output(PrintWriter out)
-   { for (String line: above) out.println(line);
+   { for (String line: above) out.println(unMark(line));
      if (below.size()>0) 
-        out.println(current.toString());
+        out.println(unMark(current.toString()));
      else 
-        out.print(current.toString());
-     for (String line: below) out.println(line);
+        out.print(unMark(current.toString()));
+     for (String line: below) out.println(unMark(line));
+   }
+   
+   /** Output the document to the given PrintWriter: marks and all */
+   public void outputLiterally(PrintWriter out)
+   { for (String line: above) out.println((line));
+     if (below.size()>0) 
+        out.println((current.toString()));
+     else 
+        out.print((current.toString()));
+     for (String line: below) out.println((line));
+   }
+   
+   /** The characters that are deemed to be marks */
+   static protected final char   [] marks = {'\ufff0', '\ufff1', '\ufff2', '\ufff3', '\ufff4', '\ufff5', '\ufff6', '\ufff7', '\ufff8', '\ufff9'};
+   static protected final char   [] trans = {'\u2776', '\u2777', '\u2778', '\u2779', '\u277a', '\u277b', '\u277c', '\u277d', '\u277e', '\u277f'};
+   static protected final String [] pats  = {"\ufff0", "\ufff1", "\ufff2", "\ufff3", "\ufff4", "\ufff5", "\ufff6", "\ufff7", "\ufff8", "\ufff9"};
+   
+   static final boolean   isMark(char c)     { return '\ufff0' <= c && c <= '\ufff9'; }
+   static final char      transMark(char c)  { return trans[c-'\ufff0']; }
+   static final char      transChar(char c)  { return c<'\ufff0' ? c : trans[c-'\ufff0']; }
+   
+   public void insertMark(int i) { insert(marks[i]); }
+   
+   /** Remove marks from the line */
+   public final String unMark(String line)
+   { boolean dirty = false;
+     int len       = line.length();
+     for (int i=0; !dirty && i<len; i++) dirty = isMark(line.charAt(i));
+     if (dirty)
+     { char[] chars = line.toCharArray();
+       int i=0, j=0;
+       while (i<chars.length)
+           if (isMark(chars[i])) i++; else chars[j++]=chars[i++];
+       return new String(chars, 0, j); 
+     }
+     return line;  
    }
 
    /** Get the text of the document */
@@ -576,6 +613,15 @@ public class Document
    { StringWriter s = new StringWriter();
      PrintWriter  p = new PrintWriter(s);
      output(p);
+     p.close();
+     return s.toString();
+   }
+   
+   /** Get the text of the document */
+   public String getLiteralText()
+   { StringWriter s = new StringWriter();
+     PrintWriter  p = new PrintWriter(s);
+     outputLiterally(p);
      p.close();
      return s.toString();
    }
@@ -847,11 +893,12 @@ public class Document
     {
       for (FocusEavesdropper d: eavesdroppers) d.focusGained(this);
     }
+    
+    
+    protected static class Lines extends LinkedList<String>
+    { 
+    }
 }
-
-
-
-
 
 
 

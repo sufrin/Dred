@@ -33,7 +33,7 @@ public class SearchableDocument extends Document
    public String regexError() { return regexError; }
 
    public boolean setPattern(String patternSource)
-   { 
+   { patternSource = (patternSource); // deal with marks
      this.patternSource = patternSource;
      try
      {  if (litFind) 
@@ -625,6 +625,7 @@ public class SearchableDocument extends Document
      }
    }
 }
+
 
 
 

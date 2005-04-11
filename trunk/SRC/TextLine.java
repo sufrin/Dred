@@ -82,7 +82,7 @@ public class TextLine extends JPanel
   }
 
   /** Returns the current text. */
-  public String getText()            { return doc.getText(); }
+  public String getText()            { return doc.getLiteralText(); }
 
   /** Set the text. */
   public void   setText(String text) { doc.setText(text); }
@@ -202,6 +202,7 @@ public class TextLine extends JPanel
   }
  
 }
+
 
 
 
