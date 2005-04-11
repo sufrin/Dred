@@ -258,7 +258,9 @@ public class Document
    public void leftDel()
    { clearSelection();
      if (!current.atLeft()) 
-     { deleteCHCorrection(getY(), getX()); current.leftDel(); }
+     { deleteCHCorrection(getY(), getX());
+       current.leftDel(); 
+     }
      else
      { if (!atTop()) 
        { 
