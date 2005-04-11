@@ -584,16 +584,19 @@ public class Document
    
    /** The characters that are deemed to be marks */
    static protected final char   [] marks = {'\ufff0', '\ufff1', '\ufff2', '\ufff3', '\ufff4', '\ufff5', '\ufff6', '\ufff7', '\ufff8', '\ufff9'};
+   /** Translations into the visible space of mark characters */
    static protected final char   [] trans = {'\u2776', '\u2777', '\u2778', '\u2779', '\u277a', '\u277b', '\u277c', '\u277d', '\u277e', '\u277f'};
-   static protected final String [] pats  = {"\ufff0", "\ufff1", "\ufff2", "\ufff3", "\ufff4", "\ufff5", "\ufff6", "\ufff7", "\ufff8", "\ufff9"};
    
+   /** Is this character a mark? */
    static final boolean   isMark(char c)     { return '\ufff0' <= c && c <= '\ufff9'; }
+   /** Return the visible translation of a mark */
    static final char      transMark(char c)  { return trans[c-'\ufff0']; }
-   static final char      transChar(char c)  { return c<'\ufff0' ? c : trans[c-'\ufff0']; }
+   /** Return the visible translation of any character */
+   static final char      transChar(char c)  { return (c<'\ufff0' || c>'\ufff9') ? c : trans[c-'\ufff0']; }
    
    public void insertMark(int i) { insert(marks[i]); }
    
-   /** Remove marks from the line */
+   /** Remove marks from the given line */
    public final String unMark(String line)
    { boolean dirty = false;
      int len       = line.length();
@@ -897,6 +900,11 @@ public class Document
     
     protected static class Lines extends LinkedList<String>
     { 
+    }
+    
+    protected static class Position
+    { int x, y;
+      public Position(int x, int y) { this.x=x; this.y=y; }
     }
 }
 
