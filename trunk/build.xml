@@ -29,10 +29,20 @@
                    debuglevel= "lines,vars,source"
                    classpath = "${CLASSPATH}"
                    source    = "1.5"
+                   encoding  = "UTF-8"
                    > 
                <compilerarg line="-Xlint:unchecked"/>
                <include name="**/*.java"/>
             </javac> 
+        </target>
+        
+        <target name="doc" depends="compile">
+          <javadoc Encoding     = "UTF-8"
+                   source       = "1.5"
+                   destdir      = "DOC"
+                   >
+             <fileset dir="${SOURCE}" includes="*.java"/>
+          </javadoc>
         </target>
         
         <target name="test" depends="Dred">
@@ -122,6 +132,7 @@
                 <delete dir="${BUILD}" />
         </target>
 </project>
+
 
 
 

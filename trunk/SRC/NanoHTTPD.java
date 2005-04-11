@@ -101,16 +101,16 @@ public class NanoHTTPD implements HTTP
   // API parts
   // ==================================================
 
-  /**
+  /**<p>
    * Override this to customize the server.
-   * <p>
+   * </p>
    * 
-   * @parm uri Percent-decoded URI without parameters, for
+   * @param uri Percent-decoded URI without parameters, for
    *       example "/index.cgi"
-   * @parm method "GET", "POST" etc.
-   * @parm parms Parsed, percent decoded parameters from URI
-   *       and, in case of POST, data.
-   * @parm header Header entries, percent decoded
+   * @param method "GET", "POST", "FORM" etc.
+   * @param parms Parsed, percent decoded parameters from URI
+   *       and, in case of POST, FORM data.
+   * @param header Header entries, percent decoded, uppercased keys
    * @return HTTP response, see class Response for details
    */
   public Response serve(String uri, String method, Properties header,
@@ -618,4 +618,5 @@ public class NanoHTTPD implements HTTP
   }
 
 }
+
 

@@ -556,6 +556,7 @@ public class SearchableDocument extends Document
    protected static class Cursor
    { public    int          x, y;
      protected Document     doc;
+     /** Invariant: line.equals(doc.lineAt(y)) ∧ 0≤x≤line.line.length() */
      protected CharSequence line;
      public Cursor(Document doc) { this(doc, false); }
      
@@ -624,6 +625,7 @@ public class SearchableDocument extends Document
      }
    }
 }
+
 
 
 
