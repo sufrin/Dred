@@ -949,7 +949,7 @@ public class Document
       {
           if (p.y<starty) continue;      
           else
-          if (p.y==starty && p.x<=startx) if (p.x==0) positions.remove(p); else continue; 
+          if (p.y==starty && p.x<=startx) if (p.x==0) removed.add(p); else continue; 
           else 
           if (p.y==endy && p.x>=endx) { p.y=starty; p.x=p.x-endx+startx; }
           else
@@ -1011,6 +1011,7 @@ public class Document
     protected void deleteTopCorrection()
     {  for (Position p: positions) 
            if (p.x==0 && p.y==0) removed.add(p);
+       removePositions();
     }
     
     protected void deleteBottomCorrection()
@@ -1048,4 +1049,5 @@ public class Document
       }
     }      
 }
+
 
