@@ -189,7 +189,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
           doc.secondaryBackups = state;
         }
       });
-      if (false) // PRO TEM
+      if (true) // PRO TEM
       menu.add
       (new CheckItem
            ("Flat L&F",
@@ -1790,22 +1790,27 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   
   static MetalTheme theme = new MetalTheme();
       
-  public static void setLookAndFeel(String lNf)
+  public static void setLookAndFeel(final String lNf)
   { theme.install(lNf.equals("flat")); 
     setLookAndFeel(new MetalLookAndFeel());
   }
   
-  public static void setLookAndFeel(LookAndFeel lNf)
-  {  
-     try   
-     { 
-       UIManager.setLookAndFeel(lNf);
-       for (Component f: Frame.getFrames())
-           SwingUtilities.updateComponentTreeUI(f);
-     }
-     catch (Exception ex) 
-     { Dred.showWarning(ex.toString());  
-     }  
+  public static void setLookAndFeel(final LookAndFeel lNf)
+  {  SwingUtilities.invokeLater
+     (new Runnable()
+      { public void run()
+        {
+          try   
+          { 
+            UIManager.setLookAndFeel(lNf);
+            for (Component f: Frame.getFrames())
+                SwingUtilities.updateComponentTreeUI(f);
+          }
+          catch (Exception ex) 
+          { Dred.showWarning(ex.toString());  
+          } 
+        }      
+      }); 
   }
   
   public static LookAndFeel standardLnF()
@@ -1944,6 +1949,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
 
 
 

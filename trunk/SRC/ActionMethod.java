@@ -87,6 +87,7 @@ import javax.swing.KeyStroke;
          try   { method.invoke(object); } 
          catch (IllegalAccessException ex)    {}
          catch (InvocationTargetException ex) {}
+         catch (Exception ex) { ex.printStackTrace(); }
       }      
     }
     
@@ -174,6 +175,7 @@ import javax.swing.KeyStroke;
       }                 
     }
 }
+
 
 
 
