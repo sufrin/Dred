@@ -188,7 +188,7 @@ public class Document
        are not notified; newlines are treated appropriately.
    */
    protected void insertChar(char ch) 
-   { if (ch=='\n') insertNewline(); else current.insert(ch);
+   { if (ch=='\n') insertNewline(); else { insertCHCorrection(getY(), getX()); current.insert(ch); }
    }
 
    /** Remove the selection if there is one, and notify listeners. */
@@ -215,7 +215,8 @@ public class Document
    /** Split the current line at the cursor; listeners are not notified.
    */
    protected void insertNewline()
-   { above.addLast(current.leftString());
+   { insertNLCorrection(getY(), getX());
+     above.addLast(current.leftString());
      current.setLine(current.rightString());
      current.moveTo(0);
    }
@@ -257,12 +258,17 @@ public class Document
    public void leftDel()
    { clearSelection();
      if (!current.atLeft()) 
-       current.leftDel(); 
+     { deleteCHCorrection(getY(), getX()); current.leftDel(); }
      else
      { if (!atTop()) 
-       { String line = above.removeLast();
+       { 
+         String line = above.removeLast();
+         deleteCorrection(getY(), line.length(), getY()+1, 0);
          current.setLine(line+current.toString());
          current.moveTo(line.length());
+       }
+       else
+       { deleteTopCorrection();
        }
      }
      docChanged();
@@ -272,13 +278,17 @@ public class Document
    public void rightDel()
    { clearSelection();
      if (!current.atRight()) 
-       current.rightDel(); 
+     { deleteCHCorrection(getY(), getX()+1); current.rightDel(); }
      else
      { if (!atBottom()) 
-       { String nline = below.removeFirst();
+       { deleteCorrection(getY(), getX(), getY()+1, 0);
+         String nline = below.removeFirst();
          String cline = current.toString();
          current.setLine(cline+nline);
          current.moveTo(cline.length());
+       }
+       else
+       { deleteBottomCorrection();
        }
      }
      docChanged();
@@ -518,6 +528,7 @@ public class Document
      // Cursor < Mark
      String topLeft  = current.leftString();
      String botRight = lineAt(selectedRegion.endy).toString().substring(selectedRegion.endx);
+     deleteCorrection(selectedRegion.starty, topLeft.length(), selectedRegion.endy, selectedRegion.endx);
      rightDelLines(selectedRegion.endy-selectedRegion.starty);
      clearMark();
      current.setLine(topLeft+botRight);
@@ -532,11 +543,13 @@ public class Document
      above.clear();
      below.clear();
      docChangedALot();
+     clearPositions();
    }
 
    /** Delete n lines below the current line. */
    protected void rightDelLines(int n)
-   { while (n-- > 0 && !atBottom()) below.removeFirst(); }
+   { while (n-- > 0 && !atBottom()) below.removeFirst(); 
+   }
 
    /** Remove the mark. */
    protected void    clearMark() { markx=marky=NOSELECTION; }
@@ -902,10 +915,125 @@ public class Document
     { 
     }
     
+    /**  Position represents a position in the document. Right now it's used only 
+         in the "position-ring".
+     */
     protected static class Position
-    { int x, y;
-      public Position(int x, int y) { this.x=x; this.y=y; }
+    { public int x, y;
+      public Position(int x, int y)         { this.x=x; this.y=y; }
+      public boolean equals(Object other)   { return equals((Position) other); }
+      public boolean equals(Position other) { return this.x==other.x && this.y==other.y; }
+      public String toString() { return String.format("[%d.%d]", y,x); }
     }
+    
+    /** The last few notable positions */
+    protected LinkedList<Position> positions = new LinkedList<Position>();
+    
+    /** Clear the position ring  */
+    protected void clearPositions() { positions.clear(); }
+    
+    /** Transform positions so they make sense in the document after the specified deletion.
+    */
+    protected void deleteCorrection(int starty, int startx, int endy, int endx)
+    { for (Position p: positions)
+      {
+          if (p.y<starty) continue;      
+          else
+          if (p.y==starty && p.x<=startx) if (p.x==0) positions.remove(p); else continue; 
+          else 
+          if (p.y==endy && p.x>=endx) { p.y=starty; p.x=p.x-endx+startx; }
+          else
+          if (p.y>endy) p.y=p.y-endy+starty;
+          else
+          positions.remove(p);
+      }
+      if (debug && !positions.isEmpty()) log.fine("%s", positions);
+    }
+    
+    /** Transform positions so they make sense in the document after the specified insertion.
+    */
+    protected void insertNLCorrection(int starty, int startx)
+    { 
+      for (Position p: positions)
+          if (p.y<starty) continue;
+          else
+          if (p.y==starty)
+             if (p.x>=startx) { p.y++; p.x-=startx; } else continue;
+          else
+             p.y++;
+      if (debug && !positions.isEmpty()) log.fine("%s", positions);
+    }
+    
+    /** Transform positions so they make sense in the document after the specified insertion.
+    */
+    protected void insertCHCorrection(int starty, int startx)
+    { 
+      for (Position p: positions)
+          if (p.y<starty) continue;
+          else
+          if (p.y==starty)
+             if (p.x>startx) p.x++; else continue;
+          else
+             continue;
+      if (debug && !positions.isEmpty()) log.fine("%s", positions);
+    }
+    
+    /** Transform positions so they make sense in the document after the specified deletion.
+    */
+    protected void deleteCHCorrection(int starty, int startx)
+    { 
+      for (Position p: positions)
+          if (p.y<starty) continue;
+          else
+          if (p.y==starty)
+             if (p.x<startx) continue;
+             else
+             if (p.x==startx) positions.remove(p);
+             else
+             if (p.x>startx) p.x--;
+          else
+             continue;
+      if (debug && !positions.isEmpty()) log.fine("(%d,%d) %s", starty, startx, positions);
+    }
+    
+    protected void deleteTopCorrection()
+    {  for (Position p: positions) 
+           if (p.x==0 && p.y==0) positions.remove(p);
+    }
+    
+    protected void deleteBottomCorrection()
+    {  int boty=length(), botx = lineAt(boty-1).length();
+       for (Position p: positions) 
+           if (p.x==botx && p.y==boty) positions.remove(p);
+    }
+    
+    /** The last position in the ring. */
+    
+    protected Position lastPos = new Position(0, 0);
+    
+    /** Add the xcurrent position to the ring. */
+    public void markPosition()
+    { int x=getX(), y=getY();
+      if (lastPos.x==x && lastPos.y==y) return;
+      lastPos = new Position(getX(), getY());      
+      positions.addLast(lastPos);
+      for (int i=positions.size(); i>6; i--) positions.removeFirst();
+    } 
+         
+    /** Rotate the ring and return one of the positions in it. */
+    public Position rotPosition(boolean back)
+    { if (positions.isEmpty()) return null;
+      else 
+      if (back) 
+      { positions.addFirst(positions.removeLast());
+        lastPos = positions.getLast();
+        return positions.getFirst();
+      }
+      else
+      { positions.addLast(lastPos=positions.removeFirst());
+        return lastPos;
+      }
+    }      
 }
 
 

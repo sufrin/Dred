@@ -25,6 +25,9 @@ editor action   doSave               ctrl  S
 editor action   doUnPrefix           ctrl alt  LEFT
 editor action   doUndent             ctrl  LEFT
 editor action   doUnicode            alt  U
+editor action   doMarkPosition       ctrl M
+editor action   doPrevPosition       PAGE_UP
+editor action   doNextPosition       PAGE_DOWN
 text action     doAbbrev             ESCAPE
 text action     doCopy               ctrl  C
 text action     doCut                ctrl  X
@@ -54,4 +57,5 @@ text action     doUpMove             UP
 minitext action doBig                ctrl  ENTER
 minitext action doClear              ctrl  U
 minitext action doTellBig            ENTER
+
 

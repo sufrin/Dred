@@ -2,11 +2,24 @@
 #       Bernard's bindings are the distributed ones
 #
 show    built in bs-bindings
+#
+#       10 visible markers that show up in red, and are useful for keeping one's 
+#       place. Apart from being stripped from the document when it's written,
+#       they behave like ordinary characters. 
+#
 text abbrev mark1 \ufff0 ctrl 1
 text abbrev mark2 \ufff1 ctrl 2
 text abbrev mark3 \ufff2 ctrl 3
 text abbrev mark4 \ufff3 ctrl 4
 text abbrev mark5 \ufff4 ctrl 5
+text abbrev mark5 \ufff5 ctrl 6
+text abbrev mark5 \ufff6 ctrl 7
+text abbrev mark5 \ufff7 ctrl 8
+text abbrev mark5 \ufff8 ctrl 9
+text abbrev mark5 \ufff9 ctrl 0
+#
+#
+#
 include class://org.sufrin.dred.Dred/function.bindings
 include class://org.sufrin.dred.Dred/ctrl.bindings
 include class://org.sufrin.dred.Dred/symbols.bindings

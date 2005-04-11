@@ -460,6 +460,7 @@ class SimpleEditor implements InteractionListener
       default:
       break;
     }
+    doc.markPosition();
   }
    
    int lastX, lastY;
@@ -499,7 +500,7 @@ class SimpleEditor implements InteractionListener
    
   public void mouseEntered(MouseEvent e)   { if (debug) log.finer("Entered"); requestFocus();  }
   public void mouseExited(MouseEvent e)    { if (debug) log.finer("Exited"); }
-  public void mouseReleased(MouseEvent e)  { }
+  public void mouseReleased(MouseEvent e)  { doc.markPosition(); }
   public void keyTyped(KeyEvent e)         { }
   public void mouseMoved(MouseEvent e)     { }
   public void mouseClicked(MouseEvent e)   { }
@@ -648,6 +649,7 @@ class SimpleEditor implements InteractionListener
     frame.setVisible(true);
   }
 }
+
 
 
 
