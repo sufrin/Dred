@@ -35,6 +35,8 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
+import javax.swing.ComponentInputMap;
+import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
@@ -194,7 +196,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       (new CheckItem
            ("Flat L&F",
             false,
-            "Use the flat L&F",
+            "Use a flat-looking Look and Feel (for when the standard Swing colour scheme makes you want to puke?)",
             prefs)
       { { run(); }
         public void run()
@@ -353,9 +355,10 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       
 
       // Eliminate input maps (pro-tem) to avoid spurious shortcut effects
-      setInputMap(JComponent.WHEN_FOCUSED, null);
-      setInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT, null);
-      setInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW, null);
+      InputMap m = new ComponentInputMap(this);
+      setInputMap(JComponent.WHEN_FOCUSED, m);
+      setInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT, m);
+      setInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW, m  );
       
       refresh();
     }
@@ -1950,6 +1953,10 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
+
+
+
 
 
 

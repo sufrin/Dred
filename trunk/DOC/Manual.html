@@ -331,8 +331,9 @@ the size of the ring is fixed at 8.
 <h3>Markers</h3>
 The characters with Unicodes <tt>fff0</tt> ... <tt>fffa</tt> (the
 "specials" range) are treated as markers and are shown (in red) as
-<strong style="color: red">❶, ❷, ... ❾, ❿</strong>. They are
-removed from the document as it is saved, but otherwise treated the same
+<strong style="color: red">❶, ❷, ... ❾, ❿</strong> (<i>i.e.</i> single
+glyphs that resemble <strong style="color: red">(1), (2), ... (9), (10)</strong>). 
+They are removed from the document as it is saved, but otherwise treated the same
 as ordinary characters. They can be used to mark places in the document
 to which you may wish to return. Don't forget to bind keystrokes to
 them (I use <tt>ctrl 1</tt> ... <tt>crtrl 0</tt>).
@@ -441,6 +442,25 @@ A file may be loaded using a specified encoding by using the
 <b>File/Edit&nbsp;(Browse)</b> menu entry and changing the encoding
 using the encoding selector provided in the file browser.
 
+<h4>Fonts</h4>
+Dred usually uses the platform standard font known to Java as <tt>MONOSPACED 14</tt>.
+But on some platforms this may lack glyphs for some of the Unicodes that you
+need to use. So it is possible to set up Dred to use a different font:
+
+<p>
+If the Java system property (or the environment variable)
+<tt>DREDTRUETYPE</tt> is set, then it is interpreted as the specification
+of a font to be derived from a truetype file. It should have  at least
+two, and up to four blank-separated fields. 
+<pre>
+        <i>truetypeurl pointsize</i> [r|i] [r|i]
+</pre>
+</p>
+<p>
+Otherwise, if the Java system property (or the environment variable)
+<tt>DREDFONT</tt> is set, then it is interpreted as the specification
+(in the standard Java font specification notation) of a standard Java font.
+</p>
 <!--
 <h2>Reference</h2>
 <p>The Dred document editing model is essentially that established in my
@@ -455,6 +475,7 @@ using the encoding selector provided in the file browser.
 <b>$Date$</b>
 </pre>
 </body>
+
 
 
 

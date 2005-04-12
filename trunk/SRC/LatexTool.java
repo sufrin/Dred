@@ -2,6 +2,8 @@ package org.sufrin.dred;
 import java.util.prefs.*;
 
 import javax.swing.BorderFactory;
+import javax.swing.ComponentInputMap;
+import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -38,9 +40,10 @@ public class LatexTool extends RunTool
       JMenuBar bar = new JMenuBar();
       // Eliminate input maps (pro-tem) to avoid spurious
       // effects
-      bar.setInputMap(JComponent.WHEN_FOCUSED, null);
-      bar.setInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT, null);
-      bar.setInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW, null);
+      InputMap m = new ComponentInputMap(bar);
+      bar.setInputMap(JComponent.WHEN_FOCUSED, m);
+      bar.setInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT, m);
+      bar.setInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW, m);
   
       JMenuItem trans = but(new Act("Translate", "Translate using tex2ps or pdflatex")
       {
@@ -109,6 +112,7 @@ public class LatexTool extends RunTool
   }
 
 }
+
 
 
 

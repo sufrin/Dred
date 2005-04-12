@@ -49,25 +49,35 @@ implements DocListener,
    */  
    public static boolean debug  = log.isLoggable("FINE");
 
-   /** Name of the default font: set from the environment variable 
-       "display_font" if that is set; otherwise "MONOSPACED 14".
+   /** Name of the default font: set from property DREDFONT
+       or environment variable DREDFONT, otherwise MONOSPACED 14.
    */
-   public static String  fontName   = System.getenv("display_font");
+   public static String  fontName = System.getProperty("DREDFONT"); 
    
-   /**  Set from the environment variable "display_ttf".
-        Non-null if the fontname is to be interpreted by the
-        FontMaker module rather than the standard font module.
-        FontMaker interprets as the name of a .ttf or type 1 font
-        followed by a point size.
+   /**  Set from the property DREDTRUETYPE or the environment
+        variable DREDTRUETYPE, otherwise empty.
+        
+        If it is nonempty, then it is  interpreted as the
+        specification of a font to be derived from a 
+        truetype file, and its four fields 
+        interpreted as:
+<pre>
+        <i>truetypeurl pointsize</i> [r|i] [r|i]
+</pre>
    */
-   public static String  ttfontName = System.getenv("display_ttf");
+   public static String  trueType = System.getProperty("DREDTRUETYPE");
 
-   static { if (fontName==null) { fontName = "MONOSPACED 14"; ttfontName = null; }}
+   static 
+   { if (fontName==null) fontName = System.getenv("DREDFONT");
+     if (fontName==null) fontName = "MONOSPACED 14"; 
+     if (trueType==null) trueType = System.getenv("DREDTRUETYPE");
+     if (trueType==null) trueType = "";
+   }
 
    /** The current font. */
    protected Font  font = 
-             ttfontName==null ? Font.decode(fontName)
-                              : FontMaker.decode(fontName);
+             trueType.equals("") ? Font.decode(fontName)
+                                 : FontMaker.decode(trueType);
 
    /** Metrics for the current font. */
    protected FontMetrics metrics = null;
@@ -602,6 +612,8 @@ implements DocListener,
    public void dragBy(int dx, int dy) {}
 
 }
+
+
 
 
 
