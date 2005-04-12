@@ -93,6 +93,7 @@ public class FileDocument extends SearchableDocument
     if (fileName.exists() && fileName.canRead())
     try
     { Reader r = (new InputStreamReader(new FileInputStream(fileName), encoding));
+      if (debug) log.fine("Reading from file: %s", fileName);
       readFrom(r);
     }
     catch (Exception ex)
@@ -101,13 +102,19 @@ public class FileDocument extends SearchableDocument
        throw new RuntimeException(ex.getMessage());
     }
     else
-    if (name.matches("[A-Za-z]+://.*"))
+    if (name.startsWith("http:")
+    ||  name.startsWith("jar:")
+    ||  name.startsWith("class:")
+    ||  name.startsWith("file:")
+    ||  name.startsWith("ftp:")
+       )
     try
     { URL url   = new URL(name);
       anonymous = true;
       fileTitle = url.toString();
       fileName  = new File(name);
       Reader r  = (new InputStreamReader(url.openStream(), encoding));
+      if (debug) log.fine("Reading from url: %s", url);
       readFrom(r);
     }
     catch (Exception ex)
@@ -297,6 +304,7 @@ public class FileDocument extends SearchableDocument
     for (Listener l:listeners) l.fileBacked(backup, fileTitle);
   }
 }
+
 
 
 

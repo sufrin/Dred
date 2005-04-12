@@ -1095,6 +1095,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     }
   }
   
+  /** Enter the current position in the position ring */
   @ActionMethod(label="Mark Position", tip="Add the current document position to the position ring")
   public void doMarkPosition()
   { 
@@ -1112,7 +1113,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   
   @ActionMethod(label="Next Position", tip="Step forwards round the position ring")
   public void doNextPosition()
-  { 
+  {  doMarkPosition();  // Yes, Virginia! This is a big move.
      Document.Position p = doc.rotPosition(false);
      if (p!=null)
      { doc.setCursorAndMark(p.x, p.y, p.x, p.y);
@@ -1120,23 +1121,23 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
   
   @ActionMethod(label="Find next", tip="Find the next instance of the pattern in the Find field")
-  public void doFindDown() { doMarkPosition(); doFind(false); doMarkPosition(); }
+  public void doFindDown() { doMarkPosition(); doFind(false); }
   
   @ActionMethod(label="Find previous", tip="Find the previous instance of the pattern in the Find field")
-  public void doFindUp() { doMarkPosition(); doFind(true); doMarkPosition(); }
+  public void doFindUp() { doMarkPosition(); doFind(true); }
   
   @ActionMethod(label="Replace (down)", tip="Replace the current instance of the find pattern with the replacement text")
-  public void doReplaceDown() { doReplace(false); doMarkPosition(); }
+  public void doReplaceDown() { doReplace(false); }
   
   @ActionMethod(label="Replace (up)", tip="Replace the current instance of the find pattern with the replacement text")
-  public void doReplaceUp() { doReplace(true); doMarkPosition(); }
+  public void doReplaceUp() { doReplace(true);  }
   
   
   @ActionMethod(label="Find next sel", tip="Set the find field to the selection, then find its next instance")
-  public void doFindSelDown() { doMarkPosition(); doFindSel(false); doMarkPosition(); }
+  public void doFindSelDown() { doMarkPosition(); doFindSel(false); }
   
   @ActionMethod(label="Find previous sel", tip="Set the find field to the selection, then find its previous instance")
-  public void doFindSelUp() { doMarkPosition(); doFindSel(true); doMarkPosition(); }
+  public void doFindSelUp() { doMarkPosition(); doFindSel(true); }
   
   /**
    * Find and select the next instance of the pattern
@@ -1446,7 +1447,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
    */
   @ActionMethod(label="Replace all", tip="Replace all instances of the Find pattern within the selection with the Repl text.")
   public void doReplaceAll()
-  {
+  { doMarkPosition();
     if (!doc.setPattern(text.find.getText()))
     {
       tempCaption(doc.regexError());
@@ -1949,6 +1950,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
 
 
 

@@ -16,15 +16,17 @@ import javax.swing.JCheckBoxMenuItem;
  * a java.util.prefs.Preferences object.
  */
 public abstract class CheckItem extends JCheckBoxMenuItem
-{
+{ /** Current state */
   protected boolean      state    = false;
+  /** Key used in prefs lookup: the menu name without spaces. */
   protected String       itemName = null;
+  /** Preferences passed in from the client if the item is to be persistent */
   protected Preferences  prefs    = null;
   
   public static Logging log = Logging.getLog("CheckItem");
   public static boolean debug = log.isLoggable("FINE");
 
-  /** Make a non-persistent checkitem initialised to the given state */
+  /** Make a non-persistent CheckItem initialised to the given state */
   public CheckItem(String s, boolean istate) { this(s, istate, null, null); }
   
   /** Make a checkitem with the given tooltip that is initialised
@@ -33,14 +35,15 @@ public abstract class CheckItem extends JCheckBoxMenuItem
   public CheckItem(String s, boolean istate, String tooltip) 
   { this(s, istate, tooltip, null); }
   
-  /** Make a checkitem with the given tooltip. If pref is non-null
-      then the state of the checkitem is persistent and is associated with
-      the boolean preference named s in pref.
+  /** Make a CheckItem with the given tooltip. If pref is non-null then the
+      CheckItem is persistent and is associated with a boolean preference
+      in pref with a name derived from s by removing spaces from it.
   */
+
   public CheckItem(String s, boolean istate, String tooltip, Preferences pref)
   {
     super();
-    this.itemName = s;
+    this.itemName = s.replace(" ", "");
     this.prefs=pref;
     this.setState(prefs==null?istate:prefs.getBoolean(itemName, istate));
     state = getState();
@@ -70,5 +73,7 @@ public abstract class CheckItem extends JCheckBoxMenuItem
    */
   public abstract void run();
 }
+
+
 
 

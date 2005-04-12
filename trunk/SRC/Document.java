@@ -1020,18 +1020,14 @@ public class Document
            if (p.x==botx && p.y==boty) removed.add(p);
        removePositions();
     }
-    
-    /** The last position in the ring. */
-    
-    protected Position lastPos = new Position(0, 0);
-    
+        
     /** Add the xcurrent position to the ring. */
     public void markPosition()
-    { int x=getX(), y=getY();
-      if (lastPos.x==x && lastPos.y==y) return;
-      lastPos = new Position(getX(), getY());      
+    { 
+      Position lastPos = new Position(getX(), getY());      
+      if (positions.contains(lastPos)) return;
       positions.addLast(lastPos);
-      for (int i=positions.size(); i>6; i--) positions.removeFirst();
+      for (int i=positions.size(); i>8; i--) positions.removeFirst();
     } 
          
     /** Rotate the ring and return one of the positions in it. */
@@ -1040,14 +1036,14 @@ public class Document
       else 
       if (back) 
       { positions.addFirst(positions.removeLast());
-        lastPos = positions.getLast();
         return positions.getFirst();
       }
       else
-      { positions.addLast(lastPos=positions.removeFirst());
-        return lastPos;
+      { positions.addLast(positions.removeFirst());
+        return positions.getLast();
       }
     }      
 }
+
 
 

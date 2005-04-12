@@ -220,7 +220,7 @@ Specifying Bindings
         </li>     
 </ul>
 
-<h4>Example Bindings</h4>
+<h4>Examples of Editor and Text Bindings</h4>
 The fallback bindings shown above are in the form they might appear
 in a Bindings file. Here are a few other examples:
 <pre><code>
@@ -233,6 +233,74 @@ in a Bindings file. Here are a few other examples:
    editor          action doFindDown            F9
    editor          action doFindUp              shift F9
 </code></pre>
+
+<h4>Other Bindings</h4>
+<h5>Include Bindings</h5>
+The binding forms
+<pre>
+        include  <i>url</i>
+        include? <i>url</i>
+</pre>
+call for the inclusion of the file denoted by the <i>url</i>. If there's
+no protocol part in the <i>url</i>, then the protocol is taken to be <tt>file:</tt>. 
+The <tt>include?</tt> form fails quietly if the <i>url</i> is not accessible.
+
+<h5>Style Sheet Bindings</h5>
+The <b>Tools/Styles</b> menu entry brings up a style book composed of sheets that
+are specified by bindings that start <tt>style</tt>. Substantive entries specify
+actions that apply "styles" to the current selection -- mostly by embedding it
+in "brackets'' of some kind.
+
+<p>
+Here is a (commented and slightly sanitised) extract from the style sheet bindings I used myself.
+</p>
+<code>
+<pre>
+style sheet XML                                             # start a new sheet, called XML
+style transform untag (?s)^&lt;[^>]+>(.*)&lt;/[^>]+>$ $1          # button "untag" extracts the body of an xml tag
+style -                                                     # add a separator to the style sheet
+style xml  block p                                          # button "p" embeds the selection in "p" tags -- block style
+style xml  line  i                                          # button "i" embeds the selection in "i" tags -- line style
+style line img   &lt;image\salt="[IMG]"\ssrc="%SEL%">          # button "img" makes an image tag (line style) from the selection
+style line link  &lt;a\shref="[XXXX]">%SEL%&lt;/a>                # button "link" embed the selection in anchor tags
+style form block ? &lt;%ARG%>%SEL%&lt;/%ARG%>                     # add a style form named "?" to the sheet. Pressing ? generates a block-style tag 
+style sheet Latex
+style form  block \\begin \begin{%ARG%}%SEL%\end{%ARG%}     # add a block style form named "\begin"
+style latex macro textbf                                    # button "textbf" embeds the selection in \textbf{...}
+style latex env   verbatim                                  # button "verbatim" embeds the selection in \begin{verbatim}...\end{verbatim} -- block style
+style form  array \begin{array}{%ARG%}%SEL%\end{array}      # add a line style form named "array"
+style block foil  \documentclass{foil}\n\\usepackage{RCS}\n\RCS\s$I\u0064: $\n\\title{}\n\author{}\n\date{}\n%\n\begin{document}\n\maketitle%SEL%\end{document}
+</pre>
+</code>
+
+"Line style" means that the selection is embedded without further ado.
+"Block style" means that a heuristic is used to try to make the resulting
+material look pretty by inserting newlines and indenting in appropriate
+places. Experiment to see if you like it.
+
+A form has both a button and a minitext on it. You "fill in" the minitext
+with an argument, and then press the button. The transformed material
+can mention the content of the minitext (%ARG%) and the selection (%SEL%).
+
+<h5>Extension Bindings</h5>
+The binding
+<pre>
+        extension path <i>url</i>
+</pre>
+adds the given <i>url</i> to the search path for extensions, and the binding
+<pre>
+        extension load <i>classname</i>
+</pre>
+searches the extension search path for the given class, and loads it. 
+<p>
+Examples are:
+<pre>
+        extension path jar:file://home/sufrin/.dred/extensions.jar   # adds the given jar file to the path
+        extension path file://home/sufrin/.dred/extensions.jar       # ditto
+        extension path /home/sufrin/.dred/extensions.jar             # ditto
+        extension path /home/sufrin/.dred/extensions/                # adds the given folder to the path
+</pre>
+</p>
 
 <A name="bindings"></A>
 <h4>Further documentation of Bindings</h4>
@@ -283,6 +351,7 @@ pre-empt some keystroke combinations for their own purposes.
 
 </body>
 </html>
+
 
 
 

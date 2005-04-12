@@ -321,16 +321,21 @@ Cut Ring Editor  doesn't itself send material to the cut ring!)
 </p>
 
 <h3>The Position Ring</h3>
-Whenever a "big" movement action is executed , the position at which it was 
-executed is appended to the <i>cut ring</i>. The <i>Prev Position</i> action moves the 
-cursor to the last position in the ring and rotates the ring by one step.
-The <i>Next Position</i> action is its inverse.
+As an <i>aide-memoire</i>, whenever a "big" movement action is executed
+the position at which it was executed is appended to the <i>cut ring</i>
+if it isn't already in the ring. The <i>Prev Position</i> action moves
+the cursor to the last position in the ring and rotates the ring by one
+step: the <i>Next Position</i> action is its inverse.  For the moment
+the size of the ring is fixed at 8.
 
 <h3>Markers</h3>
-The special "marker" characters with Unicodes <tt>fff0</tt> ... <tt>fffa</tt> 
-are shown (in red) as ❶, ❷, ... ❿. They are removed from the document
-as it is saved, but otherwise treated the same as ordinary characters. They
-can be used to mark places in the document to which you may wish to return.
+The characters with Unicodes <tt>fff0</tt> ... <tt>fffa</tt> (the
+"specials" range) are treated as markers and are shown (in red) as
+<strong style="color: red">❶, ❷, ... ❾, ❿</strong>. They are
+removed from the document as it is saved, but otherwise treated the same
+as ordinary characters. They can be used to mark places in the document
+to which you may wish to return. Don't forget to bind keystrokes to
+them (I use <tt>ctrl 1</tt> ... <tt>crtrl 0</tt>).
 
 <h3>"Small" Changes</h3>
 <p>
@@ -450,6 +455,7 @@ using the encoding selector provided in the file browser.
 <b>$Date$</b>
 </pre>
 </body>
+
 
 
 

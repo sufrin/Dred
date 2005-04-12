@@ -227,6 +227,11 @@ class SimpleEditor implements InteractionListener
   protected void buildActionMap()
   { actions.register(this); }
   
+  public void doMarkPosition()
+  { 
+     doc.markPosition();
+  }
+  
   @ActionMethod(label="DeleteLineLeft", tip="Delete the line to the left of the cursor")
   public void doDeleteLineLeft()
   { doc.setMark(0, doc.getY()); doCut(); }
@@ -253,23 +258,23 @@ class SimpleEditor implements InteractionListener
   
   @ActionMethod(label="Up", tip="Move cursor up (in the same column if possible)")
   public void doUpMove()
-  { doc.setCursor(doc.getX(), doc.getY()-1); deliberateSelection(); }
+  { doMarkPosition(); doc.setCursor(doc.getX(), doc.getY()-1); deliberateSelection(); }
   
   @ActionMethod(label="Down", tip="Move cursor down (in the same column if possible)")
   public void doDownMove()
-  { doc.setCursor(doc.getX(), doc.getY()+1); deliberateSelection(); }
+  { doMarkPosition(); doc.setCursor(doc.getX(), doc.getY()+1); deliberateSelection(); }
   
   @ActionMethod(label="Home", tip="Move cursor to the start of the document")
   public void doHomeMove()
-  { doc.setCursor(0, 0); }
+  { doMarkPosition(); doc.setCursor(0, 0); }
   
   @ActionMethod(label="End", tip="Move cursor to the start of the last line of the document")
   public void doEndMove()
-  { doc.setCursor(0, doc.length()); }
+  { doMarkPosition(); doc.setCursor(0, doc.length()); }
   
   @ActionMethod(label="Swap", tip="Swap the cursor and the mark")
   public void doSwapCursorAndMark()
-  { doc.swapSelectionEnds(); }
+  { doMarkPosition(); doc.swapSelectionEnds(); }
   
   @ActionMethod(label="Delete", tip="Delete the character to the left of the cursor")
   public void doLeftDelete()
@@ -426,6 +431,7 @@ class SimpleEditor implements InteractionListener
     int b = e.getButton();
     // int m = e.getModifiersEx();
     Point p = display.documentCoords(e);
+    doc.markPosition();
     switch (b)
     {
       case 1:
@@ -460,7 +466,6 @@ class SimpleEditor implements InteractionListener
       default:
       break;
     }
-    doc.markPosition();
   }
    
    int lastX, lastY;
@@ -500,7 +505,7 @@ class SimpleEditor implements InteractionListener
    
   public void mouseEntered(MouseEvent e)   { if (debug) log.finer("Entered"); requestFocus();  }
   public void mouseExited(MouseEvent e)    { if (debug) log.finer("Exited"); }
-  public void mouseReleased(MouseEvent e)  { doc.markPosition(); }
+  public void mouseReleased(MouseEvent e)  { }
   public void keyTyped(KeyEvent e)         { }
   public void mouseMoved(MouseEvent e)     { }
   public void mouseClicked(MouseEvent e)   { }
@@ -519,9 +524,9 @@ class SimpleEditor implements InteractionListener
 
   @ActionMethod(label="Cut", tip="Set the system clipboard from the document selection, and remove the document selection")
   public void doCut()
-  {
+  { 
     if (doc.hasNonemptySelection())
-    {
+    { doMarkPosition();
       if (debug)
         log.fine("cut");
       reversed = doc.getSelectedRegion().reversed;
@@ -531,7 +536,7 @@ class SimpleEditor implements InteractionListener
    
   @ActionMethod(label="Paste", tip="Insert the system clipboard into the document at the cursor, and select it")
   public void doPaste()
-  {
+  { doMarkPosition();
     String curSel = SystemClipboard.get();
     lastSel = curSel;
     typeOver();
@@ -555,7 +560,7 @@ class SimpleEditor implements InteractionListener
   
   @ActionMethod(label="Swap Clipboard", tip="Swap the system clipboard with the document selection")
   public void doSwapSel()
-  {
+  { doMarkPosition();
     String clip = SystemClipboard.get();
     if (clip == null)
       clip = "";
@@ -649,6 +654,7 @@ class SimpleEditor implements InteractionListener
     frame.setVisible(true);
   }
 }
+
 
 
 
