@@ -344,6 +344,15 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
         }
       });
       
+      menu = addMenu("View");
+      menu.add(new CheckItem("Pseudo Fixed Width", ed.isPseudoFixed(), "Set the display into fixed width mode -- even for a proportional font")
+      {
+        public void run()
+        {
+          ed.setPseudoFixed(state);
+        }
+      });
+      
       menu = addMenu("Help");
       bind("doHelp");
       if (Dred.sessionSocket != null) bind("doMozilla");
@@ -1953,6 +1962,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
 
 
 

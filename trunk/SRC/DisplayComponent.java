@@ -41,6 +41,13 @@ public interface DisplayComponent
   /** Set the number of lines of the display */
   public void setLines(int n);
 
+  /** Switches mode between varispaced and monospaced */
+  public void setPseudoFixed(boolean on);
+  
+  /** Is the display pseudofixed or natural width? */
+  public boolean isPseudoFixed();
 }
+
+
 
 

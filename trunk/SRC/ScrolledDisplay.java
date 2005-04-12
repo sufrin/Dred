@@ -41,7 +41,16 @@ public class ScrolledDisplay extends JPanel implements DisplayComponent
       log named Display has level FINE or above.
   */
   public static boolean debug  = log.isLoggable("FINE");
+  
+  /** Set the pseudofixed mode of the display */
+  public void setPseudoFixed(boolean on)
+  { display.setPseudoFixed(on);
+  }
 
+   /** Ask the pseudofixed mode of thedisplay */
+   public boolean isPseudoFixed()
+   { return display.isPseudoFixed();
+   }
 
   /** Construct a ScrolledDisplay of given dimensions; add a 
       Y-axis scrollbar if showBar is true.
@@ -100,6 +109,8 @@ public class ScrolledDisplay extends JPanel implements DisplayComponent
   
   public void dragBy(int dx, int dy) { display.dragBy(dx, dy); }
 }
+
+
 
 
 

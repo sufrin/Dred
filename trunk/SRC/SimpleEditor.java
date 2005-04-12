@@ -126,6 +126,16 @@ class SimpleEditor implements InteractionListener
      display.makeActive(); 
    }
    
+   /** Set the pseudofixed mode of this editor's display */
+   public void setPseudoFixed(boolean on)
+   { display.setPseudoFixed(on);
+   }
+   
+   /** Ask the pseudofixed mode of this editor's display */
+   public boolean isPseudoFixed()
+   { return display.isPseudoFixed();
+   }
+   
    /** Get the display component (on which the document is being shown) */
    public JComponent getComponent()  
    { return display.getComponent(); }
@@ -654,6 +664,7 @@ class SimpleEditor implements InteractionListener
     frame.setVisible(true);
   }
 }
+
 
 
 

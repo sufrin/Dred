@@ -449,18 +449,33 @@ need to use. So it is possible to set up Dred to use a different font:
 
 <p>
 If the Java system property (or the environment variable)
-<tt>DREDTRUETYPE</tt> is set, then it is interpreted as the specification
-of a font to be derived from a truetype file. It should have  at least
-two, and up to four blank-separated fields. 
-<pre>
-        <i>truetypeurl pointsize</i> [r|i] [r|i]
-</pre>
-</p>
-<p>
-Otherwise, if the Java system property (or the environment variable)
 <tt>DREDFONT</tt> is set, then it is interpreted as the specification
-(in the standard Java font specification notation) of a standard Java font.
+(in the standard Java font specification notation) of a standard Java font, unless
+it takes one of the forms
+<pre>
+        truetype:<i>url</i> <i>options</i>
+        type1:<i>url</i> <i>options</i>
+</pre>
+In that case, the <i>url</i> (default protocol <tt>file:</tt>) is assumed to denote a (truetype or type1) 
+font description file. The <i>options</i> may include up to one of each of the following:
+<pre>
+        b               # bold
+        i               # italic
+</pre>
+and up to one of the the following
+<pre>
+        m               # <i>the font is deemed to be monospaced (char width is M-width)</i>
+        f               # <i>the font is deemed to be monospaced (char width is M-width)</i>
+        uXXXX           # <i>the font is deemed to be monospaced (char width us unicode XXXX-width)</i>
+</pre>
+These components are separated by "-".
 </p>
+Examples:
+<pre>
+        truetype:arialuni.ttf-14-b                      # <i>bold italic arial unicode</i>
+        truetype:arialuni.ttf-16.3-b-i-m                # <i>bold italic M-spaced arial unicode</i>
+        truetype:file:arialuni.ttf-16.3-b-i-u2167       # <i>bold italic Ⅷ-spaced arial unicode</i>
+</pre>
 <!--
 <h2>Reference</h2>
 <p>The Dred document editing model is essentially that established in my
@@ -475,6 +490,7 @@ Otherwise, if the Java system property (or the environment variable)
 <b>$Date$</b>
 </pre>
 </body>
+
 
 
 

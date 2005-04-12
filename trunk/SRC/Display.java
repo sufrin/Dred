@@ -52,38 +52,30 @@ implements DocListener,
    /** Name of the default font: set from property DREDFONT
        or environment variable DREDFONT, otherwise MONOSPACED 14.
    */
-   public static String  fontName = System.getProperty("DREDFONT"); 
+   public static String  defaultFontName = System.getProperty("DREDFONT"); 
    
-   /**  Set from the property DREDTRUETYPE or the environment
-        variable DREDTRUETYPE, otherwise empty.
-        
-        If it is nonempty, then it is  interpreted as the
-        specification of a font to be derived from a 
-        truetype file, and its four fields 
-        interpreted as:
-<pre>
-        <i>truetypeurl pointsize</i> [r|i] [r|i]
-</pre>
-   */
-   public static String  trueType = System.getProperty("DREDTRUETYPE");
-
    static 
-   { if (fontName==null) fontName = System.getenv("DREDFONT");
-     if (fontName==null) fontName = "MONOSPACED 14"; 
-     if (trueType==null) trueType = System.getenv("DREDTRUETYPE");
-     if (trueType==null) trueType = "";
+   { if (defaultFontName==null) defaultFontName = System.getenv("DREDFONT");
+     if (defaultFontName==null) defaultFontName = "MONOSPACED 14"; 
    }
 
    /** The current font. */
-   protected Font  font = 
-             trueType.equals("") ? Font.decode(fontName)
-                                 : FontMaker.decode(trueType);
+   protected Font  font = null;
+   
+   /** The current font's name. */
+   protected String  fontName = null;
+
+   /** The current font's url (may start with type1: or truetype:)*/
+   protected String  fontURL = null;
 
    /** Metrics for the current font. */
    protected FontMetrics metrics = null;
 
    /** Characteristic measurements (in pixels) derived from the current font. */
-   protected int   fontAscent, fontHeight, fontDescent, fontEmWidth;
+   protected int   fontAscent, fontHeight, fontDescent, fontEmWidth, fontHalfEm;
+   
+   /** The font's model character if it's fixed-width */
+   protected char fixedChar = 0;
 
    /** Width (in pixels) for text on the display. */
    protected int textWidth;
@@ -127,6 +119,35 @@ implements DocListener,
    { super.setBounds(x, y, w, h);
      setSize(w, h);
    }
+   
+   public void setFont(String fontURL)
+   { Font font = null;
+     this.fontURL = fontURL;
+     if (fontURL.startsWith("truetype:")) 
+     { fontName  = fontURL.substring(9);
+       font      = FontMaker.decode(fontName, true);
+       fixedChar = FontMaker.fixedChar(fontName, true);
+     }
+     else
+     if (fontURL.endsWith(".ttf") || fontURL.endsWith(".ttf")) 
+     { fontName  = fontURL;
+       font      = FontMaker.decode(fontName, true);
+       fixedChar = FontMaker.fixedChar(fontName, true);
+     }
+     else
+     if (fontURL.startsWith("type1:")) 
+     { fontName  = fontURL.substring(6);
+       font      = FontMaker.decode(fontName, false);
+       fixedChar = FontMaker.fixedChar(fontName, false);
+     }
+     else
+     {  fontName = fontURL;
+        font = Font.decode(fontName);
+     }
+     this.fontName = fontName;
+     pseudofixed = fixedChar != 0;
+     setFont(font);    
+   }
 
    /** Set the font; resizing the display as necessary to accomodate
        the current width and height measured in characters.
@@ -137,10 +158,57 @@ implements DocListener,
      fontAscent  = metrics.getAscent();
      fontHeight  = metrics.getHeight();
      fontDescent = metrics.getDescent();
-     fontEmWidth = metrics.charWidth('m');
+     fontEmWidth = pseudofixed ? metrics.charWidth(fixedChar) : metrics.charWidth('M');
+     fontHalfEm  = pseudofixed ? fontEmWidth / 2 : 0;
      setSize(xmargin+2*xborder+fontEmWidth*cols, 2*yborder+fontHeight*rows);
    }
    
+   /** True if simulating a monospaced font */
+   protected boolean pseudofixed = false;
+   
+   /** Switches mode between pseudofixed and natural widths */
+   public void setPseudoFixed(boolean on)
+   { pseudofixed = on;
+     if (pseudofixed && fixedChar==0) fixedChar = 'M';
+     setFont(this.font);
+     repaint();
+   }
+   
+   /** Are we pseudofixed or natural width? */
+   public boolean isPseudoFixed() { return pseudofixed; }
+   
+   /** Local calculation of character width: implements pseudofixed */
+   protected int charWidth(char c)
+   { 
+     return pseudofixed ? fontEmWidth : metrics.charWidth(c);
+   }
+   
+   /** Translate character coordinates to a pixel offset from the left margin. */
+   protected int charToPixelX(int ox, int x, int y)
+   { CharSequence line = doc.lineAt(y);
+     int pixel = 0;
+     for (int i=x-1; i>=ox; i--) pixel+=charWidth(doc.transChar(line.charAt(i)));
+     return pixel;
+   }
+
+   /** Translate pixel offset from the left margin to a character index */
+   protected int pixelToX(int x, int y)
+   { if (y>=doc.length()) return 0;
+     if (pseudofixed) return originx + ((x+fontHalfEm)/fontEmWidth);
+     CharSequence line   = doc.lineAt(y);
+     int          length = line.length();
+     int          lx     = 0;
+     int          px     = 0;
+     int          i      = originx;
+     while (i<length)
+     { px += charWidth(doc.transChar(line.charAt(i)));
+       if (x<px) { return (px-x)<=(x-lx) ? i+1 : i; }
+       i++;
+       lx=px;
+     }
+     return length;
+   }
+
    /**
       Set the current document associated with the display.
    */
@@ -193,7 +261,7 @@ implements DocListener,
      originy=0;
      this.cols=cols;
      this.rows=rows;
-     setFont(font);
+     setFont(defaultFontName);
      preferred = dim;
      
      addComponentListener
@@ -222,14 +290,6 @@ implements DocListener,
      g.setColor(focussed ? Color.RED : Color.GRAY);
      g.fillRect(xmargin+xborder+mp-1, yborder+cy*fontHeight, 2, fontHeight);
      g.setColor(getForeground());
-   }
-
-   /** Translate character coordinates to a pixel offset from the left margin. */
-   protected int charToPixelX(int ox, int x, int y)
-   { CharSequence line = doc.lineAt(y);
-     int pixel = 0;
-     for (int i=x-1; i>=ox; i--) pixel+=metrics.charWidth(doc.transChar(line.charAt(i)));
-     return pixel;
    }
 
    /** Request a repaint of the region of the display that gives
@@ -278,7 +338,7 @@ implements DocListener,
          int baseLine = y+fontAscent;
          drawn+=1;
 
-         // Marginal information
+         // Marginal fixedCharrmation
          g.setColor(originx>0 ? panColour : plainColour);
          g.fill3DRect(xmargin, y, xborder/2, fontHeight+1, true);
          g.setColor(getForeground());
@@ -311,7 +371,7 @@ implements DocListener,
          // Draw the line: character-by-character 
          int length = line.length();
          char [] ch = new char[1];
-         for (int c=originx, x=xmargin+xborder; c<length; c++, x+=metrics.charWidth(ch[0]))
+         for (int c=originx, x=xmargin+xborder; c<length; c++, x+=charWidth(ch[0]))
          {  ch[0]=line.charAt(c);
             if (ch[0]=='\t')
             {
@@ -322,7 +382,6 @@ implements DocListener,
             {  g.setColor(Color.RED);
                ch[0]=doc.transChar(ch[0]);
                g.drawString(new String(ch), x, baseLine);
-               // g.drawRect(x, baseLine-4, 6, 6); x+=6;
                g.setColor(getForeground());
             }
             else
@@ -495,23 +554,6 @@ implements DocListener,
       if (debug) log.finer(("repaintcursorlines ")+(isActive() ? "focussed" : "unfocussed"));
    }
 
-   /** Translate pixel offset from the left margin to a character index */
-   protected int pixelToX(int x, int y)
-   { if (y>=doc.length()) return 0;
-     CharSequence line   = doc.lineAt(y);
-     int          length = line.length();
-     int          lx     = 0;
-     int          px     = 0;
-     int          i      = originx;
-     while (i<length)
-     { px += metrics.charWidth(doc.transChar(line.charAt(i)));
-       if (x<px) { return (px-x)<=(x-lx) ? i+1 : i; }
-       i++;
-       lx=px;
-     }
-     return length;
-   }
-
    /** Translate screen coordinates of a mouse event to document coordinates. */
    public final Point documentCoords(MouseEvent e) 
    { return documentCoords(e.getX(), e.getY()); }
@@ -612,6 +654,7 @@ implements DocListener,
    public void dragBy(int dx, int dy) {}
 
 }
+
 
 
 
