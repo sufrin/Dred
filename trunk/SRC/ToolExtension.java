@@ -27,12 +27,15 @@ public abstract class ToolExtension extends Extension
         public void run()
         {
           if (state)
+          { GUI.updateComponent(theTool);
             session.addToToolBar(theTool);
+          }
           else 
             session.removeFromToolBar(theTool);
         }
    }
 }
+
 
 
 

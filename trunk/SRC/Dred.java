@@ -290,7 +290,6 @@ public class Dred
   */
   public static int startServer(int port)
   { boolean pseudoServer = false;
-    EditorFrame.setLookAndFeel((prefs.getBoolean("Flat L&F", false))? "flat" : "standard");
     String user = System.getProperty("user.name");
     try
     { if (port>0 || (File.separator.equals("/") && port>=0))
@@ -449,6 +448,8 @@ public class Dred
 
 
 }
+
+
 
 
 

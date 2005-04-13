@@ -47,17 +47,11 @@ import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
-import javax.swing.LookAndFeel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
-import javax.swing.UIManager;
-import javax.swing.UIDefaults;
 
 import org.sufrin.logging.Logging;
-
-import javax.swing.plaf.*;
-import javax.swing.plaf.metal.*;
 
 
 /**
@@ -119,7 +113,20 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       try { ((ActionMethod.Action) act).setMenu(menuName); } catch (Exception ex) {}  
        menu.add(act); 
     }
-  
+    
+    protected CheckItem lookAndFeel =       
+    (new CheckItem
+           ("Flat L&F",
+            false,
+            "Use a flat-looking Look and Feel (for when the standard Swing colour scheme makes you want to puke?)",
+            prefs)
+      { { run(); }
+        public void run()
+        {
+          GUI.setLookAndFeel(state ? "flat" : "standard");
+        }
+      });
+
     public MenuBar() {}
     
     /** Construct and populate the standard menus */
@@ -192,18 +199,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
         }
       });
       if (true) // PRO TEM
-      menu.add
-      (new CheckItem
-           ("Flat L&F",
-            false,
-            "Use a flat-looking Look and Feel (for when the standard Swing colour scheme makes you want to puke?)",
-            prefs)
-      { { run(); }
-        public void run()
-        {
-          setLookAndFeel(state ? "flat" : "standard");
-        }
-      });
+      menu.add(lookAndFeel);
       menu.addSeparator();
       bind("doSavePrefs", "File/Prefs");
       bind("doLogger",    "File/Prefs");
@@ -1800,40 +1796,6 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   
   // ////////////////////////////////////////////////////////////////////////////////////////////
 
-  
-  static MetalTheme theme = new MetalTheme();
-      
-  public static void setLookAndFeel(final String lNf)
-  { theme.install(lNf.equals("flat")); 
-    setLookAndFeel(new MetalLookAndFeel());
-  }
-  
-  public static void setLookAndFeel(final LookAndFeel lNf)
-  {  SwingUtilities.invokeLater
-     (new Runnable()
-      { public void run()
-        {
-          try   
-          { 
-            UIManager.setLookAndFeel(lNf);
-            for (Component f: Frame.getFrames())
-                SwingUtilities.updateComponentTreeUI(f);
-          }
-          catch (Exception ex) 
-          { Dred.showWarning(ex.toString());  
-          } 
-        }      
-      }); 
-  }
-  
-  public static LookAndFeel standardLnF()
-  { String s = UIManager.getCrossPlatformLookAndFeelClassName();
-    try
-    { return (LookAndFeel) Class.forName(s).newInstance();
-    }
-    catch (Exception ex)
-    { return UIManager.getLookAndFeel(); }
-  }
     
   // ////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1962,6 +1924,9 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
+
+
 
 
 

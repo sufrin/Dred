@@ -2,11 +2,17 @@ package org.sufrin.dred;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.border.BevelBorder;
 
+/**
+        Precursor of the TextLine-based ToolExtensions that run specific programs.
+*/
 public abstract class RunTool extends ToolExtension
 { public RunTool(String name) { super(name); }
 
+  public abstract JComponent makeTool(EditorFrame session);
+  
   public static class Tool extends TextLine
   {
     public Tool(String label, final String cmd, final boolean noSelection, 
@@ -40,6 +46,7 @@ public abstract class RunTool extends ToolExtension
     }
   }
 }
+
 
 
 
