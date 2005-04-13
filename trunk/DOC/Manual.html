@@ -14,15 +14,27 @@
         <h1>Dred </h1>
 </center>
 
-
+<h2>Contents</h2>
+<ul>
+<li><a href="#Unix/Linux Usage">Unix/Linux Usage</a></li>
+<li><a href="#Windows (XP) Usage">Windows (XP) Usage</a></li>
+<li><a href="#The Dred Editing Session Window">The Dred Editing Session Window</a></li>
+<li><a href="#Editing Model">Editing Model</a></li>
+<li><a href="#Editing Actions">Editing Actions</a></li>
+<li><a href="#Mouse Actions">Mouse Actions</a></li>
+<li><a href="#Opening and Saving files">Opening and Saving files</a></li>
+<li><a href="#References">References</a></li>
+<li><a href="#Brief History">Brief History</a></li>
+<li><A href="index.html">Back to Dred Help Index</A></li>
+</ul>
 
 
 <p> Dred is a <i>lightweight</i>, customizeable, and extensible Unicode text
-editor. It comes, complete with documentation, in a single jar, and needs
+editor. It comes, complete with documentation, in a single (256K) jar, and needs
 a 1.5 JRE to run.
 </p>
 
-<h2>Unix/Linux Usage</h2>
+<a name="Unix/Linux Usage"><h2>Unix/Linux Usage</h2></a>
 <pre>
         java -jar Dred.jar [--enc=<i>encoding</i>] [--bindings=<i>bindings-url</i>] --wait [filenames] 
 </pre> 
@@ -66,10 +78,8 @@ the files are assumed to use the specified encoding; otherwise UTF8 is assumed.
 </p>
 
 <br></br>
-<b><A href="index.html">Back to Dred Help Index</A></b>                
-<br></br>
 
-<h2>Windows (XP) Usage</h2>
+<a name="Windows (XP) Usage"><h2>Windows (XP) Usage</h2></a>
 
 Put the Dred.jar somewhere sensible, and make a shortcut to it whose target and
 start-in fields looks something like this:
@@ -96,7 +106,7 @@ for details of how Dred can be set up to use a single
 server. It's slightly trickier under Windows XP2, which tries
 hard to prevent "Trojan" ports being opened. 
 
-<h2>The Dred Editing Session Window</h2>
+<a name="The Dred Editing Session Window"><h2>The Dred Editing Session Window</h2></a>
 <p> In each editing session window you will see the main text editing
 component at the bottom, with three &quot;minitext&quot;-editing
 components in a row above it. The minitexts are labelled
@@ -123,7 +133,7 @@ doesn't have the keyboard focus.  Focus usually moves into a text window
 as the mouse-cursor moves into it, but occasionally it's necessary to force
 the issue by clicking in the desired window.  </p>
 
-<h2>Editing Model</h2>
+<a name="Editing Model"><h2>Editing Model</h2></a>
 
 <p> At any stage, the document in a window (minitext or main) may have
 a <i>selection</i> (which is a contiguous region of the document).
@@ -155,7 +165,7 @@ buffer is also available in the clipboard. Material placed in
 the system clipboard by another application is accessible through the
 cut buffer.  </p>
 
-<h2>Editing Actions</h2>
+<a name="Editing Actions"><h2>Editing Actions</h2></a>
 <p> The editing actions described below are a small selection of the
 actions provided by the editor. Brief documentation for <i>all</i> the actions,
 and indications of their current binding(s) to keys and/or Menu buttons
@@ -373,8 +383,78 @@ The  <i>Swap2</i> action swaps the two characters immediately to the left
 of the cursor without affecting the cut buffer. It undoes itself.
 </p>
 
+<a name="Mouse Actions"><h2>Mouse Actions</h2></a>
 
-<h2>Opening and saving files</h2>
+<center>
+<table border="2" >
+
+
+<tr>
+        <td>Pressing</td>    
+        <td>Button 1</td>             
+        <td>Positions the text cursor and the mark. 
+            Automatic bracket-matching is triggered.</td>
+</tr>
+ <tr>
+          <td>Pressing</td>    
+          <td>ctrl Button 1</td>
+          <td>Positions the text cursor but not the mark.</td>      
+ </tr>
+<tr>
+        <td>Pressing</td>    
+        <td>Button 3</td>             
+        <td>Positions the mark but not the text cursor.</td>
+</tr>
+<tr>
+        <td>Pressing</td>    
+        <td>ctrl Button 3</td>        
+        <td>Removes the mark and deselects the selection.</td>
+</tr>
+<tr>
+        <td>Dragging</td>    
+        <td>Button 1</td>  
+        <td>Positions the text cursor, leaving the mark where the cursor started.</td>
+      
+</tr>
+<tr>
+        <td>Dragging</td>    
+        <td>Button 3</td>           
+        <td>Positions the mark, leaving the cursor where it is.</td>   
+</tr>
+
+<tr>
+        <td>Double-Clicking</td>    
+        <td>Button 1</td>             
+        <td>Selects the "word" under the click. The cursor
+            moves to the end of the word nearest the click.
+        </td>
+
+</tr>
+<tr>
+        <td>Triple-Clicking</td>    
+        <td>Button 1</td>             
+        <td>Selects the line under the click. The cursor
+            moves to the end of the line nearest the click.
+        </td>
+</tr>
+<tr>    <td>Rotating</td>    
+        <td>Mouse Wheel</td>             
+        <td>Scrolls the view of the document vertically without moving
+            the document cursor.
+        </td>
+</tr>
+<tr>
+        <td>Dragging</td>    
+        <td>Button 2</td>             
+        <td>Scrolls the view of the document verticallywithout moving
+            the document cursor.
+        </td>
+</tr>
+</table>
+</center>
+
+
+<a name="Opening and Saving files"><h2>Opening and Saving files</h2></a>
 
 <h3>Saving</h3>
 When you have finished editing a file, you can save it using the <b>File/Save</b>,
@@ -514,37 +594,43 @@ the monospace pitch. This can be helpful if you want to work on material
 containing glyphs that cannot be found in a monospaced font.
 </p>
 
-<h2>Reference</h2>
+<a name="References"><h2>References</h2></a>
 <p>
-A good reference for matters Unicode and Linux is: Markus Kuhn's
+A good starting point for matters Unicode is Markus Kuhn's
 <a href="http://www.cl.cam.ac.uk/~mgk25/unicode.html"> UTF-8 and Unicode FAQ for Unix/Linux</a>
 </p>
+<p>
+A Truetype font that implements a very large proprtion of the Unicode
+set is Microsoft's Arial Unicode. Microsoft no longer distribute
+this font, but Googling <tt>arialuni.ttf</tt> is sure to help you
+find it. Although it may cost you nothing, this
+font is not free.... It also occupies about 24mb.
+</p>
 
-<h2>Brief History</h2>
+<a name="Brief History"><h2>Brief History</h2></a>
 
 Dred was written in Java 1.5 during between early February and mid-April 2005 because:
 <ol>
     <li>
-    I needed a run-anywhere lightweight, reliable, and modifiable editor
+    I needed a run-anywhere lightweight and reliable editor
     capable of working with files in any reasonable encoding. 
     </li>    
     <li>
-    When the combination of Python and Tk had become a little too unwieldy 
-    for me I had given up trying to maintain the editor that I'd
-    originally written to support editing theories that used the (highly
-    nonstandard) encodings Konstanz and Laura that Richard Bornat and
-    I had used in early Jape. But I didn't want Richard's references to
-    "Bernard's heroic programming efforts" to be the end of the story.
+    When the combination of Python and Tk had become a little too unwieldy
+    for me I had given up trying to maintain the Unicode-capable editor
+    that I'd been using for a decade. I had originally written it to
+    support editing Jape theories in the (highly nonstandard) 8-bit
+    encodings Konstanz and Laura that we developed before the advent
+    of Unicode.
     </li>    
     <li>
-    I wanted to experiment with a design that (optionally) treats the selection 
-    differently than the irritating, but now-standard <i>"typing kills selection
-    but you can rescue yourself with undo"</i>
-    model.
+    I wanted to experiment with a design that can use the selection 
+    more creatively than the now ubiquitous <i>"typing deletes the selection but you can 
+    rescue yourself with undo"</i>. 
     </li>
     <li>
-    I wanted to show my students a simple, but useful, example
-    of model-view-controller. 
+    I wanted to show my students a simple but useful example
+    of the model-view-controller pattern.  
     </li>
     <li>
     I wanted to see if I could simplify the construction and
@@ -553,7 +639,7 @@ Dred was written in Java 1.5 during between early February and mid-April 2005 be
 </ol>
 I've been using it (mostly with Redhat 9, SuSe 9.2, and Solaris) for
 all my editing since mid-February, and it hasn't crashed on me more than
-twice or lost me any significant amount of work.
+twice nor lost me any significant amount of work.
 <p>
 It runs on the
 Sun 1.5 JVM on all variants of Linux, Windows, and Solaris on which that
@@ -571,6 +657,8 @@ deal of my time.</i>)
 <b>$Date$</b>
 </pre>
 </body>
+
+
 
 
 

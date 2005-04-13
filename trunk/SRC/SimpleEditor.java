@@ -474,8 +474,14 @@ class SimpleEditor implements InteractionListener, Patient
         }
       break;
       case 3:
-        doc.setMark(p.x, p.y);
-        deliberateSelection();
+        if (e.isControlDown())
+        { 
+          doc.clearSelection();
+        }
+        else
+        { doc.setMark(p.x, p.y);
+          deliberateSelection();
+        }
       break;
       case 2:
         lastX = e.getX();
@@ -671,6 +677,7 @@ class SimpleEditor implements InteractionListener, Patient
     frame.setVisible(true);
   }
 }
+
 
 
 

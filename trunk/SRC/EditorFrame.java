@@ -1183,10 +1183,10 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   @ActionMethod(offline=true, label="Find previous", tip="Find the previous instance of the pattern in the Find field")
   public void doFindUp() { doMarkPosition(); doFind(true); }
   
-  @ActionMethod(label="Replace (down)", tip="Replace the current instance of the find pattern with the replacement text")
+  @ActionMethod(offline=true, label="Replace (down)", tip="Replace the current instance of the find pattern with the replacement text")
   public void doReplaceDown() { doReplace(false); }
   
-  @ActionMethod(label="Replace (up)", tip="Replace the current instance of the find pattern with the replacement text")
+  @ActionMethod(offline=true, label="Replace (up)", tip="Replace the current instance of the find pattern with the replacement text")
   public void doReplaceUp() { doReplace(true);  }
   
   
@@ -1502,7 +1502,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
    * Replace all instances of the Find pattern within the
    * selection with the Repl text.
    */
-  @ActionMethod(label="Replace all", tip="Replace all instances of the Find pattern within the selection with the Repl text.")
+  @ActionMethod(offline=true, label="Replace all", tip="Replace all instances of the Find pattern within the selection with the Repl text.")
   public void doReplaceAll()
   { doMarkPosition();
     if (!doc.setPattern(text.find.getText()))
@@ -1973,6 +1973,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
 
 
 

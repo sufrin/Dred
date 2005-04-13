@@ -180,11 +180,11 @@ public class Dred
   public static void removeSession(EditorFrame session)
   {
     sessions.remove(session);
-    if (sessions.isEmpty())       
+    if (sessions.isEmpty() && !serverRunning)       
        ActionMethod.Action.shutdownNow();      
   }
   
-  
+  protected static boolean serverRunning = false;
 
   public synchronized static void loadBindings()
   { if (!fallBack && bindings.isEmpty())
@@ -274,7 +274,8 @@ public class Dred
   {
     closeAll();
     if (sessions.isEmpty()) 
-    { if (sessionSocket!=null) sessionSocket.close();   
+    { if (sessionSocket!=null) sessionSocket.close(); 
+      serverRunning = false;  
       ActionMethod.Action.shutdownNow();      
       System.exit(0); 
     }
@@ -299,6 +300,7 @@ public class Dred
   */
   public static int startServer(int port)
   { boolean pseudoServer = false;
+    serverRunning = true;
     String user = System.getProperty("user.name");
     try
     { if (port>0 || (File.separator.equals("/") && port>=0))
@@ -457,5 +459,7 @@ public class Dred
 
 
 }
+
+
 
 

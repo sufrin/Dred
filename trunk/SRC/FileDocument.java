@@ -66,7 +66,22 @@ public class FileDocument extends SearchableDocument
     this.encoding = encoding;
     canonicalizeFileName();
   }
-
+  
+  /** Trim a long title */
+  protected static String trimTitle(String title)
+  { if (title.length()<60) return title;
+    File f = new File(title);
+    title = "";
+    do
+    { title = f.getName();
+      f = f.getParentFile();
+      if (f==null) break; else title = File.separator+title;
+    }
+    while (title.length()<56);
+    title = "..."+title;
+    return title;
+  }
+  
   /** Canonicalize the filename if possible; otherwise leave it
       as an absolute path.
   */
@@ -79,7 +94,7 @@ public class FileDocument extends SearchableDocument
     catch (IOException ex)
     {
     }
-    fileTitle = anonymous ? fileName.getName() : fileName.toString();
+    fileTitle = trimTitle(fileName.toString());
   }
   
   /** Load the document from the file with the given name using the charset encoding associated with
@@ -93,7 +108,7 @@ public class FileDocument extends SearchableDocument
     if (fileName.exists() && fileName.canRead())
     try
     { Reader r = (new InputStreamReader(new FileInputStream(fileName), encoding));
-      if (debug) log.fine("Reading from file: %s", fileName);
+      if (debug) log.fine("Reading from file: %s (%s)", fileName, fileTitle);
       readFrom(r);
     }
     catch (Exception ex)
@@ -111,7 +126,7 @@ public class FileDocument extends SearchableDocument
     try
     { URL url   = new URL(name);
       anonymous = true;
-      fileTitle = url.toString();
+      fileTitle = trimTitle(url.toString());
       fileName  = new File(name);
       Reader r  = (new InputStreamReader(url.openStream(), encoding));
       if (debug) log.fine("Reading from url: %s", url);
@@ -304,6 +319,7 @@ public class FileDocument extends SearchableDocument
     for (Listener l:listeners) l.fileBacked(backup, fileTitle);
   }
 }
+
 
 
 
