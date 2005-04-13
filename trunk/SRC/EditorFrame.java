@@ -359,7 +359,15 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
           ed.setPseudoFixed(ed.isPseudoFixed());
         }
       });
-      menu.add(new RadioItem(models, "Monospace model \\u2167 ( \u2167 )", true, "Set the Monospace model.")
+      menu.add(new RadioItem(models, "Monospace model \\u21A6 ( \u21A6 )", false, "Set the Monospace model.")
+      {
+        public void run()
+        {
+          Display.monospaceModel = '\u21A6';
+          ed.setPseudoFixed(ed.isPseudoFixed());
+        }
+      });
+      menu.add(new RadioItem(models, "Monospace model \\u2167 ( \u2167 )", false, "Set the Monospace model.")
       {
         public void run()
         {
@@ -367,11 +375,19 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
           ed.setPseudoFixed(ed.isPseudoFixed());
         }
       });
-      menu.add(new RadioItem(models, "Monospace model \\u8A7C ( \u8A7C )", true, "Set the Monospace model.")
+      menu.add(new RadioItem(models, "Monospace model \\u8A7C ( \u8A7C )", false, "Set the Monospace model.")
       {
         public void run()
         {
           Display.monospaceModel = '\u8A7C';
+          ed.setPseudoFixed(ed.isPseudoFixed());
+        }
+      });
+      menu.add(new RadioItem(models, "Monospace model \\u210B ( \u210B )", false, "Set the Monospace model.")
+      {
+        public void run()
+        {
+          Display.monospaceModel = '\u210B';
           ed.setPseudoFixed(ed.isPseudoFixed());
         }
       });
@@ -1161,10 +1177,10 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
      }
   }
   
-  @ActionMethod(label="Find next", tip="Find the next instance of the pattern in the Find field")
+  @ActionMethod(offline=true, label="Find next", tip="Find the next instance of the pattern in the Find field")
   public void doFindDown() { doMarkPosition(); doFind(false); }
   
-  @ActionMethod(label="Find previous", tip="Find the previous instance of the pattern in the Find field")
+  @ActionMethod(offline=true, label="Find previous", tip="Find the previous instance of the pattern in the Find field")
   public void doFindUp() { doMarkPosition(); doFind(true); }
   
   @ActionMethod(label="Replace (down)", tip="Replace the current instance of the find pattern with the replacement text")
@@ -1174,10 +1190,10 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   public void doReplaceUp() { doReplace(true);  }
   
   
-  @ActionMethod(label="Find next sel", tip="Set the find field to the selection, then find its next instance")
+  @ActionMethod(offline=true, label="Find next sel", tip="Set the find field to the selection, then find its next instance")
   public void doFindSelDown() { doMarkPosition(); doFindSel(false); }
   
-  @ActionMethod(label="Find previous sel", tip="Set the find field to the selection, then find its previous instance")
+  @ActionMethod(offline=true, label="Find previous sel", tip="Set the find field to the selection, then find its previous instance")
   public void doFindSelUp() { doMarkPosition(); doFindSel(true); }
   
   /**
@@ -1957,6 +1973,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
 
 
 

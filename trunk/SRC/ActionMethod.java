@@ -1,5 +1,6 @@
 package org.sufrin.dred;
 import java.awt.event.ActionEvent;
+import java.awt.*;
 import java.lang.annotation.Annotation;
 import java.lang.annotation.Retention;
 import java.lang.reflect.InvocationTargetException;
@@ -8,9 +9,11 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.HashSet;
 import java.util.TreeSet;
+import java.util.concurrent.*;
 
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
+import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 /**     
         <tt><p>@ActionMethod</tt> annotations are placed on void methods
@@ -25,10 +28,26 @@ import javax.swing.KeyStroke;
         annotated method.</p>
 */
 @Retention(java.lang.annotation.RetentionPolicy.RUNTIME) public @interface ActionMethod  
-{
-    String tip()    default "";    
-    String label()  default "";
-       
+{   /** Tooltip */
+    String  tip()     default "";   
+    /** Label to go on the button */ 
+    String  label()   default "";
+    /** Whether the action is to be executed offline or on the GUI thread */
+    boolean offline() default false;
+    
+    /** 
+        When an object is registered with an ActionMethod.Map, each of its
+        its <code>@ActionMethod</code>-annotated methods  give rise to an
+        <code>Action</code> which records the method, the annotation, and
+        the object. The <code>Action</code>'s <code>actionPerformed</code>
+        method invokes the method in the object (using reflection).  If
+        the annotation's <code>offline</code> value is <code>true</code>,
+        then this happens in a separately running thread, otherwise
+        the method is called from the UI thread.  In addition to this,
+        the <code>Action</code>'s tooltip is set to the annotation's
+        <code>tip</code> value, and its label is set to the annotation's
+        <code>label</code> value.
+    */  
     public static class Action extends AbstractAction implements Comparable
     { public Action(Object object, Method method, ActionMethod act) 
       { super(act.label()); 
@@ -38,7 +57,7 @@ import javax.swing.KeyStroke;
         
         if (!act.tip().equals("")) putValue(AbstractAction.SHORT_DESCRIPTION, act.tip());
       }
-    
+          
       final Method       method;
       final Object       object;
       final ActionMethod act;
@@ -60,11 +79,11 @@ import javax.swing.KeyStroke;
                              .replace("]","")+" "+act.tip();
       }
       
-      public String getName() { return method.getName(); }
+      public String getName()   { return method.getName(); }
       
       public String getLabel() { return act.label(); }
       
-      public String getTip() { return act.tip(); }
+      public String getTip()   { return act.tip(); }
       
       public Set<String> getKeyNames()
       {
@@ -82,19 +101,53 @@ import javax.swing.KeyStroke;
         return activatingKeys;
       }
       
-      public void actionPerformed(ActionEvent ev)                     
-      {
-         try   { method.invoke(object); } 
-         catch (IllegalAccessException ex)    {}
-         catch (InvocationTargetException ex) {}
-         catch (Exception ex) { ex.printStackTrace(); }
+      static ExecutorService offlineThread = Executors.newSingleThreadExecutor();
+      
+      static Cursor waitCursor = Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR);
+      
+      public static void shutdownNow()
+      {  
+         offlineThread.shutdownNow();
+      }
+            
+      public void actionPerformed(final ActionEvent ev)                     
+      {  if (act.offline())
+         offlineThread.execute
+         ( new Runnable()
+           { public void run()
+             {  Object source = ev.getSource();
+                Patient patient = source instanceof Patient ? (Patient) source : null;
+                if (patient!=null) patient.setWaiting(true);
+                try   { method.invoke(object); if (patient!=null) patient.setWaiting(false); } 
+                catch (IllegalAccessException ex)    {}
+                catch (InvocationTargetException ex) {}
+                catch (Exception ex) { ex.printStackTrace(); }
+             }
+           }
+         );
+         else
+         {
+            try   { method.invoke(object); } 
+            catch (IllegalAccessException ex)    {}
+            catch (InvocationTargetException ex) {}
+            catch (Exception ex) { ex.printStackTrace(); }
+         }
+         
       }      
     }
     
+    /**
+        An ActionMap that can register all the @ActionMethod-annotated methods
+        of an object under their own names. 
+    */
     public static class Map extends ActionMap
     { public Map()                    {}    
       public Map(final Object object) { register(object); }
             
+      /** Return a mapping from the name of each ActionMethod-annotated method
+          of a class (defined locally if declared is true, inherited
+          or declared otherwise) to its annotation.
+      */
       public static java.util.Map<String, ActionMethod> getActionMethods
                                                         (Class klass, boolean declared)
       { java.util.Map<String, ActionMethod> methods = new TreeMap<String, ActionMethod>();
@@ -107,10 +160,16 @@ import javax.swing.KeyStroke;
         return methods;
       }
       
+      /** Same as <code>getActionMethods(object.getClass(), declared)</code>  */
       public static java.util.Map<String, ActionMethod> getActionMethods
                                                         (Object object, boolean declared)
       { return getActionMethods(object.getClass(), declared); }
       
+      /** Return the set of ActionMethod-annotated actions 
+          (defined locally if declared is true, inherited
+          or declared otherwise) in the given class
+          that are recorded in this Map.
+      */
       public  java.util.Set<Action> getActions
                                     (Class klass, boolean declared)
       { java.util.Set<Action> methods = new TreeSet<Action>();
@@ -127,7 +186,7 @@ import javax.swing.KeyStroke;
                                     (Object object, boolean declared)
                                     { return getActions(object.getClass(), declared); }
 
-      
+      /** Register all the ActionMethod-annotated methods of the given object */
       public void register(final Object object)
       {   for (Method method: object.getClass().getMethods())
           {  for (Annotation annotation: method.getAnnotations())  
@@ -175,6 +234,7 @@ import javax.swing.KeyStroke;
       }                 
     }
 }
+
 
 
 

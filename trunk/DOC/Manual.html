@@ -17,8 +17,9 @@
 
 
 
-<p> Dred is an lightweight, customizeable, and extensible Unicode text
-editor, written in Java 1.5.  
+<p> Dred is a <i>lightweight</i>, customizeable, and extensible Unicode text
+editor. It comes, complete with documentation, in a single jar, and needs
+a 1.5 JRE to run.
 </p>
 
 <h2>Unix/Linux Usage</h2>
@@ -68,17 +69,32 @@ the files are assumed to use the specified encoding; otherwise UTF8 is assumed.
 <b><A href="index.html">Back to Dred Help Index</A></b>                
 <br></br>
 
-<h2>Windows Usage</h2>
+<h2>Windows (XP) Usage</h2>
 
-After installing Dred using the standard installer you'll find a shortcut
-to Dred.jar in the installation directory (and perhaps on your Desktop).
-This shortcut starts a pseudo-server from which you will be able to
-start editing sessions.
+Put the Dred.jar somewhere sensible, and make a shortcut to it whose target and
+start-in fields looks something like this:
+<pre>
+Target:   C:\WINDOWS\system32\javaw.exe -jar "C:\Documents and Settings\sufrin\Desktop\DRED\Dred.jar" -w
+Start in: "C:\Documents and Settings\sufrin\Desktop"
+</pre>
+Doubleclicking this shortcut starts a new Dred in an editing session with an
+anonymous document; dropping a file onto it starts a new Dred in an editing
+session for that file. 
 
-<p> You will almost certainly want to edit the <tt>dred.bindings</tt>
+<p> You may want to put a <tt>dred.bindings</tt>
 file in the installation directory once you have found out a bit more
-about bindings.  </p>
+about bindings. When you have done so, add the following text to the
+shortcut target, just before the -jar switch:
+<pre>
+-DDREDBINDINGS="C:\Documents and Settings\sufrin\Desktop\DRED\dred.bindings" 
+</pre>
+</p>
 
+If you really care about economy, then read
+ <A href="Underhood.html">Under the Hood</A>
+for details of how Dred can be set up to use a single
+server. It's slightly trickier under Windows XP2, which tries
+hard to prevent "Trojan" ports being opened. 
 
 <h2>The Dred Editing Session Window</h2>
 <p> In each editing session window you will see the main text editing
@@ -465,11 +481,11 @@ The <i>options</i> are either empty, or take one of the forms
 <pre>
        
         @<i>pointSize</i>
-        @<i>pointSize</i>-<i>shapeoptions</i>
+        @<i>pointSize</i>-<i>shape-options</i>
 </pre>
 When no point size is specified, the pointsize is taken to be 14.
 </p>
-The <i>shapeoptions</i> may include up to one of each of the following:
+The <i>shape-options</i> may include up to one of each of the following:
 <pre>
         b               # bold
         i               # italic
@@ -504,7 +520,19 @@ A good reference for matters Unicode and Linux is: Markus Kuhn's
 <a href="http://www.cl.cam.ac.uk/~mgk25/unicode.html"> UTF-8 and Unicode FAQ for Unix/Linux</a>
 </p>
 
-
+<h2>Brief History</h2>
+<p>
+Dred was written in Java 1.5 and (to my certainb knowledge) runs on the
+Sun 1.5 JVM on all variants of Linux, Windows, and Solaris on which that
+JVM can be installed. <i>(I do not know, nor much care, whether Apple
+have gotten around to implementing their own Java 1.5 on MacOS-X. Their
+idiosyncratic Java implementations have, in the past, wasted a great
+deal of my time. If you're an adherent to the cult then you already
+believe yourself to have superior tools. Enjoy yourself with them!)
+</i>
+</p>
+<p>
+</p>
 <pre>
 <b>Bernard Sufrin</b>
 <b>$Revision$</b>

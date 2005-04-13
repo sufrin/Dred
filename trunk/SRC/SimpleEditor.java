@@ -1,5 +1,7 @@
 package org.sufrin.dred;
 import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Container;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -28,7 +30,7 @@ import org.sufrin.logging.Logging;
         <PRE>$Id$</PRE>
 */
 
-class SimpleEditor implements InteractionListener
+class SimpleEditor implements InteractionListener, Patient
 {  /** The Display component */
    protected DisplayComponent  display;
    
@@ -112,6 +114,11 @@ class SimpleEditor implements InteractionListener
    public void addFocusEavesdropper(FocusEavesdropper d) 
    {
      doc.addFocusEavesdropper(d);
+   }
+   
+   /** Set the waiting state (from something long-running) [A no-op] */
+   public void setWaiting(boolean state)
+   { 
    }
    
    /** Ask that subsequent keyboard events get delivered here. */
@@ -664,6 +671,7 @@ class SimpleEditor implements InteractionListener
     frame.setVisible(true);
   }
 }
+
 
 
 

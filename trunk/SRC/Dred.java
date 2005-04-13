@@ -1,6 +1,7 @@
 package org.sufrin.dred;
 
 import java.awt.Component;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -80,7 +81,7 @@ public class Dred
   { URL.setURLStreamHandlerFactory(new ClassURLFactory());
     boolean wait = false;
     if (args.length > 0)
-      for (String arg : args)
+    { for (String arg : args)
         if (arg.equals("-w") || arg.equals("--wait"))
           wait=true;
         else if (arg.equals("--serving"))
@@ -113,6 +114,9 @@ public class Dred
           startLocalSession(arg, EncodingName); 
         else 
           startRemoteSession(arg);
+        if (wait && sessions.isEmpty())  
+           startLocalSession(null, EncodingName); 
+     }
     else 
       startServer(0);
   }
@@ -176,7 +180,11 @@ public class Dred
   public static void removeSession(EditorFrame session)
   {
     sessions.remove(session);
+    if (sessions.isEmpty())       
+       ActionMethod.Action.shutdownNow();      
   }
+  
+  
 
   public synchronized static void loadBindings()
   { if (!fallBack && bindings.isEmpty())
@@ -266,7 +274,8 @@ public class Dred
   {
     closeAll();
     if (sessions.isEmpty()) 
-    { if (sessionSocket!=null) sessionSocket.close();         
+    { if (sessionSocket!=null) sessionSocket.close();   
+      ActionMethod.Action.shutdownNow();      
       System.exit(0); 
     }
   }
@@ -448,38 +457,5 @@ public class Dred
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
