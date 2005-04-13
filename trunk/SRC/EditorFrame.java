@@ -364,7 +364,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       
 
       // Eliminate input maps (pro-tem) to avoid spurious shortcut effects
-      InputMap m = new ComponentInputMap(this);
+      InputMap m = null;
       setInputMap(JComponent.WHEN_FOCUSED, m);
       setInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT, m);
       setInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW, m  );
@@ -1962,6 +1962,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
 
 
 

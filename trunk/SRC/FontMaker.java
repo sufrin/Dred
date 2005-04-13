@@ -2,6 +2,7 @@
 package org.sufrin.font;
 
 import java.awt.Font;
+import java.io.File;
 import java.net.URL;
 import java.util.Hashtable;
 
@@ -85,7 +86,8 @@ public class FontMaker
    */
   static protected Font makeFont(String fontName, boolean ttf)
   { // System.err.println("Making: "+fontName);
-    String[] name = fontName.split("-");
+    File f = new File(fontName);
+    String[] name = f.getName().split("-");
     String file = null;
     float  size = 14.0f;
     int    style = Font.PLAIN;
@@ -153,7 +155,7 @@ public class FontMaker
         case 2:
           size = Float.parseFloat(name[1]);
         case 1:
-          file = name[0];
+          file = new File(f.getParent(), name[0]).toString();
       }
       if (!fixedWidthSpec.equals(""))
       try 
@@ -171,6 +173,7 @@ public class FontMaker
     {
       log.warning("Substituting system default font for: %s (%s)", fontName,
                   ex.getMessage());
+      fixedWidthChars.put(fontName, (char) 0);
       return Font.decode(null);
     }
   }
@@ -193,4 +196,6 @@ public class FontMaker
     return result;
   }
 }
+
+
 
