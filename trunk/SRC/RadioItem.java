@@ -5,7 +5,7 @@ import java.util.prefs.*;
 import org.sufrin.logging.*;
 
 import javax.swing.AbstractAction;
-import javax.swing.JCheckBoxMenuItem;
+import javax.swing.ButtonGroup;
 import javax.swing.JRadioButtonMenuItem;
 
 /**
@@ -27,26 +27,31 @@ public abstract class RadioItem extends JRadioButtonMenuItem implements Preferen
   public static Logging log = Logging.getLog("RadioItem");
   public static boolean debug = log.isLoggable("FINE");
 
-  /** Make a non-persistent RadioItem initialised to the given state */
-  public RadioItem(String s, boolean istate) { this(s, istate, null, null); }
-  
+  /** Simulates CheckBox..Item getState() behaviour */
   public boolean getState() { return isSelected(); }
+  
+  /** Simulates CheckBox..Item setState() behaviour */
   public void    setState(boolean newState) { setSelected(newState); }
   
+  /** Make a non-persistent RadioItem initialised to the given state */
+  public RadioItem(ButtonGroup g, String s, boolean istate)
+  { this(g, s, istate, null, null); }
+
   /** Make a checkitem with the given tooltip that is initialised
       to the given state. 
   */
-  public RadioItem(String s, boolean istate, String tooltip) 
-  { this(s, istate, tooltip, null); }
+  public RadioItem(ButtonGroup g, String s, boolean istate, String tooltip) 
+  { this(g, s, istate, tooltip, null); }
   
   /** Make a RadioItem with the given tooltip. If pref is non-null then the
       RadioItem is persistent and is associated with a boolean preference
       in pref with a name derived from s by removing spaces from it.
   */
 
-  public RadioItem(String s, boolean istate, String tooltip, Preferences pref)
+  public RadioItem(ButtonGroup g, String s, boolean istate, String tooltip, Preferences pref)
   {
     super();
+    g.add(this);
     this.itemName = s.replace(" ", "");
     this.prefs=pref;
     this.setState(prefs==null?istate:prefs.getBoolean(itemName, istate));
@@ -92,6 +97,7 @@ public abstract class RadioItem extends JRadioButtonMenuItem implements Preferen
    */
   public abstract void run();
 }
+
 
 
 

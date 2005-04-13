@@ -445,7 +445,8 @@ using the encoding selector provided in the file browser.
 <h4>Fonts</h4>
 Dred usually uses the platform standard font known to Java as <tt>MONOSPACED 14</tt>.
 But on some platforms this may lack glyphs for some of the Unicodes that you
-need to use. So it is possible to set up Dred to use a different font:
+need to use. So it is possible to set up Dred to use a different default font,
+and it is also  possible to change the font used in a particular session.
 
 <p>
 If the Java system property (or the environment variable)
@@ -489,12 +490,12 @@ Examples:
         type1:/usr/X11R6/lib/X11/fonts/Type1/courb.pfa@12-i       # <i>italic courier from an X11 font file</i>
 </pre>
 <p>
-The <b>View/Pseudo&nbsp;Fixed&nbsp;Width</b> menu checkbox switches Dred's
-rendering of a proportionally-spaced font to and from a simulation of
-that used for a monospaced font, using the width of an uppercase "M"
-as the character pitch (unless a different pitch model character was
-specified in the shape options). This can be helpful if you want to work
-on material containing glyphs that cannot be found in a monospaced font.
+The <b>View/Monospaced</b> menu checkbox switches Dred's rendering of a
+proportionally-spaced font to and from a simulation of that used for a
+monospaced font. The radiobuttons below it allow you to select (from a
+small number of models) the character whose width is used to determine
+the monospace pitch. This can be helpful if you want to work on material
+containing glyphs that cannot be found in a monospaced font.
 </p>
 
 <h2>Reference</h2>

@@ -89,7 +89,7 @@ public class FontMaker
     File     f           = new File(fontName);
     String[] fileAndOpts = f.getName().split("@");
     String   file        = new File(f.getParent(), fileAndOpts[0]).toString();
-    String[] opts        = (fileAndOpts.length>1 ? fileAndOpts[1] : "").split("-");
+    String[] opts        = (fileAndOpts.length>1 ? fileAndOpts[1] : "14").split("-");
     float    size        = 14.0f;
     int      style       = Font.PLAIN;
     int      fixedWidthChar = 0;
@@ -97,8 +97,8 @@ public class FontMaker
     try
     {
       switch (opts.length)
-      {
-        default:
+      { 
+        default: break;
         case 4:
           switch (opts[3].toLowerCase().charAt(0))
           {
@@ -169,7 +169,7 @@ public class FontMaker
       return fetchRawFont(file, ttf).deriveFont(style, size);
     }
     catch (Exception ex)
-    {
+    { ex.printStackTrace();
       log.warning("Substituting system default font for: %s (%s)", fontName,
                   ex.getMessage());
       fixedWidthChars.put(fontName, (char) 0);

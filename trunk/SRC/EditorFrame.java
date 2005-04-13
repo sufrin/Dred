@@ -342,6 +342,8 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       });
       
       menu = addMenu("View");
+      ButtonGroup models = new ButtonGroup();
+      
       menu.add(new CheckItem("Monospaced", ed.isPseudoFixed(), "Simulate a monospaced font with the current font.")
       {
         public void run()
@@ -349,11 +351,27 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
           ed.setPseudoFixed(state);
         }
       });
-      menu.add(new CheckItem("Monospace model character: \u2167", false, "Set the Monospace model to \u2167 (a very wide character).")
+      menu.add(new RadioItem(models, "Monospace model M", true, "Set the Monospace model.")
       {
         public void run()
         {
-          Display.monospaceModel = (state ? '\u2167' : 'M');
+          Display.monospaceModel = 'M';
+          ed.setPseudoFixed(ed.isPseudoFixed());
+        }
+      });
+      menu.add(new RadioItem(models, "Monospace model \\u2167 ( \u2167 )", true, "Set the Monospace model.")
+      {
+        public void run()
+        {
+          Display.monospaceModel = '\u2167';
+          ed.setPseudoFixed(ed.isPseudoFixed());
+        }
+      });
+      menu.add(new RadioItem(models, "Monospace model \\u8A7C ( \u8A7C )", true, "Set the Monospace model.")
+      {
+        public void run()
+        {
+          Display.monospaceModel = '\u8A7C';
           ed.setPseudoFixed(ed.isPseudoFixed());
         }
       });
