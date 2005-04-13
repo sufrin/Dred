@@ -49,7 +49,7 @@ public class FontMaker
    */
   static public Font decode(String fontName, boolean ttf)
   {
-    fontName = fontName.replaceAll("[ ]+", "-");
+    fontName = fontName.replaceAll("[ ]+", " ");
     Font f = fetchFont(fontName, ttf);
     log.fine("%s:%s => %s", ttf?"truetype":"type1", fontName, f);
     return f;
@@ -58,7 +58,7 @@ public class FontMaker
   /** The fixed-width character for the font (if it's pseudofixed) */
   static public char fixedChar(String fontName, boolean ttf)
   {
-    fontName = fontName.replaceAll("[ ]+", "-");
+    fontName = fontName.replaceAll("[ ]+", " ");
     fetchFont(fontName, ttf);
     return fixedWidthChars.get(fontName);
   }
@@ -86,38 +86,21 @@ public class FontMaker
    */
   static protected Font makeFont(String fontName, boolean ttf)
   { // System.err.println("Making: "+fontName);
-    File f = new File(fontName);
-    String[] name = f.getName().split("-");
-    String file = null;
-    float  size = 14.0f;
-    int    style = Font.PLAIN;
-    int    fixedWidthChar = 0;
-    String fixedWidthSpec ="";
+    File     f           = new File(fontName);
+    String[] fileAndOpts = f.getName().split("@");
+    String   file        = new File(f.getParent(), fileAndOpts[0]).toString();
+    String[] opts        = (fileAndOpts.length>1 ? fileAndOpts[1] : "").split("-");
+    float    size        = 14.0f;
+    int      style       = Font.PLAIN;
+    int      fixedWidthChar = 0;
+    String   fixedWidthSpec = "";
     try
     {
-      switch (name.length)
+      switch (opts.length)
       {
         default:
-        case 5:
-          switch (name[4].toLowerCase().charAt(0))
-          {
-            case 'i':
-              style = Font.ITALIC;
-            break;
-            case 'b':
-              style = Font.BOLD;
-            break;
-            case 'u':
-              fixedWidthSpec = name[4].substring(1);
-            break;
-            case 'f':
-            case 'm':
-              fixedWidthSpec = "004d";
-            break;
-            default:
-          }
         case 4:
-          switch (name[3].toLowerCase().charAt(0))
+          switch (opts[3].toLowerCase().charAt(0))
           {
             case 'i':
               style = Font.ITALIC;
@@ -126,7 +109,7 @@ public class FontMaker
               style = Font.BOLD;
             break;
             case 'u':
-              fixedWidthSpec = name[3].substring(1);
+              fixedWidthSpec = opts[3].substring(1);
             break;
             case 'f':
             case 'm':
@@ -135,7 +118,25 @@ public class FontMaker
             default:
           }
         case 3:
-          switch (name[2].toLowerCase().charAt(0))
+          switch (opts[2].toLowerCase().charAt(0))
+          {
+            case 'i':
+              style = Font.ITALIC;
+            break;
+            case 'b':
+              style = Font.BOLD;
+            break;
+            case 'u':
+              fixedWidthSpec = opts[2].substring(1);
+            break;
+            case 'f':
+            case 'm':
+              fixedWidthSpec = "004d";
+            break;
+            default:
+          }
+        case 2:
+          switch (opts[1].toLowerCase().charAt(0))
           {
             case 'i':
               style |= Font.ITALIC;
@@ -144,7 +145,7 @@ public class FontMaker
               style |= Font.BOLD;
             break;
             case 'u':
-              fixedWidthSpec = name[2].substring(1);
+              fixedWidthSpec = opts[1].substring(1);
             break;
             case 'm':
             case 'f':
@@ -152,10 +153,8 @@ public class FontMaker
             break;
             default:
           }
-        case 2:
-          size = Float.parseFloat(name[1]);
         case 1:
-          file = new File(f.getParent(), name[0]).toString();
+          size = Float.parseFloat(opts[0]);
       }
       if (!fixedWidthSpec.equals(""))
       try 
@@ -196,6 +195,7 @@ public class FontMaker
     return result;
   }
 }
+
 
 
 

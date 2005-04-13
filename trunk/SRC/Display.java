@@ -76,6 +76,9 @@ implements DocListener,
    
    /** The font's model character if it's fixed-width */
    protected char fixedChar = 0;
+   
+   /** The default monospace character model */
+   public static char monospaceModel = 'M';
 
    /** Width (in pixels) for text on the display. */
    protected int textWidth;
@@ -158,7 +161,7 @@ implements DocListener,
      fontAscent  = metrics.getAscent();
      fontHeight  = metrics.getHeight();
      fontDescent = metrics.getDescent();
-     fontEmWidth = pseudofixed ? metrics.charWidth(fixedChar) : metrics.charWidth('M');
+     fontEmWidth = pseudofixed ? metrics.charWidth(fixedChar) : metrics.charWidth(monospaceModel);
      fontHalfEm  = pseudofixed ? fontEmWidth / 2 : 0;
      setSize(xmargin+2*xborder+fontEmWidth*cols, 2*yborder+fontHeight*rows);
    }
@@ -169,7 +172,7 @@ implements DocListener,
    /** Switches mode between pseudofixed and natural widths */
    public void setPseudoFixed(boolean on)
    { pseudofixed = on;
-     if (pseudofixed && fixedChar==0) fixedChar = 'M';
+     if (pseudofixed) fixedChar = monospaceModel;
      setFont(this.font);
      repaint();
    }
@@ -654,6 +657,7 @@ implements DocListener,
    public void dragBy(int dx, int dy) {}
 
 }
+
 
 
 

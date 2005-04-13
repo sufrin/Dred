@@ -341,13 +341,22 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       });
       
       menu = addMenu("View");
-      menu.add(new CheckItem("Pseudo Fixed Width", ed.isPseudoFixed(), "Set the display into fixed width mode -- even for a proportional font")
+      menu.add(new CheckItem("Monospaced", ed.isPseudoFixed(), "Simulate a monospaced font with the current font.", prefs)
       {
         public void run()
         {
           ed.setPseudoFixed(state);
         }
       });
+      menu.add(new CheckItem("Monospace model character: \u2167", false, "Set the Monospace model to \u2167 (a very wide character)", prefs)
+      {
+        public void run()
+        {
+          Display.monospaceModel = (state ? '\u2167' : 'M');
+          ed.setPseudoFixed(ed.isPseudoFixed());
+        }
+      });
+      bind("doSetFont");
       
       menu = addMenu("Help");
       bind("doHelp");
@@ -607,6 +616,11 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       text.argument.setText(String.format("%h", c)); 
     }
   } 
+  
+  @ActionMethod(label="Set font to ....", tip="Set this window's font")
+  public void doSetFont()
+  {
+  }
     
   protected static Bindings protoBindings = null;
   public    static void  setBindings(Bindings thePrototype) { protoBindings = thePrototype; }
@@ -1924,6 +1938,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
 
 
 

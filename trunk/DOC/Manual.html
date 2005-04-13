@@ -454,15 +454,17 @@ If the Java system property (or the environment variable)
 it takes one of the forms
 <pre>
         truetype:<i>url</i> <i>options</i>
-        type1:<i>url</i> <i>options</i>
+        type1:<i>url</i>    <i>options</i>
 </pre>
 In that case, the <i>url</i> (default protocol <tt>file:</tt>) is assumed to denote a (truetype or type1) 
 font description file. 
 </p>
 <p>
-The <i>options</i> are either empty, or take the form
+The <i>options</i> are either empty, or take one of the forms
 <pre>
-        <i>pointSize</i> <i>shapeoptions</i>
+       
+        @<i>pointSize</i>
+        @<i>pointSize</i>-<i>shapeoptions</i>
 </pre>
 When no point size is specified, the pointsize is taken to be 14.
 </p>
@@ -477,21 +479,30 @@ and up to one of:
         f               # <i>the font is deemed to be monospaced (char width is M-width)</i>
         uXXXX           # <i>the font is deemed to be monospaced (char width is unicode XXXX-width)</i>
 </pre>
-These components are separated by "-".
+The shape options are separated by "-".
 <br></br>
 Examples:
 <pre>
-        truetype:arialuni.ttf-14-b                      # <i>bold italic arial unicode</i>
-        truetype:arialuni.ttf-16.3-b-i-m                # <i>bold italic M-spaced arial unicode</i>
-        truetype:file:arialuni.ttf-16.3-b-i-u2167       # <i>bold italic Ⅷ-spaced arial unicode</i>
+        truetype:arialuni.ttf@14-b                                # <i>bold italic arial unicode from a local font file</i>
+        truetype:arialuni.ttf@16.3-b-i-m                          # <i>bold italic M-spaced arial unicode from a local font file</i>
+        truetype:file:arialuni.ttf@16.3-b-i-u2167                 # <i>bold italic Ⅷ-spaced arial unicode from a local font file</i>
+        type1:/usr/X11R6/lib/X11/fonts/Type1/courb.pfa@12-i       # <i>italic courier from an X11 font file</i>
 </pre>
-<!--
-<h2>Reference</h2>
-<p>The Dred document editing model is essentially that established in my
-(1981) Science of Computer Programming paper: 
-&quot;Formal Specification of a Display-Oriented Text Editor&quot;.
+<p>
+The <b>View/Pseudo&nbsp;Fixed&nbsp;Width</b> menu checkbox switches Dred's
+rendering of a proportionally-spaced font to and from a simulation of
+that used for a monospaced font, using the width of an uppercase "M"
+as the character pitch (unless a different pitch model character was
+specified in the shape options). This can be helpful if you want to work
+on material containing glyphs that cannot be found in a monospaced font.
 </p>
--->
+
+<h2>Reference</h2>
+<p>
+A good reference for matters Unicode and Linux is: Markus Kuhn's
+<a href="http://www.cl.cam.ac.uk/~mgk25/unicode.html"> UTF-8 and Unicode FAQ for Unix/Linux</a>
+</p>
+
 
 <pre>
 <b>Bernard Sufrin</b>
@@ -499,6 +510,7 @@ Examples:
 <b>$Date$</b>
 </pre>
 </body>
+
 
 
 

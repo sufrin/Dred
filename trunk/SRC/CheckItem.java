@@ -1,7 +1,7 @@
 package org.sufrin.dred;
 
 import java.awt.event.*;
-import java.util.prefs.Preferences;
+import java.util.prefs.*;
 import org.sufrin.logging.*;
 
 import javax.swing.AbstractAction;
@@ -15,7 +15,7 @@ import javax.swing.JCheckBoxMenuItem;
  * method. CheckItems may have persistent state that is associated with
  * a java.util.prefs.Preferences object.
  */
-public abstract class CheckItem extends JCheckBoxMenuItem
+public abstract class CheckItem extends JCheckBoxMenuItem implements PreferenceChangeListener
 { /** Current state */
   protected boolean      state    = false;
   /** Key used in prefs lookup: the menu name without spaces. */
@@ -62,7 +62,22 @@ public abstract class CheckItem extends JCheckBoxMenuItem
     });
     
     if (tooltip!=null) setToolTipText(tooltip); 
+    
+    if (prefs!=null) prefs.addPreferenceChangeListener(this);
    
+  }
+  
+  public void preferenceChange(PreferenceChangeEvent event)
+  { log.info("%s notices %s changed.", itemName, event.getKey());
+    if (event.getKey().equals(itemName))
+    { if (debug) log.finer("%s changed.", itemName);
+      boolean newState = Boolean.parseBoolean(event.getNewValue());
+      if (newState!=getState())
+      { if (debug) log.fine("%s changed to %s", itemName, newState);
+        this.setState(newState);
+        run();
+      }
+    }
   }
   
   /**
@@ -73,6 +88,7 @@ public abstract class CheckItem extends JCheckBoxMenuItem
    */
   public abstract void run();
 }
+
 
 
 
