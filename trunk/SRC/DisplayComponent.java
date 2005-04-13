@@ -41,11 +41,16 @@ public interface DisplayComponent
   /** Set the number of lines of the display */
   public void setLines(int n);
 
-  /** Switches mode between varispaced and monospaced */
-  public void setPseudoFixed(boolean on);
+  /** Switches mode between varispaced and monospaced 
+   *  and sets the pitch model for monospacing.
+   */
+  public void setMonoSpace(boolean on, char pitchModel);
   
-  /** Is the display pseudofixed or natural width? */
-  public boolean isPseudoFixed();
+  /** Is the display pseudo-monospaced or natural width? */
+  public boolean isMonoSpaced();
+  
+  /** Set the font */
+  public void setFont(String font);
 }
 
 

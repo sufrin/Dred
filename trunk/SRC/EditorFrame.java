@@ -1,11 +1,7 @@
 package org.sufrin.dred;
 
-import GUIBuilder.RowLayout;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Frame;
 import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
@@ -14,11 +10,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
-import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -36,7 +29,6 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
-import javax.swing.ComponentInputMap;
 import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -47,12 +39,12 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JSeparator;
-import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
 import org.sufrin.logging.Logging;
+
+import GUIBuilder.RowLayout;
 
 
 /**
@@ -348,50 +340,46 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       {
         public void run()
         {
-          ed.setPseudoFixed(state);
+          ed.setPseudoFixed(state, (char) 0);
         }
       });
       menu.add(new RadioItem(models, "Monospace model M", true, "Set the Monospace model.")
       {
         public void run()
         {
-          Display.monospaceModel = 'M';
-          ed.setPseudoFixed(ed.isPseudoFixed());
+          ed.setPseudoFixed(ed.isPseudoFixed(), 'M');
         }
       });
       menu.add(new RadioItem(models, "Monospace model \\u21A6 ( \u21A6 )", false, "Set the Monospace model.")
       {
         public void run()
         {
-          Display.monospaceModel = '\u21A6';
-          ed.setPseudoFixed(ed.isPseudoFixed());
+           ed.setPseudoFixed(ed.isPseudoFixed(), '\u21A6');
         }
       });
       menu.add(new RadioItem(models, "Monospace model \\u2167 ( \u2167 )", false, "Set the Monospace model.")
       {
         public void run()
         {
-          Display.monospaceModel = '\u2167';
-          ed.setPseudoFixed(ed.isPseudoFixed());
+           ed.setPseudoFixed(ed.isPseudoFixed(), '\u2167');
         }
       });
       menu.add(new RadioItem(models, "Monospace model \\u8A7C ( \u8A7C )", false, "Set the Monospace model.")
       {
         public void run()
         {
-          Display.monospaceModel = '\u8A7C';
-          ed.setPseudoFixed(ed.isPseudoFixed());
+          ed.setPseudoFixed(ed.isPseudoFixed(), '\u8A7C');
         }
       });
       menu.add(new RadioItem(models, "Monospace model \\u210B ( \u210B )", false, "Set the Monospace model.")
       {
         public void run()
         {
-          Display.monospaceModel = '\u210B';
-          ed.setPseudoFixed(ed.isPseudoFixed());
+          ed.setPseudoFixed(ed.isPseudoFixed(), '\u210B');
         }
       });
       bind("doSetFont");
+      bind("doSetDefaultFont");
       
       menu = addMenu("Help");
       bind("doHelp");
@@ -654,7 +642,13 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   
   @ActionMethod(label="Set font to ....", tip="Set this window's font")
   public void doSetFont()
-  {
+  { ed.setFont(text.argument.getText());
+  }
+  
+  @ActionMethod(label="Set default font to ... ", tip="Set this window's and the default font")
+  public void doSetDefaultFont()
+  { ed.setFont(text.argument.getText());
+    Display.setDefaultFontName(text.argument.getText());
   }
     
   protected static Bindings protoBindings = null;

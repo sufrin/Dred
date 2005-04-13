@@ -6,6 +6,7 @@ import java.io.File;
 import java.net.URL;
 import java.util.Hashtable;
 
+import org.sufrin.dred.Dred;
 import org.sufrin.logging.Logging;
 
 /**
@@ -169,11 +170,11 @@ public class FontMaker
       return fetchRawFont(file, ttf).deriveFont(style, size);
     }
     catch (Exception ex)
-    { ex.printStackTrace();
+    { Dred.showWarning(String.format("Cannot load font %s (%s)\nLoading system default instead", fontName, ex.getMessage()));
       log.warning("Substituting system default font for: %s (%s)", fontName,
                   ex.getMessage());
       fixedWidthChars.put(fontName, (char) 0);
-      return Font.decode(null);
+      return Font.decode("MONOSPACED 14");
     }
   }
 

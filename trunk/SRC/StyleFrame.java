@@ -1,20 +1,21 @@
 
 package org.sufrin.dred;
 
-import GUIBuilder.*;
-import java.util.regex.*;
 import java.awt.BorderLayout;
-import java.awt.event.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
-import javax.swing.JWindow;
+
 import GUIBuilder.Col;
+import GUIBuilder.Row;
 
 /**
         A Styleframe is JFrame that contains a number of style sheets, each of

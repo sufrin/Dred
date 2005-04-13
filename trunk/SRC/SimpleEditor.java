@@ -1,14 +1,12 @@
 package org.sufrin.dred;
 import java.awt.Component;
-import java.awt.Cursor;
-import java.awt.Container;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.io.Reader;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.Reader;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
@@ -57,7 +55,7 @@ class SimpleEditor implements InteractionListener, Patient
    static public void setTypeOver(boolean mode) 
    { typeOver = mode; 
      Display.typeOver = mode;
-   };
+   }
    
    /** Indicate that the selection just made was deliberate (not automatic) */
    protected void deliberateSelection()
@@ -134,13 +132,13 @@ class SimpleEditor implements InteractionListener, Patient
    }
    
    /** Set the pseudofixed mode of this editor's display */
-   public void setPseudoFixed(boolean on)
-   { display.setPseudoFixed(on);
+   public void setPseudoFixed(boolean on, char pitchModel)
+   { display.setMonoSpace(on, pitchModel);
    }
    
    /** Ask the pseudofixed mode of this editor's display */
    public boolean isPseudoFixed()
-   { return display.isPseudoFixed();
+   { return display.isMonoSpaced();
    }
    
    /** Get the display component (on which the document is being shown) */
@@ -675,6 +673,12 @@ class SimpleEditor implements InteractionListener, Patient
     frame.pack();
     frame.setLocationRelativeTo(null);
     frame.setVisible(true);
+  }
+
+  public void setFont(String text)
+  {
+    display.setFont(text);
+    
   }
 }
 

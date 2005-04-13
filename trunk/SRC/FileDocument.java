@@ -198,9 +198,9 @@ public class FileDocument extends SearchableDocument
   }
 
   /** Change the path to the associated file, and save the document in it. */
-  public void doSaveAs(File aFileName, String encoding)
+  public void doSaveAs(File aFileName, String anEncoding)
   { setFileName(aFileName);
-    setEncoding(encoding);
+    setEncoding(anEncoding);
     doSave();
   }
   

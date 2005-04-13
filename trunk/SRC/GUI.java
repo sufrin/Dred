@@ -1,12 +1,12 @@
 package org.sufrin.dred;
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Frame;
 import java.util.prefs.Preferences;
-import javax.swing.SwingUtilities;
+
 import javax.swing.LookAndFeel;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import javax.swing.UIDefaults;
-import javax.swing.plaf.*;
-import javax.swing.plaf.metal.*;
+import javax.swing.plaf.metal.MetalLookAndFeel;
 
 /** This module coordinates Dred's current global Look and Feel setting.
  */

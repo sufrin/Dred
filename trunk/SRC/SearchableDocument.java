@@ -33,8 +33,7 @@ public class SearchableDocument extends Document
    public String regexError() { return regexError; }
 
    public boolean setPattern(String patternSource)
-   { patternSource = (patternSource); // deal with marks
-     this.patternSource = patternSource;
+   { this.patternSource = patternSource;
      try
      {  if (litFind) 
             pattern = Pattern.compile(Pattern.quote(patternSource));
@@ -556,7 +555,7 @@ public class SearchableDocument extends Document
    protected static class Cursor
    { public    int          x, y;
      protected Document     doc;
-     /** Invariant: line.equals(doc.lineAt(y)) ∧ 0≤x≤line.line.length() */
+     /** Invariant: line.equals(doc.lineAt(y)) ??? 0???x???line.line.length() */
      protected CharSequence line;
      public Cursor(Document doc) { this(doc, false); }
      

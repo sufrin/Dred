@@ -6,7 +6,6 @@ import org.sufrin.logging.*;
 
 import javax.swing.AbstractAction;
 import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JRadioButtonMenuItem;
 
 /**
  * A JCheckBoxMenuItem with a run method that is called

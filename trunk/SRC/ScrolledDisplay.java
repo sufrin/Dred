@@ -43,13 +43,13 @@ public class ScrolledDisplay extends JPanel implements DisplayComponent
   public static boolean debug  = log.isLoggable("FINE");
   
   /** Set the pseudofixed mode of the display */
-  public void setPseudoFixed(boolean on)
-  { display.setPseudoFixed(on);
+  public void setMonoSpace(boolean on, char pitchModel)
+  { display.setMonoSpace(on, pitchModel);
   }
 
    /** Ask the pseudofixed mode of thedisplay */
-   public boolean isPseudoFixed()
-   { return display.isPseudoFixed();
+   public boolean isMonoSpaced()
+   { return display.isMonoSpaced();
    }
 
   /** Construct a ScrolledDisplay of given dimensions; add a 
@@ -108,6 +108,11 @@ public class ScrolledDisplay extends JPanel implements DisplayComponent
   { return display.documentCoords(e.getX(), e.getY()); }
   
   public void dragBy(int dx, int dy) { display.dragBy(dx, dy); }
+
+  public void setFont(String font)
+  {
+    display.setFont(font);   
+  }
 }
 
 

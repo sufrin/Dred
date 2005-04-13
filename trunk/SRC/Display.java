@@ -54,6 +54,11 @@ implements DocListener,
    */
    public static String  defaultFontName = System.getProperty("DREDFONT"); 
    
+   public static void setDefaultFontName(String newName)
+   {
+     defaultFontName = newName;
+   }
+   
    static 
    { if (defaultFontName==null) defaultFontName = System.getenv("DREDFONT");
      if (defaultFontName==null) defaultFontName = "MONOSPACED 14"; 
@@ -75,10 +80,10 @@ implements DocListener,
    protected int   fontAscent, fontHeight, fontDescent, fontEmWidth, fontHalfEm;
    
    /** The font's model character if it's fixed-width */
-   protected char fixedChar = 0;
+   protected char pitchModelChar = 0;
    
    /** The default monospace character model */
-   public static char monospaceModel = 'M';
+   final public static char defaultPitchModelChar = 'M';
 
    /** Width (in pixels) for text on the display. */
    protected int textWidth;
@@ -124,32 +129,32 @@ implements DocListener,
    }
    
    public void setFont(String fontURL)
-   { Font font = null;
+   { Font theFont = null;
      this.fontURL = fontURL;
      if (fontURL.startsWith("truetype:")) 
      { fontName  = fontURL.substring(9);
-       font      = FontMaker.decode(fontName, true);
-       fixedChar = FontMaker.fixedChar(fontName, true);
+       theFont      = FontMaker.decode(fontName, true);
+       pitchModelChar = FontMaker.fixedChar(fontName, true);
      }
      else
      if (fontURL.endsWith(".ttf") || fontURL.endsWith(".ttf")) 
      { fontName  = fontURL;
-       font      = FontMaker.decode(fontName, true);
-       fixedChar = FontMaker.fixedChar(fontName, true);
+       theFont      = FontMaker.decode(fontName, true);
+       pitchModelChar = FontMaker.fixedChar(fontName, true);
      }
      else
      if (fontURL.startsWith("type1:")) 
      { fontName  = fontURL.substring(6);
-       font      = FontMaker.decode(fontName, false);
-       fixedChar = FontMaker.fixedChar(fontName, false);
+       theFont      = FontMaker.decode(fontName, false);
+       pitchModelChar = FontMaker.fixedChar(fontName, false);
      }
      else
      {  fontName = fontURL;
-        font = Font.decode(fontName);
+        theFont = Font.decode(fontName);
      }
-     this.fontName = fontName;
-     pseudofixed = fixedChar != 0;
-     setFont(font);    
+     monoSpaced = pitchModelChar != 0;
+     setFont(theFont); 
+     if (doc!=null) calibrate();
    }
 
    /** Set the font; resizing the display as necessary to accomodate
@@ -161,50 +166,50 @@ implements DocListener,
      fontAscent  = metrics.getAscent();
      fontHeight  = metrics.getHeight();
      fontDescent = metrics.getDescent();
-     fontEmWidth = pseudofixed ? metrics.charWidth(fixedChar) : metrics.charWidth(monospaceModel);
-     fontHalfEm  = pseudofixed ? fontEmWidth / 2 : 0;
+     fontEmWidth = monoSpaced ? metrics.charWidth(pitchModelChar) : metrics.charWidth(defaultPitchModelChar);
+     fontHalfEm  = monoSpaced ? fontEmWidth / 2 : 0;
      setSize(xmargin+2*xborder+fontEmWidth*cols, 2*yborder+fontHeight*rows);
    }
    
-   /** True if simulating a monospaced font */
-   protected boolean pseudofixed = false;
+   /** True if simulating a monospaced font -- we usually use font data for positioning calculations. */
+   protected boolean monoSpaced = false;
    
    /** Switches mode between pseudofixed and natural widths */
-   public void setPseudoFixed(boolean on)
-   { pseudofixed = on;
-     if (pseudofixed) fixedChar = monospaceModel;
+   public void setMonoSpace(boolean on, char pitchModel)
+   { monoSpaced = on;
+     if (monoSpaced && pitchModel!='\000') pitchModelChar = pitchModel;
      setFont(this.font);
      repaint();
    }
    
    /** Are we pseudofixed or natural width? */
-   public boolean isPseudoFixed() { return pseudofixed; }
+   public boolean isMonoSpaced() { return monoSpaced; }
    
    /** Local calculation of character width: implements pseudofixed */
    protected int charWidth(char c)
    { 
-     return pseudofixed ? fontEmWidth : metrics.charWidth(c);
+     return monoSpaced ? fontEmWidth : metrics.charWidth(c);
    }
    
    /** Translate character coordinates to a pixel offset from the left margin. */
    protected int charToPixelX(int ox, int x, int y)
    { CharSequence line = doc.lineAt(y);
      int pixel = 0;
-     for (int i=x-1; i>=ox; i--) pixel+=charWidth(doc.transChar(line.charAt(i)));
+     for (int i=x-1; i>=ox; i--) pixel+=charWidth(Document.transChar(line.charAt(i)));
      return pixel;
    }
 
    /** Translate pixel offset from the left margin to a character index */
    protected int pixelToX(int x, int y)
    { if (y>=doc.length()) return 0;
-     if (pseudofixed) return originx + ((x+fontHalfEm)/fontEmWidth);
+     if (monoSpaced) return originx + ((x+fontHalfEm)/fontEmWidth);
      CharSequence line   = doc.lineAt(y);
      int          length = line.length();
      int          lx     = 0;
      int          px     = 0;
      int          i      = originx;
      while (i<length)
-     { px += charWidth(doc.transChar(line.charAt(i)));
+     { px += charWidth(Document.transChar(line.charAt(i)));
        if (x<px) { return (px-x)<=(x-lx) ? i+1 : i; }
        i++;
        lx=px;
@@ -381,9 +386,9 @@ implements DocListener,
                g.drawRect(x, baseLine-4, 6, 6); x+=6;
             }
             else 
-            if (doc.isMark(ch[0]))
+            if (Document.isMark(ch[0]))
             {  g.setColor(Color.RED);
-               ch[0]=doc.transChar(ch[0]);
+               ch[0]=Document.transChar(ch[0]);
                g.drawString(new String(ch), x, baseLine);
                g.setColor(getForeground());
             }

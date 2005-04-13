@@ -13,7 +13,6 @@ import java.util.concurrent.*;
 
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
-import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 /**     
         <tt><p>@ActionMethod</tt> annotations are placed on void methods
