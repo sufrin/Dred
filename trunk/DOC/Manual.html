@@ -457,7 +457,16 @@ it takes one of the forms
         type1:<i>url</i> <i>options</i>
 </pre>
 In that case, the <i>url</i> (default protocol <tt>file:</tt>) is assumed to denote a (truetype or type1) 
-font description file. The <i>options</i> may include up to one of each of the following:
+font description file. 
+</p>
+<p>
+The <i>options</i> are either empty, or take the form
+<pre>
+        <i>pointSize</i> <i>shapeoptions</i>
+</pre>
+When no point size is specified, the pointsize is taken to be 14.
+</p>
+The <i>shapeoptions</i> may include up to one of each of the following:
 <pre>
         b               # bold
         i               # italic
@@ -469,7 +478,7 @@ and up to one of the the following
         uXXXX           # <i>the font is deemed to be monospaced (char width us unicode XXXX-width)</i>
 </pre>
 These components are separated by "-".
-</p>
+<br></br>
 Examples:
 <pre>
         truetype:arialuni.ttf-14-b                      # <i>bold italic arial unicode</i>
@@ -490,6 +499,7 @@ Examples:
 <b>$Date$</b>
 </pre>
 </body>
+
 
 
 
