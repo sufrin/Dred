@@ -521,15 +521,47 @@ A good reference for matters Unicode and Linux is: Markus Kuhn's
 </p>
 
 <h2>Brief History</h2>
+
+Dred was written in Java 1.5 during between early February and mid-April 2005 because:
+<ol>
+    <li>
+    I needed a run-anywhere lightweight, reliable, and modifiable editor
+    capable of working with files in any reasonable encoding. 
+    </li>    
+    <li>
+    When the combination of Python and Tk had become a little too unwieldy 
+    for me I had given up trying to maintain the editor that I'd
+    originally written to support editing theories that used the (highly
+    nonstandard) encodings Konstanz and Laura that Richard Bornat and
+    I had used in early Jape. But I didn't want Richard's references to
+    "Bernard's heroic programming efforts" to be the end of the story.
+    </li>    
+    <li>
+    I wanted to experiment with a design that (optionally) treats the selection 
+    differently than the irritating, but now-standard <i>"typing kills selection
+    but you can rescue yourself with undo"</i>
+    model.
+    </li>
+    <li>
+    I wanted to show my students a simple, but useful, example
+    of model-view-controller. 
+    </li>
+    <li>
+    I wanted to see if I could simplify the construction and
+    documentation of the GUI by using Java 1.5 annotations.
+    </li>
+</ol>
+I've been using it (mostly with Redhat 9, SuSe 9.2, and Solaris) for
+all my editing since mid-February, and it hasn't crashed on me more than
+twice or lost me any significant amount of work.
 <p>
-Dred was written in Java 1.5 and (to my certainb knowledge) runs on the
+It runs on the
 Sun 1.5 JVM on all variants of Linux, Windows, and Solaris on which that
-JVM can be installed. <i>(I do not know, nor much care, whether Apple
+JVM can be installed. (<i>I don't know, nor much care, whether Apple
 have gotten around to implementing their own Java 1.5 on MacOS-X. Their
 idiosyncratic Java implementations have, in the past, wasted a great
-deal of my time. If you're an adherent to the cult then you already
-believe yourself to have superior tools. Enjoy yourself with them!)
-</i>
+deal of my time.</i>)
+
 </p>
 <p>
 </p>
@@ -539,6 +571,7 @@ believe yourself to have superior tools. Enjoy yourself with them!)
 <b>$Date$</b>
 </pre>
 </body>
+
 
 
 
