@@ -34,6 +34,7 @@ import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.ComponentInputMap;
 import javax.swing.InputMap;
@@ -304,13 +305,13 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       menu.addSeparator();
       menu.add
       (new Act("Insert Unicode Range", 
-               "Insert boilerplate abbreviation lines for the 128 characters with Unicode starting at hex code in ....")
+               "Insert boilerplate abbreviation lines for the 256 characters in the page containing the hex code in ....")
       {
         public void run()
         {
           try
-          { int low  = Integer.parseInt(text.argument.getText(), 16);
-            int high = low+128;
+          { int low  = Integer.parseInt(text.argument.getText(), 16) / 256 * 256;
+            int high = low+256;
             while (low<high) 
                   doc.insert(String.format("text abbrev XXX \\u%04X # %c\n", low, (char) low++));
             text.argument.setText(String.format("%04X", low));  
@@ -341,14 +342,14 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       });
       
       menu = addMenu("View");
-      menu.add(new CheckItem("Monospaced", ed.isPseudoFixed(), "Simulate a monospaced font with the current font.", prefs)
+      menu.add(new CheckItem("Monospaced", ed.isPseudoFixed(), "Simulate a monospaced font with the current font.")
       {
         public void run()
         {
           ed.setPseudoFixed(state);
         }
       });
-      menu.add(new CheckItem("Monospace model character: \u2167", false, "Set the Monospace model to \u2167 (a very wide character)", prefs)
+      menu.add(new CheckItem("Monospace model character: \u2167", false, "Set the Monospace model to \u2167 (a very wide character).")
       {
         public void run()
         {
