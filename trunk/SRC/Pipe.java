@@ -49,7 +49,7 @@ public class Pipe
   */
   public static Process execute(File cwd, String command, final String input, final Continue cont, final boolean collect)
   { List<String> args = new Vector<String>();
-    if (File.separator.equals("\\")) // Cheap test for Widowhood!
+    if (Dred.onWindows()) 
     {
       args.add("cmd");
       args.add("/c");
@@ -140,6 +140,7 @@ public class Pipe
     void consumeOutput(BufferedReader reader);
   }
 }
+
 
 
 

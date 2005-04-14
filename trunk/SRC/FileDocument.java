@@ -103,6 +103,7 @@ public class FileDocument extends SearchableDocument
   public void doLoad(String name)
   { fileName = new File(name).getAbsoluteFile();
     canonicalizeFileName();
+    if (debug) log.fine("Loading %s (%s)", fileName, fileTitle);
     anonymous = false;
     fileNameSet();
     if (fileName.exists() && fileName.canRead())
@@ -122,9 +123,16 @@ public class FileDocument extends SearchableDocument
     ||  name.startsWith("class:")
     ||  name.startsWith("file:")
     ||  name.startsWith("ftp:")
+    ||  name.startsWith("dred:")
        )
     try
-    { URL url   = new URL(name);
+    { 
+      if (name.startsWith("dred://")) name = "class://org.sufrin.dred.Dred"+name.substring(6);
+      else
+      if (name.startsWith("dred:/")) name = "class://org.sufrin.dred.Dred"+name.substring(5);
+      else
+      if (name.startsWith("dred:")) name = "class://org.sufrin.dred.Dred/"+name.substring(5);
+      URL url   = new URL(name);
       anonymous = true;
       fileTitle = trimTitle(url.toString());
       fileName  = new File(name);
@@ -321,6 +329,7 @@ public class FileDocument extends SearchableDocument
     for (Listener l:listeners) l.fileBacked(backup, fileTitle);
   }
 }
+
 
 
 

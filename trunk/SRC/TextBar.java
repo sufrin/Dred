@@ -1,8 +1,9 @@
 package org.sufrin.dred;
 
+import GUIBuilder.Row;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import GUIBuilder.RowLayout;
 
@@ -15,21 +16,38 @@ import GUIBuilder.RowLayout;
  */
 public class TextBar extends JPanel
 {
-  public TextLine argument, find, repl;
+  public    TextLine argument, find, repl;
+  protected JCheckBox findLit = new JCheckBox(), 
+                      replLit = new JCheckBox();
+  protected Row       findRow = new Row(), 
+                      replRow = new Row();
+  
+  { findRow.add(new JLabel(" Find")); findRow.add(findLit); 
+    replRow.add(new JLabel(" Repl")); replRow.add(replLit); 
+    findLit.setToolTipText("Check this to intepret the Find minitext as a regular expression");
+    replLit.setToolTipText("Check this to intepret the Repl minitext as a regular expression substitution template");
+  }
+  
+  public boolean isFindRegEx()             { return findLit.isSelected(); }
+  public boolean isReplRegEx()             { return replLit.isSelected(); }
+  public void setFindRegEx(boolean state)  { findLit.setSelected(state); }
+  public void setReplRegEx(boolean state)  { replLit.setSelected(state); }
 
   public TextBar()
-  {
+  { 
     setLayout(new RowLayout(-1, true));
     setBorder(BorderFactory.createEtchedBorder());
     argument = new TextLine(24, " .... ");
     argument.setToolTipText("The argument text for various commands with arguments (....)");
-    find     = new TextLine(24, " Find ");
-    find.setToolTipText("The find text or pattern");
-    repl     = new TextLine(24, " Repl ");
-    repl.setToolTipText("The replacement text or template");
+    find     = new TextLine(22, findRow, true, " Find ");
+    findRow.setToolTipText("The find text or pattern (regular expression when checked)");
+    repl     = new TextLine(22, replRow, true, " Repl ");
+    replRow.setToolTipText("The replacement text or template (regular expression substitution when checked)");
     add(argument);
     add(find);
     add(repl);
+    findLit.setBorderPaintedFlat(true);
+    replLit.setBorderPaintedFlat(true);
   }
   
   /** Bind keys in all three textlines to the same action in each */
@@ -49,6 +67,9 @@ public class TextBar extends JPanel
   }
 
 }
+
+
+
 
 
 

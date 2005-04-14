@@ -121,7 +121,9 @@ components in a row above it. The minitexts are labelled
 and &quot;Repl&quot;. 
 
 <p> The <i>Find</i> and <i>Replace</i> minitexts provide arguments for
-the actions of the same name.  </p>
+the actions of the same name. The little checkboxes next to
+them indicate whether they are interpreted as "regular expression" or
+"literal".</p>
 
 <p> The <i>Argument</i> minitext provides arguments for many of the other
 editing commands, including those on the <i>File</i> menu which start
@@ -203,29 +205,35 @@ the <i>Find</i>, and the <i>Replace</i> texts, respectively.
 
 <p>
 The <i>FindDown</i> action selects the next (<i>FindUp</i> previous) instance of the
-<i>Find</i> minitext. 
+pattern specified by the <i>Find</i> minitext. 
 </p>
-The <b>Edit/Literal&nbsp;Find</b> checkbox
-controls the interpretation of the pattern as literal or regular expression.
+If the checkbox adjacent to the <i>Find</i> minitext is checked then
+the pattern is interpreted as a regular expression, otherwise it is interpreted
+literally.
 
-<p> <b>If the current selection is an instance of the Find text </b>
-then the <i>ReplaceDown</i> action saves the current selection in the
-cut-buffer and replaces it with the <i>Repl</i> minitext -- leaving the
-cursor to the right of the mark. The <i>ReplaceUp</i> button does the
-same, but leaves the cursor to the left of the mark.  </p>
+<p> If the current selection is an instance of the Find text, <i>and has
+the cursor to the right of the mark</i>, then the <i>ReplaceDown</i>
+action saves the current selection in the cut-buffer and replaces it
+with the (meaning of the) <i>Repl</i> minitext -- leaving the cursor to the right of
+the mark. The <i>ReplaceUp</i> button is analogous, but requires that
+the cursor is to the left of the mark in the Find text, and leaves the
+cursor to the left of the mark in the replacement text.</p>
+
+<p>The meaning of the  <i>Repl</i> minitext is the text itself
+if the checkbox adjacent to it is NOT checked. Otherwise its meaning is
+the text obtained by substituting each instance of <tt>$n</tt> in it
+by the text that matched the <tt>n</tt>th bracketed expression in the 
+instance of the pattern that is being replaced.
+</p>
 
 <p>The <i>FindUp</i> action is usually bound to the SHIFTED key that
 the <i>FindDown</i> action is bound to; likewise the <i>ReplaceUp</i>
 action is usually bound to the SHIFTED <i>ReplaceDown</i> key.  </p>
 
-<p>The <b>Edit/Literal&nbsp;Replace</b> checkbox controls the
-interpretation of the <i>Repl</i> minitext
- as a literal or regexp substitution (<tt>$n</tt> replaces the
-<tt>n</tt>th bracketed expression in the pattern).
-</p>
 
 <p> The <i>FindSelDown</i> action makes the current selection the
-<i>Find</i> text, then acts as the <i>FindDown</i> action. Likewise
+<i>Find</i> pattern, turns off regular expression interpretation,
+and then acts as the <i>FindDown</i> action. Likewise
 <i>FindSelUp</i> makes the current selection the <i>Find</i> text,
 then acts as the <i>FindUp</i> action.  </p>
 
@@ -545,18 +553,18 @@ for the file) are <tt>ftp:</tt> and <tt>http:</tt>
 Dred has an additional protocol
 that gives it access to resources (such as documentation and pre-designed
 bindings files) that come packaged in its .jar file. To access such a file
-one prefixes its name with <tt>class://org/sufrin.dred.Dred/</tt>. Specific
+one prefixes its name with <tt>dred:</tt>. Specific
 examples that might be useful are:
 <code><pre>
-   class://org/sufrin.dred.Dred/dred-bs.bindings
-   class://org/sufrin.dred.Dred/function.bindings
-   class://org/sufrin.dred.Dred/style.bindings
-   class://org/sufrin.dred.Dred/symbols.bindings
-   class://org/sufrin.dred.Dred/ctrl.bindings
-   class://org/sufrin.dred.Dred/Manual.html
-   class://org/sufrin.dred.Dred/Bindings.html
-   class://org/sufrin.dred.Dred/Underhood.html
-   class://org/sufrin.dred.Dred/index.html
+   dred:/dred-bs.bindings
+   dred:/function.bindings
+   dred:/style.bindings
+   dred:/symbols.bindings
+   dred:/ctrl.bindings
+   dred:/Manual.html
+   dred:/Bindings.html
+   dred:/Underhood.html
+   dred:/index.html
 </pre></code>
 </p>
 
@@ -691,6 +699,7 @@ deal of my time.</i>)
 <b>$Date$</b>
 </pre>
 </body>
+
 
 
 

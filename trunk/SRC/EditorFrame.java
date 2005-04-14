@@ -208,6 +208,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       menu.addSeparator();
       menu.addSeparator();
       
+      if (false)
       menu.add
       (new CheckItem("Literal Find", 
                      SearchableDocument.initLitFind, 
@@ -219,6 +220,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
           doc.litFind = state;
         }
       });
+      if (false)
       menu.add(new CheckItem("Literal Replace",
                              SearchableDocument.initLitRepl,
                              "Interpret Repl text literally (alternative is as regular expression substitution)", 
@@ -229,6 +231,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
           doc.litRepl = state;
         }
       });
+     
       menu.addSeparator();
       menu.add(new CheckItem("( )   matching",
                              SearchableDocument.initMatchBra,
@@ -263,7 +266,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
 
       menu = addMenu("Etc");
       bind("doShell");
-      if (File.separator.equals("/")) // Unix -- pathetic really, but ...
+      if (Dred.onUnix()) // Unix -- pathetic really, but ...
       {
          menu.addSeparator();
          menu.add(new Act("fmt -75 -c  < sel'n", "Use an external formatter (fmt) to format the current selection")
@@ -383,10 +386,12 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       
       menu = addMenu("Help");
       bind("doHelp");
-      if (Dred.sessionSocket != null) bind("doMozilla");
+      if (Dred.sessionSocket != null) 
+         bind(Dred.onUnix()?"doMozilla":"doExplorer");
       menu.addSeparator();
       bind("doCurrentBindings");
       bind("doCommands");
+      bind("doUnpackDocumentation");
       menu.addSeparator();
       bind("doAbout");
       
@@ -1197,10 +1202,11 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
    * switches).
    */
   public void doFind(boolean upwards)
-  {
+  { doc.litFind = !text.isFindRegEx();
+    doc.litRepl = !text.isReplRegEx();
     if (!doc.setPattern(text.find.getText()))
-    {
-      tempCaption(doc.regexError());
+    { tempCaption(doc.regexError());
+      Dred.showWarning(doc.regexError());
       return;
     }
     edFocus();
@@ -1214,7 +1220,9 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
    * text specified by the current selection.
    */
   public void doFindSel(boolean upwards)
-  {
+  { doc.litFind = false;
+    text.setFindRegEx(false);
+    doc.litRepl = !text.isReplRegEx();
     if (!hasNonemptySelection())
       return;
     text.find.setText(doc.getSelection());
@@ -1309,6 +1317,51 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
            { ex.printStackTrace();
            }
          }  
+  }
+  
+  @ActionMethod(label="Browse Help with Internet Explorer", tip="Browse the help text (from Dred's built-in server) using explorer.")
+  public void doExplorer()
+  {
+        { try
+           { whoCalledBrowser = this; 
+             Runtime.getRuntime().exec(String.format("explorer http://localhost:%d/index.html", Dred.sessionSocket.getPort()));              
+           }
+           catch (IOException ex)
+           { ex.printStackTrace();
+           }
+         }  
+  }
+  
+  @ActionMethod(label="Unpack Documentation", tip="Unpack the documentation files into the local filestore, and (on Windows) view them with Explorer.")
+  public void doUnpackDocumentation()
+  { 
+    fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+    fileChooser.setCurrentDirectory(cwd); // doc.getFileName().getParentFile());
+    int res = fileChooser.showOpenDialog(this);
+    if (res == JFileChooser.APPROVE_OPTION)
+    {
+      File newcwd = fileChooser.getSelectedFile();
+      if (newcwd.isDirectory())
+      { String[] files = { "index.html",   "Manual.html", "Underhood.html", 
+                           "Bindings.html", "current.bindings.html"};
+        for (String file: files) 
+        { FileDocument d = new FileDocument("UTF8");
+          d.doLoad("dred:"+file);
+          d.doSaveAs(new File(newcwd, file), "UTF8");
+        }
+        tempCaption(String.format("Documentation saved in: %s", newcwd.getAbsolutePath()));
+        if (Dred.onWindows()) 
+        try 
+        { Runtime.getRuntime().exec(String.format("explorer %s\\index.html", newcwd)); 
+        }
+        catch (Exception ex)
+        {}             
+      }
+      else 
+      { tempCaption(String.format("%s is not a directory.", newcwd.getAbsolutePath()));
+        return;
+      }    
+    }
   }
   
   protected static EditorFrame whoCalledBrowser = null;
@@ -1484,12 +1537,15 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
    * find switches), then replace it with the Repl text.
    */
   public void doReplace(boolean upwards)
-  {
+  { doc.litRepl = !text.isReplRegEx();
+    doc.litFind = !text.isFindRegEx();
     doc.setReplacement(text.repl.getText());
     edFocus();
     String lastSel = doc.replace(upwards);
     if (lastSel == null)
-      tempCaption(doc.regexError());
+    {  tempCaption(doc.regexError());
+       Dred.showWarning(doc.regexError());
+    }
     else SystemClipboard.set(lastSel);
   }
 
@@ -1499,7 +1555,9 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
    */
   @ActionMethod(offline=true, label="Replace all", tip="Replace all instances of the Find pattern within the selection with the Repl text.")
   public void doReplaceAll()
-  { doMarkPosition();
+  { doc.litRepl = !text.isReplRegEx();
+    doc.litFind = !text.isFindRegEx();
+    doMarkPosition();
     if (!doc.setPattern(text.find.getText()))
     {
       tempCaption(doc.regexError());
@@ -1967,6 +2025,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
 
 
 

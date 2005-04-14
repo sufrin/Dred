@@ -118,7 +118,9 @@ public class Dred
            startLocalSession(null, EncodingName); 
      }
     else 
-      startServer(0);
+    { startServer(0);
+      if (onWindows()) startLocalSession(null, EncodingName); 
+    }
   }
   
   /** Return true if there's REALLY a server running */
@@ -303,7 +305,7 @@ public class Dred
     serverRunning = true;
     String user = System.getProperty("user.name");
     try
-    { if (port>0 || (File.separator.equals("/") && port>=0))
+    { if (port>0 || (onUnix() && port>=0))
       { 
         sessionSocket = new SessionSocket(port, prefs);
         port = sessionSocket.getPort();
@@ -429,9 +431,12 @@ public class Dred
   {
     return Dialog.showWarning(null, msg, dflt, options);
   }
-
-
+  
+  /* Is there no limit to my philistinism? */
+  public static boolean onUnix()    { return File.separator.equals("/"); }
+  public static boolean onWindows() { return File.separator.equals("\\"); }
 }
+
 
 
 
