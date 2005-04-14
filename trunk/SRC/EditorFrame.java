@@ -109,9 +109,9 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     
     protected CheckItem lookAndFeel =       
     (new CheckItem
-           ("Flat L&F",
+           ("Flat Look and Feel",
             false,
-            "Use a flat-looking Look and Feel (for when the standard Swing colour scheme makes you want to puke?)",
+            "Use a flat-looking Look and Feel (for when the standard Swing colour scheme makes you want to puke)",
             prefs)
       { { run(); }
         public void run()
@@ -205,7 +205,6 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       menu.addSeparator();
       bind("doReplaceDown");
       bind("doReplaceUp");
-      menu.addSeparator();
       menu.addSeparator();
       
       if (false)
@@ -420,11 +419,11 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   /* Load all the standard extensions */
   static
   { 
+    Extension.register(new CutRingTool(prefs));
     Extension.register(new LatexTool(prefs));
     Extension.register(new AntTool());
     Extension.register(new MakeTool());
     Extension.register(new ShellTool());
-    Extension.register(new CutRingTool(prefs));
     Extension.register(new KeystrokeTool());
     File extensions = null;
     try
@@ -2025,6 +2024,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
 
 
 

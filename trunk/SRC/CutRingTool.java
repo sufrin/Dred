@@ -1,4 +1,5 @@
 package org.sufrin.dred;
+import  java.awt.*;
 import  java.awt.event.*;
 import  java.io.*;
 import  java.util.prefs.Preferences;
@@ -222,7 +223,8 @@ public class CutRingTool extends Extension
               }
             }
         });
-        sizeTool.setMaximumSize(sizeLabel.getMaximumSize());
+        Dimension d = sizeLabel.getMaximumSize();
+        sizeTool.setMaximumSize(new Dimension(d.width, d.height*3/2));
     }
         
     /** Select the previous Cut */
@@ -245,6 +247,9 @@ public class CutRingTool extends Extension
         
   }
 }
+
+
+
 
 
 

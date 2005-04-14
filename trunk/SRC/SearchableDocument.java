@@ -1,4 +1,5 @@
 package org.sufrin.dred;
+import javax.swing.Timer;
 import java.util.regex.*;
 import org.sufrin.logging.Logging;
 
@@ -72,12 +73,38 @@ public class SearchableDocument extends Document
    /** Line number of the last successful search. */
    private   int         matchY;
    
+   boolean searchingOk = true;
+   
+   Timer timer = new Timer(3500, new Act("Timer")
+   {
+      public void run() { interruptSearch(); Dred.showWarning("Timeout after 3.5secs on search"); }
+   });
+   { timer.setRepeats(false); }
+   
+   boolean stopTimer(boolean value)
+   { timer.stop();
+     searchingOk = true;
+     return value;
+   }
+         
+   void startTimer() { timer.start(); searchingOk = true; }
+   
+   protected void interruptSearch()
+   { searchingOk = false;
+   }
 
    /** Select (with the cursor to the right of the mark) the next
        instance of the document pattern after the cursor, if there is one.
        Return true iff successful;
    */
-   public boolean downFind() { return downFind(pattern); }
+   public boolean downFind() { startTimer(); return stopTimer(downFind(pattern)); }
+
+   /** Select (with the cursor to the left of the mark) the previous
+       instance of the pattern before the cursor, if there is one.
+       Return true iff successful;
+   */
+   public boolean upFind() { startTimer(); ; return stopTimer(upFind(pattern)); }
+
 
    /** Select (with the cursor to the right of the mark) the next
        instance of the given pattern after the cursor, if there is  one.
@@ -91,7 +118,8 @@ public class SearchableDocument extends Document
      else
         return false;
    }
-
+   
+   
    /**
         Find the closest instance of pattern below the current position.
    */
@@ -103,7 +131,7 @@ public class SearchableDocument extends Document
    */
    public boolean downSearch(int x, int y, Pattern aPattern)
    { CharSequence r = lineAt(y);
-     while (true)
+     while (searchingOk)
      { if (searchFirst(x, aPattern, r))
        { matchY = y;
          return true;
@@ -116,6 +144,7 @@ public class SearchableDocument extends Document
        else
        return false;
      }
+     return false;
    }
    
    /** Find the first occurence of the pattern after x in the sequence r, 
@@ -134,12 +163,6 @@ public class SearchableDocument extends Document
    } 
 
    
-   /** Select (with the cursor to the left of the mark) the previous
-       instance of the pattern before the cursor, if there is one.
-       Return true iff successful;
-   */
-   public boolean upFind() { return upFind(pattern); }
-
    public boolean upFind(Pattern aPattern)
    { if (upSearch(aPattern))
      { 
@@ -161,7 +184,7 @@ public class SearchableDocument extends Document
    */
    public boolean upSearch(int x, int y, Pattern aPattern)
    { CharSequence r = lineAt(y);
-     while (true)
+     while (searchingOk)
      { if (searchLast(x, aPattern, r))
        { matchY = y;
          return true;
@@ -174,6 +197,7 @@ public class SearchableDocument extends Document
        else
          return false;
      }
+     return false;
    }
 
    /** Find the last occurence of the pattern before x in the sequence r,
@@ -624,6 +648,7 @@ public class SearchableDocument extends Document
      }
    }
 }
+
 
 
 
