@@ -23,6 +23,7 @@
 <li><a href="#Editing Actions">Editing Actions</a></li>
 <li><a href="#Mouse Actions">Mouse Actions</a></li>
 <li><a href="#Opening and Saving files">Opening and Saving files</a></li>
+<li><a href="#Fonts">Fonts</a></li>
 <li><a href="#References">References</a></li>
 <li><a href="#Brief History">Brief History</a></li>
 <li><A href="index.html">Back to Dred Help Index</A></li>
@@ -36,33 +37,38 @@ a 1.5 JRE to run.
 
 <a name="Unix/Linux Usage"><h2>Unix/Linux Usage</h2></a>
 <pre>
-        java -jar Dred.jar [--enc=<i>encoding</i>] [--bindings=<i>bindings-url</i>] --wait [filenames] 
+        java -jar Dred.jar [--enc=<i>encoding</i>] [--bindings=<i>bindings-url</i>] --wait <i>files</i> 
 </pre> 
 or 
 <pre>
-        java -jar Dred.jar [--enc=<i>encoding</i>] [--bindings=<i>bindings-url</i>] -w [filenames] 
+        java -jar Dred.jar [--enc=<i>encoding</i>] [--bindings=<i>bindings-url</i>] -w <i>files</i> 
 </pre>
 or        
 <pre>
-        ted [--enc=<i>encoding</i>] [--bindings=<i>bindings-url</i>] [filenames]
+        ted [--enc=<i>encoding</i>] [--bindings=<i>bindings-url</i>] <i>files</i>
 </pre>  
-<p> This starts edit sessions for each of the given filenames.  The
+<p> This starts edit sessions for each of the files. The
 program exits when the last session terminates.  
 </p>
 
 <pre>
-        java -jar Dred.jar [--enc=<i>encoding</i>] [--bindings=<i>bindings-url</i>] [filenames]  &amp;
+        java -jar Dred.jar [--enc=<i>encoding</i>] [--bindings=<i>bindings-url</i>] <i>files</i>  &amp;
 </pre>  
 or        
 <pre>
-        dred [--enc=<i>encoding</i>] [--bindings=<i>bindings-url</i>] [filenames]
+        dred [--enc=<i>encoding</i>] [--bindings=<i>bindings-url</i>] <i>files</i>
 </pre>  
 <p>
-This starts edit sessions for each of the given filenames, using an
-existing Dred server if one is running, then exits immediately. If no
+This starts edit sessions for each of the given files, <i>using the user's
+existing Dred server if one is running</i>, then exits immediately. If no
 server is running then it starts itself in server mode, puts up an
 (iconified) server control, and starts edit sessions for the
 filenames. 
+
+
+
+Files are usually specified by paths in the local filestore, but can also be specifed by URL: 
+see <a href="#Opening a URL">Opening a URL</a> for details.  
 </p>
 
 <p>
@@ -74,7 +80,8 @@ the files are assumed to use the specified encoding; otherwise UTF8 is assumed.
 </p>
       
 <p>
-(see also <A href="Bindings.html">Specifying Bindings</A> and <A href="Underhood.html">Under the Hood</A>)
+(see also <A href="Bindings.html">Specifying Bindings</A> and 
+<A href="Underhood.html">Under the Hood</A>)
 </p>
 
 <br></br>
@@ -481,64 +488,84 @@ in the file browser.
 <h3>Opening</h3>
 Use the <b>File/Edit&nbsp;....</b> menu entry with the name of
 the file in the argument minitext, or use the <b>File/Edit&nbsp;(browse)</b> 
-menu entry to start a new editing session. 
+menu entry to start a new editing session. The browser opens in the 
+current working directory of the editing session, which is usually that
+from which the session was started.
 
-<p> The "filename completion" shortcut in the argument minitext causes
-the text in that minitext to change to the longest common prefix of
-all the files in the <i>current scope</i> that start with the existing value of
-the minitext. 
+<h4>Filename Completion</h4>
+<p> The "filename completion" shortcut (usually TAB) in the argument
+minitext causes the text in that minitext to change to the longest common
+prefix of all the files in the <i>current scope</i> that start with the
+existing value of the minitext.  
 </p>
 
 
-<ul>
+<ol>
      <li>
      If the minitext is empty, then a browser is opened in the current
      working directory (the directory from which the session was started).
      </li>
+          
+     <li>
+     If the minitext looks like an absolute path then the current scope is the parent 
+     of that path. 
+     For example, the scope of the path <tt>/b</tt> is <tt>/</tt>, and the scope of 
+     <tt>/b/</tt> is <tt>/b/</tt>
+     </li>
+     
      
      <li>
-     If the minitext looks like a relative path then the current scope
-     is interpreted <i>relative to the parent 
-     path of the file being edited</i>.
-     </li>
-           
-     <li>
-     If the minitext is an absolute path then the current scope is the parent 
-     of that path.
+     If the minitext starts with <tt>./</tt> then the leading <tt>./</tt> is replaced by
+     the absolute path of the current working directory of the editing
+     session (which is usually the current working directory directory
+     from which the session was started), and rule 2 is applied.
      </li>
      <li>
-     If the minitext looks like a URL, then Dred will do its best to read the file
-     from that URL (Note that Dred cannot yet <i>save</i> documents to locations 
-     specified by a URL).       
-     <br></br>
-     Protocols known to work (providing no credentials are required
-     for the file) are <tt>ftp:</tt> and <tt>http:</tt>
-     <br></br>
-           Dred has an additional protocol
-           that gives it access to resources (such as documentation and pre-designed
-           bindings files) that come packaged in its .jar file. To access such a file
-           one prefixes its name with <tt>class://org/sufrin.dred.Dred/</tt>. Specific
-           examples that might be useful are:
-           <code><pre>
-              class://org/sufrin.dred.Dred/dred-bs.bindings
-              class://org/sufrin.dred.Dred/function.bindings
-              class://org/sufrin.dred.Dred/style.bindings
-              class://org/sufrin.dred.Dred/symbols.bindings
-              class://org/sufrin.dred.Dred/ctrl.bindings
-              class://org/sufrin.dred.Dred/Manual.html
-              class://org/sufrin.dred.Dred/Bindings.html
-              class://org/sufrin.dred.Dred/Underhood.html
-              class://org/sufrin.dred.Dred/index.html
-           </pre></code>
+     If the minitext starts with <tt>../</tt> then the leading <tt>../</tt> is replaced
+     by the absolute path of the parent of the current working directory
+     of the editing session, and rule 2 is applied.
      </li>
-</ul>
+     
+     <li>
+     In all other cases, the minitext is prefixed with <i>the parent
+     path of the file being edited</i> in the current session, and rule
+     2 is applied.
+     </li>           
+</ol>
+
+<a name="Opening a URL><h4>Opening a URL</h4></a>
+<p>
+Dred will do its best to read a filedenoted by URL, but it cannot yet <i>save</i> documents to locations 
+specified by a URL. If you edit a URL-specified file, you will need to use <b>Save As</b> to save it
+somewhere else. 
+<br></br>
+Protocols known to work (providing no credentials are required
+for the file) are <tt>ftp:</tt> and <tt>http:</tt>
+<br></br>
+Dred has an additional protocol
+that gives it access to resources (such as documentation and pre-designed
+bindings files) that come packaged in its .jar file. To access such a file
+one prefixes its name with <tt>class://org/sufrin.dred.Dred/</tt>. Specific
+examples that might be useful are:
+<code><pre>
+   class://org/sufrin.dred.Dred/dred-bs.bindings
+   class://org/sufrin.dred.Dred/function.bindings
+   class://org/sufrin.dred.Dred/style.bindings
+   class://org/sufrin.dred.Dred/symbols.bindings
+   class://org/sufrin.dred.Dred/ctrl.bindings
+   class://org/sufrin.dred.Dred/Manual.html
+   class://org/sufrin.dred.Dred/Bindings.html
+   class://org/sufrin.dred.Dred/Underhood.html
+   class://org/sufrin.dred.Dred/index.html
+</pre></code>
+</p>
 
 <h4>Character Set Encoding</h4>
 A file may be loaded using a specified encoding by using the
 <b>File/Edit&nbsp;(Browse)</b> menu entry and changing the encoding
 using the encoding selector provided in the file browser.
 
-<h4>Fonts</h4>
+<a name="Fonts"><h2>Fonts</h2></a>
 Dred usually uses the platform standard font known to Java as <tt>MONOSPACED 14</tt>.
 But on some platforms this may lack glyphs for some of the Unicodes that you
 need to use. So it is possible to set up Dred to use a different default font,
@@ -567,8 +594,8 @@ When no point size is specified, the pointsize is taken to be 14.
 </p>
 The <i>shape-options</i> may include up to one of each of the following:
 <pre>
-        b               # bold
-        i               # italic
+        b[old]          # bold
+        i[italic]       # italic
 </pre>
 and up to one of:
 <pre>
@@ -578,8 +605,10 @@ and up to one of:
 </pre>
 The shape options are separated by "-".
 <br></br>
-Examples:
+Examples of font specifications are
 <pre>
+        MONOSPACED-14                                             # 
+        Sanserif-bold-14                                          # 
         truetype:arialuni.ttf@14-b                                # <i>bold italic arial unicode from a local font file</i>
         truetype:arialuni.ttf@16.3-b-i-m                          # <i>bold italic M-spaced arial unicode from a local font file</i>
         truetype:file:arialuni.ttf@16.3-b-i-u2167                 # <i>bold italic Ⅷ-spaced arial unicode from a local font file</i>
@@ -593,6 +622,11 @@ small number of models) the character whose width is used to determine
 the monospace pitch. This can be helpful if you want to work on material
 containing glyphs that cannot be found in a monospaced font.
 </p>
+
+The <b>View/Set font to ...</b> and the <b>View/Set default font to ...</b> menu
+entries change the font used in the current window (or that
+used in the current windopw and all future windows) to the
+font specified in the Argument (...) minitext. 
 
 <a name="References"><h2>References</h2></a>
 <p>
@@ -657,6 +691,8 @@ deal of my time.</i>)
 <b>$Date$</b>
 </pre>
 </body>
+
+
 
 
 

@@ -503,15 +503,6 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
    */
   static int frames = 0;
 
-  /** Return the common prefix of a and b */
-  protected static String commonPrefix(String a, String b)
-  {
-    int m = Math.min(a.length(), b.length());
-    for (int i = 0; i < m; i++)
-      if (a.charAt(i) != b.charAt(i))
-        return a.substring(0, i);
-    return a.substring(0, m);
-  }
 
   /** The application bars */
   JPanel bars = new JPanel();
@@ -642,13 +633,13 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   
   @ActionMethod(label="Set font to ....", tip="Set this window's font")
   public void doSetFont()
-  { ed.setFont(text.argument.getText());
+  { ed.setFont((text.argument.getText().trim()));
   }
   
   @ActionMethod(label="Set default font to ... ", tip="Set this window's and the default font")
   public void doSetDefaultFont()
-  { ed.setFont(text.argument.getText());
-    Display.setDefaultFontName(text.argument.getText());
+  { ed.setFont((text.argument.getText().trim()));
+    Display.setDefaultFontName((text.argument.getText().trim()));
   }
     
   protected static Bindings protoBindings = null;
@@ -873,13 +864,13 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   {
     name = desugarFilename(name);
     File path = new File(name);
-    File cdir = path.getParentFile() == null
-                ? doc.getFileName()
-                     .getParentFile()
-                : path.isDirectory()
-                                    ? path
-                                    : path.getParentFile();
-    String[] files = cdir.list();
+    // implements the scope rule explained in the Manual
+    File scope = path.getParentFile() == null
+               ? doc.getFileName().getParentFile()
+               : path.isDirectory()
+                 ? path
+                 : path.getParentFile();
+    String[] files = scope.list();
     String prefix = path.isDirectory() ? "" : path.getName();
     LinkedList<String> candidates = new LinkedList<String>();
     if (files == null)
@@ -892,8 +883,18 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     String candidate = candidates.removeFirst();
     while (!candidates.isEmpty())
       candidate = commonPrefix(candidate, candidates.removeFirst());
-    File it = new File(cdir, candidate);
+    File it = new File(scope, candidate);
     return it.toString() + (it.isDirectory() ? File.separator : "");
+  }
+  
+  /** Return the common prefix of a and b */
+  protected static String commonPrefix(String a, String b)
+  {
+    int m = Math.min(a.length(), b.length());
+    for (int i = 0; i < m; i++)
+      if (a.charAt(i) != b.charAt(i))
+        return a.substring(0, i);
+    return a.substring(0, m);
   }
 
   /**
@@ -924,7 +925,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     // transform relative addresses to ``relative to cwd''
     if (   name.startsWith(".." + File.separator)
         || name.startsWith("." + File.separator)
-        || doc.getFileTitle().matches("[A-Za-z]+://.*")
+        || doc.getFileTitle().matches("[A-Za-z]+:/.*") // doc was from a url
        )
       name = cwd.toString() + File.separator + name;
     File file = new File(name);
@@ -1096,7 +1097,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   public void doEdit()
   { 
     String name = text.argument.getText();
-    if (!name.matches("[A-Za-z]+://.*"))
+    if (!name.matches("[A-Za-z]+:/.*"))
     {
        name = desugarFilename(name);
        if ("".equals(name))
@@ -1725,9 +1726,11 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       name = new File(doc.getFileName().getParent(), spec).getAbsolutePath();
     name = name.replaceAll("\\.tex$", "");
     name += usepdf ? ".pdf" : ".ps";
-    // Automatic scaling based on a heuristic
-    smallscale = doc.lineAt(0).toString().matches(".*documentclass.*foil.*");
-    //
+    // Automatic scaling is based on a heuristic
+    smallscale = false;
+    for (int i=0; i<Math.min(doc.length(), 4); i++)
+        smallscale = smallscale || 
+                      doc.lineAt(i).toString().matches(".*documentclass.*foil.*");
     String command = usepdf
                            ? "xpdf "
                            : ("gv -spartan -scale " + (smallscale ? -2 : -1) + " -geometry -1+0 ");
@@ -1746,7 +1749,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
 
   /**
    * Add a Doc listener to the document that shows current
-   * location on the GUI; overridden in ``fast'' frames.
+   * location on the GUI; overridden in fast-changing frames.
    */
   public void enableDocFeedback()
   {
@@ -1815,10 +1818,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
    */
   public void fileReport(String report)
   {
-    Dred.showWarning(report, 0, new Object[]
-    {
-      "OK"
-    });
+    Dred.showWarning(report);
     tempCaption(report);
   }
 
@@ -1967,6 +1967,8 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
+
 
 
 

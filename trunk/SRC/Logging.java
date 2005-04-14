@@ -7,37 +7,71 @@ import java.lang.reflect.*;
 import java.util.logging.*;
 
 /**
-        A Logging is a facade for a Logger: it offers formatted
+        
+<p>
+        A <tt>Logging</tt> is a facade for a <tt>Logger</tt>: it offers formatted
         output as a convenience. The static methods of this class
-        offer simplified access to the java.util.logging logging
+        offer simplified access to the <tt>java.util.logging</tt> logging
         system.
+</p>
 
-        Loggers obtained  by using this class's getLogger method
+<p>
+        Loggers obtained  by using this class's <tt>getLogger</tt> method
         can have their level set from the java system properties,
         by the usual logging configuration file, or by a nominated
         configuration file.
+</p>
 
+<p>
         Logging configuration is compatible with the Java standard
-        if either the environment variable "Logging.standard"
+        if either the environment variable <tt>"Logging.standard"</tt>
         (or a system resource with the same name) has value "1".
+</p>
 
+<p>
         Otherwise the logging levels for named logs can be specified
-        by one or more java command-line -D parameters or system
+        by one or more java command-line <tt>-D</tt> parameters or system
         resources.
+</p>
         
         <PRE>
-        java -Dmlogname".log"=level ... 
+        java -D<i>logname</i>.log=<i>level</i> ... 
         </PRE>
 
-        Logs configured this way log at the given level via the
-        defaultLogger, which uses a formatter that generates
-        single-line records whose timestamps record milliseconds
-        (but not the date).
+where <i>level</i> is one of the following
+<pre>
+        OFF            <i>(highest value)</i>
+        SEVERE 
+        WARNING
+        INFO
+        CONFIG
+        FINE
+        FINER
+        FINEST  
+        ALL             <i>(lowest value)</i>
+</pre>
 
-        If there is a system resource "Logging.configuration" then
+<p>
+        Logs configured this way log at the given level  via the
+        <tt>defaultLogger</tt>, an anonymous logger which uses a
+        formatter that generates single-line records whose timestamps
+        record milliseconds (but not the date). 
+</p>
+
+<p>
+        If there is a system resource (or environment variable) 
+        <tt>"Logging.configuration"</tt> then
         its value is taken to be the name of a properties-style
         file from which the log manager reads its configuration.
+</p>
 
+<p>
+        Unless the system resource (or environment variable)
+        <tt>"Logging.standard"</tt> has value "1" then the standard
+        <tt>root</tt> Logger (ie the logger with the empty name) is
+        disabled, and messages are directed to the a console handler
+        which is given the simplified one line format.
+</p>
 
         <PRE>
         $Id$
@@ -87,7 +121,7 @@ public class Logging
     for (Object p: System.getProperties().keySet())
     { String prop = (String) p;
       if (prop.endsWith(".log"))
-      { Logger.getLogger(prop.substring(0, prop.length()-4)).setLevel(Level.parse(System.getProperty(prop)));
+      { Logger.getLogger(prop.substring(0, prop.length()-4)).setLevel(Level.parse(System.getProperty(prop).toUpperCase()));
         needLogger=needLogger || true; // to get round an Eclipse warning
       }
     }       
@@ -103,7 +137,7 @@ public class Logging
   { Logger  log   = Logger.getLogger(name);
     if ("Logging".equals(name)) logLogging=log;
     String  lev   = System.getProperty(name+".log");
-    Level   level = lev==null ? Level.INFO : Level.parse(lev);
+    Level level   = lev==null ? Level.INFO : Level.parse(lev.toUpperCase());
     if (!standardLogging) 
     { log.setLevel(level); 
       log.setParent(defaultLogger); 
@@ -120,7 +154,7 @@ public class Logging
   */
   public static boolean isLoggable(Logger logger, String level)
   { 
-    return isLoggable(logger, Level.parse(level));
+    return isLoggable(logger, Level.parse(level.toUpperCase()));
   }
   
   /**
@@ -161,9 +195,14 @@ public class Logging
 
   // Adapter class
   
-  protected Logging(Logger log) { this.log=log; this.klass = discoverCallerClass(); }
+  protected Logging(Logger log) 
+  { this.log=log; 
+    this.klass = discoverCallerClass(); 
+    getLevel();
+  }
   protected Logger log;
   protected Class  klass; // For use by dynamic configurers that need to switch on a debug boolean
+  protected Level  level; 
   
   /** Set the value of a static boolean field in the class that this logger is logging: return false
       if the field couldn't be set. 
@@ -182,7 +221,7 @@ public class Logging
   
   /** Will this Logging log messages of the given level? */
   public boolean isLoggable(String level) 
-  { return isLoggable(this.log, Level.parse(level)); }
+  { return isLoggable(this.log, Level.parse(level.toUpperCase())); }
 
   /** Will this Logging log messages of the given level? */
   public boolean isLoggable(Level level) 
@@ -190,18 +229,20 @@ public class Logging
 
   /** Set the level of this Logging */
   public void setLevel(String level)
-  { log.setLevel(Level.parse(level)); }
+  { log.setLevel(this.level=Level.parse(level)); 
+  }
   
   /** Get the level of this Logging */
   public String getLevel()
   { Logger logger = log;
     while (logger.getLevel()==null && logger.getParent()!=null)
            logger=logger.getParent();
-    if (logger.getLevel()==null) return "OFF";
-    return logger.getLevel().toString();
+    if (logger.getLevel()==null) { this.level = Level.OFF; return "OFF"; }
+    this.level=logger.getLevel();
+    return this.level.toString();
   }
   
-  final static String thisClassName = Logging.class.getName(); // So *this* class can migrate packages
+  final static String loggingClassName = Logging.class.getName(); // So *this* class can migrate packages
 
   /** 
     Record the details of the innermost non-Logging caller in the given record.  
@@ -227,19 +268,19 @@ public class Logging
        // Get the stack trace.
        StackTraceElement stack[] = (new Throwable()).getStackTrace();
        // Find a method in the Logging class.
-       int level = 0;
-       while (level < stack.length && !stack[level].getClassName().equals(thisClassName)) 
-       {   level++;
+       int frameLevel = 0;
+       while (frameLevel < stack.length && !stack[frameLevel].getClassName().equals(loggingClassName)) 
+       {   frameLevel++;
        }
        // Find the first subsequent non-"Logging" class frame.
-       while (level < stack.length) 
-       {   StackTraceElement frame = stack[level];
+       while (frameLevel < stack.length) 
+       {   StackTraceElement frame = stack[frameLevel];
            String            name  = frame.getClassName();
-           if (!name.equals(thisClassName)) 
+           if (!name.equals(loggingClassName)) 
            {
                return frame;
            }
-           level++;
+           frameLevel++;
        }
        return null;        
   }
@@ -256,19 +297,34 @@ public class Logging
   }  
 
   public void logMessage(Level level, String fmt, Object[] args)
-  { LogRecord record = new LogRecord(level, new Formatter().format(fmt, args).toString());
+  { if (level.intValue()<this.level.intValue()) return; // Save the formatter call if it won't be published
+    LogRecord record = new LogRecord(level, new Formatter().format(fmt, args).toString());
     discoverCaller(record);
     log.log(record);
   }
   
-  public static String toString(Throwable ex)
-  { ByteArrayOutputStream b = new ByteArrayOutputStream(100);
-    PrintStream p = new PrintStream(b);
-    ex.printStackTrace(p);
-    p.flush();
-    return b.toString();
-  }
   
+  /** Return the Throwable wrapped for fuller printing */  
+  public static Thrown thrown(Throwable ex) { return new Thrown(ex); }
+  
+  /** Return the Throwable wrapped for fuller printing */  
+  public static Thrown stackTrace() { return new Thrown(new Throwable("STACK TRACE FROM LOGGER")); }
+  
+  /** A wrapper for throwables that shows their trace */
+  protected static class Thrown
+  { Throwable ex;
+    public Thrown(Throwable ex) { this.ex = ex; }
+    public String toString()    { return toString(ex); }
+    public void throwAgain()    { throw new RuntimeException(ex); }
+    public static String toString(Throwable ex)
+    { ByteArrayOutputStream b = new ByteArrayOutputStream(100);
+      PrintStream p = new PrintStream(b);
+      ex.printStackTrace(p);
+      p.flush();
+      return b.toString();
+    }
+  }
+    
   public void info(String fmt, Object ... args) 
   { logMessage(Level.INFO, fmt, args); }
   public void config(String fmt, Object ... args)
@@ -280,9 +336,11 @@ public class Logging
   public void finest(String fmt, Object ... args)
   { logMessage(Level.FINEST, fmt, args); }  
   public void warning(String fmt, Object ... args)
-  { logMessage(Level.WARNING, fmt, args); }  
+  { logMessage(Level.WARNING, fmt, args); 
+  }  
   public void severe(String fmt, Object ... args)
-  { logMessage(Level.SEVERE, fmt, args); }  
+  { logMessage(Level.SEVERE, fmt, args); 
+  }  
 
 
   protected static HashMap<String, Logging> loggerWithName = new HashMap<String, Logging>();
@@ -297,7 +355,7 @@ public class Logging
     return result;
   }
   
-  /** Factory method to make a Logging named with the last syllable of the calling class's name. */
+  /** Factory method to make a Logging named with the calling class's name. */
   public static Logging getLog()
   { String name = discoverCallerClass().getName();
     return getLog(name);
@@ -305,6 +363,7 @@ public class Logging
   
   
 }
+
 
 
 

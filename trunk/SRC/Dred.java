@@ -20,6 +20,7 @@ import javax.swing.BorderFactory;
 import org.sufrin.urlfactory.*;
 import org.sufrin.logging.Logging;
 import org.sufrin.logging.LoggingSocket;
+import org.sufrin.logging.Dialog;
 
 /**
  * A simple editor that uses a scrollable display.
@@ -108,7 +109,7 @@ public class Dred
         else if (arg.equals("--bindings="))
           fallBack=true;
         else if (arg.startsWith("--bindings="))
-          readBindings(arg.substring("-bindings=".length()), true);
+          readBindings(arg.substring("--bindings=".length()), true);
         else if (wait) 
           startLocalSession(arg, EncodingName); 
         else 
@@ -418,46 +419,21 @@ public class Dred
   }
 
   
-   /**
-   * Show a warning message in a dialogue window with
-   * various option buttons. When a button is pressed return
-   * its number. The default button (the one fired by
-   * pressing ENTER) is indicated by the given integer
-   * parameter. The dialogue's parent is the given
-   * component.
-   */
-  protected static int showWarning(Component parent, String msg, int dflt,
-                                   Object[] options)
-  {
-    int option = JOptionPane.showOptionDialog(parent, msg, "Warning",
-                                              JOptionPane.DEFAULT_OPTION,
-                                              JOptionPane.WARNING_MESSAGE,
-                                              null, options, options[dflt]);
-    return option;
-  }
+  protected static int showWarning(Component parent, String msg, int dflt, Object[] options)
+  { return Dialog.showWarning(parent, msg, dflt, options); }
+  
+ 
+  public  static int showWarning(String msg) { return Dialog.showWarning(msg); }
 
-  public static int showWarning(String msg)
-  {
-    return showWarning(null, msg, 0, new Object[]
-    {
-      "OK"
-    });
-  }
-
-  /**
-   * Show a warning message in a dialogue window with
-   * various option buttons. When a button is pressed return
-   * its number. The default button (the one fired by
-   * pressing ENTER) is indicated by the given integer
-   * parameter.
-   */
   protected static int showWarning(String msg, int dflt, Object[] options)
   {
-    return showWarning(null, msg, dflt, options);
+    return Dialog.showWarning(null, msg, dflt, options);
   }
 
 
 }
+
+
 
 
 

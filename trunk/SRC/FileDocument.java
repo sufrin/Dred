@@ -108,7 +108,7 @@ public class FileDocument extends SearchableDocument
     if (fileName.exists() && fileName.canRead())
     try
     { Reader r = (new InputStreamReader(new FileInputStream(fileName), encoding));
-      if (debug) log.fine("Reading from file: %s (%s)", fileName, fileTitle);
+      if (debug) log.fine("Opening file: %s (%s)", fileName, fileTitle);
       readFrom(r);
     }
     catch (Exception ex)
@@ -129,14 +129,16 @@ public class FileDocument extends SearchableDocument
       fileTitle = trimTitle(url.toString());
       fileName  = new File(name);
       Reader r  = (new InputStreamReader(url.openStream(), encoding));
-      if (debug) log.fine("Reading from url: %s", url);
+      if (debug) log.fine("Opening url: %s", url);
       readFrom(r);
     }
     catch (Exception ex)
     {  anonymous = true;
        if (debug) ex.printStackTrace();
        throw new RuntimeException("Cannot open url: "+ ex.getMessage());
-    }    
+    } 
+    else
+      if (debug) log.fine("Creating new file: %s (%s) %s", fileName, fileTitle, log.stackTrace());       
   }
   
   /** Load this document from the given reader */
@@ -319,6 +321,7 @@ public class FileDocument extends SearchableDocument
     for (Listener l:listeners) l.fileBacked(backup, fileTitle);
   }
 }
+
 
 
 

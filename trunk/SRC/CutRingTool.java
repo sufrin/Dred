@@ -4,6 +4,7 @@ import  java.io.*;
 import  java.util.prefs.Preferences;
 import  java.util.LinkedList;
 import  javax.swing.*;
+import  org.sufrin.logging.Dialog;
 
 /**
         The CutRingTool module has static methods that save the last
@@ -244,6 +245,7 @@ public class CutRingTool extends Extension
         
   }
 }
+
 
 
 
