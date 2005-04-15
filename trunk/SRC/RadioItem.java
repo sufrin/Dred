@@ -1,6 +1,8 @@
 package org.sufrin.dred;
 
 import java.awt.event.*;
+import javax.swing.event.*;
+
 import java.util.prefs.*;
 import java.util.HashSet;
 import org.sufrin.logging.*;
@@ -10,110 +12,99 @@ import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.ButtonModel;
 import javax.swing.JRadioButtonMenuItem;
+import javax.swing.SwingUtilities;
 
 /**
  * A JRadioButtonMenuItem with a run method that is called
  * whenever the state of the associated button is changed.
  * The boolean variable state, that represents the state
  * of the associated button, may be used in the run
- * method. RadioItems may have persistent state that is associated with
- * a java.util.prefs.Preferences object.
+ * method. 
  */
-public abstract class RadioItem extends JRadioButtonMenuItem implements PreferenceChangeListener
+public class RadioItem<VAL> extends JRadioButtonMenuItem 
 { /** Current state */
   protected boolean      state    = false;
-  /** Key used in prefs lookup: the menu name without spaces. */
-  protected String       itemName = null;
-  /** Preferences passed in from the client if the item is to be persistent */
-  protected Preferences  prefs    = null;
+
+  /** The value associated with this RadioButton */
+  protected VAL value    = null;
   
-  public static Logging log = Logging.getLog("RadioItem");
+  public static Logging log   = Logging.getLog("RadioItem");
   public static boolean debug = log.isLoggable("FINE");
 
   /** Simulates CheckBox..Item getState() behaviour */
   public boolean getState() { return isSelected(); }
   
   /** Simulates CheckBox..Item setState() behaviour */
-  public void    setState(boolean newState) { setSelected(newState); }
+  public void    setState(boolean newState) 
+  { setSelected(newState); }
   
-  /** Make a non-persistent RadioItem initialised to the given state */
-  public RadioItem(Group g, String s, boolean istate)
-  { this(g, s, istate, null, null); }
-
-  /** Make a checkitem with the given tooltip that is initialised
-      to the given state. 
-  */
-  public RadioItem(Group g, String s, boolean istate, String tooltip) 
-  { this(g, s, istate, tooltip, null); }
+  public RadioItem(final Group<VAL> group, VAL value)
+  {
+    this(group, value.toString(), value);
+  }
   
-  /** Make a RadioItem with the given tooltip. If pref is non-null then the
-      RadioItem is persistent and is associated with a boolean preference
-      in pref with a name derived from s by removing spaces from it.
-  */
-
-  public RadioItem(Group g, String s, boolean istate, String tooltip, Preferences pref)
+  public RadioItem(final Group<VAL> group, String name, VAL value)
   {
     super();
-    g.add(this);
-    this.itemName = s.replace(" ", "");
-    this.prefs=pref;
-    this.setState(prefs==null?istate:prefs.getBoolean(itemName, istate));
-    state = getState();
-    if (debug) log.fine("RadioItem(%s) is initially %s", itemName, state);
-       
-    setAction(new AbstractAction(s)
+    this.value = value;
+    group.add(this);
+    setAction
+    (new Act(name, group.tooltip)
     { 
-      public void actionPerformed(ActionEvent ev)
+      public void run()
       {
         state = getState();
-        if (debug) log.fine("RadioItem(%s) is %s", itemName, state);
-        run();
-        saveState();
+        if (debug) log.fine("RadioItem(%s) is %s", RadioItem.this.value==null?"?":RadioItem.this.value, state);  
+        if (state) group.setValue(RadioItem.this.value);      
       }
     });
+          
+       
+  }
+  
+  /** A RadioItem.Group is custodian of a value controlled by a collection
+     of RadioItems.
+  */
+  public static abstract class Group<VAL> extends ButtonGroup
+  { /** The items in the group */
+    HashSet<RadioItem<VAL>> items = new HashSet<RadioItem<VAL>>();
+    /** The current value of the group */
+    VAL    value   = null;
+    /** The tooltip shared by members of the group */
+    String tooltip = null;
+    /** The name of the group */
+    String name    = null;
+    /** The preferences that this group is associated with */
+    Preferences prefs = null;
     
-    if (tooltip!=null) setToolTipText(tooltip); 
+    /** Construct a group with the given name, whose initial value is
+        the given value.         
+    */
+    public Group(String name, VAL value, String tooltip, Preferences prefs)
+    { 
+      this.value   = value;
+      this.tooltip = tooltip;
+      this.name    = name;
+      this.prefs   = prefs;
+    }
     
-    if (prefs!=null) prefs.addPreferenceChangeListener(this);
-   
-  }
-  
-  public static class Group extends ButtonGroup
-  { public void add(RadioItem item) { super.add(item); items.add(item); }
-    protected HashSet<RadioItem> items = new HashSet<RadioItem>();
-    public void setSelected(ButtonModel m, boolean state)
-    { super.setSelected(m, state);
-      for (RadioItem item: items) { item.run(); }
+    public void add(RadioItem<VAL> item) 
+    { super.add(item);
+      items.add(item); 
+      item.setState(item.value!=null && item.value.equals(this.value));
     }
+    
+    /** Set the value associated with the group */
+    public void setValue(VAL value)
+    { this.value=value;
+      run();
+      if (prefs!=null) prefs.put(name, value.toString());
+    }  
+    
+    /** Invoked when the value associated with  the group changes */
+    abstract public void run();
   }
   
-  public void saveState()
-  { 
-    if (prefs!=null)
-    { prefs.putBoolean(itemName, getState());
-    }
-  }
-  
-  public void preferenceChange(PreferenceChangeEvent event)
-  { // log.info("%s notices %s changed.", itemName, event.getKey());
-    if (event.getKey().equals(itemName))
-    { if (debug) log.finer("%s changed.", itemName);
-      boolean newState = Boolean.parseBoolean(event.getNewValue());
-      if (newState!=getState())
-      { if (debug) log.fine("%s changed to %s", itemName, newState);
-        this.setState(newState);
-        // run();
-      }
-    }
-  }
-  
-  /**
-   * Invoked when the state of the switch changes; should
-   * maintain any invariant relationships that are
-   * intended to hold between the state of the switch and
-   * the editor session.
-   */
-  public abstract void run();
 }
 
 

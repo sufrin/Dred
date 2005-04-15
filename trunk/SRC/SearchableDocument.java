@@ -1,5 +1,6 @@
 package org.sufrin.dred;
 import javax.swing.Timer;
+import java.awt.Component;
 import java.util.regex.*;
 import org.sufrin.logging.Logging;
 import org.sufrin.logging.Dialog;
@@ -74,6 +75,14 @@ public class SearchableDocument extends Document
    /** Line number of the last successful search. */
    private   int         matchY;
    
+   /** The component to be associated with error messages */
+   Component parentComponent = null;
+   /** Set the component to be associated with error messages */
+   public void setParentComponent(Component parentComponent)
+   { if (parentComponent==null)
+         this.parentComponent=parentComponent;
+   }
+   
    /** Searching hasn't been interrupted */   
    boolean searchingOk = true;
    
@@ -121,7 +130,7 @@ public class SearchableDocument extends Document
    
    /** Inform the user that time has run out, and ask what to do */
    public boolean newLease(int x, int y)
-   { switch (Dialog.showWarning(String.format("%d seconds' searching has reached line %d.\nWhat do you want to do?", timer.getDelay()/1000, y)
+   { switch (Dialog.showWarning(parentComponent, String.format("%d seconds' searching has reached line %d.\nWhat do you want to do?", timer.getDelay()/1000, y)
                                , 0, leaseOptions))
      { case 0: return false;
        case 1: setCursor(x, y); return false;

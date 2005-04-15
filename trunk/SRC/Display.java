@@ -174,15 +174,18 @@ implements DocListener,
    /** True if simulating a monospaced font -- we usually use font data for positioning calculations. */
    protected boolean monoSpaced = false;
    
-   /** Switches mode between pseudofixed and natural widths */
-   public void setMonoSpace(boolean on, char pitchModel)
+   /** Switches mode between pseudo-fixed ("monospaced") and natural widths; if
+       pitchModel is nonzero, then it specifies the new
+       pitch model character.
+    */
+   public void setMonoSpaced(boolean on, char pitchModel)
    { monoSpaced = on;
-     if (monoSpaced && pitchModel!='\000') pitchModelChar = pitchModel;
+     if (pitchModel!='\000') pitchModelChar = pitchModel;
      setFont(this.font);
      repaint();
    }
    
-   /** Are we pseudofixed or natural width? */
+   /** Are we pseuddo-monospaced or natural width? */
    public boolean isMonoSpaced() { return monoSpaced; }
    
    /** Local calculation of character width: implements pseudofixed */
@@ -662,6 +665,8 @@ implements DocListener,
    public void dragBy(int dx, int dy) {}
 
 }
+
+
 
 
 

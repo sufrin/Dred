@@ -426,6 +426,7 @@ public class Dred
   
  
   public  static int showWarning(String msg) { return Dialog.showWarning(msg); }
+  public  static int showWarning(Component c, String msg) { return Dialog.showWarning(c, msg); }
 
   protected static int showWarning(String msg, int dflt, Object[] options)
   {
@@ -436,6 +437,7 @@ public class Dred
   public static boolean onUnix()    { return File.separator.equals("/"); }
   public static boolean onWindows() { return File.separator.equals("\\"); }
 }
+
 
 
 

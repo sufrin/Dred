@@ -44,7 +44,7 @@ public interface DisplayComponent
   /** Switches mode between varispaced and monospaced 
    *  and sets the pitch model for monospacing.
    */
-  public void setMonoSpace(boolean on, char pitchModel);
+  public void setMonoSpaced(boolean on, char pitchModel);
   
   /** Is the display pseudo-monospaced or natural width? */
   public boolean isMonoSpaced();
@@ -52,6 +52,7 @@ public interface DisplayComponent
   /** Set the font */
   public void setFont(String font);
 }
+
 
 
 

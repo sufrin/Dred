@@ -43,8 +43,8 @@ public class ScrolledDisplay extends JPanel implements DisplayComponent
   public static boolean debug  = log.isLoggable("FINE");
   
   /** Set the pseudofixed mode of the display */
-  public void setMonoSpace(boolean on, char pitchModel)
-  { display.setMonoSpace(on, pitchModel);
+  public void setMonoSpaced(boolean on, char pitchModel)
+  { display.setMonoSpaced(on, pitchModel);
   }
 
    /** Ask the pseudofixed mode of thedisplay */
@@ -114,6 +114,7 @@ public class ScrolledDisplay extends JPanel implements DisplayComponent
     display.setFont(font);   
   }
 }
+
 
 
 

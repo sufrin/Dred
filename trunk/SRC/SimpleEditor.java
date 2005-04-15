@@ -131,13 +131,13 @@ class SimpleEditor implements InteractionListener, Patient
      display.makeActive(); 
    }
    
-   /** Set the pseudofixed mode of this editor's display */
-   public void setPseudoFixed(boolean on, char pitchModel)
-   { display.setMonoSpace(on, pitchModel);
+   /** Set the monospace features of this editor's display  */
+   public void setMonoSpaced(boolean on, char pitchModel)
+   { display.setMonoSpaced(on, pitchModel);
    }
    
-   /** Ask the pseudofixed mode of this editor's display */
-   public boolean isPseudoFixed()
+   /** As if the monospace feature of this editor's display is set */
+   public boolean isMonoSpaced()
    { return display.isMonoSpaced();
    }
    
@@ -681,6 +681,7 @@ class SimpleEditor implements InteractionListener, Patient
     
   }
 }
+
 
 
 

@@ -56,7 +56,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   public static Logging log   = Logging.getLog("EditorFrame");
   public static boolean debug = log.isLoggable("FINE");
 
-  EditorFrame session = this;
+  final EditorFrame session = this;
   
   protected static Preferences prefs = Preferences.userRoot().node("Dred");
   
@@ -199,63 +199,19 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       bind("doLogger",    "File/Prefs");
       menu.addSeparator();
       menu.addSeparator();
-      RadioItem.Group searchTimes = new RadioItem.Group();
-      menu.add
-      (new RadioItem
-           (searchTimes, "Search for ≤ 1 sec", 
-            false, 
-            "Upper bound on search time", prefs)
+      RadioItem.Group<Integer> times = new RadioItem.Group<Integer>("Search time limit", prefs.getInt("Search time limit", 4), "Time limit on searches before asking for confirmation", prefs)
       { { run(); }
         public void run()
         {
-          if (state) doc.setSearchTimeLimit(1);
+          doc.setSearchTimeLimit(value);
         }
-      });
-      menu.add
-      (new RadioItem
-           (searchTimes, "Search for ≤ 2 sec", 
-            false, 
-            "Upper bound on search time", prefs)
-      { { run(); }
-        public void run()
-        {
-          if (state) doc.setSearchTimeLimit(2);
-        }
-      });
-      menu.add
-      (new RadioItem
-           (searchTimes, "Search for ≤ 4 sec", 
-            true, 
-            "Upper bound on search time", prefs)
-      { { run(); }
-        public void run()
-        {
-          if (state) doc.setSearchTimeLimit(4);
-        }
-      });
-      menu.add
-      (new RadioItem
-           (searchTimes, "Search for ≤ 8 sec", 
-            false, 
-            "Upper bound on search time", prefs)
-      { { run(); }
-        public void run()
-        {
-          if (state) doc.setSearchTimeLimit(8);
-        }
-      });
-      menu.add
-      (new RadioItem
-           (searchTimes, "Search for ≤ 16 sec", 
-            false, 
-            "Upper bound on search time", prefs)
-      { { run(); }
-        public void run()
-        {
-          if (state) doc.setSearchTimeLimit(16);
-        }
-      });
-
+      };      
+      menu.add(new RadioItem<Integer> (times, "Search for ≤ 1 sec",  1));
+      menu.add(new RadioItem<Integer> (times, "Search for ≤ 2 sec",  2));
+      menu.add(new RadioItem<Integer> (times, "Search for ≤ 4 sec",  4));
+      menu.add(new RadioItem<Integer> (times, "Search for ≤ 8 sec",  8));
+      menu.add(new RadioItem<Integer> (times, "Search for ≤ 16 sec", 16));
+      
       menu = addMenu("Edit");
       bind("doReplaceAll");
       menu.addSeparator();
@@ -265,31 +221,6 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       bind("doReplaceDown");
       bind("doReplaceUp");
       menu.addSeparator();
-      
-      if (false)
-      menu.add
-      (new CheckItem("Literal Find", 
-                     SearchableDocument.initLitFind, 
-                     "Interpret Find text literally (alternative is as a regular expression)", 
-                     prefs)
-      { { run(); }
-        public void run()
-        {
-          doc.litFind = state;
-        }
-      });
-      if (false)
-      menu.add(new CheckItem("Literal Replace",
-                             SearchableDocument.initLitRepl,
-                             "Interpret Repl text literally (alternative is as regular expression substitution)", 
-                             prefs)
-      { { run(); }
-        public void run()
-        {
-          doc.litRepl = state;
-        }
-      });
-     
       menu.addSeparator();
       menu.add(new CheckItem("( )   matching",
                              SearchableDocument.initMatchBra,
@@ -324,7 +255,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
 
       menu = addMenu("Etc");
       bind("doShell");
-      if (Dred.onUnix()) // Unix -- pathetic really, but ...
+      if (Dred.onUnix()) 
       {
          menu.addSeparator();
          menu.add(new Act("fmt -75 -c  < sel'n", "Use an external formatter (fmt) to format the current selection")
@@ -370,7 +301,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
             text.argument.setText(String.format("%04X", low));  
             doc.cursorChanged();        
           }
-          catch (Exception ex) { Dred.showWarning(ex.toString()); }
+          catch (Exception ex) { Dred.showWarning(session, ex.toString()); }
         }
       });      
 
@@ -395,50 +326,25 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       });
       
       menu = addMenu("View");
-      RadioItem.Group models = new RadioItem.Group ();
+      menu.add(new CheckItem("Monospaced", ed.isMonoSpaced(), "Simulate a monospaced font with the current font.")
+      {
+        public void run()
+        {
+          ed.setMonoSpaced(state, (char) 0);
+        }
+      });
+
+      RadioItem.Group<String> models = 
+               new RadioItem.Group<String> ("Monospace Model", prefs.get("Monospace Model", "M"), "Set the monospace model", prefs)
+      { { run(); }
+        public void run() { ed.setMonoSpaced(ed.isMonoSpaced(), value.charAt(0)); }
+      };
       
-      menu.add(new CheckItem("Monospaced", ed.isPseudoFixed(), "Simulate a monospaced font with the current font.")
-      {
-        public void run()
-        {
-          ed.setPseudoFixed(state, (char) 0);
-        }
-      });
-      menu.add(new RadioItem(models, "Monospace model M", true, "Set the Monospace model.")
-      {
-        public void run()
-        {
-          ed.setPseudoFixed(ed.isPseudoFixed(), 'M');
-        }
-      });
-      menu.add(new RadioItem(models, "Monospace model \\u21A6 ( \u21A6 )", false, "Set the Monospace model.")
-      {
-        public void run()
-        {
-           ed.setPseudoFixed(ed.isPseudoFixed(), '\u21A6');
-        }
-      });
-      menu.add(new RadioItem(models, "Monospace model \\u2167 ( \u2167 )", false, "Set the Monospace model.")
-      {
-        public void run()
-        {
-           ed.setPseudoFixed(ed.isPseudoFixed(), '\u2167');
-        }
-      });
-      menu.add(new RadioItem(models, "Monospace model \\u8A7C ( \u8A7C )", false, "Set the Monospace model.")
-      {
-        public void run()
-        {
-          ed.setPseudoFixed(ed.isPseudoFixed(), '\u8A7C');
-        }
-      });
-      menu.add(new RadioItem(models, "Monospace model \\u210B ( \u210B )", false, "Set the Monospace model.")
-      {
-        public void run()
-        {
-          ed.setPseudoFixed(ed.isPseudoFixed(), '\u210B');
-        }
-      });
+      menu.add(new RadioItem<String>(models, "Monospace model M", "M"));
+      menu.add(new RadioItem<String>(models, "Monospace model \\u21A6 ( \u21A6 )", "\u21A6"));
+      menu.add(new RadioItem<String>(models, "Monospace model \\u2167 ( \u2167 )", "\u2167"));
+      menu.add(new RadioItem<String>(models, "Monospace model \\u8A7C ( \u8A7C )", "\u8A7C"));
+      menu.add(new RadioItem<String>(models, "Monospace model \\u210B ( \u210B )", "\u210B"));
       bind("doSetFont");
       bind("doSetDefaultFont");
       
@@ -1264,7 +1170,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     doc.litRepl = !text.isReplRegEx();
     if (!doc.setPattern(text.find.getText()))
     { tempCaption(doc.regexError());
-      Dred.showWarning(doc.regexError());
+      Dred.showWarning(this, doc.regexError());
       return;
     }
     edFocus();
@@ -1604,7 +1510,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     String lastSel = doc.replace(upwards);
     if (lastSel == null)
     {  tempCaption(doc.regexError());
-       Dred.showWarning(doc.regexError());
+       Dred.showWarning(this, doc.regexError());
     }
     else SystemClipboard.set(lastSel);
   }
@@ -1862,6 +1768,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   public void edFocus()
   {
     ed.makeActive();
+    text.argument.requestFocus();
     ed.requestFocus();
   }
 
@@ -1936,7 +1843,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
    */
   public void fileReport(String report)
   {
-    Dred.showWarning(report);
+    Dred.showWarning(this, report);
     tempCaption(report);
   }
 
@@ -1995,6 +1902,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   {
     this.doc = doc;
     ed.setDoc(doc);
+    doc.setParentComponent(this);
     doc.addListener(this);
     enableDocFeedback();
     menuBar = new MenuBar();
