@@ -2,7 +2,7 @@ package org.sufrin.dred;
 
 import java.awt.event.*;
 import java.util.prefs.*;
-import java.util.Enumeration;
+import java.util.HashSet;
 import org.sufrin.logging.*;
 
 import javax.swing.AbstractAction;
@@ -79,7 +79,12 @@ public abstract class RadioItem extends JRadioButtonMenuItem implements Preferen
   }
   
   public static class Group extends ButtonGroup
-  {
+  { public void add(RadioItem item) { super.add(item); items.add(item); }
+    protected HashSet<RadioItem> items = new HashSet<RadioItem>();
+    public void setSelected(ButtonModel m, boolean state)
+    { super.setSelected(m, state);
+      for (RadioItem item: items) { item.run(); }
+    }
   }
   
   public void saveState()
