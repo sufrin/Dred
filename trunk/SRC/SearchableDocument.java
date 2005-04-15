@@ -2,6 +2,7 @@ package org.sufrin.dred;
 import javax.swing.Timer;
 import java.util.regex.*;
 import org.sufrin.logging.Logging;
+import org.sufrin.logging.Dialog;
 
 public class SearchableDocument extends Document
 { 
@@ -22,7 +23,7 @@ public class SearchableDocument extends Document
                          initMatchBra=true,
                          initMatchLatex=true,
                          initMatchXML=true;
-
+   
    /** Modes of find and replace and bracket matching */
    public boolean litFind=initLitFind, 
                   litRepl=initLitRepl, 
@@ -73,24 +74,60 @@ public class SearchableDocument extends Document
    /** Line number of the last successful search. */
    private   int         matchY;
    
+   /** Searching hasn't been interrupted */   
    boolean searchingOk = true;
    
-   Timer timer = new Timer(3500, new Act("Timer")
+   /** Upper bound on the time a search can proceed without confirmation */
+   public int searchTimeLimit = 4;
+   
+   /** One-shot timer for searches */
+   Timer timer = new Timer(0, new Act("Timer")
    {
-      public void run() { interruptSearch(); Dred.showWarning("Timeout after 3.5secs on search"); }
+      public void run() { interruptSearch();  }
    });
    { timer.setRepeats(false); }
    
-   boolean stopTimer(boolean value)
+   /** Set upper bound on the time a search can proceed without confirmation */
+   synchronized public void setSearchTimeLimit(int secs)
+   { 
+      searchTimeLimit = secs;
+      timer.setInitialDelay(1000*searchTimeLimit);
+      timer.setDelay(1000*searchTimeLimit);
+      timer.setRepeats(false);
+      interruptSearch();
+   }
+   
+   /** Stop the timer, re-enable searching, return the given value */
+   synchronized boolean stopTimer(boolean value)
    { timer.stop();
      searchingOk = true;
      return value;
    }
-         
-   void startTimer() { timer.start(); searchingOk = true; }
    
-   protected void interruptSearch()
+   /** Start the timer and enable searching */     
+   synchronized void startTimer() 
+   { setSearchTimeLimit(searchTimeLimit);
+     timer.start(); 
+     searchingOk = true; 
+   }
+   
+   /** Interrupt the running search */
+   synchronized public void interruptSearch()
    { searchingOk = false;
+     timer.stop();
+   }
+   
+   static final String[] leaseOptions = { "Cancel", "Stop here", "Continue"};
+   
+   /** Inform the user that time has run out, and ask what to do */
+   public boolean newLease(int x, int y)
+   { switch (Dialog.showWarning(String.format("%d seconds' searching has reached line %d.\nWhat do you want to do?", timer.getDelay()/1000, y)
+                               , 0, leaseOptions))
+     { case 0: return false;
+       case 1: setCursor(x, y); return false;
+       case 2: startTimer();    return true;
+     }
+     return false;
    }
 
    /** Select (with the cursor to the right of the mark) the next
@@ -131,7 +168,7 @@ public class SearchableDocument extends Document
    */
    public boolean downSearch(int x, int y, Pattern aPattern)
    { CharSequence r = lineAt(y);
-     while (searchingOk)
+     while (searchingOk || newLease(x, y))
      { if (searchFirst(x, aPattern, r))
        { matchY = y;
          return true;
@@ -184,7 +221,7 @@ public class SearchableDocument extends Document
    */
    public boolean upSearch(int x, int y, Pattern aPattern)
    { CharSequence r = lineAt(y);
-     while (searchingOk)
+     while (searchingOk || newLease(x, y))
      { if (searchLast(x, aPattern, r))
        { matchY = y;
          return true;

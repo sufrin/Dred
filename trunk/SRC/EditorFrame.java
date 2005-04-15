@@ -31,6 +31,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.InputMap;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -196,6 +197,64 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       menu.addSeparator();
       bind("doSavePrefs", "File/Prefs");
       bind("doLogger",    "File/Prefs");
+      menu.addSeparator();
+      menu.addSeparator();
+      RadioItem.Group searchTimes = new RadioItem.Group();
+      menu.add
+      (new RadioItem
+           (searchTimes, "Search for ≤ 1 sec", 
+            false, 
+            "Upper bound on search time", prefs)
+      { { run(); }
+        public void run()
+        {
+          if (state) doc.setSearchTimeLimit(1);
+        }
+      });
+      menu.add
+      (new RadioItem
+           (searchTimes, "Search for ≤ 2 sec", 
+            false, 
+            "Upper bound on search time", prefs)
+      { { run(); }
+        public void run()
+        {
+          if (state) doc.setSearchTimeLimit(2);
+        }
+      });
+      menu.add
+      (new RadioItem
+           (searchTimes, "Search for ≤ 4 sec", 
+            true, 
+            "Upper bound on search time", prefs)
+      { { run(); }
+        public void run()
+        {
+          if (state) doc.setSearchTimeLimit(4);
+        }
+      });
+      menu.add
+      (new RadioItem
+           (searchTimes, "Search for ≤ 8 sec", 
+            false, 
+            "Upper bound on search time", prefs)
+      { { run(); }
+        public void run()
+        {
+          if (state) doc.setSearchTimeLimit(8);
+        }
+      });
+      menu.add
+      (new RadioItem
+           (searchTimes, "Search for ≤ 16 sec", 
+            false, 
+            "Upper bound on search time", prefs)
+      { { run(); }
+        public void run()
+        {
+          if (state) doc.setSearchTimeLimit(16);
+        }
+      });
 
       menu = addMenu("Edit");
       bind("doReplaceAll");
@@ -336,7 +395,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       });
       
       menu = addMenu("View");
-      ButtonGroup models = new ButtonGroup();
+      RadioItem.Group models = new RadioItem.Group ();
       
       menu.add(new CheckItem("Monospaced", ed.isPseudoFixed(), "Simulate a monospaced font with the current font.")
       {
@@ -1212,6 +1271,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     boolean ok = upwards ? doc.upFind() : doc.downFind();
     if (!ok)
       tempCaption("Pattern not found");
+    edFocus();
   }
 
   /**
@@ -1230,6 +1290,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     boolean ok = upwards ? doc.upFind(pat) : doc.downFind(pat);
     if (!ok)
       tempCaption("Pattern not found");
+    edFocus();
   }
 
   /** Cut, and replace the current selection 
@@ -2024,6 +2085,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
 
 
 

@@ -2,10 +2,13 @@ package org.sufrin.dred;
 
 import java.awt.event.*;
 import java.util.prefs.*;
+import java.util.Enumeration;
 import org.sufrin.logging.*;
 
 import javax.swing.AbstractAction;
+import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
+import javax.swing.ButtonModel;
 import javax.swing.JRadioButtonMenuItem;
 
 /**
@@ -34,13 +37,13 @@ public abstract class RadioItem extends JRadioButtonMenuItem implements Preferen
   public void    setState(boolean newState) { setSelected(newState); }
   
   /** Make a non-persistent RadioItem initialised to the given state */
-  public RadioItem(ButtonGroup g, String s, boolean istate)
+  public RadioItem(Group g, String s, boolean istate)
   { this(g, s, istate, null, null); }
 
   /** Make a checkitem with the given tooltip that is initialised
       to the given state. 
   */
-  public RadioItem(ButtonGroup g, String s, boolean istate, String tooltip) 
+  public RadioItem(Group g, String s, boolean istate, String tooltip) 
   { this(g, s, istate, tooltip, null); }
   
   /** Make a RadioItem with the given tooltip. If pref is non-null then the
@@ -48,7 +51,7 @@ public abstract class RadioItem extends JRadioButtonMenuItem implements Preferen
       in pref with a name derived from s by removing spaces from it.
   */
 
-  public RadioItem(ButtonGroup g, String s, boolean istate, String tooltip, Preferences pref)
+  public RadioItem(Group g, String s, boolean istate, String tooltip, Preferences pref)
   {
     super();
     g.add(this);
@@ -56,17 +59,16 @@ public abstract class RadioItem extends JRadioButtonMenuItem implements Preferen
     this.prefs=pref;
     this.setState(prefs==null?istate:prefs.getBoolean(itemName, istate));
     state = getState();
+    if (debug) log.fine("RadioItem(%s) is initially %s", itemName, state);
        
     setAction(new AbstractAction(s)
-    {
+    { 
       public void actionPerformed(ActionEvent ev)
       {
         state = getState();
         if (debug) log.fine("RadioItem(%s) is %s", itemName, state);
         run();
-        if (prefs!=null)
-        { prefs.putBoolean(itemName, state);
-        }
+        saveState();
       }
     });
     
@@ -74,6 +76,17 @@ public abstract class RadioItem extends JRadioButtonMenuItem implements Preferen
     
     if (prefs!=null) prefs.addPreferenceChangeListener(this);
    
+  }
+  
+  public static class Group extends ButtonGroup
+  {
+  }
+  
+  public void saveState()
+  { 
+    if (prefs!=null)
+    { prefs.putBoolean(itemName, getState());
+    }
   }
   
   public void preferenceChange(PreferenceChangeEvent event)
@@ -97,6 +110,7 @@ public abstract class RadioItem extends JRadioButtonMenuItem implements Preferen
    */
   public abstract void run();
 }
+
 
 
 

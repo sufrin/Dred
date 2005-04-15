@@ -66,7 +66,7 @@ public class Dialog
    * pressing ENTER) is indicated by the given integer
    * parameter.
    */
-  protected static int showWarning(String msg, int dflt, Object[] options)
+  public static int showWarning(String msg, int dflt, Object[] options)
   {
     return showWarning(null, msg, dflt, options);
   }
@@ -90,10 +90,11 @@ public class Dialog
    * pressing ENTER) is indicated by the given integer
    * parameter.
    */
-  protected static int showError(String msg, int dflt, Object[] options)
+  public static int showError(String msg, int dflt, Object[] options)
   {
     return showError(null, msg, dflt, options);
   }
 
 }
+
 
