@@ -274,7 +274,7 @@ implements DocListener,
      this.rows=rows;
      setFont(defaultFontName);
      preferred = dim;
-     
+          
      addComponentListener
      ( new ComponentAdapter()
        { public void componentResized(ComponentEvent e) 
@@ -283,6 +283,13 @@ implements DocListener,
      );
 
    }
+   
+   /** Is text antialiased? */
+   protected static boolean antialiasing = true;
+   
+   /** Set the antialiasing mode */
+   public static void setAntiAliasing(boolean mode)
+   { antialiasing = mode; }
 
    /** Paint the cursor and mark. */
    protected void paintCursor(Graphics g)
@@ -324,6 +331,10 @@ implements DocListener,
      if (debug) log.finer(String.format("Paint origin=%d,%d", originx,originy));
      // Calculate the bounding rectangle(s) of the selection
      Document.Region region = doc.getSelectedRegion();
+     
+     if (antialiasing)
+        ((Graphics2D) g).setRenderingHint
+        (RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
      
      int selStartY = region.starty;
      int selStartX = region.startx;
@@ -665,6 +676,7 @@ implements DocListener,
    public void dragBy(int dx, int dy) {}
 
 }
+
 
 
 

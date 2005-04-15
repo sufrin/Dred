@@ -199,7 +199,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       bind("doLogger",    "File/Prefs");
       menu.addSeparator();
       menu.addSeparator();
-      RadioItem.Group<Integer> times = new RadioItem.Group<Integer>("Search time limit", prefs.getInt("Search time limit", 4), "Time limit on searches before asking for confirmation", prefs)
+      RadioItem.Group<Integer> times = new RadioItem.Group<Integer>("Search time limit", prefs.getInt("Search time limit", 4), "Time limit on searches before asking for confirmation", prefs, RadioItem.toInt)
       { { run(); }
         public void run()
         {
@@ -210,7 +210,9 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       menu.add(new RadioItem<Integer> (times, "Search for ≤ 2 sec",  2));
       menu.add(new RadioItem<Integer> (times, "Search for ≤ 4 sec",  4));
       menu.add(new RadioItem<Integer> (times, "Search for ≤ 8 sec",  8));
+      menu.add(new RadioItem<Integer> (times, "Search for ≤ 12 sec", 12));
       menu.add(new RadioItem<Integer> (times, "Search for ≤ 16 sec", 16));
+      menu.add(new RadioItem<Integer> (times, "Search for ≤ 20 sec", 20));
       
       menu = addMenu("Edit");
       bind("doReplaceAll");
@@ -301,7 +303,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
             text.argument.setText(String.format("%04X", low));  
             doc.cursorChanged();        
           }
-          catch (Exception ex) { Dred.showWarning(session, ex.toString()); }
+          catch (Exception ex) { Dred.showWarning(ed.getComponent(), ex.toString()); }
         }
       });      
 
@@ -326,6 +328,19 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       });
       
       menu = addMenu("View");
+      menu.add(new CheckItem("Antialiasing", false, "Enable high-quality (antialiased) rendering of text.", prefs)
+      { { run(); }
+        public void run()
+        {
+          Display.setAntiAliasing(state);
+          ed.getComponent().repaint();
+        }
+      });
+      menu.addSeparator();
+      bind("doSetFont");
+      bind("doSetDefaultFont");
+      menu.addSeparator();
+      
       menu.add(new CheckItem("Monospaced", ed.isMonoSpaced(), "Simulate a monospaced font with the current font.")
       {
         public void run()
@@ -335,7 +350,8 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       });
 
       RadioItem.Group<String> models = 
-               new RadioItem.Group<String> ("Monospace Model", prefs.get("Monospace Model", "M"), "Set the monospace model", prefs)
+               new RadioItem.Group<String> ("Monospace Model", prefs.get("Monospace Model", "M"), 
+                                                              "Set the monospace model")
       { { run(); }
         public void run() { ed.setMonoSpaced(ed.isMonoSpaced(), value.charAt(0)); }
       };
@@ -345,8 +361,6 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       menu.add(new RadioItem<String>(models, "Monospace model \\u2167 ( \u2167 )", "\u2167"));
       menu.add(new RadioItem<String>(models, "Monospace model \\u8A7C ( \u8A7C )", "\u8A7C"));
       menu.add(new RadioItem<String>(models, "Monospace model \\u210B ( \u210B )", "\u210B"));
-      bind("doSetFont");
-      bind("doSetDefaultFont");
       
       menu = addMenu("Help");
       bind("doHelp");
@@ -1170,7 +1184,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     doc.litRepl = !text.isReplRegEx();
     if (!doc.setPattern(text.find.getText()))
     { tempCaption(doc.regexError());
-      Dred.showWarning(this, doc.regexError());
+      Dred.showWarning(ed.getComponent(), doc.regexError());
       return;
     }
     edFocus();
@@ -1485,7 +1499,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       {
               "Keep editing", "Save it and quit", "Just Quit"
       };
-      int option = Dred.showWarning(this, msg, 0, options);
+      int option = Dred.showWarning(ed.getComponent(), msg, 0, options);
       if (option == 1)
         doSave();
       if (option >= 1)
@@ -1510,7 +1524,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     String lastSel = doc.replace(upwards);
     if (lastSel == null)
     {  tempCaption(doc.regexError());
-       Dred.showWarning(this, doc.regexError());
+       Dred.showWarning(ed.getComponent(), doc.regexError());
     }
     else SystemClipboard.set(lastSel);
   }
@@ -1571,7 +1585,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
         {
                   "Save it anyway", "Cancel"
         };
-        save = 0 == Dred.showWarning(this, msg, 1, options);
+        save = 0 == Dred.showWarning(ed.getComponent(), msg, 1, options);
       }
       if (save)
         doc.doSave();
@@ -1628,7 +1642,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       {
               "Save it anyway", "Cancel"
       };
-      save = 0 == Dred.showWarning(this, msg, 1, options);
+      save = 0 == Dred.showWarning(ed.getComponent(), msg, 1, options);
     }
     if (save)
     { doc.doSaveAs(file, encoding);
@@ -1843,7 +1857,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
    */
   public void fileReport(String report)
   {
-    Dred.showWarning(this, report);
+    Dred.showWarning(ed.getComponent(), report);
     tempCaption(report);
   }
 
@@ -1902,7 +1916,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   {
     this.doc = doc;
     ed.setDoc(doc);
-    doc.setParentComponent(this);
+    doc.setParentComponent(ed.getComponent());
     doc.addListener(this);
     enableDocFeedback();
     menuBar = new MenuBar();
@@ -1993,6 +2007,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
 
 
 
