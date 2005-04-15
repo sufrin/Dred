@@ -24,7 +24,8 @@
 <li><a href="#Mouse Actions">Mouse Actions</a></li>
 <li><a href="#Opening and Saving files">Opening and Saving files</a></li>
 <li><a href="#Fonts">Fonts</a></li>
-<li><a href="#References">References</a></li>
+<li><a href="#Preferences">Preferences</a></li>
+<li><a href="#Etc">Etc</a></li>
 <li><a href="#Brief History">Brief History</a></li>
 <li><A href="index.html">Back to Dred Help Index</A></li>
 </ul>
@@ -139,8 +140,9 @@ are bound to keys, and can also be used on the minitexts.
 <p>Dred shows which of its (mini-)text windows has the keyboard focus
 by showing its cursor in red. A text window with a greyed-out cursor
 doesn't have the keyboard focus.  Focus usually moves into a text window
-as the mouse-cursor moves into it, but occasionally it's necessary to force
-the issue by clicking in the desired window.  </p>
+as the mouse-cursor moves into it, but occasionally after
+popup warnings it's necessary to force the issue by clicking in the desired window.  
+</p>
 
 <a name="Editing Model"><h2>Editing Model</h2></a>
 
@@ -636,7 +638,34 @@ entries change the font used in the current window (or that
 used in the current windopw and all future windows) to the
 font specified in the Argument (...) minitext. 
 
-<a name="References"><h2>References</h2></a>
+<p>
+The <b>View/Antialising</b> checkbox controls the degree of effort Dred puts into
+rendering characters. 
+</p>
+
+<a name="Preferences"> <h2>Persistent Preferences</h2> </a>
+The  <b>File/Preferences</b> submenu displays many of Dred's 
+preferences that persist between Dred invocations. Amongst these are
+<li>
+<li>Typing removes selection (or not)</li>
+<li>Tooltips enabled</li>
+<li>Secondary backups (saving generates a secondary backup if a primary backup exists)</li>
+<li>Flat Look and Feel (if the slightly lurid Java standard turns you off)</li>
+<li>Save Preferences on Exit (if you want preference settings to be persistent)</li>
+</li>
+
+<p>
+Other persistent preference settings on this menu specify an upper bound for
+the time a search can take before Dred asks you for confirmation. This 
+is irrelevant except for people editing enormous files. (>50K lines)
+</p>
+
+<p>
+The bracket-matching settings on the <b>Edit</b> menu, and the
+<b>Antialiasing</b> setting on the <b>View</b> menu are also persistent.
+</p>
+
+<a name="Etc"><h2>Etc</h2></a>
 <p>
 A good starting point for matters Unicode is Markus Kuhn's
 <a href="http://www.cl.cam.ac.uk/~mgk25/unicode.html"> UTF-8 and Unicode FAQ for Unix/Linux</a>
@@ -645,8 +674,9 @@ A good starting point for matters Unicode is Markus Kuhn's
 A Truetype font that implements a very large proprtion of the Unicode
 set is Microsoft's Arial Unicode. Microsoft no longer distribute
 this font, but Googling <tt>arialuni.ttf</tt> is sure to help you
-find it. Although it may cost you nothing, this
-font is not free.... It also occupies about 24mb.
+find it. Although it may cost you nothing, this font is not free.... 
+It also occupies about 24mb, and <i> has fewer mathematical
+symbols then many of the standard Java fonts</i>.
 </p>
 
 <a name="Brief History"><h2>Brief History</h2></a>
@@ -699,6 +729,7 @@ deal of my time.</i>)
 <b>$Date$</b>
 </pre>
 </body>
+
 
 
 
