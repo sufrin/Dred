@@ -5,6 +5,9 @@ import java.util.regex.*;
 import org.sufrin.logging.Logging;
 import org.sufrin.logging.Dialog;
 
+/** A SearchableDocument extends a Document with facilities to search, 
+    match brackets, etc.
+*/
 public class SearchableDocument extends Document
 { 
    public SearchableDocument()
@@ -517,8 +520,9 @@ public class SearchableDocument extends Document
    // We'll need a proper lexer eventually.
    // Meanwhile we'll treat an opentag broken at a line boundary as an opentag
    
-   String xopen  = "<\\w+[^<>]*[^/]>|<\\w>|<\\w+[^<>]*$",
-          xclose = "</\\w+>|^\\s*/>$|^\\s*>$|^[^<>]*/>";
+   String xopen    = "<\\w+[^<>]*[^/]>|<\\w>|<\\w+[^<>]*$",
+          xclose   = "</\\w+>|^\\s*/>$|^\\s*>$|^[^<>]*/>",
+          xupclose = "</\\w+>|^\\s*/>$|^\\s*>$|^[^<>]*/>";
           
    Pattern cdopen  = Pattern.compile("\\Q<![CDATA[\\E"),
            cdclose = Pattern.compile("\\Q]]>\\E"),
@@ -538,7 +542,7 @@ public class SearchableDocument extends Document
    }
       
    public boolean matchUpXMLEnv()
-   { if (matchUp(xopen, xclose))  
+   { if (matchUp(xopen, xupclose))  
      { setMark(match.start(), matchY);
        return true;
      }
@@ -549,14 +553,25 @@ public class SearchableDocument extends Document
    }
 
    /////////////// Specialised behaviour for insert and setCursor... //////////////
+   
+   Runnable matchUpJob = new Runnable()
+   {
+      public void run() { matchUp(); tentativeSelection(); }   
+   };
+   
+   Runnable matchUpDownJob = new Runnable()
+   {  public void run() 
+      { if (matchUp() || matchDown())  tentativeSelection();
+      }    
+   };
 
    /** Insert c in the document and move the mark to the matching
        opening bracket (if there is one)
    */
    public void insert(char c)
    { 
-     super.insert(c);
-     if (matchBra) { matchUp(); tentativeSelection(); }
+     super.insert(c);    
+     if (matchBra) ActionMethod.Action.execute(matchUpJob);
    }
 
    /** Reposition cursor and mark, then move the mark to the matching closing bracket if
@@ -566,11 +581,8 @@ public class SearchableDocument extends Document
        to find matching bracketing constructs.
    */
    public void setCursorAndMark(int x, int y)
-   { super.setCursorAndMark(x, y);
-     if (matchBra) 
-     { if (matchUp() || matchDown()) 
-          tentativeSelection();
-     }     
+   { super.setCursorAndMark(x, y);     
+     if (matchBra) ActionMethod.Action.execute(matchUpDownJob);     
    }
 
    /////////////////////// Fast character-specified bracket matching //////////////
@@ -580,7 +592,7 @@ public class SearchableDocument extends Document
    { Cursor c = new Cursor(this);
      startWaiting();
      int n=0;
-     while (!c.atEnd()) 
+     while (searchingOk && !c.atEnd()) 
      { if (c.rightChar()==bra) n++; else
        if (c.rightChar()==ket) { n--; if (n==0) break; }
        c.moveRight(); 
@@ -594,7 +606,7 @@ public class SearchableDocument extends Document
    { Cursor c = new Cursor(this);
      startWaiting();
      int n=0;
-     while (!c.atStart()) 
+     while (searchingOk && !c.atStart()) 
      { c.moveLeft(); 
        if (c.rightChar()==ket) n++; else
        if (c.rightChar()==bra) { n--; if (n==0) break; }
@@ -603,14 +615,14 @@ public class SearchableDocument extends Document
      return stopWaiting(false);
    }
 
-   /** A cursor presents a sequential view of the characters
+   /** A cursor presents a sequentially streamed view of the characters
        (including newlines) in a specific document. The document
        must not be changed while the cursor is in use.
    */
    protected static class Cursor
    { public    int          x, y;
      protected Document     doc;
-     /** Invariant: line.equals(doc.lineAt(y)) ??? 0???x???line.line.length() */
+     /** Invariant: line.equals(doc.lineAt(y)) /\ 0&lt;=x&lt;=line.length() */
      protected CharSequence line;
      public Cursor(Document doc) { this(doc, false); }
      
@@ -679,6 +691,8 @@ public class SearchableDocument extends Document
      }
    }
 }
+
+
 
 
 

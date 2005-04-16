@@ -195,9 +195,9 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       if (true) // PRO TEM
       menu.add(lookAndFeel);
       menu.addSeparator();
+      menu.addSeparator();
       bind("doSavePrefs", "File/Prefs");
       bind("doLogger",    "File/Prefs");
-      menu.addSeparator();
       
       menu = addMenu("Edit");
       bind("doReplaceAll");
@@ -1993,5 +1993,6 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
 
 

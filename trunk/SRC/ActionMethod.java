@@ -45,7 +45,7 @@ import javax.swing.KeyStroke;
         the method is called from the UI thread.  In addition to this,
         the <code>Action</code>'s tooltip is set to the annotation's
         <code>tip</code> value, and its label is set to the annotation's
-        <code>label</code> value.
+        <code>label</code> value. 
     */  
     public static class Action extends AbstractAction implements Comparable
     { public Action(Object object, Method method, ActionMethod act) 
@@ -100,10 +100,13 @@ import javax.swing.KeyStroke;
         return activatingKeys;
       }
       
+      /** Worker thread for offline actions  */      
       static ExecutorService offlineThread = Executors.newSingleThreadExecutor();
       
-      static Cursor waitCursor = Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR);
-      
+      /** Execute a job in the worker thread */
+      public static void execute(Runnable job) { offlineThread.execute(job); }
+            
+      /** Stop the worker thread */
       public static void shutdownNow()
       {  
          offlineThread.shutdownNow();
@@ -233,6 +236,7 @@ import javax.swing.KeyStroke;
       }                 
     }
 }
+
 
 
 
