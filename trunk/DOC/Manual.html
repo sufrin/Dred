@@ -678,11 +678,12 @@ The bracket-matching settings on the <b>Edit</b> menu, and the
 
 <a name="Etc"><h2>Etc</h2></a>
 <h4>Interrupting long-running tasks</h4>
-Typing control K (or whatever key you choose to bind to the
-<i>KillProcess</i> action) will abort a long-running search or a long-runing
-external process. If you're editing an enormous file with bracket-matching enabled,
-then a search for a matching opening or closing bracket might take a very long time.
-The symptom of this is the "wait" cursor appearing over the main editing window.
+The <i>KillProcess</i> action, invoked by pressing the little red button
+at the bottom right of the frame,  will abort a long-running search or
+a long-runing external process. If you're editing an enormous file with
+bracket-matching enabled, then a search for a matching opening or closing
+bracket might take a very long time.  The symptom of this is the "wait"
+cursor appearing over the main editing window.
 
 <h4>Unicode</h4>
 <p>
@@ -703,7 +704,8 @@ symbols then many of the standard Java fonts</i>.
 <p>
 One thing that needs improving is the bracket matching for
 XML: it uses inadequate machinery, and gets upward matches wrong
-more often than not in files in which opening tags don't appear on single lines.
+more often than not in files in which opening tags are split between lines.
+(On the other hand it's fine for HTML editing)
 </p>
 <p>
 The core document implementation is very robust, but at the price of making some
@@ -766,6 +768,7 @@ deal of my time.</i>)
 <b>$Date$</b>
 </pre>
 </body>
+
 
 
 
