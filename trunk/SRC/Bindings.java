@@ -117,10 +117,10 @@ public class Bindings implements Iterable<Bindings.Binding>
           bindings.add(binding);
           
           if (fields.length==2 && fields[0].equalsIgnoreCase("include"))
-             read(new URL(url, fields[1]));
+             read(DredURL.newURL(url, fields[1]));
           else
           if (fields.length==2 && fields[0].equalsIgnoreCase("include?"))
-             try { read(new URL(url, fields[1])); } catch (Exception ex) {}
+             try { read(DredURL.newURL(url, fields[1])); } catch (Exception ex) {}
           else
           if (fields.length>1 && fields[0].equalsIgnoreCase("show"))
              System.err.println("[Dred: "+binding.getFields(1)+"]");
@@ -234,6 +234,7 @@ public class Bindings implements Iterable<Bindings.Binding>
     }
   }
 }
+
 
 
 

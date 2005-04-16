@@ -146,10 +146,10 @@ public class Dred
   { File file = new File(url);
     if (file.exists() && file.canRead()) url="file:"+file.getAbsolutePath();
     try 
-    { readBindings(new URL(url)); }
+    { readBindings(DredURL.newURL(url)); }
     catch (Exception ex)
     { if (warn) 
-      { showWarning("Cannot read bindings from: "+url);
+      { showWarning("Cannot read bindings from: "+url+ " because "+ex);
         if (bindings.isEmpty()) 
            showWarning("Using fallback bindings.");        
       }
@@ -446,6 +446,7 @@ public class Dred
   public static boolean onUnix()    { return !simWindows && File.separator.equals("/"); }
   public static boolean onWindows() { return simWindows || File.separator.equals("\\"); }
 }
+
 
 
 

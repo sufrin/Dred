@@ -1754,6 +1754,11 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     viewer = Pipe.execute(cwd, command + name, "", cont);
   }
 
+  /** Insert method for use by extensions */
+  public void insert(String s)
+  { doc.insert(s);
+  }
+  
   /**
    * Request the keyboard focus, and make the current
    * editor window active.
@@ -1989,6 +1994,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
 
 
 

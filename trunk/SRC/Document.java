@@ -603,11 +603,14 @@ public class Document
    static protected final char   [] trans = {'\u2776', '\u2777', '\u2778', '\u2779', '\u277a', '\u277b', '\u277c', '\u277d', '\u277e', '\u277f'};
    
    /** Is this character a mark? */
-   static final boolean   isMark(char c)     { return '\ufff0' <= c && c <= '\ufff9'; }
+   public static final boolean   isMark(char c)     { return '\ufff0' <= c && c <= '\ufff9'; }
    /** Return the visible translation of a mark */
-   static final char      transMark(char c)  { return trans[c-'\ufff0']; }
+   public static final char      transMark(char c)  { return trans[c-'\ufff0']; }
    /** Return the visible translation of any character */
-   static final char      transChar(char c)  { return (c<'\ufff0' || c>'\ufff9') ? c : trans[c-'\ufff0']; }
+   public static final char      transChar(char c)  { return (c<'\ufff0' || c>'\ufff9') ? c : trans[c-'\ufff0']; }
+   
+   public static char[] getMarkCharacters()   { return marks; }
+   public static char[] getMarkTranslations() { return trans; }
    
    public void insertMark(int i) { insert(marks[i]); }
    
@@ -1044,6 +1047,7 @@ public class Document
       }
     }      
 }
+
 
 
 

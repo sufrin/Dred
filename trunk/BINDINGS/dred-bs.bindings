@@ -20,12 +20,17 @@ text abbrev mark5 \ufff9 ctrl 0
 #
 #
 #
-include class://org.sufrin.dred.Dred/function.bindings
-include class://org.sufrin.dred.Dred/ctrl.bindings
-include class://org.sufrin.dred.Dred/symbols.bindings
-include class://org.sufrin.dred.Dred/style.bindings
+show Loading local bindings
+include? file:dred.local.bindings
+show Loaded local bindings
+include  dred:/function.bindings
+include  dred:/ctrl.bindings
+include  dred:/symbols.bindings
+include  dred:/style.bindings
 #
 #
 #
+
+
 
 
