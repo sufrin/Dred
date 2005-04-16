@@ -78,8 +78,9 @@ public class Extension
     if (ext==null)    
        try
        { 
-         Class<?> klass =  loader.loadClass(name);
+         Class<?> klass = loader.loadClass(name);
          ext = (Extension) klass.newInstance();
+         log.fine("Extension %s loaded", name);
          extension.put(name, ext);
        }
        catch (Exception e)
@@ -93,16 +94,21 @@ public class Extension
   public    static void  setBindings(Bindings thePrototype) 
   { protoBindings = thePrototype; 
     for (Bindings.Binding binding: protoBindings)
-        if (binding.matches("extension", "path") && binding.length()==3)
+        if (binding.matches("extension", "path") && binding.length()>2)
         { Extension.addRoot(binding.getField(2)); }
         else
-        if (binding.matches("extension", "load") && binding.length()==3)
-        { Extension.load(binding.getField(2)); }
+        if (binding.matches("extension", "load") && binding.length()>2)
+        { Extension.load(binding.getField(2)); 
+          if (binding.length()>3) 
+             System.err.printf("[Dred: %s]%n", binding.getFields(3));
+        }
+        else
+        if (binding.matches("extension"))
+           log.warning("Unknown extension binding: %s", binding);
   }
   
-
-
 }
+
 
 
 

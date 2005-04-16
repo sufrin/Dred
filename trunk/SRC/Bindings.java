@@ -1,4 +1,5 @@
 package org.sufrin.dred;
+import org.sufrin.logging.Dialog;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -116,11 +117,25 @@ public class Bindings implements Iterable<Bindings.Binding>
           Binding binding = new Binding(fields);
           bindings.add(binding);
           
-          if (fields.length==2 && fields[0].equalsIgnoreCase("include"))
-             read(DredURL.newURL(url, fields[1]));
+          if (fields.length>=2 && fields[0].equalsIgnoreCase("include"))
+             try
+             { 
+                read(DredURL.newURL(url, fields[1]));
+             }
+             catch (Exception ex) 
+             {
+                Dialog.showError("Bindings include %s failed\nError was: %s", fields[1], ex.getMessage());
+             }
           else
-          if (fields.length==2 && fields[0].equalsIgnoreCase("include?"))
-             try { read(DredURL.newURL(url, fields[1])); } catch (Exception ex) {}
+          if (fields.length>=2 && fields[0].equalsIgnoreCase("include?"))
+             try 
+             { read(DredURL.newURL(url, fields[1])); 
+             } 
+             catch (Exception ex) 
+             {
+               if (binding.length()>3) 
+                  System.err.printf("[Dred: %s]%n", binding.getFields(2).replace("%s", DredURL.newURL(url, fields[1]).toString()));
+             }
           else
           if (fields.length>1 && fields[0].equalsIgnoreCase("show"))
              System.err.println("[Dred: "+binding.getFields(1)+"]");
@@ -197,6 +212,9 @@ public class Bindings implements Iterable<Bindings.Binding>
                     
     static public String toKey(int n, String[] spec)
     { String s = " "+spec[spec.length-1].toUpperCase()
+               .replace("SHIFT",       "shift")
+               .replace("META",        "meta")
+               .replace("ALT",         "alt")
                .replace("[",           "OPEN_BRACKET")
                .replace("]",           "CLOSE_BRACKET")
                .replace("BACKSPACE",   "BACK_SPACE")
@@ -234,6 +252,8 @@ public class Bindings implements Iterable<Bindings.Binding>
     }
   }
 }
+
+
 
 
 

@@ -146,9 +146,9 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       menu=menu2;
       menu.add
       (new CheckItem
-           ("Typing Removes Selection", 
+           ("Typing Cuts Selection", 
             false, 
-            "Typing removes a nonempty selection from the document",
+            "Typing cuts nonempty definite selections (into the cut ring)",
             prefs)
       { { run(); }
         public void run()
@@ -483,7 +483,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   /** The document being edited/ */
   FileDocument doc;
   
-  /** Get the document being edited/ */
+    /** Get the document being edited/ */
   public FileDocument getDoc() { return doc; }
   
   /** Add a focus eavesdropper to the underlying document */
@@ -1753,11 +1753,6 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
                            : ("gv -spartan -scale " + (smallscale ? -2 : -1) + " -geometry -1+0 ");
     viewer = Pipe.execute(cwd, command + name, "", cont);
   }
-
-  /** Insert method for use by extensions */
-  public void insert(String s)
-  { doc.insert(s);
-  }
   
   /**
    * Request the keyboard focus, and make the current
@@ -1994,6 +1989,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
 
 
 

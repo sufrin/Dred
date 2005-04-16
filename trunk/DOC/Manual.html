@@ -380,13 +380,20 @@ the size of the ring is fixed at 8.
 <h3>Markers</h3>
 The characters with Unicodes <tt>fff0</tt> ... <tt>fffa</tt> (the
 "specials" range) are treated as markers and are shown (in red) as
-<strong style="color: red">❶, ❷, ... ❾, ❿</strong> (<i>i.e.</i> single
-glyphs that resemble <strong style="color: red">(1), (2), ... (9), (10)</strong>). 
-They are removed from the document as it is saved, but otherwise treated the same
-as ordinary characters. They can be used to mark places in the document
-to which you may wish to return. Don't forget to bind keystrokes to
-them (I use <tt>ctrl 1</tt> ... <tt>crtrl 0</tt>).
-
+<strong style="color: red">❶, ❷, ... ❾, ❿</strong> (<i>i.e.</i>
+single glyphs that resemble <strong style="color: red">(1), (2), ... (9),
+(10)</strong>).  They are removed from the document as it is saved,
+but otherwise treated the same as ordinary characters. They can be used
+to mark places in the document to which you may wish to return. Don't
+forget to bind keystrokes to them (I use <tt>ctrl 1</tt> ... <tt>crtrl
+0</tt>). You'll find that the standard extension <tt>MarkTool</tt>
+provides a menu which makes working with marks fairly easy. One way of
+loading this extension is to add the following bindings to one of your
+bindings files:
+<pre>
+           extension path class:/MarkTool/
+           extension load MarkTool                  
+</pre>
 <h3>"Small" Changes</h3>
 <p>
 Any single character insertion can be undone by the <i>Delete</i> action.
@@ -573,6 +580,7 @@ examples that might be useful are:
    dred:/Bindings.html
    dred:/Underhood.html
    dred:/index.html
+   dred:/MarkTool.java
 </pre></code>
 </p>
 
@@ -669,6 +677,14 @@ The bracket-matching settings on the <b>Edit</b> menu, and the
 </p>
 
 <a name="Etc"><h2>Etc</h2></a>
+<h4>Interrupting long-running tasks</h4>
+Typing control K (or whatever key you choose to bind to the
+<i>KillProcess</i> action) will abort a long-running search or a long-runing
+external process. If you're editing an enormous file with bracket-matching enabled,
+then a search for a matching opening or closing bracket might take a very long time.
+The symptom of this is the "wait" cursor appearing over the main editing window.
+
+<h4>Unicode</h4>
 <p>
 A good starting point for matters Unicode is Markus Kuhn's
 <a href="http://www.cl.cam.ac.uk/~mgk25/unicode.html"> UTF-8 and Unicode FAQ for Unix/Linux</a>
@@ -681,6 +697,24 @@ find it. Although it may cost you nothing, this font is not free....
 It also occupies about 24mb, and <i> has fewer mathematical
 symbols then many of the standard Java fonts</i>.
 </p>
+
+<h4>What's Flaky?</h4>
+
+<p>
+One thing that needs improving is the bracket matching for
+XML: it uses inadequate machinery, and gets upward matches wrong
+more often than not in files in which opening tags don't appear on single lines.
+</p>
+<p>
+The core document implementation is very robust, but at the price of making some
+kinds of search slower than they might be. One day ....
+</p>
+<h4>What's needs more Documenation?</h4>
+<p>
+You name it! The Extension API is completely undocumented at present. Only
+by reading the source code and the JavaDoc can you ..... 
+</p>
+
 
 <a name="Brief History"><h2>Brief History</h2></a>
 
@@ -700,7 +734,7 @@ Dred was written in Java 1.5 during between early February and mid-April 2005 be
     </li>    
     <li>
     I wanted to experiment with a design that can use the selection 
-    more creatively than the now ubiquitous <i>"typing deletes the selection but you can 
+    more creatively than the now-ubiquitous <i>"typing deletes the selection but you can 
     rescue yourself with undo"</i>. 
     </li>
     <li>
@@ -732,6 +766,7 @@ deal of my time.</i>)
 <b>$Date$</b>
 </pre>
 </body>
+
 
 
 

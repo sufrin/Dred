@@ -1,28 +1,27 @@
 #
 #       Bernard's bindings are the distributed ones
 #
-show    built in bs-bindings
+show    Loading built-in bs-bindings
 #
 #       10 visible markers that show up in red, and are useful for keeping one's 
 #       place. Apart from being stripped from the document when it's written,
-#       they behave like ordinary characters. 
+#       they behave like ordinary characters. The MarkTool extension that's
+#       provided as standard provides a simple way of looking for each/any of them.
 #
 text abbrev mark1 \ufff0 ctrl 1
 text abbrev mark2 \ufff1 ctrl 2
 text abbrev mark3 \ufff2 ctrl 3
 text abbrev mark4 \ufff3 ctrl 4
 text abbrev mark5 \ufff4 ctrl 5
-text abbrev mark5 \ufff5 ctrl 6
-text abbrev mark5 \ufff6 ctrl 7
-text abbrev mark5 \ufff7 ctrl 8
-text abbrev mark5 \ufff8 ctrl 9
-text abbrev mark5 \ufff9 ctrl 0
+text abbrev mark6 \ufff5 ctrl 6
+text abbrev mark7 \ufff6 ctrl 7
+text abbrev mark8 \ufff7 ctrl 8
+text abbrev mark9 \ufff8 ctrl 9
+text abbrev mark0 \ufff9 ctrl 0
 #
 #
 #
-show Loading local bindings
-include? file:dred.local.bindings
-show Loaded local bindings
+include? dred.extension.bindings No Extension Bindings (%s)
 include  dred:/function.bindings
 include  dred:/ctrl.bindings
 include  dred:/symbols.bindings
@@ -30,6 +29,7 @@ include  dred:/style.bindings
 #
 #
 #
+
 
 
 

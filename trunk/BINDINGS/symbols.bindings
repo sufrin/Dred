@@ -15,49 +15,61 @@ text    abbrev <->              \u2194
     
 text    abbrev +>       \u219b    
 text    abbrev ->>      \u21a0          # ↠
-text    abbrev >->      \u21a3
-text    abbrev mapsto   \u21a6
+text    abbrev >->      \u21a3          # ↣
+text    abbrev mapsto   \u21a6          # ↦
 text    abbrev |->      \u21a6
     
 text    abbrev zz       \u21af meta Z   # ↯ 
     
-text    abbrev <=       \u21D0
-text    abbrev Uparrow  \u21D1
-text    abbrev =>       \u21D2
-text    abbrev Downarrow \u21D3
-text    abbrev <->      \u2194
-text    abbrev iff      \u21D4
-text    abbrev <=>      \u21D4
+text    abbrev <=       \u21D0          # ⇐
+text    abbrev Uparrow  \u21D1          # ⇑
+text    abbrev =>       \u21D2          # ⇒
+text    abbrev Downarrow \u21D3         # ⇓
+text    abbrev <->      \u2194          # ↔
+text    abbrev iff      \u21D4          # ⇔
+text    abbrev <=>      \u21D4          # ⇔
     
-text    abbrev <==      \u21DA
-text    abbrev ==>      \u21DB
-text    abbrev <~~      \u21DC
-text    abbrev ~~>      \u21DD
+text    abbrev <==      \u21DA          # ⇚
+text    abbrev ==>      \u21DB          # ⇛
+text    abbrev <~~      \u21DC          # ⇜
+text    abbrev ~~>      \u21DD          # ⇝
     
-text    abbrev lwa      \u21E6  # ⇦ 
-text    abbrev uwa      \u21E7  # ⇧ 
-text    abbrev rwa      \u21E8  # ⇨ 
-text    abbrev dwa      \u21E9  # ⇩ 
+text    abbrev lwa      \u21E6          # ⇦ 
+text    abbrev uwa      \u21E7          # ⇧ 
+text    abbrev rwa      \u21E8          # ⇨ 
+text    abbrev dwa      \u21E9          # ⇩ 
     
-text    abbrev endproof \u220E                  # ∎  
-text    abbrev compose  \u2218  meta o          # ∘ 
-text    abbrev dot      \u2219  meta PERIOD     # ∙ 
-text    abbrev par      \u2225                  # ∥ 
+text    abbrev []       \u220E                          # ∎  
+text    abbrev compose  \u2218  meta o                  # ∘ 
+text    abbrev dot      \u2219  meta PERIOD             # ∙
+text    abbrev fatdot   \u2022  shift meta  PERIOD      # •             # •
+text    abbrev tick     \u221a          # √ 
+text    abbrev ||       \u2225          # ∥ 
+
+text    abbrev euro     \u20ac          # €
+text    abbrev pound    \u20a4  shift 3 # ₤           
     
-text    abbrev land     \u2227
-text    abbrev lor      \u2228
-text    abbrev cup      \u2229
-text    abbrev cap      \u222a
+text    abbrev land     \u2227          # ∧
+text    abbrev /\\      \u2227          # ∧
+text    abbrev lor      \u2228          # ∨
+text    abbrev \\/      \u2228
+text    abbrev cap      \u2229          # ∩
+text    abbrev cup      \u222a          # ∪         
     
-text    abbrev so       \u2234  # ∴ 
-text    abbrev coz      \u2235  # ∵ 
+text    abbrev so       \u2234          # ∴ 
+text    abbrev coz      \u2235          # ∵ 
     
-text    abbrev becomes  \u2254  # ≔ 
-text    abbrev :=       \u2254  
+text    abbrev becomes  \u2254          # ≔ 
+text    abbrev :=       \u2254          # ≔
+text    abbrev defs     \u225c          # ≜
     
-text    abbrev defs     \u2258  # ≘ 
-text    abbrev equiv    \u2261  # ≡ 
-text    abbrev ==       \u2261  # ≡ 
+text    abbrev defs     \u2258          # ≘ 
+text    abbrev equiv    \u2261          # ≡ 
+text    abbrev ==       \u2261          # ≡ 
+text    abbrev xo       \u2297          # ⊗
+text    abbrev ox       \u2297          # ⊗
+text    abbrev |-       \u22a2          # ⊢
+text    abbrev proves   \u22a2          # ⊢
     
 text    abbrev alpha    \u03B1
 text    abbrev beta     \u03B2
@@ -138,4 +150,13 @@ text    abbrev qof      \u05E7
 text    abbrev resh     \u05E8
 text    abbrev shin     \u05E9
 text    abbrev tav      \u05EA
+
+text    abbrev copyright \u00a9 # ©
+text    abbrev ><        \u00d7 # ×
+text    abbrev O/        \u00D8 # Ø
+text    abbrev <<        \u00AB # «
+text    abbrev >>        \u00BA # »
+
+
+
 

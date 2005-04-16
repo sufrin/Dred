@@ -57,6 +57,7 @@
         
         <target name="ext" depends="Dred">
            <javac  srcdir    = "${EXT}" 
+                   destdir   = "${BUILD}/"
                    debug     = "true"
                    debuglevel= "lines,vars,source"
                    classpath = "${BUILD}/Dred.jar"
@@ -127,6 +128,7 @@
                 
                 
                 <mkdir dir="${BUILD}"/>
+                <mkdir dir="${BUILD}/org/sufrin/dred/EXT"/>
                 <exec os         = "Linux,SunOS"
                       dir        = "${BUILD}"
                       executable = "python">
@@ -149,6 +151,7 @@
                 <delete dir="${BUILD}" />
         </target>
 </project>
+
 
 
 

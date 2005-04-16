@@ -1,0 +1,10 @@
+#
+#       Local bindings to test extension
+#
+extension path /home/sufrin/EXTRA/SVNPLAYPEN/Dred/trunk/EXT
+extension load MarkTool
+show      Mark Tool Loaded
+#
+#
+
+
