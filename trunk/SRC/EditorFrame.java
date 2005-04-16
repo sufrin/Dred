@@ -45,7 +45,7 @@ import javax.swing.Timer;
 
 import org.sufrin.logging.Logging;
 
-import GUIBuilder.RowLayout;
+import GUIBuilder.*;
 
 
 /**
@@ -356,8 +356,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       bind("doCommands");
       bind("doUnpackDocumentation");
       menu.addSeparator();
-      bind("doAbout");
-      
+      bind("doAbout");      
 
       // Eliminate input maps (pro-tem) to avoid spurious shortcut effects
       InputMap m = null;
@@ -464,6 +463,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
   static ImageIcon dnought = new ImageIcon(Dred.class.getResource("dnought.jpg"));
+  static ImageIcon stop    = new ImageIcon(Dred.class.getResource("stop.png"));
 
   /**
    * Count of the number of frames/sessions that have been
@@ -746,6 +746,17 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     feedback.add(labelC);
     feedback.add(Box.createHorizontalGlue());
     feedback.add(labelR);
+    feedback.add(new JLabel(" "));
+    feedback.add
+    (new ImageButton(stop)
+     {
+        public void run()
+        { 
+          doKillProcess();
+        }
+     }
+    ); 
+
 
     bars.setLayout(new BoxLayout(bars, BoxLayout.Y_AXIS));
     toolbars.setLayout(new RowLayout(-1, true)); // (new BoxLayout(toolbars, BoxLayout.X_AXIS));
@@ -1989,6 +2000,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
 
 
 
