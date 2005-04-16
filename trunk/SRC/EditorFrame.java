@@ -1183,17 +1183,12 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
    * text specified by the current selection.
    */
   public void doFindSel(boolean upwards)
-  { doc.litFind = false;
-    text.setFindRegEx(false);
-    doc.litRepl = !text.isReplRegEx();
-    if (!hasNonemptySelection())
-      return;
-    text.find.setText(doc.getSelection());
-    Pattern pat = Pattern.compile(Pattern.quote(doc.getSelection()));
-    edFocus();
-    boolean ok = upwards ? doc.upFind(pat) : doc.downFind(pat);
-    if (!ok)
-      tempCaption("Pattern not found");
+  { text.setFindRegEx(false);
+    text.setReplRegEx(false);   
+    if (hasNonemptySelection())
+    { text.find.setText(doc.getSelection());
+      doFind(upwards);
+    }
   }
 
   /** Cut, and replace the current selection 
@@ -1508,6 +1503,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     if (lastSel == null)
     {  tempCaption(doc.regexError());
        Dred.showWarning(ed.getComponent(), doc.regexError());
+       edFocus();
     }
     else SystemClipboard.set(lastSel);
   }
@@ -1993,6 +1989,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
 
 
 

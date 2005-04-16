@@ -220,13 +220,12 @@ If the checkbox adjacent to the <i>Find</i> minitext is checked then
 the pattern is interpreted as a regular expression, otherwise it is interpreted
 literally.
 
-<p> If the current selection is an instance of the Find text, <i>and has
-the cursor to the right of the mark</i>, then the <i>ReplaceDown</i>
-action saves the current selection in the cut-buffer and replaces it
-with the (meaning of the) <i>Repl</i> minitext -- leaving the cursor to the right of
-the mark. The <i>ReplaceUp</i> button is analogous, but requires that
-the cursor is to the left of the mark in the Find text, and leaves the
-cursor to the left of the mark in the replacement text.</p>
+<p> If the current selection is an instance of the Find text then the
+<i>ReplaceDown</i> action saves the current selection in the cut-buffer
+and replaces it with the (meaning of the) <i>Repl</i> minitext --
+leaving the cursor to the right of the mark. The <i>ReplaceUp</i>
+button is analogous and leaves the cursor to the left of the mark in
+the replacement text.</p>
 
 <p>The meaning of the  <i>Repl</i> minitext is the text itself
 if the checkbox adjacent to it is NOT checked. Otherwise its meaning is
@@ -733,6 +732,7 @@ deal of my time.</i>)
 <b>$Date$</b>
 </pre>
 </body>
+
 
 
 
