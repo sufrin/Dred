@@ -90,7 +90,8 @@ public class Dred
         }
         else if (arg.startsWith("--serve="))
         { int port = Integer.parseInt(arg.substring("--serve=".length()));
-          startServer(port);
+          if (!(prefs.getInt("port", 0)==port && isServing()))
+             startServer(port);
         }
         else if (arg.equals("--serve"))
         { startServer(0);       
@@ -239,13 +240,19 @@ public class Dred
   {     String cwd  = System.getProperty("user.dir");
         File   file = new File(path);
         int    port = prefs.getInt("port", 0);  
+        
+        // No port; try starting one
         if (port==0) 
         {  port = startServer(port);
-           System.err.printf("[Dred: started server on port %d]%n", port);
+           if (port==0) 
+              System.err.printf("[Dred: started pseudo-server]%n");
+           else
+              System.err.printf("[Dred: started server on port %d]%n", port);
         }
         
+        // Have a couple of cracks at firing up a session
         int retries = 1;
-        while (retries>=0)
+        while (port != 0 && retries>=0)
         try
         {
           URL              url    = new URL("http", "localhost", port, "/edit?FILE="+file.getAbsolutePath()+"&CWD="+cwd+"&ENCODING="+EncodingName);
@@ -259,6 +266,7 @@ public class Dred
           port = startServer(0);
           retries--;
         }
+        if (port==0) startLocalSession(path, EncodingName);
   }
 
   
@@ -305,7 +313,7 @@ public class Dred
     serverRunning = true;
     String user = System.getProperty("user.name");
     try
-    { if (port>0 || (onUnix() && port>=0))
+    { if (port>0 || (onUnix() && port==0))
       { 
         sessionSocket = new SessionSocket(port, prefs);
         port = sessionSocket.getPort();
@@ -434,9 +442,13 @@ public class Dred
   }
   
   /* Is there no limit to my philistinism? */
-  public static boolean onUnix()    { return File.separator.equals("/"); }
-  public static boolean onWindows() { return File.separator.equals("\\"); }
+  public static boolean simWindows = System.getProperty("DREDWINDOWS")!=null || System.getenv("DREDWINDOWS")!=null;
+  public static boolean onUnix()    { return !simWindows && File.separator.equals("/"); }
+  public static boolean onWindows() { return simWindows || File.separator.equals("\\"); }
 }
+
+
+
 
 
 

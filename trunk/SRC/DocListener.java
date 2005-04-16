@@ -13,7 +13,10 @@ public interface DocListener
   void docChanged(int first, int last);    
   void cursorChanged(int first, int last); 
   void selectionChanged(int first, int last); 
+  void startWaiting();
+  void stopWaiting();
 }
+
 
 
 

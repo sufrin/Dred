@@ -15,12 +15,12 @@ The scripts <tt>dred</tt> and <tt>ted</tt> are very simple, and
 I don't much care what you decide to call them.
 <pre>
         #!/bin/sh
-        # usage: dred [switches] filenames
+        # usage: dred [switches] <i>files</i>
         exec java -jar $HOME/bin/Dred.jar "$@" &
 </pre>
 <pre>
         #!/bin/sh
-        # usage: ted [switches] filenames
+        # usage: ted [switches] <i>files</i>
         exec java -jar $HOME/bin/Dred.jar --wait "$@" 
 </pre>
 
@@ -33,12 +33,16 @@ The program can be started in server mode by invoking:
 </p>
         
 <pre>
-        java -jar Dred.jar --serve[=####]
+        java -jar Dred.jar --serve[=####] <i>files</i>
 </pre>
 <p>
 If the port number (=####) appears, and the given port is not currently in use,
-then the program starts serving the current user on that port; otherwise it finds an unused port, 
-and starts serving on that.
+then the program starts serving the current user on that port. 
+If the port number appears, and the given port responds to an inquiry 
+that indicates that a Dred server
+is operating at that port, then editing sessions
+are started on that server for the files; otherwise it finds an unused port, starts serving on that,
+and starts editing sessions on that server for the files.
 </p>
 
 <p>
@@ -112,6 +116,8 @@ accepts connections from the host on which it's running.  </p>
 </pre>
 </body>
 </html>
+
+
 
 
 

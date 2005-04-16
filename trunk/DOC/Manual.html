@@ -92,7 +92,7 @@ the files are assumed to use the specified encoding; otherwise UTF8 is assumed.
 Put the Dred.jar somewhere sensible, and make a shortcut to it whose target and
 start-in fields looks something like this:
 <pre>
-Target:   C:\WINDOWS\system32\javaw.exe -jar "C:\Documents and Settings\sufrin\Desktop\DRED\Dred.jar" -w
+Target:   C:\WINDOWS\system32\javaw.exe -jar "C:\Documents and Settings\sufrin\Desktop\DRED\Dred.jar" 
 Start in: "C:\Documents and Settings\sufrin\Desktop"
 </pre>
 Doubleclicking this shortcut starts a new Dred in an editing session with an
@@ -112,7 +112,14 @@ If you really care about economy, then read
  <A href="Underhood.html">Under the Hood</A>
 for details of how Dred can be set up to use a single
 server. It's slightly trickier under Windows XP2, which tries
-hard to prevent "Trojan" ports being opened. 
+hard to prevent "Trojan" ports being opened. The bottom line is
+that you should choose port number (####) above 8000 that you know won't be used by
+any other server, and change the shortcut to:
+
+<pre>
+Target:   C:\WINDOWS\system32\javaw.exe -jar "C:\Documents and Settings\sufrin\Desktop\DRED\Dred.jar" --serve==####
+</pre>
+
 
 <a name="The Dred Editing Session Window"><h2>The Dred Editing Session Window</h2></a>
 <p> In each editing session window you will see the main text editing
@@ -658,12 +665,6 @@ preferences that persist between Dred invocations. Amongst these are
 </li>
 
 <p>
-Other persistent preference settings on this menu specify an upper bound for
-the time a search can take before Dred asks you for confirmation. This 
-is irrelevant except for people editing enormous files. (>50K lines)
-</p>
-
-<p>
 The bracket-matching settings on the <b>Edit</b> menu, and the
 <b>Antialiasing</b> setting on the <b>View</b> menu are also persistent.
 </p>
@@ -732,6 +733,8 @@ deal of my time.</i>)
 <b>$Date$</b>
 </pre>
 </body>
+
+
 
 
 

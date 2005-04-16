@@ -39,7 +39,7 @@ implements DocListener,
    protected int   originx=0, originy=0;
 
    /** Physical border dimensions. 0..xmargin-1 is space for (line) annotations. */
-   protected int xmargin=2, xborder=6, yborder=4;
+   protected int xmargin=2, xborder=6, yborder=6;
 
    /** Logging for the current class */
    static Logging log = Logging.getLog("Display");
@@ -273,6 +273,7 @@ implements DocListener,
      this.cols=cols;
      this.rows=rows;
      setFont(defaultFontName);
+     setCursor(textCursor);
      preferred = dim;
           
      addComponentListener
@@ -281,7 +282,6 @@ implements DocListener,
          { calibrate(); }
        }
      );
-
    }
    
    /** Is text antialiased? */
@@ -319,7 +319,8 @@ implements DocListener,
      int cx = doc.getX()-originx;
      int mp = charToPixelX(originx, originx+cx, cy+originy);
      repaint(xmargin+xborder+mp-1, yborder+cy*fontHeight, 2, fontHeight);
-     //repaint(0, 0, dim.width, yborder);
+     repaint(0, 0, dim.width, yborder);
+     repaint(0, dim.height-yborder, dim.width, dim.height-yborder);
    }
       
    /** No-op: repainting (including background) is done by paint. */
@@ -342,6 +343,14 @@ implements DocListener,
      int selStopX  = region.endx;
      int bottom    = Math.min(originy+rows, doc.length());
      
+     g.setColor(Color.WHITE);
+     if (focussed) 
+     { int yb=2;
+       g.fill3DRect(0, 1, dim.width, yb, true);
+       g.fill3DRect(0, dim.height-yb , dim.width, yb, true);
+     }
+
+     
      // Draw the visible lines
      g.setColor(getForeground());
      g.setFont(font);
@@ -360,7 +369,7 @@ implements DocListener,
          int baseLine = y+fontAscent;
          drawn+=1;
 
-         // Marginal fixedCharrmation
+         // Marginal material
          g.setColor(originx>0 ? panColour : plainColour);
          g.fill3DRect(xmargin, y, xborder/2, fontHeight+1, true);
          g.setColor(getForeground());
@@ -620,13 +629,13 @@ implements DocListener,
    {
      log.fine("Focus gained from: %s", e.getOppositeComponent());
      focussed = true;
-     setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
      repaintFocus();
      if (doc!=null) doc.focusGained(); // inform the document
    }
    
    /** The display cursor shown when this Display doesn't have the focus */
-   protected static Cursor unfocussed = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
+   protected static Cursor waitCursor = Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR),
+                           textCursor = Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR);
    
    /** Called when this component loses the focus. 
        Sets the mouse cursor shape, and shows a visual indication
@@ -636,7 +645,6 @@ implements DocListener,
    { 
      log.fine("Focus lost to: %s", e.getOppositeComponent());
      focussed = false;
-     setCursor(unfocussed);
      repaintFocus();
    }
 
@@ -644,6 +652,18 @@ implements DocListener,
    public void requestFocus()
    { if (debug) log.fine("");
      super.requestFocus();
+   }
+   
+   /** Set the wait cursor */
+   public void startWaiting()
+   {
+      setCursor(waitCursor);
+   }
+   
+   /** Set the text cursor */
+   public void stopWaiting()
+   {
+      setCursor(textCursor);
    }
 
    /** There is only one ACTIVE Display, and that is the one on which
@@ -676,6 +696,7 @@ implements DocListener,
    public void dragBy(int dx, int dy) {}
 
 }
+
 
 
 

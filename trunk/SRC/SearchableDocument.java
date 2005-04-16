@@ -85,56 +85,37 @@ public class SearchableDocument extends Document
    
    /** Searching hasn't been interrupted */   
    boolean searchingOk = true;
-   
-   /** Upper bound on the time a search can proceed without confirmation */
-   public int searchTimeLimit = 4;
-   
-   /** One-shot timer for searches */
-   Timer timer = new Timer(0, new Act("Timer")
-   {
-      public void run() { interruptSearch();  }
-   });
-   { timer.setRepeats(false); }
-   
-   /** Set upper bound on the time a search can proceed without confirmation */
-   synchronized public void setSearchTimeLimit(int secs)
+      
+   /** Re-enable searching, return the given value */
+   synchronized boolean stopWaiting(boolean value)
    { 
-      searchTimeLimit = secs;
-      timer.setInitialDelay(1000*searchTimeLimit);
-      timer.setDelay(1000*searchTimeLimit);
-      timer.setRepeats(false);
-      interruptSearch();
-   }
-   
-   /** Stop the timer, re-enable searching, return the given value */
-   synchronized boolean stopTimer(boolean value)
-   { timer.stop();
      searchingOk = true;
+     for (DocListener listener: docListeners) listener.stopWaiting();
      return value;
    }
    
-   /** Start the timer and enable searching */     
-   synchronized void startTimer() 
-   { setSearchTimeLimit(searchTimeLimit);
-     timer.start(); 
+   /** Enable searching */     
+   synchronized void startWaiting() 
+   { 
      searchingOk = true; 
+     for (DocListener listener: docListeners) listener.startWaiting();
    }
    
    /** Interrupt the running search */
    synchronized public void interruptSearch()
    { searchingOk = false;
-     timer.stop();
    }
    
    static final String[] leaseOptions = { "Cancel", "Stop here", "Continue"};
    
    /** Inform the user that time has run out, and ask what to do */
    public boolean newLease(int x, int y)
-   { switch (Dialog.showWarning(parentComponent, String.format("%d seconds' searching has reached line %d.\nWhat do you want to do?", timer.getDelay()/1000, y)
+   { switch (Dialog.showWarning(parentComponent, String.format("Searching has reached line %d.\nWhat do you want to do?", y)
                                , 0, leaseOptions))
-     { case 0: return false;
-       case 1: setCursor(x, y); return false;
-       case 2: startTimer();    return true;
+     { 
+       case 1: setCursor(x, y); 
+       case 0: return stopWaiting(false);
+       case 2: stopWaiting(true);
      }
      return false;
    }
@@ -143,13 +124,13 @@ public class SearchableDocument extends Document
        instance of the document pattern after the cursor, if there is one.
        Return true iff successful;
    */
-   public boolean downFind() { startTimer(); return stopTimer(downFind(pattern)); }
+   public boolean downFind() { return (downFind(pattern)); }
 
    /** Select (with the cursor to the left of the mark) the previous
        instance of the pattern before the cursor, if there is one.
        Return true iff successful;
    */
-   public boolean upFind() { startTimer(); ; return stopTimer(upFind(pattern)); }
+   public boolean upFind() { return (upFind(pattern)); }
 
 
    /** Select (with the cursor to the right of the mark) the next
@@ -177,10 +158,11 @@ public class SearchableDocument extends Document
    */
    public boolean downSearch(int x, int y, Pattern aPattern)
    { CharSequence r = lineAt(y);
+     startWaiting();
      while (searchingOk || newLease(x, y))
      { if (searchFirst(x, aPattern, r))
        { matchY = y;
-         return true;
+         return stopWaiting(true);
        }
        y++;
        if (y<length())
@@ -188,9 +170,9 @@ public class SearchableDocument extends Document
          x = 0;
        }
        else
-       return false;
+       return stopWaiting(false);
      }
-     return false;
+     return stopWaiting(false);
    }
    
    /** Find the first occurence of the pattern after x in the sequence r, 
@@ -230,10 +212,11 @@ public class SearchableDocument extends Document
    */
    public boolean upSearch(int x, int y, Pattern aPattern)
    { CharSequence r = lineAt(y);
+     startWaiting();
      while (searchingOk || newLease(x, y))
      { if (searchLast(x, aPattern, r))
        { matchY = y;
-         return true;
+         return stopWaiting(true);
        }
        y--;
        if (y>=0)
@@ -241,9 +224,9 @@ public class SearchableDocument extends Document
          x=r.length();
        }
        else
-         return false;
+         return stopWaiting(false);
      }
-     return false;
+     return stopWaiting(false);
    }
 
    /** Find the last occurence of the pattern before x in the sequence r,
@@ -366,10 +349,10 @@ public class SearchableDocument extends Document
      Pattern pket = Pattern.compile(ket);
      if (matchDown(getX(), getY(), pbra, pket))  
      { setMark(match.end(), matchY); 
-       return true; 
+       return (true); 
      }
      else
-       return false;
+       return (false);
    }
    
    /** 
@@ -404,7 +387,7 @@ public class SearchableDocument extends Document
    
    /** A non-nesting variant of matchDown */
    public boolean skipDown(Pattern bra, Pattern ket)
-   {
+   { 
      if (skipDown(getX(), getY(), bra, ket))
      { setMark(match.end(), matchY);
        return true;
@@ -450,10 +433,10 @@ public class SearchableDocument extends Document
      Pattern pket = Pattern.compile(ket);
      if (matchUp(getX(), getY(), pbra, pket))  
      { setMark(match.start(), matchY); 
-       return true; 
+       return (true); 
      }
      else
-       return false;
+       return (false);
    }
    
    /** If the cursor c is positioned just after an instance of ket, then
@@ -595,27 +578,29 @@ public class SearchableDocument extends Document
    /** Move the mark downwards to the closest matched ket, if possible. */
    public boolean matchDown(char bra, char ket)
    { Cursor c = new Cursor(this);
+     startWaiting();
      int n=0;
      while (!c.atEnd()) 
      { if (c.rightChar()==bra) n++; else
        if (c.rightChar()==ket) { n--; if (n==0) break; }
        c.moveRight(); 
      }
-     if (c.rightChar()==ket) { c.moveRight(); setMark(c.x, c.y); return true; }
-     return false;
+     if (c.rightChar()==ket) { c.moveRight(); setMark(c.x, c.y); return stopWaiting(true); }
+     return stopWaiting(false);
    }
    
    /** Move the mark upwards to the closest matched bra, if possible. */
    public boolean matchUp(char bra, char ket)
    { Cursor c = new Cursor(this);
+     startWaiting();
      int n=0;
      while (!c.atStart()) 
      { c.moveLeft(); 
        if (c.rightChar()==ket) n++; else
        if (c.rightChar()==bra) { n--; if (n==0) break; }
      }
-     if (c.rightChar()==bra) { setMark(c.x, c.y); return true; }
-     return false;
+     if (c.rightChar()==bra) { setMark(c.x, c.y); return stopWaiting(true); }
+     return stopWaiting(false);
    }
 
    /** A cursor presents a sequential view of the characters
@@ -694,6 +679,8 @@ public class SearchableDocument extends Document
      }
    }
 }
+
+
 
 
 

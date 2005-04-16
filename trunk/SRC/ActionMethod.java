@@ -32,7 +32,7 @@ import javax.swing.KeyStroke;
     /** Label to go on the button */ 
     String  label()   default "";
     /** Whether the action is to be executed offline or on the GUI thread */
-    boolean offline() default false;
+    boolean offline() default true;
     
     /** 
         When an object is registered with an ActionMethod.Map, each of its
@@ -233,6 +233,7 @@ import javax.swing.KeyStroke;
       }                 
     }
 }
+
 
 
 

@@ -198,21 +198,6 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       bind("doSavePrefs", "File/Prefs");
       bind("doLogger",    "File/Prefs");
       menu.addSeparator();
-      menu.addSeparator();
-      RadioItem.Group<Integer> times = new RadioItem.Group<Integer>("Search time limit", prefs.getInt("Search time limit", 4), "Time limit on searches before asking for confirmation", prefs, RadioItem.toInt)
-      { { run(); }
-        public void run()
-        {
-          doc.setSearchTimeLimit(value);
-        }
-      };      
-      menu.add(new RadioItem<Integer> (times, "Search for ≤ 1 sec",  1));
-      menu.add(new RadioItem<Integer> (times, "Search for ≤ 2 sec",  2));
-      menu.add(new RadioItem<Integer> (times, "Search for ≤ 4 sec",  4));
-      menu.add(new RadioItem<Integer> (times, "Search for ≤ 8 sec",  8));
-      menu.add(new RadioItem<Integer> (times, "Search for ≤ 12 sec", 12));
-      menu.add(new RadioItem<Integer> (times, "Search for ≤ 16 sec", 16));
-      menu.add(new RadioItem<Integer> (times, "Search for ≤ 20 sec", 20));
       
       menu = addMenu("Edit");
       bind("doReplaceAll");
@@ -1191,7 +1176,6 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     boolean ok = upwards ? doc.upFind() : doc.downFind();
     if (!ok)
       tempCaption("Pattern not found");
-    edFocus();
   }
 
   /**
@@ -1210,7 +1194,6 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     boolean ok = upwards ? doc.upFind(pat) : doc.downFind(pat);
     if (!ok)
       tempCaption("Pattern not found");
-    edFocus();
   }
 
   /** Cut, and replace the current selection 
@@ -1406,10 +1389,10 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     return b;
   }
   
-  /** Kill the currently-running OS-process, if any. */
-  @ActionMethod(label="Kill", tip="Kill any currently-running background process")
+  /** Kill the currently-running OS-process, if any, and stop a long running search. */
+  @ActionMethod(offline = false, label="Kill", tip="Kill any currently-running background process or long-running editor activity")
   public void doKillProcess()
-  {
+  { doc.interruptSearch();
     if (process != null)
     {
       process.destroy();
@@ -1740,7 +1723,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
 
       public void fail(Exception ex)
       {
-        ex.printStackTrace();
+        Dred.showWarning(session, ex.toString());
         viewer = null;
       }
 
@@ -1808,6 +1791,9 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       {
         showDocFeedback();
       }
+      
+      public void startWaiting() {}
+      public void stopWaiting() {}
     });
   }
 
@@ -2007,86 +1993,5 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
