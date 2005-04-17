@@ -33,19 +33,18 @@
                    encoding  = "UTF-8"
                    > 
                <compilerarg line="-Xlint:unchecked"/>
-               <include name="**/*.java"/>
+               <include name="**/*.java"
+               />
             </javac> 
         </target>
         
         <target name="javadoc" depends="compile">
           <javadoc Encoding     = "UTF-8"
                    source       = "1.5"
-                   destdir      = "JAVADOC"
-                   >
+                   destdir      = "JAVADOC">
              <fileset   dir     ="${SOURCE}" 
                         includes="*.java" 
-                        excludes="NanoHTTPDServer.java"
-                        />
+                        excludes="NanoHTTPDServer.java"/>
           </javadoc>
         </target>
         
@@ -126,8 +125,7 @@
              haven't found one that does it, so  it's implemented
              by a little Python script.
         -->
-                
-                
+                                
                 <mkdir dir="${BUILD}"/>
                 <mkdir dir="${BUILD}/org/sufrin/dred/EXT"/>
                 <exec os         = "Linux,SunOS"
@@ -153,6 +151,7 @@
                 <delete dir="${BUILD}" />
         </target>
 </project>
+
 
 
 

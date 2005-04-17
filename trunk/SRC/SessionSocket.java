@@ -80,7 +80,7 @@ public class SessionSocket extends NanoHTTPD
     else
     if (method.equalsIgnoreCase("GET") && uri.toUpperCase().startsWith("/HELP"))
     { URL url = Dred.class.getResource("index.html");
-      return new Response(HTTP_OK, MIME_HTML, url.openStream());
+      return new Response(HTTP_OK, MIME_HTML+"; charset=UTF8", url.openStream());
     }
     else
     if (method.equalsIgnoreCase("GET") && uri.equals("/favicon.ico"))
@@ -94,13 +94,13 @@ public class SessionSocket extends NanoHTTPD
     if (method.equalsIgnoreCase("GET") && uri.equals("/current.bindings.html"))
     { EditorFrame caller = EditorFrame.whoCalledBrowser;
       String bindings = caller == null ? "<html><body>No bindings</body></html>" : caller.getBindingsHTML();
-      Response r = new Response(HTTP_OK, HTTP_OK, bindings);
+      Response r = new Response(HTTP_OK, MIME_HTML+"; charset=UTF8", bindings);
       return r;
     }
     else
     if (method.equalsIgnoreCase("GET") && uri.endsWith(".html"))
     { 
-      return serveURL("class://org.sufrin.dred.Dred"+uri, "text/html");
+      return serveURL("class://org.sufrin.dred.Dred"+uri, MIME_HTML+"; charset=UTF8");
     }
     else
       return new Response(HTTP_FORBIDDEN,
@@ -135,6 +135,7 @@ public class SessionSocket extends NanoHTTPD
 
   
 }
+
 
 
 

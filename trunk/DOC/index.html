@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" ?>
 <html>
 <head>
     <title>
@@ -10,6 +11,14 @@
         <image alt="" src="dnought.png"></image>
         <h1>Dred Help</h1>
 </center>
+<h3>
+        Description
+</h3>
+<p>
+ Dred is a <i>lightweight</i>, customizeable, and extensible Unicode text
+editor. It comes, complete with documentation, in a single executable jar (~256K).
+It was written in Java 1.5 and needs a Java 1.5 runtime.
+</p>
 <h3>
         Resources
 </h3>
@@ -25,16 +34,61 @@
      </li>
      <li>
         <a href="current.bindings.html">Current Dred Bindings</a>
-     </li>
-          
+     </li>          
+     
 </ul>
+<h3>
+Installing Dred (Windows, Solaris, Linux)
+</h3>
+<ol>
+        <li>
+                <a href="http://java.sun.com/j2se/1.5.0/download.jsp">Ensure you have Sun's latest Java 1.5 implementation (JRE 5.0 or JDK 5.0)</a>
+        </li>
+        <li>
+                <a href="http://jape.comlab.ox.ac.uk:8080/">Download the current <tt>Dred.jar</tt> file.</a>
+        </li>
+        <li>
+                Put the file in a directory, and run it. 
+                <ul>
+                  <li>
+                    On Unix systems this can be done with the shell command:
+                    <tt>java -jar Dred.jar</tt> 
+                  </li>
+                  <li>
+                    On Windows systems this can usually be done by
+                    doublelicking on <tt>Dred.jar</tt>. If WinRAR or
+                    some other file archiver has "registered" <tt>.jar</tt> files
+                    as archives, you will have to open a command window
+                    and give the command
+                    <tt>java -jar Dred.jar </tt> 
+                  </li>
+                </ul>
+        </li>
+        <li>
+                The previous step should open an editing window on
+                an "anonymous" file. Use one of the <tt>Help</tt> menu entries to
+                get access to the documentation, and a description of the current bindings.
+                On Windows I recommend that you unpack the documentation and
+                read it using explorer.
+        </li>
+        <li>
+                If you don't want the trouble of finding out how to bind
+                shortcuts and abbreviations to your favourite Unicode characters,
+                then you can get a kickstart by using the ones I use. This will do the trick:
+                <pre>
+                <tt>java -jar Dred.jar java -jar BUILD/Dred.jar --bindings=dred:dred-bs.bindings</tt> 
+                </pre>
+        </li>
+</ol>
 <pre>
-<b>Bernard Sufrin</b>
+<b>© (2005) Bernard Sufrin</b>
 <b>$Revision$</b>
 <b>$Date$</b>
 </pre>
 </body>
 </html>
+
+
 
 
 

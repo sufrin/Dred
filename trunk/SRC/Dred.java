@@ -81,7 +81,6 @@ public class Dred
   public static void main(String[] args) throws Exception
   { URL.setURLStreamHandlerFactory(new ClassURLFactory());
     boolean wait = false;
-    if (args.length > 0)
     { for (String arg : args)
         if (arg.equals("-w") || arg.equals("--wait"))
           wait=true;
@@ -118,11 +117,11 @@ public class Dred
           startRemoteSession(arg);
         if (wait && sessions.isEmpty())  
            startLocalSession(null, EncodingName); 
+        if (!wait && sessions.isEmpty())
+        {  startServer(0);
+           startLocalSession(null, EncodingName); 
+        }
      }
-    else 
-    { startServer(0);
-      if (onWindows()) startLocalSession(null, EncodingName); 
-    }
   }
   
   /** Return true if there's REALLY a server running */
@@ -448,6 +447,8 @@ public class Dred
   public static boolean onUnix()    { return !simWindows && File.separator.equals("/"); }
   public static boolean onWindows() { return simWindows || File.separator.equals("\\"); }
 }
+
+
 
 
 
