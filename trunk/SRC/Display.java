@@ -654,16 +654,16 @@ implements DocListener,
      super.requestFocus();
    }
    
-   /** Set the wait cursor */
+   /** SGive visible evidence of waiting */
    public void startWaiting()
    {
-      setCursor(waitCursor);
+      //setCursor(waitCursor);
    }
    
-   /** Set the text cursor */
+   /** Set withdraw visible evidence of waiting */
    public void stopWaiting()
    {
-      setCursor(textCursor);
+      //setCursor(textCursor);
    }
 
    /** There is only one ACTIVE Display, and that is the one on which
@@ -696,6 +696,7 @@ implements DocListener,
    public void dragBy(int dx, int dy) {}
 
 }
+
 
 
 
