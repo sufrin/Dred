@@ -150,7 +150,14 @@
         <target name ="clean" >
                 <delete dir="${BUILD}" />
         </target>
+        
+        <target name="dist" depends="Dred">
+          <exec executable="sh" output="/dev/tty" error="/dev/tty">
+            <arg line="-c 'rsync -v -t -e ssh DOC/*.html DOC/*g BUILD/Dred.jar jape:JAPEWEBHOME/jape.org/DRED'"/>
+          </exec>
+        </target>
 </project>
+
 
 
 

@@ -80,7 +80,8 @@ public class Dred
    */
   public static void main(String[] args) throws Exception
   { URL.setURLStreamHandlerFactory(new ClassURLFactory());
-    boolean wait = false;
+    boolean wait    = false;    // are we running standalone?
+    int     started = 0;        // the number of sessions started from the command line
     { for (String arg : args)
         if (arg.equals("-w") || arg.equals("--wait"))
           wait=true;
@@ -94,7 +95,8 @@ public class Dred
              startServer(port);
         }
         else if (arg.equals("--serve"))
-        { startServer(0);       
+        { 
+             startServer(0);       
         }
         else if (arg.startsWith("--enc="))
         { String name = arg.substring("--enc=".length());
@@ -111,15 +113,27 @@ public class Dred
           fallBack=true;
         else if (arg.startsWith("--bindings="))
           readBindings(arg.substring("--bindings=".length()), true);
-        else if (wait) 
-          startLocalSession(arg, EncodingName); 
         else 
-          startRemoteSession(arg);
-        if (wait && sessions.isEmpty())  
-           startLocalSession(null, EncodingName); 
-        if (!wait && sessions.isEmpty())
-        {  startServer(0);
-           startLocalSession(null, EncodingName); 
+        { if (wait) 
+             startLocalSession(arg, EncodingName); 
+          else 
+             startRemoteSession(arg, EncodingName);
+          started++;
+        }
+          
+        if (wait) 
+        {  // standalone mode
+           if (sessions.isEmpty())  startLocalSession(null, EncodingName); 
+        }
+        else
+        {  // server mode (except on Windows)
+           if (started==0)
+           {  startServer(0);
+              if (onUnix()) 
+                 startRemoteSession("Untitled", EncodingName); 
+              else
+                 startLocalSession(null, EncodingName); 
+           }
         }
      }
   }
@@ -236,7 +250,7 @@ public class Dred
   /** After starting a server (if there is none running) on the default
       server port, start a remote editing session for the given path.
    */
-  public static void startRemoteSession(String path) throws Exception
+  public static void startRemoteSession(String path, String EncodingName) throws Exception
   {     String cwd  = System.getProperty("user.dir");
         if (cwd==null || cwd.equals("")) cwd = System.getProperty("user.home");
         File   file = new File(path);
@@ -447,6 +461,9 @@ public class Dred
   public static boolean onUnix()    { return !simWindows && File.separator.equals("/"); }
   public static boolean onWindows() { return simWindows || File.separator.equals("\\"); }
 }
+
+
+
 
 
 
