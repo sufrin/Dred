@@ -464,6 +464,11 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
 
   static ImageIcon dnought = new ImageIcon(Dred.class.getResource("dnought.jpg"));
   static ImageIcon stop    = new ImageIcon(Dred.class.getResource("stop.png"));
+  
+  ImageButton stopButton = new ImageButton(stop)
+  {  { setEnabled(false); }
+     public void run() { doKillProcess(); }
+  };
 
   /**
    * Count of the number of frames/sessions that have been
@@ -747,15 +752,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     feedback.add(Box.createHorizontalGlue());
     feedback.add(labelR);
     feedback.add(new JLabel(" "));
-    feedback.add
-    (new ImageButton(stop)
-     {
-        public void run()
-        { 
-          doKillProcess();
-        }
-     }
-    ); 
+    feedback.add(stopButton); 
 
 
     bars.setLayout(new BoxLayout(bars, BoxLayout.Y_AXIS));
@@ -1395,7 +1392,9 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     return b;
   }
   
-  /** Kill the currently-running OS-process, if any, and stop a long running search. */
+  /** Kill the currently-running OS-process, if any, stop any long running search,
+      and flush the queued events.
+  */
   @ActionMethod(offline = false, label="Kill", tip="Kill any currently-running background process or long-running editor activity")
   public void doKillProcess()
   { doc.interruptSearch();
@@ -1404,7 +1403,16 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       process.destroy();
       process = null;
     }
+    SwingUtilities.invokeLater(flushEvents);
   }
+  
+  final Runnable flushEvents = new Runnable()
+  { public void run()
+    {
+      int n = ActionMethod.Action.flushEvents();
+      tempCaption(n==0?"[Interrupted]":String.format("[Interrupted %d]", n));
+    }
+  };
 
   /**
    * Load the document from the given reader.
@@ -1799,8 +1807,8 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
         showDocFeedback();
       }
       
-      public void startWaiting() {}
-      public void stopWaiting() {}
+      public void startWaiting() { stopButton.setEnabled(true); }
+      public void stopWaiting()  { stopButton.setEnabled(false); }
     });
   }
 
@@ -2000,6 +2008,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
 
 
 

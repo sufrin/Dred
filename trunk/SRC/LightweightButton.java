@@ -11,7 +11,7 @@ import javax.swing.JComponent;
 public abstract class LightweightButton extends JComponent 
 { ActionListener listener;
   String         command;
-  boolean pressed = false, entered=false;                     
+  boolean pressed = false, entered=false, enabled = true;                     
 
   abstract public void paint(Graphics g);                     
   abstract public void pressed(boolean pressed);              
@@ -52,4 +52,5 @@ public abstract class LightweightButton extends JComponent
   
   public Dimension getMaximumSize()   { return getMinimumSize(); }
 }
+
 

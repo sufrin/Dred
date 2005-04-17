@@ -104,17 +104,25 @@ import javax.swing.KeyStroke;
       static ExecutorService offlineThread = Executors.newSingleThreadExecutor();
       
       /** Execute a job in the worker thread */
-      public static void execute(Runnable job) { offlineThread.execute(job); }
+      synchronized public static void execute(Runnable job) { offlineThread.execute(job); }
             
       /** Stop the worker thread */
-      public static void shutdownNow()
+      synchronized public static void shutdownNow()
       {  
          offlineThread.shutdownNow();
       }
             
+      /** Flush the worker thread's queue  */
+      synchronized public static int flushEvents()
+      {  
+         int n = offlineThread.shutdownNow().size();
+         offlineThread = Executors.newSingleThreadExecutor();
+         return n;
+      }
+            
       public void actionPerformed(final ActionEvent ev)                     
       {  if (act.offline())
-         offlineThread.execute
+         execute
          ( new Runnable()
            { public void run()
              {  Object source = ev.getSource();
@@ -236,6 +244,7 @@ import javax.swing.KeyStroke;
       }                 
     }
 }
+
 
 
 

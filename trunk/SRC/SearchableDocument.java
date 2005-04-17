@@ -111,9 +111,21 @@ public class SearchableDocument extends Document
    
    static final String[] leaseOptions = { "Cancel", "Stop here", "Continue"};
    
-   /** Inform the user that time has run out, and ask what to do */
+   static final boolean dialogBugFix = true; 
+   /** Inform the user that time has run out, and ask what to do
+       using a Dialog.
+       If <tt>dialogBugFix</tt>, then just return false. 
+       TODO:
+       There's an interaction with the cancellation machinery that I don't
+       understand, yet. If we are in a state where we have (at any time in the past)
+       interrupted the offline thread executor, the Dialog box always returns its
+       default option. There is evidence that the Dialog box gets interrupted
+       while it is loading its icon. I'm certain that I need a subtler way
+       of interrupting the thread executor if this is ever to be fixed.       
+   */
    public boolean newLease(int x, int y)
-   { switch (Dialog.showWarning(parentComponent, String.format("Searching has reached line %d.\nWhat do you want to do?", y)
+   { if (dialogBugFix) return stopWaiting(false);
+     switch (Dialog.showWarning(parentComponent, String.format("Searching has reached line %d.\nWhat do you want to do?", y)
                                , 0, leaseOptions))
      { 
        case 1: setCursor(x, y); 
@@ -691,6 +703,8 @@ public class SearchableDocument extends Document
      }
    }
 }
+
+
 
 
 
