@@ -17,6 +17,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.BorderFactory;
 
+import org.sufrin.nanohttp.*;
 import org.sufrin.urlfactory.*;
 import org.sufrin.logging.Logging;
 import org.sufrin.logging.LoggingSocket;
@@ -238,6 +239,7 @@ public class Dred
    */
   public static void startRemoteSession(String path) throws Exception
   {     String cwd  = System.getProperty("user.dir");
+        if (cwd==null || cwd.equals("")) cwd = System.getProperty("user.home");
         File   file = new File(path);
         int    port = prefs.getInt("port", 0);  
         
@@ -255,7 +257,7 @@ public class Dred
         while (port != 0 && retries>=0)
         try
         {
-          URL              url    = new URL("http", "localhost", port, "/edit?FILE="+file.getAbsolutePath()+"&CWD="+cwd+"&ENCODING="+EncodingName);
+          URL              url    = new URL("http", "localhost", port, ("/edit?FILE="+NanoHTTPD.encodeUri(file.getAbsolutePath())+"&CWD="+NanoHTTPD.encodeUri(cwd)+"&ENCODING="+EncodingName));
           LineNumberReader reader = new LineNumberReader(new InputStreamReader(url.openStream(), "UTF8")); 
           reader.close();
           return;
@@ -446,6 +448,7 @@ public class Dred
   public static boolean onUnix()    { return !simWindows && File.separator.equals("/"); }
   public static boolean onWindows() { return simWindows || File.separator.equals("\\"); }
 }
+
 
 
 
