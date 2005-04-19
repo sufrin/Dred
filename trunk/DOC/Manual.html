@@ -743,47 +743,21 @@ by reading the source code and the JavaDoc can you .....
 
 
 <a name="Brief History"><h2>Brief History</h2></a>
+<p> Dred was written in Java 1.5 during between early February and
+mid-April 2005 because, having given up trying to maintain a decade-old
+editor I'd written in Python+Tk, I needed a run-anywhere lightweight
+and reliable editor that I could use to edit UTF8-encoded Jape theories.
+I had tried a number of public domain editors written in Java, but found
+that they made editing mathematical texts quite tedious,  had very long
+startup times, or were insufficiently customizeable for me.</p>
 
-Dred was written in Java 1.5 during between early February and mid-April 2005 because:
-<ol>
-    <li>
-    I needed a run-anywhere lightweight and reliable editor
-    capable of working with files in any reasonable encoding. 
-    </li>    
-    <li>
-    When the combination of Python and Tk had become a little too unwieldy
-    for me I had given up trying to maintain the Unicode-capable editor
-    that I'd been using for a decade. I had originally written it to
-    support editing Jape theories in the (highly nonstandard) 8-bit
-    encodings Konstanz and Laura that we developed before the advent
-    of Unicode.
-    </li>    
-    <li>
-    I wanted to experiment with a design that can use the selection 
-    more creatively than the now-ubiquitous <i>"typing deletes the selection but you can 
-    rescue yourself with undo"</i>. 
-    </li>
-    <li>
-    I wanted to show my students a simple but useful example
-    of the model-view-controller pattern.  
-    </li>
-    <li>
-    I wanted to see if I could simplify the construction and
-    documentation of the GUI by using Java 1.5 annotations.
-    </li>
-</ol>
-I've been using it (mostly with Redhat 9, SuSe 9.2, and Solaris) for
-all my editing since mid-February, and it hasn't crashed on me more than
-twice nor lost me any significant amount of work.
-<p>
-It runs on the
-Sun 1.5 JVM on all variants of Linux, Windows, and Solaris on which that
-JVM can be installed. (<i>I don't know, nor much care, whether Apple
-have gotten around to implementing their own Java 1.5 on MacOS-X. Their
-idiosyncratic Java implementations have, in the past, wasted a great
-deal of my time.</i>)
+<p> I've been using Dred (on Redhat 9, SuSe 9.2, Solaris, and Windows)
+for all my editing since mid-February, and have found it completely
+reliable.</p>
 
-</p>
+<p> It runs on the Sun 1.5 JVM on all variants of Linux, Windows, and
+Solaris on which that JVM can be installed.  </p>
+
 <p>
 </p>
 <pre>
@@ -792,6 +766,7 @@ deal of my time.</i>)
 <b>$Date$</b>
 </pre>
 </body>
+
 
 
 
