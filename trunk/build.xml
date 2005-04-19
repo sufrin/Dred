@@ -4,7 +4,12 @@
 -->
 <project        name    ="Dred" 
                 default ="Dred">
-
+        <!--
+        <taskdef classname="JFlex.anttask.JFlexTask" name="jflex" />
+        <target name="xml">
+          <jflex file="SRC/xml.flex" destdir="SRC"/>
+        </target>
+        -->
 
         <property name="SOURCE"       value="SRC"/>
         <property name="EXT"          value="EXT"/>
@@ -115,7 +120,7 @@
                <chmod file="${HOME}/bin/dredserver"     perm="ugo+rx" verbose="yes"/>
         </target>
 
-        <target name ="prepare" >
+        <target name ="prepare">
         <!-- Distribute the Java source files into the directories
              from which they should be compiled. Directories are
              determined by the package information found in the
@@ -157,6 +162,13 @@
           </exec>
         </target>
 </project>
+
+
+
+
+
+
+
 
 
 

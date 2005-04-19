@@ -723,19 +723,19 @@ It also occupies about 24mb, and <i> has fewer mathematical
 symbols then many of the standard Java fonts</i>.
 </p>
 
-<h4>What's Flaky?</h4>
-
-<p>
-One thing that needs improving is the bracket matching for
-XML: it uses inadequate machinery, and gets upward matches wrong
-more often than not in files in which opening tags are split between lines.
-(On the other hand it's fine for HTML editing)
-</p>
-<p>
-The core document implementation is very robust, but at the price of making some
-kinds of search slower than they might be. One day ....
-</p>
-<h4>What's needs more Documenation?</h4>
+<h4>What needs rewriting?</h4>
+<ol>
+<li>
+The core document representation is very robust and efficient, but
+at the cost of making some kinds of search slower than they might be,
+and making multiline searches impossible. One day ....
+</li>
+<li>
+I lost patience with Java/Swing's keyboard focus machinery: my replacement
+uses brute force. 
+</li>
+</ol>
+<h4>What needs more Documenation?</h4>
 <p>
 You name it! The Extension API is completely undocumented at present. Only
 by reading the source code and the JavaDoc can you ..... 
@@ -792,6 +792,7 @@ deal of my time.</i>)
 <b>$Date$</b>
 </pre>
 </body>
+
 
 
 

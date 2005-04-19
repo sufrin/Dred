@@ -1,5 +1,6 @@
 package org.sufrin.dred;
 import javax.swing.Timer;
+import java.io.Reader;
 import java.awt.Component;
 import java.util.regex.*;
 import org.sufrin.logging.Logging;
@@ -392,43 +393,7 @@ public class SearchableDocument extends Document
      }
      return false;
    }
-   
-   /** A non-nesting variant of matchDown */
-   public boolean skipDown(int x, int y, Pattern bra, Pattern ket)
-   {
-     if (!atRight(x, y, bra)) return false;
-     return downSearch(x, y, ket);
-   }
-   
-   /** A non-nesting variant of matchDown */
-   public boolean skipDown(Pattern bra, Pattern ket)
-   { 
-     if (skipDown(getX(), getY(), bra, ket))
-     { setMark(match.end(), matchY);
-       return true;
-     }
-     else
-       return false;
-   }
-   
-   /** A non-nesting variant of matchUp */
-   public boolean skipUp(int x, int y, Pattern bra, Pattern ket)
-   {
-     if (!atLeft(x, y, ket)) return false;
-     return upSearch(x, y, ket); 
-   }
-   
-   /** A non-nesting variant of matchDown */
-   public boolean skipUp(Pattern bra, Pattern ket)
-   {
-     if (skipUp(getX(), getY(), bra, ket))
-     { setMark(match.start(), matchY);
-       return true;
-     }
-     else
-       return false;
-   }
-   
+      
    /** True of there's an instance of the given pattern at the left of the given position */
    protected boolean atLeft(int x, int y, Pattern aPattern)
    { CharSequence line = lineAt(y);
@@ -528,42 +493,152 @@ public class SearchableDocument extends Document
    
    /////////////////////////// XML //////////////////////////////////////////
    
-   // Horrors! This only works properly for one-line opentags. 
-   // We'll need a proper lexer eventually.
-   // Meanwhile we'll treat an opentag broken at a line boundary as an opentag
-   
-   String xopen    = "<\\w+[^<>]*[^/]>|<\\w>|<\\w+[^<>]*$",
-          xclose   = "</\\w+>|^\\s*/>$|^\\s*>$|^[^<>]*/>",
-          xupclose = "</\\w+>|^\\s*/>$|^\\s*>$|^[^<>]*/>";
-          
-   Pattern cdopen  = Pattern.compile("\\Q<![CDATA[\\E"),
-           cdclose = Pattern.compile("\\Q]]>\\E"),
-           ccopen  = Pattern.compile("\\Q<!--\\E"),
-           ccclose = Pattern.compile("\\Q-->\\E");
-   
    public boolean matchDownXMLEnv()
-   { 
-     if (matchDown(xopen, xclose)) 
-     { setMark(match.end(), matchY);
-       return true;
+   { startWaiting();
+     XmlLex scanner = new XmlLex(this);
+     if (scanner.matchDown())
+     { setMark(scanner.x, scanner.y);
+       return stopWaiting(true);
      }
-     else 
-       return skipDown(ccopen, ccclose)
-           || skipDown(cdopen, cdclose)
-           || matchDown('<', '>');
+     else
+       return matchDown('<', '>');
    }
-      
+   
    public boolean matchUpXMLEnv()
-   { if (matchUp(xopen, xupclose))  
-     { setMark(match.start(), matchY);
-       return true;
+   { startWaiting();
+     XmlLex scanner = new XmlLex(this);
+     if (scanner.matchUp())
+     { setMark(scanner.x, scanner.y);
+       return stopWaiting(true);
      }
-     else 
-       return skipUp(ccopen, ccclose)
-           || skipUp(cdopen, cdclose)
-           || matchUp('<', '>');
+     else
+       return matchUp('<', '>');
    }
+   
+   /** An ad-hoc, very forgiving, lexer & bracket-matcher for XML */
+   public static class XmlLex extends Cursor
+   { public XmlLex (SearchableDocument doc) { super(doc); }
+     
+     public static enum XMLSymbol { Comment, PI, Empty, Open, Close, CData, None; }
+     
+     char ch, ch3=0, ch2=0, ch1=0;
+     
+     void nextChar() 
+     { moveRight(); ch3=ch2; ch2=ch1; ch1=ch; ch=doc.searchingOk?rightChar():'\000'; }
+     
+     void prevChar() 
+     { moveLeft(); ch3=ch2; ch2=ch1; ch1=ch; ch=doc.searchingOk?leftChar():'\000'; }
 
+     public boolean matchDown()
+     { ch=rightChar();
+       XMLSymbol symbol;
+       int level = 0;
+       do 
+       { symbol=nextSymbol(); 
+         if (symbol==null) return false; else
+         switch (symbol)
+         { case Comment: case PI: case Empty: case CData:
+                if (level==0) return true;
+           break;
+           case Open: 
+                level++;
+           break;
+           case Close:
+                level--;
+                if (level<=0) return true;
+           break;
+         }
+       }
+       while (true); 
+     }
+     
+     public boolean matchUp()
+     { ch=leftChar();
+       XMLSymbol symbol;
+       int level = 0;
+       do 
+       { 
+         symbol=prevSymbol(); 
+         if (symbol==null) return false; else
+         switch (symbol)
+         { case Comment: case PI: case Empty: case CData:
+                if (level==0) return true;
+           break;
+           case Close: 
+                level++;
+           break;
+           case Open:
+                level--;
+                if (level<=0) return true;
+           break;
+         }
+       }
+       while (true); 
+     }
+     
+     public XMLSymbol result(XMLSymbol res)
+     { if (res!=null) nextChar();
+       return res;
+     }
+     
+     public XMLSymbol presult(XMLSymbol res)
+     { if (res!=null) prevChar();
+       return res;
+     }
+       
+     public XMLSymbol nextSymbol()
+     { 
+       while (ch!='\000' && ch!='<') nextChar();
+       nextChar();
+       switch (ch)
+       { case '!': 
+              nextChar();
+              switch (ch)
+              { default:
+                   while (ch!=0 && !(ch=='>' && ch1=='-' && ch2=='-')) nextChar();
+                   return result(ch==0?null : ch=='>' ? XMLSymbol.Comment : XMLSymbol.None);
+                case '[':
+                   while (ch!=0 && !(ch=='>' && ch1==']' && ch2==']')) nextChar();
+                   return result(ch==0?null : ch=='>' ? XMLSymbol.CData : XMLSymbol.None);
+              }
+         case '?': nextChar();
+                   while (ch!=0 && !(ch=='>' && ch1=='?')) nextChar();
+                   return result(ch==0?null : ch=='>' ? XMLSymbol.PI : XMLSymbol.None);
+         case '/': 
+            nextChar();
+            while (ch!=0 && !(ch=='>')) nextChar();
+            return result(ch==0?null : ch=='>' ? XMLSymbol.Close : XMLSymbol.None);
+         default:
+          nextChar();
+          while (ch!=0 && !(ch=='>')) nextChar();
+          return result(ch==0?null : ch=='>' ? (ch1=='/' ? XMLSymbol.Empty : XMLSymbol.Open) : XMLSymbol.None);
+       }
+     }
+     
+     public XMLSymbol prevSymbol()
+     { 
+       while (ch!='\000' && ch!='>') prevChar();
+       prevChar();
+       switch (ch)
+       { case '/': 
+              do { prevChar(); } while (ch!=0 && ch!='<');
+              return presult(ch==0 ? null : XMLSymbol.Empty);
+         case '-':
+              do { prevChar(); } while (ch!=0 && !(ch=='<' && ch1=='!' && ch2=='-' && ch3=='-'));
+              return presult(ch==0 ? null : XMLSymbol.Comment);
+         case ']':
+              do { prevChar(); } while (ch!=0 && !(ch=='<' && ch1=='[' && ch2=='C'));
+              return presult(ch==0 ? null : XMLSymbol.CData);
+         case '?':
+              do { prevChar(); } while (ch!=0 && !(ch=='<' && ch1=='?'));
+              return presult(ch==0 ? null : XMLSymbol.PI);             
+         default:
+              do { prevChar(); } while (ch!=0 && ch!='<');
+              return presult(ch==0 ? null : ch1=='/' ? XMLSymbol.Close : XMLSymbol.Open);
+       }          
+     }
+   }   
+      
    /////////////// Specialised behaviour for insert and setCursor... //////////////
    
    Runnable matchUpJob = new Runnable()
@@ -633,12 +708,12 @@ public class SearchableDocument extends Document
    */
    protected static class Cursor
    { public    int          x, y;
-     protected Document     doc;
+     protected SearchableDocument     doc;
      /** Invariant: line.equals(doc.lineAt(y)) /\ 0&lt;=x&lt;=line.length() */
      protected CharSequence line;
-     public Cursor(Document doc) { this(doc, false); }
+     public Cursor(SearchableDocument doc) { this(doc, false); }
      
-     public Cursor(Document doc, boolean atMark)
+     public Cursor(SearchableDocument doc, boolean atMark)
      { this.doc=doc;
        if (atMark)
        { this.x=doc.getMarkX();
@@ -651,7 +726,6 @@ public class SearchableDocument extends Document
          this.line=doc.lineAt(y);
        }
      }
-
 
      /** Cursor is at the start of the document. */
      public boolean atStart() { return x<=0 && y<=0; }
@@ -677,19 +751,19 @@ public class SearchableDocument extends Document
      /** Return the character to the left of the cursor (newline
          if the cursor is at the start of a line)
      */
-     public char leftChar()   { return x<=0 ? '\n' : line.charAt(x-1); }
+     public char leftChar()   { return atStart() ? '\000' : x<=0 ? '\n' : line.charAt(x-1); }
 
      /** Return the character to the right of the cursor (newline
          if the cursor is at the end of a line)
      */
-     public char rightChar()  { return x<0 || x==line.length() ? '\n' : line.charAt(x); }
+     public char rightChar()  { return atEnd() ? '\000' : (x<0 || x==line.length()) ? '\n' : line.charAt(x); }
      
      /** Move to the end of the previous line, if possible */
      protected void leftLine()
      { if (y>0) 
        { y--;
          line=doc.lineAt(y);
-         x=line.length()-1;
+         x=line.length();
        }
      }
      
@@ -703,6 +777,7 @@ public class SearchableDocument extends Document
      }
    }
 }
+
 
 
 
