@@ -521,7 +521,7 @@ public class SearchableDocument extends Document
      
      public static enum XMLSymbol { Comment, PI, Empty, Open, Close, CData, None; }
      
-     char ch, ch3=0, ch2=0, ch1=0;
+     char ch, ch3=0, ch2=0, ch1=0; 
      
      void nextChar() 
      { moveRight(); ch3=ch2; ch2=ch1; ch1=ch; ch=doc.searchingOk?rightChar():'\000'; }
