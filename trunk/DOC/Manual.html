@@ -7,7 +7,7 @@
 <head>
         <title>Dred</title>
         <link rel="shortcut icon" href="favicon.png" type="image/png" ></link>
-</head>
+</head> 
 
 <body>  
 <center>
@@ -210,13 +210,13 @@ can be seen by pressing the <b>Help/Show Bindings</b> menu item.
 
 
 <h3>Cut and Paste</h3>
-<p>The <i>Cut</i> action removes the selection from the document and puts
-it in the cut-buffer.  The <i>Paste</i> action inserts the content of
-the cut-buffer into the document and re-selects it. The <i>Copy</i> action
+<p>The <i>Cut</i> (C-x) action removes the selection from the document and puts
+it in the cut-buffer.  The <i>Paste</i> (C-v) action inserts the content of
+the cut-buffer into the document and re-selects it. The <i>Copy</i> (C-c) action
 replaces the cut-buffer with the selection (if there is a selection),
-and the <i>SwapSel</i> action exchanges the selection and the cut-buffer (except
+and the <i>SwapSel</i> (C-V) action exchanges the selection and the cut-buffer (except
 that if the selection is null, then the cut-buffer doesn't change).  The
-<i>SwapCursorAndMark</i> action does what its name suggests.
+<i>SwapCursorAndMark</i> (C-s) action does what its name suggests.
 </p>
 
 <h3>Search and Replace</h3>
@@ -230,7 +230,7 @@ the <i>Find</i>, and the <i>Replace</i> texts, respectively.
 </p>
 
 <p>
-The <i>FindDown</i> action selects the next (<i>FindUp</i> previous) instance of the
+The <i>FindDown</i> (C-f) action selects the next (<i>FindUp</i> (C-F) previous) instance of the
 pattern specified by the <i>Find</i> minitext. 
 </p>
 If the checkbox adjacent to the <i>Find</i> minitext is checked then
@@ -238,9 +238,9 @@ the pattern is interpreted as a regular expression, otherwise it is interpreted
 literally.
 
 <p> If the current selection is an instance of the Find text then the
-<i>ReplaceDown</i> action saves the current selection in the cut-buffer
+<i>ReplaceDown</i> (C-a) (C-r) action saves the current selection in the cut-buffer
 and replaces it with the (meaning of the) <i>Repl</i> minitext --
-leaving the cursor to the right of the mark. The <i>ReplaceUp</i>
+leaving the cursor to the right of the mark. The <i>ReplaceUp</i> (C-A) (C-R)
 button is analogous and leaves the cursor to the left of the mark in
 the replacement text.</p>
 
@@ -256,15 +256,15 @@ the <i>FindDown</i> action is bound to; likewise the <i>ReplaceUp</i>
 action is usually bound to the SHIFTED <i>ReplaceDown</i> key.  </p>
 
 
-<p> The <i>FindSelDown</i> action makes the current selection the
+<p> The <i>FindSelDown</i> (C-A-f) action makes the current selection the
 <i>Find</i> pattern, turns off regular expression interpretation,
 and then acts as the <i>FindDown</i> action. Likewise
-<i>FindSelUp</i> makes the current selection the <i>Find</i> text,
+<i>FindSelUp</i> (C-A-F) makes the current selection the <i>Find</i> text,
 then acts as the <i>FindUp</i> action.  </p>
 
-<p>The <i>ClearArgument</i> action moves the keyboard focus
+<p>The <i>ClearArgument</i> (C-Ins) action moves the keyboard focus
 into the <i>Argument</i> minitext area and erases the text that is
-there. <i>ClearFind</i>, and <i>ClearRepl</i> behave analogously in the
+there. <i>ClearFind</i> (Ins) and <i>ClearRepl</i> (A-Ins) behave analogously in the
 <i>Find</i> and <i>Repl</i> minitexts. 
 </p>
 
@@ -766,6 +766,7 @@ Solaris on which that JVM can be installed.  </p>
 <b>$Date$</b>
 </pre>
 </body>
+
 
 
 
