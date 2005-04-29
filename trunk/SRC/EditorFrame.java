@@ -1398,12 +1398,19 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   @ActionMethod(offline = false, label="Kill", tip="Kill any currently-running background process or long-running editor activity")
   public void doKillProcess()
   { doc.interruptSearch();
-    if (process != null)
+    doStopProcess();
+    SwingUtilities.invokeLater(flushEvents);
+  }
+  
+  /** Kill the currently-running OS-process, if any.
+  */
+  @ActionMethod(offline = false, label="Kill", tip="Kill any currently-running background process (but not long-running editor activity)")
+  public void doStopProcess()
+  { if (process != null)
     {
       process.destroy();
       process = null;
     }
-    SwingUtilities.invokeLater(flushEvents);
   }
   
   final Runnable flushEvents = new Runnable()
@@ -1664,7 +1671,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
    */
   public void doShell(final String program)
   {
-    doKillProcess();
+    doStopProcess();
     final String sel = doc.hasSelection() ? doc.getSelection() : "";
     final boolean reversed = doc.getSelectedRegion().reversed;
     Pipe.Continue cont = new Pipe.Continue()
@@ -1943,7 +1950,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
    */
   public void startProcess(final String command, String input)
   {
-    doKillProcess();
+    doStopProcess();
     if (processFrame == null)
       processFrame = new ProcessFrame(command);
     else processFrame.setCommand(command);
@@ -2008,6 +2015,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
 
 
 
