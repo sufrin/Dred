@@ -101,8 +101,7 @@ public class NanoHTTPDServer extends NanoHTTPD
 
     // Prohibit getting out of current directory
     if (uri.startsWith("..") || uri.endsWith("..") || uri.indexOf("../") >= 0)
-      return new Response(HTTP_FORBIDDEN, MIME_PLAINTEXT,
-                          "FORBIDDEN: Won't serve ../ for security reasons.");
+      return new Response(HTTP_FORBIDDEN, MIME_PLAINTEXT, "Relative directory names are forbidden.");
 
     File f = new File(homeDir, uri);
     if (!f.exists())
@@ -198,7 +197,7 @@ public class NanoHTTPDServer extends NanoHTTPD
       else
       {
         return new Response(HTTP_FORBIDDEN, MIME_PLAINTEXT,
-                            "FORBIDDEN: No directory listing.");
+                            "Directory listings are not permitted.");
       }
     }
 
@@ -244,7 +243,7 @@ public class NanoHTTPDServer extends NanoHTTPD
     catch (IOException ioe)
     {
       return new Response(HTTP_FORBIDDEN, MIME_PLAINTEXT,
-                          "FORBIDDEN: Reading file failed.");
+                          "IO error: "+ioe.toString());
     }
   }
 
@@ -253,31 +252,29 @@ public class NanoHTTPDServer extends NanoHTTPD
    */
   private static Hashtable<String, String> theMimeTypes = new Hashtable<String, String>();
   static
-  {
-    StringTokenizer st = new StringTokenizer
-    (   "htm            text/html "
-      + "html           text/html "
-      + "java           text/plain "
-      + "c              text/plain "
-      + "h              text/plain "
-      + "hs             text/plain "
-      + "txt            text/plain "
-      + "asc            text/plain "
-      + "gif            image/gif "
-      + "jpg            image/jpeg "
-      + "jpeg           image/jpeg "
-      + "png            image/png "
-      + "mp3            audio/mpeg "
-      + "m3u            audio/mpeg-url "
-      + "pdf            application/pdf "
-      + "doc            application/msword "
-      + "ogg            application/x-ogg "
-      + "zip            application/octet-stream "
-      + "exe            application/octet-stream "
-      + "class          application/octet-stream "
-    );
-    while (st.hasMoreTokens())
-      theMimeTypes.put(st.nextToken(), st.nextToken());
+  { String[][] st = 
+    {  {"htm",        "text/html"}
+    ,  {"html",       "text/html"}
+    ,  {"java",       "text/plain"}
+    ,  {"c",          "text/plain"}
+    ,  {"h",          "text/plain"}
+    ,  {"hs",         "text/plain"}
+    ,  {"txt",        "text/plain"}
+    ,  {"asc",        "text/plain"}
+    ,  {"gif",        "image/gif"}
+    ,  {"jpg",        "image/jpeg"}
+    ,  {"jpeg",       "image/jpeg"}
+    ,  {"png",        "image/png"}
+    ,  {"mp3",        "audio/mpeg"}
+    ,  {"m3u",        "audio/mpeg-url"}
+    ,  {"pdf",        "application/pdf"}
+    ,  {"doc",        "application/msword"}
+    ,  {"ogg",        "application/x-ogg"}
+    ,  {"zip",        "application/octet-stream"}
+    ,  {"exe",        "application/octet-stream"}
+    ,  {"class",      "application/octet-stream"}
+    };
+    for (String[] e: st) theMimeTypes.put(e[0], e[1]);
   }
 
   static boolean reflectOK = true;
@@ -329,4 +326,5 @@ public class NanoHTTPDServer extends NanoHTTPD
   }
 
 }
+
 
