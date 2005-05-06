@@ -40,7 +40,7 @@ public class LatexTool extends RunTool
       JMenuBar bar = new JMenuBar();
       // Eliminate input maps (pro-tem) to avoid spurious
       // effects
-      InputMap m = new ComponentInputMap(bar);
+      InputMap m = null; // new ComponentInputMap(bar);
       bar.setInputMap(JComponent.WHEN_FOCUSED, m);
       bar.setInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT, m);
       bar.setInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW, m);
@@ -112,6 +112,7 @@ public class LatexTool extends RunTool
   }
 
 }
+
 
 
 
