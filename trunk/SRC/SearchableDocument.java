@@ -259,7 +259,7 @@ public class SearchableDocument extends Document
      
      if (findEndX==findStartX) 
      { // Pattern matches empty, so truncate the search.
-       log.warning("Pattern %s matches empty string", aPattern);
+       Dialog.showWarning("Pattern %s matches empty string", aPattern);
        match = new MatchResult()
        { public int end()           { return x; }
          public int end(int n)      { return x; }
@@ -777,6 +777,7 @@ public class SearchableDocument extends Document
      }
    }
 }
+
 
 
 

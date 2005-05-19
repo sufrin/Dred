@@ -2,262 +2,262 @@
 #       This file contains some interesting symbols in the UTF8 encoding
 #       It can be used to test Unicode symbol coverage of a font
 #
-text abbrev XXX \u2000 #  
-text abbrev XXX \u2001 #  
-text abbrev XXX \u2002 #  
-text abbrev XXX \u2003 #  
-text abbrev XXX \u2004 #  
-text abbrev XXX \u2005 #  
-text abbrev XXX \u2006 #  
-text abbrev XXX \u2007 #  
-text abbrev XXX \u2008 #  
-text abbrev XXX \u2009 #  
-text abbrev XXX \u200A #  
-text abbrev XXX \u200B # ​
-text abbrev XXX \u200C # ‌
-text abbrev XXX \u200D # ‍
-text abbrev XXX \u200E # ‎
-text abbrev XXX \u200F # ‏
-text abbrev XXX \u2010 # ‐
-text abbrev XXX \u2011 # ‑
-text abbrev XXX \u2012 # ‒
-text abbrev XXX \u2013 # –
-text abbrev XXX \u2014 # —
-text abbrev XXX \u2015 # ―
-text abbrev XXX \u2016 # ‖
-text abbrev XXX \u2017 # ‗
-text abbrev XXX \u2018 # ‘
-text abbrev XXX \u2019 # ’
-text abbrev XXX \u201A # ‚
-text abbrev XXX \u201B # ‛
-text abbrev XXX \u201C # “
-text abbrev XXX \u201D # ”
-text abbrev XXX \u201E # „
-text abbrev XXX \u201F # ‟
-text abbrev XXX \u2020 # †
-text abbrev XXX \u2021 # ‡
-text abbrev XXX \u2022 # •
-text abbrev XXX \u2023 # ‣
-text abbrev XXX \u2024 # ․
-text abbrev XXX \u2025 # ‥
-text abbrev XXX \u2026 # …
-text abbrev XXX \u2027 # ‧
-text abbrev XXX \u2028 #  
-text abbrev XXX \u2029 #  
-text abbrev XXX \u202A # ‪
-text abbrev XXX \u202B # ‫
-text abbrev XXX \u202C # ‬
-text abbrev XXX \u202D # ‭
-text abbrev XXX \u202E # ‮
-text abbrev XXX \u202F #  
-text abbrev XXX \u2030 # ‰
-text abbrev XXX \u2031 # ‱
-text abbrev XXX \u2032 # ′
-text abbrev XXX \u2033 # ″
-text abbrev XXX \u2034 # ‴
-text abbrev XXX \u2035 # ‵
-text abbrev XXX \u2036 # ‶
-text abbrev XXX \u2037 # ‷
-text abbrev XXX \u2038 # ‸
-text abbrev XXX \u2039 # ‹
-text abbrev XXX \u203A # ›
-text abbrev XXX \u203B # ※
-text abbrev XXX \u203C # ‼
-text abbrev XXX \u203D # ‽
-text abbrev XXX \u203E # ‾
-text abbrev XXX \u203F # ‿
-text abbrev XXX \u2040 # ⁀
-text abbrev XXX \u2041 # ⁁
-text abbrev XXX \u2042 # ⁂
-text abbrev XXX \u2043 # ⁃
-text abbrev XXX \u2044 # ⁄
-text abbrev XXX \u2045 # ⁅
-text abbrev XXX \u2046 # ⁆
-text abbrev XXX \u2047 # ⁇
-text abbrev XXX \u2048 # ⁈
-text abbrev XXX \u2049 # ⁉
-text abbrev XXX \u204A # ⁊
-text abbrev XXX \u204B # ⁋
-text abbrev XXX \u204C # ⁌
-text abbrev XXX \u204D # ⁍
-text abbrev XXX \u204E # ⁎
-text abbrev XXX \u204F # ⁏
-text abbrev XXX \u2050 # ⁐
-text abbrev XXX \u2051 # ⁑
-text abbrev XXX \u2052 # ⁒
-text abbrev XXX \u2053 # ⁓
-text abbrev XXX \u2054 # ⁔
-text abbrev XXX \u2055 # ⁕
-text abbrev XXX \u2056 # ⁖
-text abbrev XXX \u2057 # ⁗
-text abbrev XXX \u2058 # ⁘
-text abbrev XXX \u2059 # ⁙
-text abbrev XXX \u205A # ⁚
-text abbrev XXX \u205B # ⁛
-text abbrev XXX \u205C # ⁜
-text abbrev XXX \u205D # ⁝
-text abbrev XXX \u205E # ⁞
-text abbrev XXX \u205F #  
-text abbrev XXX \u2060 # ⁠
-text abbrev XXX \u2061 # ⁡
-text abbrev XXX \u2062 # ⁢
-text abbrev XXX \u2063 # ⁣
-text abbrev XXX \u2064 # ⁤
-text abbrev XXX \u2065 # ⁥
-text abbrev XXX \u2066 # ⁦
-text abbrev XXX \u2067 # ⁧
-text abbrev XXX \u2068 # ⁨
-text abbrev XXX \u2069 # ⁩
-text abbrev XXX \u206A # ⁪
-text abbrev XXX \u206B # ⁫
-text abbrev XXX \u206C # ⁬
-text abbrev XXX \u206D # ⁭
-text abbrev XXX \u206E # ⁮
-text abbrev XXX \u206F # ⁯
-text abbrev XXX \u2070 # ⁰
-text abbrev XXX \u2071 # ⁱ
-text abbrev XXX \u2072 # ⁲
-text abbrev XXX \u2073 # ⁳
-text abbrev XXX \u2074 # ⁴
-text abbrev XXX \u2075 # ⁵
-text abbrev XXX \u2076 # ⁶
-text abbrev XXX \u2077 # ⁷
-text abbrev XXX \u2078 # ⁸
-text abbrev XXX \u2079 # ⁹
-text abbrev XXX \u207A # ⁺
-text abbrev XXX \u207B # ⁻
-text abbrev XXX \u207C # ⁼
-text abbrev XXX \u207D # ⁽
-text abbrev XXX \u207E # ⁾
-text abbrev XXX \u207F # ⁿ
-text abbrev XXX \u2080 # ₀
-text abbrev XXX \u2081 # ₁
-text abbrev XXX \u2082 # ₂
-text abbrev XXX \u2083 # ₃
-text abbrev XXX \u2084 # ₄
-text abbrev XXX \u2085 # ₅
-text abbrev XXX \u2086 # ₆
-text abbrev XXX \u2087 # ₇
-text abbrev XXX \u2088 # ₈
-text abbrev XXX \u2089 # ₉
-text abbrev XXX \u208A # ₊
-text abbrev XXX \u208B # ₋
-text abbrev XXX \u208C # ₌
-text abbrev XXX \u208D # ₍
-text abbrev XXX \u208E # ₎
-text abbrev XXX \u208F # ₏
-text abbrev XXX \u2090 # ₐ
-text abbrev XXX \u2091 # ₑ
-text abbrev XXX \u2092 # ₒ
-text abbrev XXX \u2093 # ₓ
-text abbrev XXX \u2094 # ₔ
-text abbrev XXX \u2095 # ₕ
-text abbrev XXX \u2096 # ₖ
-text abbrev XXX \u2097 # ₗ
-text abbrev XXX \u2098 # ₘ
-text abbrev XXX \u2099 # ₙ
-text abbrev XXX \u209A # ₚ
-text abbrev XXX \u209B # ₛ
-text abbrev XXX \u209C # ₜ
-text abbrev XXX \u209D # ₝
-text abbrev XXX \u209E # ₞
-text abbrev XXX \u209F # ₟
-text abbrev XXX \u20A0 # ₠
-text abbrev XXX \u20A1 # ₡
-text abbrev XXX \u20A2 # ₢
-text abbrev XXX \u20A3 # ₣
-text abbrev XXX \u20A4 # ₤
-text abbrev XXX \u20A5 # ₥
-text abbrev XXX \u20A6 # ₦
-text abbrev XXX \u20A7 # ₧
-text abbrev XXX \u20A8 # ₨
-text abbrev XXX \u20A9 # ₩
-text abbrev XXX \u20AA # ₪
-text abbrev XXX \u20AB # ₫
-text abbrev XXX \u20AC # €
-text abbrev XXX \u20AD # ₭
-text abbrev XXX \u20AE # ₮
-text abbrev XXX \u20AF # ₯
-text abbrev XXX \u20B0 # ₰
-text abbrev XXX \u20B1 # ₱
-text abbrev XXX \u20B2 # ₲
-text abbrev XXX \u20B3 # ₳
-text abbrev XXX \u20B4 # ₴
-text abbrev XXX \u20B5 # ₵
-text abbrev XXX \u20B6 # ₶
-text abbrev XXX \u20B7 # ₷
-text abbrev XXX \u20B8 # ₸
-text abbrev XXX \u20B9 # ₹
-text abbrev XXX \u20BA # ₺
-text abbrev XXX \u20BB # ₻
-text abbrev XXX \u20BC # ₼
-text abbrev XXX \u20BD # ₽
-text abbrev XXX \u20BE # ₾
-text abbrev XXX \u20BF # ₿
-text abbrev XXX \u20C0 # ⃀
-text abbrev XXX \u20C1 # ⃁
-text abbrev XXX \u20C2 # ⃂
-text abbrev XXX \u20C3 # ⃃
-text abbrev XXX \u20C4 # ⃄
-text abbrev XXX \u20C5 # ⃅
-text abbrev XXX \u20C6 # ⃆
-text abbrev XXX \u20C7 # ⃇
-text abbrev XXX \u20C8 # ⃈
-text abbrev XXX \u20C9 # ⃉
-text abbrev XXX \u20CA # ⃊
-text abbrev XXX \u20CB # ⃋
-text abbrev XXX \u20CC # ⃌
-text abbrev XXX \u20CD # ⃍
-text abbrev XXX \u20CE # ⃎
-text abbrev XXX \u20CF # ⃏
-text abbrev XXX \u20D0 # ⃐
-text abbrev XXX \u20D1 # ⃑
-text abbrev XXX \u20D2 # ⃒
-text abbrev XXX \u20D3 # ⃓
-text abbrev XXX \u20D4 # ⃔
-text abbrev XXX \u20D5 # ⃕
-text abbrev XXX \u20D6 # ⃖
-text abbrev XXX \u20D7 # ⃗
-text abbrev XXX \u20D8 # ⃘
-text abbrev XXX \u20D9 # ⃙
-text abbrev XXX \u20DA # ⃚
-text abbrev XXX \u20DB # ⃛
-text abbrev XXX \u20DC # ⃜
-text abbrev XXX \u20DD # ⃝
-text abbrev XXX \u20DE # ⃞
-text abbrev XXX \u20DF # ⃟
-text abbrev XXX \u20E0 # ⃠
-text abbrev XXX \u20E1 # ⃡
-text abbrev XXX \u20E2 # ⃢
-text abbrev XXX \u20E3 # ⃣
-text abbrev XXX \u20E4 # ⃤
-text abbrev XXX \u20E5 # ⃥
-text abbrev XXX \u20E6 # ⃦
-text abbrev XXX \u20E7 # ⃧
-text abbrev XXX \u20E8 # ⃨
-text abbrev XXX \u20E9 # ⃩
-text abbrev XXX \u20EA # ⃪
-text abbrev XXX \u20EB # ⃫
-text abbrev XXX \u20EC # ⃬
-text abbrev XXX \u20ED # ⃭
-text abbrev XXX \u20EE # ⃮
-text abbrev XXX \u20EF # ⃯
-text abbrev XXX \u20F0 # ⃰
-text abbrev XXX \u20F1 # ⃱
-text abbrev XXX \u20F2 # ⃲
-text abbrev XXX \u20F3 # ⃳
-text abbrev XXX \u20F4 # ⃴
-text abbrev XXX \u20F5 # ⃵
-text abbrev XXX \u20F6 # ⃶
-text abbrev XXX \u20F7 # ⃷
-text abbrev XXX \u20F8 # ⃸
-text abbrev XXX \u20F9 # ⃹
-text abbrev XXX \u20FA # ⃺
-text abbrev XXX \u20FB # ⃻
-text abbrev XXX \u20FC # ⃼
-text abbrev XXX \u20FD # ⃽
-text abbrev XXX \u20FE # ⃾
-text abbrev XXX \u20FF # ⃿
+\u2000 #  
+\u2001 #  
+\u2002 #  
+\u2003 #  
+\u2004 #  
+\u2005 #  
+\u2006 #  
+\u2007 #  
+\u2008 #  
+\u2009 #  
+\u200A #  
+\u200B # ​
+\u200C # ‌
+\u200D # ‍
+\u200E # ‎
+\u200F # ‏
+\u2010 # ‐
+\u2011 # ‑
+\u2012 # ‒
+\u2013 # –
+\u2014 # —
+\u2015 # ―
+\u2016 # ‖
+\u2017 # ‗
+\u2018 # ‘
+\u2019 # ’
+\u201A # ‚
+\u201B # ‛
+\u201C # “
+\u201D # ”
+\u201E # „
+\u201F # ‟
+\u2020 # †
+\u2021 # ‡
+\u2022 # •
+\u2023 # ‣
+\u2024 # ․
+\u2025 # ‥
+\u2026 # …
+\u2027 # ‧
+\u2028 #  
+\u2029 #  
+\u202A # ‪
+\u202B # ‫
+\u202C # ‬
+\u202D # ‭
+\u202E # ‮
+\u202F #  
+\u2030 # ‰
+\u2031 # ‱
+\u2032 # ′
+\u2033 # ″
+\u2034 # ‴
+\u2035 # ‵
+\u2036 # ‶
+\u2037 # ‷
+\u2038 # ‸
+\u2039 # ‹
+\u203A # ›
+\u203B # ※
+\u203C # ‼
+\u203D # ‽
+\u203E # ‾
+\u203F # ‿
+\u2040 # ⁀
+\u2041 # ⁁
+\u2042 # ⁂
+\u2043 # ⁃
+\u2044 # ⁄
+\u2045 # ⁅
+\u2046 # ⁆
+\u2047 # ⁇
+\u2048 # ⁈
+\u2049 # ⁉
+\u204A # ⁊
+\u204B # ⁋
+\u204C # ⁌
+\u204D # ⁍
+\u204E # ⁎
+\u204F # ⁏
+\u2050 # ⁐
+\u2051 # ⁑
+\u2052 # ⁒
+\u2053 # ⁓
+\u2054 # ⁔
+\u2055 # ⁕
+\u2056 # ⁖
+\u2057 # ⁗
+\u2058 # ⁘
+\u2059 # ⁙
+\u205A # ⁚
+\u205B # ⁛
+\u205C # ⁜
+\u205D # ⁝
+\u205E # ⁞
+\u205F #  
+\u2060 # ⁠
+\u2061 # ⁡
+\u2062 # ⁢
+\u2063 # ⁣
+\u2064 # ⁤
+\u2065 # ⁥
+\u2066 # ⁦
+\u2067 # ⁧
+\u2068 # ⁨
+\u2069 # ⁩
+\u206A # ⁪
+\u206B # ⁫
+\u206C # ⁬
+\u206D # ⁭
+\u206E # ⁮
+\u206F # ⁯
+\u2070 # ⁰
+\u2071 # ⁱ
+\u2072 # ⁲
+\u2073 # ⁳
+\u2074 # ⁴
+\u2075 # ⁵
+\u2076 # ⁶
+\u2077 # ⁷
+\u2078 # ⁸
+\u2079 # ⁹
+\u207A # ⁺
+\u207B # ⁻
+\u207C # ⁼
+\u207D # ⁽
+\u207E # ⁾
+\u207F # ⁿ
+\u2080 # ₀
+\u2081 # ₁
+\u2082 # ₂
+\u2083 # ₃
+\u2084 # ₄
+\u2085 # ₅
+\u2086 # ₆
+\u2087 # ₇
+\u2088 # ₈
+\u2089 # ₉
+\u208A # ₊
+\u208B # ₋
+\u208C # ₌
+\u208D # ₍
+\u208E # ₎
+\u208F # ₏
+\u2090 # ₐ
+\u2091 # ₑ
+\u2092 # ₒ
+\u2093 # ₓ
+\u2094 # ₔ
+\u2095 # ₕ
+\u2096 # ₖ
+\u2097 # ₗ
+\u2098 # ₘ
+\u2099 # ₙ
+\u209A # ₚ
+\u209B # ₛ
+\u209C # ₜ
+\u209D # ₝
+\u209E # ₞
+\u209F # ₟
+\u20A0 # ₠
+\u20A1 # ₡
+\u20A2 # ₢
+\u20A3 # ₣
+\u20A4 # ₤
+\u20A5 # ₥
+\u20A6 # ₦
+\u20A7 # ₧
+\u20A8 # ₨
+\u20A9 # ₩
+\u20AA # ₪
+\u20AB # ₫
+\u20AC # €
+\u20AD # ₭
+\u20AE # ₮
+\u20AF # ₯
+\u20B0 # ₰
+\u20B1 # ₱
+\u20B2 # ₲
+\u20B3 # ₳
+\u20B4 # ₴
+\u20B5 # ₵
+\u20B6 # ₶
+\u20B7 # ₷
+\u20B8 # ₸
+\u20B9 # ₹
+\u20BA # ₺
+\u20BB # ₻
+\u20BC # ₼
+\u20BD # ₽
+\u20BE # ₾
+\u20BF # ₿
+\u20C0 # ⃀
+\u20C1 # ⃁
+\u20C2 # ⃂
+\u20C3 # ⃃
+\u20C4 # ⃄
+\u20C5 # ⃅
+\u20C6 # ⃆
+\u20C7 # ⃇
+\u20C8 # ⃈
+\u20C9 # ⃉
+\u20CA # ⃊
+\u20CB # ⃋
+\u20CC # ⃌
+\u20CD # ⃍
+\u20CE # ⃎
+\u20CF # ⃏
+\u20D0 # ⃐
+\u20D1 # ⃑
+\u20D2 # ⃒
+\u20D3 # ⃓
+\u20D4 # ⃔
+\u20D5 # ⃕
+\u20D6 # ⃖
+\u20D7 # ⃗
+\u20D8 # ⃘
+\u20D9 # ⃙
+\u20DA # ⃚
+\u20DB # ⃛
+\u20DC # ⃜
+\u20DD # ⃝
+\u20DE # ⃞
+\u20DF # ⃟
+\u20E0 # ⃠
+\u20E1 # ⃡
+\u20E2 # ⃢
+\u20E3 # ⃣
+\u20E4 # ⃤
+\u20E5 # ⃥
+\u20E6 # ⃦
+\u20E7 # ⃧
+\u20E8 # ⃨
+\u20E9 # ⃩
+\u20EA # ⃪
+\u20EB # ⃫
+\u20EC # ⃬
+\u20ED # ⃭
+\u20EE # ⃮
+\u20EF # ⃯
+\u20F0 # ⃰
+\u20F1 # ⃱
+\u20F2 # ⃲
+\u20F3 # ⃳
+\u20F4 # ⃴
+\u20F5 # ⃵
+\u20F6 # ⃶
+\u20F7 # ⃷
+\u20F8 # ⃸
+\u20F9 # ⃹
+\u20FA # ⃺
+\u20FB # ⃻
+\u20FC # ⃼
+\u20FD # ⃽
+\u20FE # ⃾
+\u20FF # ⃿
 
 \u2100 # ℀
 \u2101 # ℁
@@ -2819,6 +2819,7 @@ text abbrev XXX \u20FF # ⃿
 \u2BFD # ⯽
 \u2BFE # ⯾
 \u2BFF # ⯿
+
 
 
 
