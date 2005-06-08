@@ -38,8 +38,22 @@ implements DocListener,
    */
    protected int   originx=0, originy=0;
 
-   /** Physical border dimensions. 0..xmargin-1 is space for (line) annotations. */
-   protected int xmargin=2, xborder=6, yborder=6;
+   /** Physical border dimensions. 
+       <ul>
+       <li>
+               <tt>0..xmargin-1</tt> is space for (line) annotations;
+       </li>
+       <li>
+               <tt>xmargin..xmargin+xborder</tt> is visible left border indication. 
+               The left border is painted yellow when the X origin of the window 
+               is nonzero.
+       </li>
+       <li>
+                <tt>0..ymargin</tt> is visible top border indication
+       </li>
+       </ul>
+   */
+   protected int xmargin=0, xborder=6, yborder=6;
 
    /** Logging for the current class */
    static Logging log = Logging.getLog("Display");
@@ -696,6 +710,7 @@ implements DocListener,
    public void dragBy(int dx, int dy) {}
 
 }
+
 
 
 
