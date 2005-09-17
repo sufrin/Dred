@@ -42,13 +42,14 @@ text    abbrev dwa      \u21E9          # ⇩
 text    abbrev []       \u220E                          # ∎  
 text    abbrev compose  \u2218  meta o                  # ∘ 
 text    abbrev dot      \u2219  meta PERIOD             # ∙
-text    abbrev fatdot   \u2022  shift meta  PERIOD      # •             # •
+text    abbrev fatdot   \u2022          # •             # •
 text    abbrev tick     \u221a          # √ 
 text    abbrev ||       \u2225          # ∥ 
 
 text    abbrev euro     \u20ac          # €
 text    abbrev pound    \u20a4  shift 3 # ₤           
     
+text    abbrev lnot     \u00AC          # ¬
 text    abbrev land     \u2227          # ∧
 text    abbrev /\\      \u2227          # ∧
 text    abbrev lor      \u2228          # ∨
@@ -68,8 +69,14 @@ text    abbrev equiv    \u2261          # ≡
 text    abbrev ==       \u2261          # ≡ 
 text    abbrev xo       \u2297          # ⊗
 text    abbrev ox       \u2297          # ⊗
+text    abbrev o+       \u2295          # 
+text    abbrev +o       \u2295          # 
 text    abbrev |-       \u22a2          # ⊢
 text    abbrev proves   \u22a2          # ⊢
+text    abbrev true     \u22a4          # ⊤
+text    abbrev false    \u22a5          # ⊥
+text    abbrev top      \u22a4          # ⊤
+text    abbrev bot      \u22a5          # ⊥
     
 text    abbrev alpha    \u03B1
 text    abbrev beta     \u03B2
@@ -130,7 +137,7 @@ text    abbrev dalet    \u05D3
 text    abbrev he       \u05D4
 text    abbrev vav      \u05D5
 text    abbrev vov      \u05D5
-text    abbrev zayin    \u05D6
+text    abbrev zayin    \u05D6  # ז
 text    abbrev het      \u05D7
 text    abbrev tet      \u05D8
 text    abbrev yod      \u05D9
@@ -151,12 +158,32 @@ text    abbrev resh     \u05E8
 text    abbrev shin     \u05E9
 text    abbrev tav      \u05EA
 
+
+text    abbrev .0       \u2080 # ₀
+text    abbrev .1       \u2081 # ₁
+text    abbrev .2       \u2082 # ₂
+text    abbrev .3       \u2083 # ₃
+text    abbrev .4       \u2084 # ₄
+text    abbrev .5       \u2085 # ₅
+text    abbrev .6       \u2086 # ₆
+text    abbrev .7       \u2087 # ₇
+text    abbrev .8       \u2088 # ₈
+text    abbrev .9       \u2089 # ₉
+text    abbrev .+       \u208A # ₊
+text    abbrev .-       \u208B # ₋
+text    abbrev .=       \u208C # ₌
+text    abbrev .(       \u208D # ₍
+text    abbrev .)       \u208E # ₎
+
 text    abbrev copyright \u00a9 # ©
 text    abbrev ><        \u00d7 # ×
 text    abbrev O/        \u00D8 # Ø
 text    abbrev <<        \u00AB # «
-text    abbrev >>        \u00BA # »
+text    abbrev >>        \u00BB # »
+
+text    abbrev So        \u2042 # ⁂
+text    abbrev --        \u2014 # — (wide minus)
 
 
-
+############################################
 
