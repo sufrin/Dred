@@ -65,13 +65,16 @@ public class LatexTool extends RunTool
       menu.add(trans);
       menu.add(view);
       menu.addSeparator();
-      menu.add(new CheckItem("Use PDF", this.session.usepdf, "Generate pdf using pdflatex; view with acroread", prefs)
+      CheckItem usePdf = 
+      new CheckItem("Use PDF", this.session.usepdf, "Generate pdf using pdflatex; view with acroread", prefs)
       {
         public void run()
         {
           LatexToolBar.this.session.usepdf = state;
         }
-      });
+      };
+      usePdf.run();
+      menu.add(usePdf);
       bar.add(menu);
       setLabel(bar);
       setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
@@ -112,6 +115,7 @@ public class LatexTool extends RunTool
   }
 
 }
+
 
 
 
