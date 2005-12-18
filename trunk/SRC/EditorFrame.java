@@ -379,7 +379,10 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     }
   }
   
-  /* Load all the standard extensions */
+  /* Load all the standard extensions.
+     This just registers the tool objecs; each tool has its own
+     way of generating a new GUI component when a session starts.
+  */
   static
   { 
     Extension.register(new CutRingTool(prefs));
@@ -2016,6 +2019,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
 
 
 
