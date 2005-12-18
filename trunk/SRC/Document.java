@@ -764,22 +764,34 @@ public class Document
    public void doLoad(String s)
    {}
 
+   /** Insert any string at the current position. 
+       Current position is moved to the right of the 
+       inserted string. Listeners are not informed.
+   */
+   public void insertQuietly(String s) 
+   { 
+     for (int i=0; i<s.length(); i++) insertChar(s.charAt(i));
+   }
+
    /** Load the document from the given reader. */
    public void doLoad(Reader theReader)
    {  BufferedReader reader = new BufferedReader(theReader);
       String line=null;
+      clearSelection();
+      clearPositions();
       try
       {
         while ((line=reader.readLine())!=null)
         { 
-          insert(line);  
-          insert("\n");
+          insertQuietly(line);  
+          insertQuietly("\n");
         }
       }
       catch (Exception ex)
       {
         throw new RuntimeException(ex);
       }
+      docChangedALot();
    }
    
    /** Append lines from the given reader to the document. */
@@ -1047,6 +1059,7 @@ public class Document
       }
     }      
 }
+
 
 
 

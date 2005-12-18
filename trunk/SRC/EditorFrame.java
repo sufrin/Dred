@@ -1,5 +1,6 @@
 package org.sufrin.dred;
 
+// $Id$
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Insets;
@@ -127,6 +128,8 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     public void bindMenus()
     {
       menu = addMenu("File");     
+      bind("doReload");
+      menu.addSeparator();
       bind("doSave");
       bind("doEdit");
       bind("doSaveAs");
@@ -922,8 +925,8 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   public void dispose()
   {
     super.dispose();
-    // Decouple the associated document
-    ed.removeDoc();
+    // Decouple the associated document 
+    ed.removeDoc(); 
     // Remove associated windows
     if (styleFrame != null)
       styleFrame.dispose();
@@ -1561,6 +1564,40 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     else SystemClipboard.set(lastSel);
     doMarkPosition();
   }
+  
+  @ActionMethod(label="Reload", tip="Reload the document being edited if it has changed in the filestore but not locally")
+  public void doReload()
+  {  boolean exists    = doc.getFileName().exists();
+     boolean fileLater = exists && doc.lastModified() < doc.getFileName().lastModified();
+     boolean reload    = exists && fileLater;
+     if (!exists)
+        Dred.showWarning(ed.getComponent(), String.format("%s doesn't exist in the filestore", doc.getFileName()));
+     else
+     if ((!reload || doc.hasChanged()))
+     {
+       String msg = String
+                          .format(
+                                  "%s %s\nLoaded here: %Tc\nChanged elsewhere: %Tc",
+                                  doc.getFileName(),
+                                  doc.hasChanged() ? " has been changed here."
+                                      : " has not been changed here.",
+                                  doc.lastModified(), doc.getFileName()
+                                                         .lastModified());
+        Object[] options =
+        {
+                  "Reload from the filestore", "Cancel"
+        };
+        reload = 0 == Dred.showWarning(ed.getComponent(), msg, 1, options);
+     }
+     if (exists && reload)
+     { String path = doc.getFileName().toString();
+       int cursorY = doc.getY();
+       doc.deleteAll();
+       doc.doLoad(path);
+       doc.setCursorAndMark(0, cursorY);
+       doc.docChangedALot();
+     }
+  }
 
   /**
    * Save the current document if it has been changed in
@@ -2019,6 +2056,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
 
 
 
