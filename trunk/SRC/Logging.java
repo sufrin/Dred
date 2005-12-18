@@ -121,7 +121,14 @@ public class Logging
     for (Object p: System.getProperties().keySet())
     { String prop = (String) p;
       if (prop.endsWith(".log"))
-      { Logger.getLogger(prop.substring(0, prop.length()-4)).setLevel(Level.parse(System.getProperty(prop).toUpperCase()));
+      { try
+        {  
+           Logger.getLogger(prop.substring(0, prop.length()-4)).setLevel(Level.parse(System.getProperty(prop).toUpperCase()));
+        }
+        catch (IllegalArgumentException ex)
+        {
+           System.err.println("[Log property "+p+"="+System.getProperty(prop)+"]");
+        }
         needLogger=needLogger || true; // to get round an Eclipse warning
       }
     }       
@@ -363,6 +370,8 @@ public class Logging
   
   
 }
+
+
 
 
 
