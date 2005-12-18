@@ -388,6 +388,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     Extension.register(new MakeTool());
     Extension.register(new ShellTool());
     Extension.register(new KeystrokeTool());
+    
     File extensions = null;
     try
     {  
@@ -2015,6 +2016,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
 
 
 
