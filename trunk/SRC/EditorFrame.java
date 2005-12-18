@@ -1,6 +1,8 @@
 package org.sufrin.dred;
 
 // $Id$
+// Added doReload 
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Insets;
@@ -2056,6 +2058,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
 
 
 
