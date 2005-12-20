@@ -394,6 +394,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     Extension.register(new LatexTool(prefs));
     Extension.register(new AntTool());
     Extension.register(new MakeTool());
+    Extension.register(new VersionControlTool());
     Extension.register(new ShellTool());
     Extension.register(new KeystrokeTool());
     
@@ -840,9 +841,10 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
   protected void closeProcessFrame()
-  {
-    processFrame.dispose();
-    processFrame = null;
+  { if (processFrame!=null)
+    { processFrame.dispose();
+      processFrame = null;
+    }
   }
 
   public String completeFilename(String name)
@@ -925,7 +927,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
    * document from it.
    */
   public void dispose()
-  {
+  { 
     super.dispose();
     // Decouple the associated document 
     ed.removeDoc(); 
@@ -935,8 +937,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     Dred.removeSession(this);
     if (viewer != null)
       viewer.destroy();
-    if (process != null)
-      process.destroy();
+    if (process != null) process.destroy();
     wait.release();
   }
   
@@ -1416,9 +1417,11 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   @ActionMethod(offline = false, label="Kill", tip="Kill any currently-running background process (but not long-running editor activity)")
   public void doStopProcess()
   { if (process != null)
-    {
-      process.destroy();
-      process = null;
+    { 
+      { 
+       process.destroy();
+       process = null;
+      }
     }
   }
   
@@ -1504,7 +1507,24 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
    */
   @ActionMethod(label="Quit", tip="Quit the current file-editing window. Offers a dialogue if the document being edited has channged since it was last saved.")
   public void doQuit()
-  { 
+  { // Close any open process frames and  kill their processes
+    // This is making heavy weather of it
+    final Runnable flushProcess = new Runnable()
+    { public void run()
+      {
+        doStopProcess();
+      }
+    };
+    final Runnable flushFrame = new Runnable()
+    { public void run()
+      {
+        closeProcessFrame();
+      }
+    };
+    SwingUtilities.invokeLater(flushProcess);
+    SwingUtilities.invokeLater(flushFrame);
+
+    ////////////////////////
     if (doc.hasChanged())
     {
       String msg = String.format("%s has been changed", doc.getFileName());
@@ -1567,6 +1587,9 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     doMarkPosition();
   }
   
+  /** 
+  *   Reload the document being edited
+  */
   @ActionMethod(label="Reload", tip="Reload the document being edited if it has changed in the filestore but not locally")
   public void doReload()
   {  boolean exists    = doc.getFileName().exists();
@@ -1591,14 +1614,20 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
         };
         reload = 0 == Dred.showWarning(ed.getComponent(), msg, 1, options);
      }
-     if (exists && reload)
-     { String path = doc.getFileName().toString();
-       int cursorY = doc.getY();
-       doc.deleteAll();
-       doc.doLoad(path);
-       doc.setCursorAndMark(0, cursorY);
-       doc.docChangedALot();
-     }
+     if (exists && reload) reloadDocFromFilestore();
+     
+  }
+  
+  /**
+        Reload the document from the filestore. It had better be there!
+  */
+  void reloadDocFromFilestore()
+  { String path = doc.getFileName().toString();
+    int cursorY = doc.getY();
+    doc.deleteAll();
+    doc.doLoad(path);
+    doc.setCursorAndMark(0, cursorY);
+    doc.docChangedALot();
   }
 
   /**
@@ -1989,9 +2018,9 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   /**
    * Run the given command with the given input and spool
    * its output into the (newly-created if necessary)
-   * ProcessFrame.
+   * ProcessFrame. Run andThen if the command executes successfully and orElse otherwise.
    */
-  public void startProcess(final String command, String input)
+  public void startProcess(final String command, String input, final Runnable andThen, final Runnable orElse)
   {
     doStopProcess();
     if (processFrame == null)
@@ -2000,11 +2029,14 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     Pipe.Continue cont = new Pipe.Continue()
     {
       public void consumeOutput(BufferedReader reader)
-      {
-        processFrame.setEnabled(false);
-        processFrame.doAppend(reader); // Ignores cursor
-        // positioning
-        processFrame.setEnabled(true);
+      { ProcessFrame f = processFrame;
+        // ensure that processframe doesn't go away (perhaps things are closing)
+        if (f!=null)
+        { 
+          f.setEnabled(false);
+          f.doAppend(reader); // Ignores cursor positioning
+          f.setEnabled(true);
+        }
       }
 
       public void fail(Exception ex)
@@ -2017,9 +2049,16 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       {
         tempCaption(String.format("[%o] (%s)", exitCode, command));
         process = null;
+        if (exitCode==0 && andThen!=null) andThen.run();
+        if (exitCode!=0 && orElse!=null)  orElse.run();
       }
     };
     process = Pipe.execute(cwd, command, input, cont, false);
+  }
+  
+  public void startProcess(final String command, String input)
+  {
+    startProcess(command, input, null, null);
   }
 
   /**
@@ -2058,6 +2097,8 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
+
 
 
 
