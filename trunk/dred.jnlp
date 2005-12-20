@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <jnlp
+  <!-- $Id: dred.jnlp,v 1.7 2005/12/20 14:28:48 sufrin Exp sufrin $ -->
+
   spec="1.5+"
   codebase="http://web.comlab.ox.ac.uk/oucl/work/bernard.sufrin/"
   href="dred.jnlp">
@@ -21,6 +23,14 @@
     <argument>UNNAMED</argument>
   </application-desc>
 </jnlp>
+
+
+
+
+
+
+
+
 
 
 
