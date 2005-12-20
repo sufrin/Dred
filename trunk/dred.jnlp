@@ -3,6 +3,7 @@
   spec="1.5+"
   codebase="http://web.comlab.ox.ac.uk/oucl/work/bernard.sufrin/"
   href="dred.jnlp">
+  <!-- $Id:$ -->
   <information>
     <title>Dred</title>
     <vendor>Bernard Sufrin</vendor>
@@ -21,6 +22,7 @@
     <argument>UNNAMED</argument>
   </application-desc>
 </jnlp>
+
 
 
 
