@@ -1628,6 +1628,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     doc.doLoad(path);
     doc.setCursorAndMark(0, cursorY);
     doc.docChangedALot();
+    doc.setChanged(false);
   }
 
   /**
@@ -2097,6 +2098,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
 
 
 
