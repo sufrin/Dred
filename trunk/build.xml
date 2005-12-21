@@ -24,8 +24,21 @@
                            Server,
                            Reflect
                           "/>
+                          
+        <target name        = "scp" 
+                description = "Copy Dred.jar to jape: and eclectic: using scp"
+                depends     = "Dred">
+                <exec executable = "scp">
+                      <arg line="-p ${BUILD}/Dred.jar eclectic:bin"/>
+                </exec>
+                <exec executable = "scp">
+                      <arg line="-p ${BUILD}/Dred.jar jape:bin"/>
+                </exec>
+       </target>
                                   
-        <target name = "compile" depends="prepare">
+        <target name        = "compile" 
+                description = "Compile all .java files below ${BUILD}"
+                depends     = "prepare">
             <depend srcdir ="${BUILD}" 
                     destdir="${BUILD}"
                     cache  ="${BUILD}/dependencies"
@@ -43,7 +56,9 @@
             </javac> 
         </target>
         
-        <target name="javadoc" depends="compile">
+        <target name="javadoc" 
+                description  = "Javadoc for (nearly) all .java files in ${SOURCE}"
+                depends="compile">
           <javadoc Encoding     = "UTF-8"
                    source       = "1.5"
                    destdir      = "JAVADOC">
@@ -60,7 +75,9 @@
         </target>
         
         <!-- Extensions -->
-        <target name="ext" depends="compile">
+        <target name="ext" 
+                description  = "Compile the .java files from ${EXT} into ${BUILD}"
+                depends="compile">
            <javac  srcdir    = "${EXT}" 
                    destdir   = "${BUILD}/"
                    debug     = "true"
@@ -74,7 +91,9 @@
             </javac>
         </target>
 
-        <target name = "Dred" depends="compile,ext">
+        <target name = "Dred" 
+                description  = "Make a self-contained runnable Dred.jar in ${BUILD}"
+                depends="compile,ext">
             <jar    basedir  ="${BUILD}" 
                     destfile ="${BUILD}/Dred.jar"
                     includes = "**/*.class **/*.jpg **/*.png **/*.html **/*.xml **/*.bindings"
@@ -162,6 +181,7 @@
           </exec>
         </target>
 </project>
+
 
 
 

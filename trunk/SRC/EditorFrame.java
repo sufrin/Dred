@@ -1991,6 +1991,11 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   {
     this.cwd = cwd;
   }
+  
+  public File getCWD()
+  {
+    return cwd;
+  }
 
   /** Set the document associated with the editor. */
   public void setDoc(FileDocument doc)
@@ -2021,7 +2026,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
    * its output into the (newly-created if necessary)
    * ProcessFrame. Run andThen if the command executes successfully and orElse otherwise.
    */
-  public void startProcess(final String command, String input, final Runnable andThen, final Runnable orElse)
+  public void startProcess(final File cwd, final String command, String input, final Runnable andThen, final Runnable orElse)
   {
     doStopProcess();
     if (processFrame == null)
@@ -2059,7 +2064,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   
   public void startProcess(final String command, String input)
   {
-    startProcess(command, input, null, null);
+    startProcess(cwd, command, input, null, null);
   }
 
   /**
@@ -2098,6 +2103,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
 
 
 
