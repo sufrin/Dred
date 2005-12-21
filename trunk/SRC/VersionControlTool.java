@@ -69,7 +69,7 @@ public class VersionControlTool extends RunTool
           &&
           new File(parent, fileName.getName()+",v").exists()) vcsName = VC.RCS;
   
-      JMenuItem commit = but(new Act("Commit", "Commit this file using the selected version control system")
+      JMenuItem commit = but(new Act("Commit", "Commit this file using the text field as a comment")
       {
         public void run()
         {
@@ -77,7 +77,7 @@ public class VersionControlTool extends RunTool
         }
       });
       
-      JMenuItem diff = but(new Act("Diff", "Get the differences between this file and a committed version")
+      JMenuItem diff = but(new Act("Diff", "Get the differences between this file and the numbered (or last) revision of this file")
       {
         public void run()
         {
@@ -85,7 +85,7 @@ public class VersionControlTool extends RunTool
         }
       });
       
-      JMenuItem log = but(new Act("Log", "Get the log for (a version of) this file ")
+      JMenuItem log = but(new Act("Log", "Get the log for (the numbered) revision of this file ")
       {
         public void run()
         {
@@ -94,11 +94,11 @@ public class VersionControlTool extends RunTool
       });
   
       JMenu menu = new JMenu("VC:");
-      RadioItem.Group<VC> vcs = new RadioItem.Group<VC> ("VersionController", vcsName, "Set the version control system")
+      RadioItem.Group<VC> vcs = new RadioItem.Group<VC> ("VersionController", vcsName, "Set the version control system to this one")
       { { run(); }
         public void run() { vcsName = value; }
       };
-      menu.setToolTipText("Checkin this file");
+      menu.setToolTipText("Version control actions: commit, diff, log");
       menu.add(commit);
       menu.add(diff);
       menu.add(log);
@@ -110,7 +110,7 @@ public class VersionControlTool extends RunTool
       bar.add(menu);
       setLabel(bar);
       setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
-      setToolTipText("The checkin message");
+      setToolTipText("The checkin message or the revision number");
     }
   
     JMenuItem but(Act a)
@@ -187,6 +187,7 @@ public class VersionControlTool extends RunTool
   }
 
 }
+
 
 
 
