@@ -36,21 +36,30 @@ public class VersionControlTool extends RunTool
     
     /** The version control system in use
     */
-    VC vcsName = null;
+    VC     vcsName  = null;
+    File   fileName = null;
+    File   parent   = null;
+    String filePath = null;
+    String lastName = null;
   
     public VersionControlToolBar(EditorFrame session)
     {
       super(20, null, true, "VersionControl");
       this.session = session;
+      fileName     = session.doc.getFileName();
+      parent       = fileName.getParentFile();
+      lastName     = fileName.getName();
+      filePath     = fileName.getAbsolutePath();
+      
+      // set up the menu bar
       JMenuBar bar = new JMenuBar();
-      // Eliminate input maps (pro-tem) to avoid spurious effects
       InputMap m = null; // new ComponentInputMap(bar);
       bar.setInputMap(JComponent.WHEN_FOCUSED, m);
       bar.setInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT, m);
       bar.setInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW, m);
       
-      // Establish what kind of VCS we are using
-      File parent = session.doc.getFileName().getParentFile();
+      // Heuristically establish what kind of VCS we are using
+      // Resolve ambiguity with priority: RCS(,v), RCS(directory), SVN, CVS
       boolean svn = new File(parent, ".svn").exists();
       boolean rcs = new File(parent, "RCS").exists();
       boolean cvs = new File(parent, "CVS").exists();
@@ -58,7 +67,7 @@ public class VersionControlTool extends RunTool
       // ,v files for RCS take priority over all other clues
       if (vcsName!=VC.RCS 
           &&
-          new File(parent, session.doc.getFileName().getName()+",v").exists()) vcsName = VC.RCS;
+          new File(parent, fileName.getName()+",v").exists()) vcsName = VC.RCS;
   
       JMenuItem commit = but(new Act("Commit", "Commit this file using the selected version control system")
       {
@@ -126,16 +135,16 @@ public class VersionControlTool extends RunTool
     public void doCheckin(String message)
     {
       this.session.doSave();
-      String fileName = session.doc.getFileName().getAbsolutePath();
       message = message.replaceAll("(['\\\\\"])", "\\\\$1");
       String cmd = null;
+      File   cwd = session.getCWD();
       switch (vcsName)
-      { case CVS: cmd = String.format("cvs ci -m '%s' %s", message, fileName); message=""; break;
-        case SVN: cmd = String.format("svn ci -m '%s' %s", message, fileName); message=""; break;
-        case RCS: cmd = String.format("ci -l %s", fileName); break;
-        default:  cmd = String.format("echo unknown VCS commit -m '%s' %s", message, fileName); message=""; break;
+      { case CVS: cmd = String.format("cvs ci -m '%s' %s", message, lastName); cwd = parent; message=""; break;
+        case SVN: cmd = String.format("svn ci -m '%s' %s", message, filePath); message=""; break;
+        case RCS: cmd = String.format("ci -l %s", filePath); break;
+        default:  cmd = String.format("echo unknown VCS commit -m '%s' %s", message, filePath); message=""; break;
       }      
-      this.session.startProcess(cmd, message, reloader, null);
+      this.session.startProcess(cwd, cmd, message, reloader, null);
     } 
      
     /**
@@ -146,14 +155,15 @@ public class VersionControlTool extends RunTool
       this.session.doSave();
       String fileName = session.doc.getFileName().getAbsolutePath();
       String cmd = null;
+      File   cwd = session.getCWD();
       if (!revision.equals("")) revision = (vcsName==VC.RCS?"-r":"-r ")+revision;
       switch (vcsName)
-      { case CVS: cmd = String.format("cvs diff %s %s", revision, fileName); break;
-        case SVN: cmd = String.format("svn diff %s %s", revision, fileName); break;
-        case RCS: cmd = String.format("rcsdiff %s %s", revision, fileName); break;
-        default:  cmd = String.format("echo unknown VCS diff %s %s", revision, fileName); break;
+      { case CVS: cmd = String.format("cvs diff %s %s", revision, lastName); cwd = parent; break;
+        case SVN: cmd = String.format("svn diff %s %s", revision, filePath); break;
+        case RCS: cmd = String.format("rcsdiff %s %s", revision, filePath); break;
+        default:  cmd = String.format("echo unknown VCS diff %s %s", revision, filePath); break;
       }      
-      this.session.startProcess(cmd, "");
+      this.session.startProcess(cwd, cmd, "", null, null);
     }  
     
     /**
@@ -164,18 +174,20 @@ public class VersionControlTool extends RunTool
       // this.session.doSave();
       String fileName = session.doc.getFileName().getAbsolutePath();
       String cmd = null;
+      File   cwd = session.getCWD();
       if (!revision.equals("")) revision = (vcsName==VC.RCS?"-r":"-r ")+revision;
       switch (vcsName)
-      { case CVS: cmd = String.format("cvs log %s %s", revision, fileName); break;
-        case SVN: cmd = String.format("svn log %s %s", revision, fileName); break;
-        case RCS: cmd = String.format("rlog %s %s", revision, fileName); break;
-        default:  cmd = String.format("echo unknown VCS log %s %s", revision, fileName); break;
+      { case CVS: cmd = String.format("cvs log %s %s", revision, lastName); cwd = parent; break;
+        case SVN: cmd = String.format("svn log %s %s", revision, filePath); break;
+        case RCS: cmd = String.format("rlog %s %s", revision, filePath); break;
+        default:  cmd = String.format("echo unknown VCS log %s %s", revision, filePath); break;
       }      
-      this.session.startProcess(cmd, "");
+      this.session.startProcess(cwd, cmd, "", null, null);
     }  
   }
 
 }
+
 
 
 
