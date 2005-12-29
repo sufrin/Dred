@@ -113,7 +113,7 @@ public class DredLoader extends ClassLoader
     // Is it a system class?
     try
     {
-      klass = super.findSystemClass(className);
+      klass = Thread.currentThread().getContextClassLoader().loadClass(className); // super.findSystemClass(className);
       log.finer("Class %s came from the system classpath", className);
       return klass;
     }
@@ -140,6 +140,8 @@ public class DredLoader extends ClassLoader
     return klass;
   }
 }
+
+
 
 
 
