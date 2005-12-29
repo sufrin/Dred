@@ -75,51 +75,12 @@ public class DredLoader extends ClassLoader
       return null;
     }
   }
-
-  /**
-   * Load and resolve a class.
-   */
-  public Class<?> loadClass(String className) throws ClassNotFoundException
-  {
-    return (loadClass(className, true));
-  }
   
-  /**
-   * Reload and resolve a class.
-   */
-  public Class<?> reLoadClass(String className) throws ClassNotFoundException
-  { classes.remove(className);
-    return (loadClass(className, true));
-  }
-
-  /**
-   * Load and possibly resolve a class.
-   */
-  public synchronized Class<?> loadClass(String className, boolean resolveIt) throws ClassNotFoundException
-  {
-    Class klass;
+  // Override
+  public Class<?> findClass(String className) throws ClassNotFoundException
+  { Class klass;
     byte  byteCode[];
 
-    log.finer("Loading class %s", className);
-
-    /* Check the cache */
-    klass = classes.get(className);
-    if (klass != null)
-    {
-      log.finer("Class %s was already loaded", className);
-      return klass;
-    }
-
-    // Is it a system class?
-    try
-    {
-      klass = Thread.currentThread().getContextClassLoader().loadClass(className); // super.findSystemClass(className);
-      log.finer("Class %s came from the system classpath", className);
-      return klass;
-    }
-    catch (ClassNotFoundException e)  { }
-    
-    // Is it local?
     byteCode = getLocalClass(className);
     if (byteCode == null) 
     {  log.warning("Class %s wasn't found in %s", className, roots);
@@ -132,14 +93,12 @@ public class DredLoader extends ClassLoader
     { log.severe("Class %s from %s could not be loaded into this JVM", className, root);
       throw new ClassFormatError(); 
     }
-
-    if (resolveIt) { resolveClass(klass); }
-
-    classes.put(className, klass);
-    log.finer("Class %s loaded", className);
+    
     return klass;
   }
+
 }
+
 
 
 
