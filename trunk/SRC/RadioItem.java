@@ -112,10 +112,11 @@ public class RadioItem<VAL> extends    JRadioButtonMenuItem
     /** Invoked when the value associated with  the group changes */
     abstract public void run();
     
-    @SuppressWarnings("unchecked") // the VAL cast is unchecked 
+    
     public void preferenceChange(PreferenceChangeEvent event)
     { if (parser!=null && event.getKey().equals(name))
-      { VAL newVal = (VAL) parser.parse(event.getNewValue());
+      { @SuppressWarnings("unchecked") 
+        VAL newVal = (VAL) parser.parse(event.getNewValue());
         for (RadioItem item: items)
             item.setState(item.value!=null && item.value.equals(newVal));
       }
@@ -136,6 +137,7 @@ public class RadioItem<VAL> extends    JRadioButtonMenuItem
   };
   
 }
+
 
 
 
