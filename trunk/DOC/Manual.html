@@ -18,6 +18,7 @@
 <ul>
 <li><a href="#Unix/Linux Usage">Unix/Linux Usage</a></li>
 <li><a href="#Windows (XP) Usage">Windows (XP) Usage</a></li>
+<li><a href="#MACOS">Mac OS X Usage</a></li>
 <li><a href="#The Dred Editing Session Window">The Dred Editing Session Window</a></li>
 <li><a href="#Editing Model">Editing Model</a></li>
 <li><a href="#Editing Actions">Editing Actions</a></li>
@@ -102,6 +103,24 @@ loading and configuration of Dred extensions
 </p>
 
 <br></br>
+
+<a name="MACOS"><h2>Mac OS X Usage</h2></a>
+Usage is mich same as Linux/Unix usage (as outlined above), except that
+it makes sense to drive <code>dred</code> with a shell script containing
+the following command:
+
+<pre>
+exec java1.5 -Xdock:icon="$HOME/Bin/dnought.png" \
+             -Xdock:name="Dred"                  \
+             -Dapple.laf.growbox.intrudes=false  \
+             -Dapple.laf.useScreenMenuBar=true -jar $HOME/Bin/Dred.jar "$@" 
+</pre>
+
+<p>
+There's a bug in the present Mac OS X implementation of scrollbars (in
+all look-and-feel variants) so we suppress scrollbars under Mac OS X.
+</p>
+
 
 <a name="Windows (XP) Usage"><h2>Windows (XP) Usage</h2></a>
 
@@ -765,6 +784,9 @@ Solaris on which that JVM can be installed.  </p>
 <b>$Date$</b>
 </pre>
 </body>
+
+
+
 
 
 

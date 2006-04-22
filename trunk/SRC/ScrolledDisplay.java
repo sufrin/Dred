@@ -15,10 +15,17 @@ public class ScrolledDisplay extends JPanel implements DisplayComponent
   /** Construct a ScrolledDisplay from a scrollable display; add 
       a Y-axis scrollbar if showBar is true.
   */
+  protected static boolean noBars = Dred.onMac() && !"mac".equals(System.getProperty("scroll"));
+  static
+  { 
+     if (noBars) 
+        System.err.println("[Buggy Mac OS X Scrollbars suppressed. (Reinstate with java -Dscroll=mac ... )]\n");
+  }
+  
   public ScrolledDisplay(ScrollableDisplay display, boolean showBar)
   { super(true);
-    { String prop = System.getProperty("scroll");
-      if ("mac".equals(prop)) showBar = false;//**
+    { // Cope with dreadful mac scrollbar bug (pro-tem)
+      showBar = showBar && !noBars;
     }
     this.display = display;
     setLayout(new BorderLayout());
@@ -117,6 +124,7 @@ public class ScrolledDisplay extends JPanel implements DisplayComponent
     display.setFont(font);   
   }
 }
+
 
 
 

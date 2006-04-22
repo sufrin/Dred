@@ -430,7 +430,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       super(80, 24, command);
       setDoc(new FileDocument("UTF8", new File("Process Log"), true));
       menuBar.add(Box.createHorizontalGlue());
-      menuBar.add(clearButton);
+      if (Dred.onMac()) text.add(clearButton); else menuBar.add(clearButton);
       this.command = command;
     }
 
@@ -2105,6 +2105,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
 
 
 

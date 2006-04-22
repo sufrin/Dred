@@ -26,7 +26,7 @@ public class ScrollableDisplay extends Display implements DisplayComponent
          public void mouseWheelMoved(MouseWheelEvent e) 
          { int rot = e.getWheelRotation();
            int amt = e.getScrollType()==MouseWheelEvent.WHEEL_UNIT_SCROLL ? e.getScrollAmount() : 1;
-           if (bar!=null) 
+           if (!passiveBar && bar!=null) 
            { bar.setValue(bar.getValue()+rot*amt);
              forceOrigin(bar.getValue());
            }
@@ -39,9 +39,23 @@ public class ScrollableDisplay extends Display implements DisplayComponent
    }
    
    public void dragBy(int dx, int dy)
-   { if (bar!=null && dy!=0)
-     {  bar.setValue(bar.getValue()+(dy>0?-1:1));
-        forceOrigin(bar.getValue());
+   { if (dy!=0)
+     {
+       if (!passiveBar && bar!=null)
+       {  bar.setValue(bar.getValue()+(dy>0?-1:1));
+          forceOrigin(bar.getValue());
+       }
+       else
+          forceOrigin(originy+(dy>0?-1:1));
+     };
+     if (dx!=0)
+     {
+       if (!passiveBar && xbar!=null)
+       {  xbar.setValue(xbar.getValue()+(dx>0?-1:1));
+          forceXOrigin(xbar.getValue());
+       }
+       else
+          forceXOrigin(originx+(dx>0?-1:1));
      }
    }
    
@@ -82,14 +96,15 @@ public class ScrollableDisplay extends Display implements DisplayComponent
 
    protected boolean syncing = false;
    protected boolean syncing() { return syncing; }
+   protected boolean passiveBar = "passive".equals(System.getProperty("scroll"));
 
    protected void syncScrollBar()
    {  if (bar==null) return;
       syncing = true;
       if (debug) log.finer("oy=%d, adj=%s, rows=%d", originy, bar.getValueIsAdjusting(), rows);
       bar.setValueIsAdjusting(true);
-      bar.setVisibleAmount(rows); 
-      bar.setBlockIncrement(rows); 
+      //bar.setVisibleAmount(rows); 
+      //bar.setBlockIncrement(rows); 
       bar.setUnitIncrement(1); 
       bar.setVisibleAmount(rows); 
       bar.setBlockIncrement(rows-1);  // Keep context on screen
@@ -106,6 +121,7 @@ public class ScrollableDisplay extends Display implements DisplayComponent
      bar = new JScrollBar();
      BoundedRangeModel model = bar.getModel();
 
+     
      model.addChangeListener
      ( new ChangeListener()
        {
@@ -119,6 +135,8 @@ public class ScrollableDisplay extends Display implements DisplayComponent
        }
      );
      
+     if (passiveBar) return bar;
+     
      bar.addAdjustmentListener
      ( new AdjustmentListener()
        { 
@@ -128,7 +146,7 @@ public class ScrollableDisplay extends Display implements DisplayComponent
             // BUG: pressing on scrollbar arrows doesn't set ...IsAdjusting
             // if (bar.getValueIsAdjusting())
             // so we only force the origin if we are not syncing
-            if (true || !syncing)
+            if (!syncing)
                 forceOrigin(newY);
          }
        }
@@ -142,6 +160,7 @@ public class ScrollableDisplay extends Display implements DisplayComponent
    
      xbar = new JScrollBar(JScrollBar.HORIZONTAL);
      BoundedRangeModel model = xbar.getModel();
+     
 
      model.addChangeListener
      ( new ChangeListener()
@@ -155,6 +174,8 @@ public class ScrollableDisplay extends Display implements DisplayComponent
          }
        }
      );
+     
+     if (passiveBar) return xbar;
      
      xbar.addAdjustmentListener
      ( new AdjustmentListener()
@@ -174,13 +195,5 @@ public class ScrollableDisplay extends Display implements DisplayComponent
      return xbar;
    }
 }
-
-
-
-
-
-
-
-
 
 
