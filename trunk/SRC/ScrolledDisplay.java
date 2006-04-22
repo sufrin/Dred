@@ -17,6 +17,9 @@ public class ScrolledDisplay extends JPanel implements DisplayComponent
   */
   public ScrolledDisplay(ScrollableDisplay display, boolean showBar)
   { super(true);
+    { String prop = System.getProperty("scroll");
+      if ("mac".equals(prop)) showBar = false;//**
+    }
     this.display = display;
     setLayout(new BorderLayout());
     add(display, "Center");
@@ -114,6 +117,7 @@ public class ScrolledDisplay extends JPanel implements DisplayComponent
     display.setFont(font);   
   }
 }
+
 
 
 
