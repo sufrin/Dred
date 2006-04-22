@@ -30,6 +30,9 @@ public class ScrollableDisplay extends Display implements DisplayComponent
            { bar.setValue(bar.getValue()+rot*amt);
              forceOrigin(bar.getValue());
            }
+           else
+           {  forceOrigin(originy+rot*amt);
+           }
          }
        }
      );
@@ -84,6 +87,7 @@ public class ScrollableDisplay extends Display implements DisplayComponent
    {  if (bar==null) return;
       syncing = true;
       if (debug) log.finer("oy=%d, adj=%s, rows=%d", originy, bar.getValueIsAdjusting(), rows);
+      bar.setValueIsAdjusting(true);
       bar.setVisibleAmount(rows); 
       bar.setBlockIncrement(rows); 
       bar.setUnitIncrement(1); 
@@ -93,6 +97,7 @@ public class ScrollableDisplay extends Display implements DisplayComponent
       xbar.setValue(originx); 
       if (doc!=null) bar.setMaximum(doc.length()+1); 
       syncing = false;
+      bar.setValueIsAdjusting(false);
    }
    
    public JScrollBar getYScrollBar()
@@ -123,7 +128,7 @@ public class ScrollableDisplay extends Display implements DisplayComponent
             // BUG: pressing on scrollbar arrows doesn't set ...IsAdjusting
             // if (bar.getValueIsAdjusting())
             // so we only force the origin if we are not syncing
-            if (!syncing)
+            if (true || !syncing)
                 forceOrigin(newY);
          }
        }
@@ -169,6 +174,7 @@ public class ScrollableDisplay extends Display implements DisplayComponent
      return xbar;
    }
 }
+
 
 
 

@@ -152,7 +152,7 @@
                                 
                 <mkdir dir="${BUILD}"/>
                 <mkdir dir="${BUILD}/org/sufrin/dred/EXT"/>
-                <exec os         = "Linux,SunOS"
+                <exec 
                       dir        = "${BUILD}"
                       executable = "python">
                   <arg value="../${SOURCE}/javatree"/>
@@ -181,6 +181,7 @@
           </exec>
         </target>
 </project>
+
 
 
 
