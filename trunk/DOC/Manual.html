@@ -105,12 +105,14 @@ loading and configuration of Dred extensions
 <br></br>
 
 <a name="MACOS"><h2>Mac OS X Usage</h2></a>
-Usage is mich same as Linux/Unix usage (as outlined above), except that
+Usage is much the same as Linux/Unix usage (as outlined above), except that
 it makes sense to drive <code>dred</code> with a shell script containing
-the following command:
+the following command -- which enables some of the OS X specific
+features of java, and assumes <code>Dred.jar</code> is 
+in <code>$HOME/Bin</code>.
 
 <pre>
-exec java1.5 -Xdock:icon="$HOME/Bin/dnought.png" \
+exec java    -Xdock:icon="$HOME/Bin/dnought.png" \
              -Xdock:name="Dred"                  \
              -Dapple.laf.growbox.intrudes=false  \
              -Dapple.laf.useScreenMenuBar=true -jar $HOME/Bin/Dred.jar "$@" 
@@ -118,7 +120,10 @@ exec java1.5 -Xdock:icon="$HOME/Bin/dnought.png" \
 
 <p>
 There's a bug in the present Mac OS X implementation of scrollbars (in
-all look-and-feel variants) so we suppress scrollbars under Mac OS X.
+all look-and-feel variants) so (for the moment)
+we suppress scrollbars under Mac OS X. If you insist on
+experiencing the bug, then add <code>-Dscroll=mac</code>
+to the above command (just before the <code>-jar</code> switch).
 </p>
 
 
@@ -784,6 +789,7 @@ Solaris on which that JVM can be installed.  </p>
 <b>$Date$</b>
 </pre>
 </body>
+
 
 
 
