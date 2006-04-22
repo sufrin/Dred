@@ -476,7 +476,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   static ImageIcon stop    = new ImageIcon(Dred.class.getResource("stop.png"));
   
   ImageButton stopButton = new ImageButton(stop)
-  {  { setEnabled(false); }
+  {  { setEnabled(false); setToolTipText("Interrupt current search/match/process"); }
      public void run() { doKillProcess(); }
   };
 
@@ -763,6 +763,8 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     feedback.add(labelR);
     feedback.add(new JLabel(" "));
     feedback.add(stopButton); 
+    // Avoid obscuring the stop button with the resize handle    
+    if (Dred.onMac()) feedback.add(new JLabel(" _"));
 
 
     bars.setLayout(new BoxLayout(bars, BoxLayout.Y_AXIS));
@@ -1282,12 +1284,12 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     showBrowser("Current Dred Bindings", bindings);
   }
 
-  @ActionMethod(label="Browse Help with Mozilla", tip="Browse the help text (from Dred's built-in server) using mozilla.")
+  @ActionMethod(label="Browse Help with Mozilla/Safari", tip="Browse the help text (from Dred's built-in server) using mozilla.")
   public void doMozilla()
   {
         { try
            { whoCalledBrowser = this; 
-             Runtime.getRuntime().exec(String.format("mozilla http://localhost:%d/index.html", Dred.sessionSocket.getPort()));              
+             Runtime.getRuntime().exec(String.format("%s http://127.0.0.1:%d/index.html", Dred.onMac()?"open":"mozilla", Dred.sessionSocket.getPort()));              
            }
            catch (IOException ex)
            { ex.printStackTrace();
@@ -2103,6 +2105,8 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
+
 
 
 

@@ -460,7 +460,9 @@ public class Dred
   public static boolean simWindows = System.getProperty("DREDWINDOWS")!=null || System.getenv("DREDWINDOWS")!=null;
   public static boolean onUnix()    { return !simWindows && File.separator.equals("/"); }
   public static boolean onWindows() { return simWindows || File.separator.equals("\\"); }
+  public static boolean onMac()     { return System.getProperty("os.name").equals("Mac OS X"); }
 }
+
 
 
 
