@@ -10,6 +10,7 @@ import org.sufrin.logging.Logging;
 
         <PRE>$Id$</PRE>
 */
+@SuppressWarnings("serial")
 public class ScrolledDisplay extends JPanel implements DisplayComponent
 { 
   /** Construct a ScrolledDisplay from a scrollable display; add 

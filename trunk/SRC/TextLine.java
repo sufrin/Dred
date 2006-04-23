@@ -19,6 +19,7 @@ import GUIBuilder.RowLayout;
 /** 
  *    An editable single-line of text with a caption/title. 
  */
+@SuppressWarnings("serial")
 public class TextLine extends JPanel
 { Document     doc; 
   SimpleEditor ed; 

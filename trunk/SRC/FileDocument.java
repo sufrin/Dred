@@ -141,7 +141,7 @@ public class FileDocument extends SearchableDocument
        throw new RuntimeException("Cannot open url: "+ ex.getMessage());
     } 
     else
-      if (debug) log.fine("Creating new file: %s (%s) %s", fileName, fileTitle, log.stackTrace());       
+      if (debug) log.fine("Creating new file: %s (%s) %s", fileName, fileTitle, Logging.stackTrace());       
   }
   
   /** Load this document from the given reader */

@@ -43,7 +43,8 @@ public abstract class CheckItem extends JCheckBoxMenuItem implements PreferenceC
       in pref with a name derived from s by removing spaces from it.
   */
 
-  public CheckItem(String s, boolean istate, String tooltip, Preferences pref)
+  @SuppressWarnings("serial")
+public CheckItem(String s, boolean istate, String tooltip, Preferences pref)
   {
     super();
     this.itemName = s.replace(" ", "");

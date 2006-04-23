@@ -1,11 +1,16 @@
 package org.sufrin.dred;
-import  java.awt.*;
-import  java.awt.event.*;
-import  java.io.*;
-import  java.util.prefs.Preferences;
-import  java.util.LinkedList;
-import  javax.swing.*;
-import  org.sufrin.logging.Dialog;
+import java.awt.Dimension;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.File;
+import java.util.LinkedList;
+import java.util.prefs.Preferences;
+
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
 
 /**
         The CutRingTool module has static methods that save the last
@@ -14,7 +19,7 @@ import  org.sufrin.logging.Dialog;
         menu button that opens a (singleton) editing window that provides
         access to the saved material.
 */
-
+@SuppressWarnings("serial")
 public class CutRingTool extends Extension
 { 
   /** Make a CutRingTool */
@@ -29,7 +34,8 @@ public class CutRingTool extends Extension
   /** (Invoked whenever an editing session starts) adds a button to the Edit menu
       which makes the cut ring editing session visible.    
   */
-  public void openSession(EditorFrame session)
+ 
+public void openSession(EditorFrame session)
   { super.openSession(session);
     JMenu menu = session.addMenu("Edit");
     menu.addSeparator();

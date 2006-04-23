@@ -16,6 +16,7 @@ import java.util.*;
         </PRE>
 */
 
+@SuppressWarnings("serial")
 public     class Display 
 extends    JComponent  
 implements DocListener, 

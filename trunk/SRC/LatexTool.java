@@ -1,15 +1,14 @@
 package org.sufrin.dred;
-import java.util.prefs.*;
+import java.io.File;
+import java.util.prefs.Preferences;
 
 import javax.swing.BorderFactory;
-import javax.swing.ComponentInputMap;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.border.BevelBorder;
-import java.io.File;
 
 /**
         Tool that puts up a Latex Toolbar
@@ -26,7 +25,7 @@ public class LatexTool extends RunTool
   }
 
 
-  class LatexToolBar extends TextLine
+  @SuppressWarnings("serial") class LatexToolBar extends TextLine
   {
     /**
      *  The EditorFrame to which this ToolBar is attached.

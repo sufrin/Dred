@@ -1,7 +1,6 @@
 package org.sufrin.logging;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-import java.awt.KeyboardFocusManager;
 import java.awt.Component;
 import java.awt.event.*;
 

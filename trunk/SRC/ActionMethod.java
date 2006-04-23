@@ -1,15 +1,15 @@
 package org.sufrin.dred;
 import java.awt.event.ActionEvent;
-import java.awt.*;
 import java.lang.annotation.Annotation;
 import java.lang.annotation.Retention;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.HashSet;
 import java.util.TreeSet;
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
@@ -47,7 +47,8 @@ import javax.swing.KeyStroke;
         <code>tip</code> value, and its label is set to the annotation's
         <code>label</code> value. 
     */  
-    public static class Action extends AbstractAction implements Comparable
+    @SuppressWarnings("serial")
+	public static class Action extends AbstractAction implements Comparable
     { public Action(Object object, Method method, ActionMethod act) 
       { super(act.label()); 
         this.method = method; 
@@ -150,7 +151,8 @@ import javax.swing.KeyStroke;
         An ActionMap that can register all the @ActionMethod-annotated methods
         of an object under their own names. 
     */
-    public static class Map extends ActionMap
+    @SuppressWarnings("serial")
+	public static class Map extends ActionMap
     { public Map()                    {}    
       public Map(final Object object) { register(object); }
             

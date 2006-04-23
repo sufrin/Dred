@@ -15,7 +15,8 @@ public abstract class CheckBox extends JCheckBox
 {
   protected boolean state = false;
 
-  public CheckBox(String s, boolean istate)
+ @SuppressWarnings("serial")
+public CheckBox(String s, boolean istate)
   {
     super();
     this.setSelected(istate);

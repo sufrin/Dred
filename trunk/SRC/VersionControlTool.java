@@ -153,6 +153,7 @@ public class VersionControlTool extends RunTool
     public void doDiff(String revision)
     {
       this.session.doSave();
+      @SuppressWarnings("unused") 
       String fileName = session.doc.getFileName().getAbsolutePath();
       String cmd = null;
       File   cwd = session.getCWD();
@@ -172,6 +173,7 @@ public class VersionControlTool extends RunTool
     public void doLog(String revision)
     {
       // this.session.doSave();
+      @SuppressWarnings("unused") 
       String fileName = session.doc.getFileName().getAbsolutePath();
       String cmd = null;
       File   cwd = session.getCWD();

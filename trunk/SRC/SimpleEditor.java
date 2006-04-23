@@ -27,7 +27,7 @@ import org.sufrin.logging.Logging;
 
         <PRE>$Id$</PRE>
 */
-
+@SuppressWarnings("unused") 
 class SimpleEditor implements InteractionListener, Patient
 {  /** The Display component */
    protected DisplayComponent  display;
@@ -388,6 +388,7 @@ class SimpleEditor implements InteractionListener, Patient
   
   
   /** Returns an action that inserts the given string */
+  @SuppressWarnings("serial")
   protected AbstractAction insertString(final String string)
   { 
     return new Act("Insert "+string, "Insert a string")

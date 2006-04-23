@@ -1,7 +1,8 @@
 package org.sufrin.nanohttp;
 public interface HTTP
 {
- public static class Properties extends java.util.TreeMap<String, String> {};
+ @SuppressWarnings("serial")
+public static class Properties extends java.util.TreeMap<String, String> {};
   /**
    * Some HTTP response status codes
    */

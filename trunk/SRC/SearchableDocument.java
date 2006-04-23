@@ -1,10 +1,12 @@
 package org.sufrin.dred;
-import javax.swing.Timer;
-import java.io.Reader;
 import java.awt.Component;
-import java.util.regex.*;
-import org.sufrin.logging.Logging;
+import java.util.regex.MatchResult;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+
 import org.sufrin.logging.Dialog;
+import org.sufrin.logging.Logging;
 
 /** A SearchableDocument extends a Document with facilities to search, 
     match brackets, etc.

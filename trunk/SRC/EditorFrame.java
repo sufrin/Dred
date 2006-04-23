@@ -30,11 +30,9 @@ import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.InputMap;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -48,12 +46,14 @@ import javax.swing.Timer;
 
 import org.sufrin.logging.Logging;
 
-import GUIBuilder.*;
+import GUIBuilder.ImageButton;
+import GUIBuilder.RowLayout;
 
 
 /**
  * A top-level frame holding an editor a menu bar and a TextBar.
  */
+@SuppressWarnings("serial")
 public class EditorFrame extends JFrame implements FileDocument.Listener
 { 
   public static Logging log   = Logging.getLog("EditorFrame");

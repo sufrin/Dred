@@ -25,6 +25,7 @@ import GUIBuilder.Row;
         A styling descriptor describes a transformation that is applied to the current selection
         when the corresponding button is pressed.
  */
+@SuppressWarnings("serial")
 public class StyleFrame extends JFrame
 {
   

@@ -5,23 +5,27 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.*;
-import java.net.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.LineNumberReader;
+import java.net.ConnectException;
+import java.net.URL;
 import java.util.Vector;
-import java.util.prefs.*;
+import java.util.prefs.BackingStoreException;
+import java.util.prefs.Preferences;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
-import javax.swing.BorderFactory;
 
-import org.sufrin.nanohttp.*;
-import org.sufrin.urlfactory.*;
+import org.sufrin.logging.Dialog;
 import org.sufrin.logging.Logging;
 import org.sufrin.logging.LoggingSocket;
-import org.sufrin.logging.Dialog;
+import org.sufrin.nanohttp.NanoHTTPD;
+import org.sufrin.urlfactory.ClassURLFactory;
 
 /**
  * A simple editor that uses a scrollable display.

@@ -928,7 +928,8 @@ public class Document
     }
     
     
-    protected static class Lines extends LinkedList<String>
+    @SuppressWarnings("serial")
+	protected static class Lines extends LinkedList<String>
     { 
     }
     

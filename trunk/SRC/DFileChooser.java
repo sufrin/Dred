@@ -12,6 +12,7 @@ import javax.swing.JFileChooser;
 
 /** A FileChooser component with a combobox for selecting character set encodings */
 
+@SuppressWarnings("serial")
 public class DFileChooser extends JFileChooser
 {
   public JComboBox theSelector = null; 

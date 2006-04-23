@@ -15,7 +15,7 @@ import java.awt.event.*;
         $Id$
         </PRE>
 */
-
+@SuppressWarnings("serial") 
 public class ScrollableDisplay extends Display implements DisplayComponent
 {  
    public ScrollableDisplay(int cols, int rows)

@@ -28,7 +28,7 @@ public class KeystrokeTool extends ToolExtension
         public void keyPressed(KeyEvent e)
         {
           KeyStroke k = KeyStroke.getKeyStrokeForEvent(e);
-          int  ch   = e.getKeyChar();
+          @SuppressWarnings("unused") int  ch   = e.getKeyChar();
           int  mods = e.getModifiersEx();
           String comment = false ? "" : String.format(" #  %d %o[%s]", e.getKeyCode(), mods, KeyEvent.getModifiersExText(mods));
           if ((mods & KeyEvent.ALT_GRAPH_MASK) != 0) comment+=".AltGr";

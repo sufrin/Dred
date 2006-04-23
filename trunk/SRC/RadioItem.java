@@ -1,18 +1,14 @@
 package org.sufrin.dred;
 
-import java.awt.event.*;
-import javax.swing.event.*;
-
-import java.util.prefs.*;
 import java.util.HashSet;
-import org.sufrin.logging.*;
+import java.util.prefs.PreferenceChangeEvent;
+import java.util.prefs.PreferenceChangeListener;
+import java.util.prefs.Preferences;
 
-import javax.swing.AbstractAction;
-import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
-import javax.swing.ButtonModel;
 import javax.swing.JRadioButtonMenuItem;
-import javax.swing.SwingUtilities;
+
+import org.sufrin.logging.Logging;
 
 /**
  * A JRadioButtonMenuItem with a run method that is called
@@ -21,6 +17,7 @@ import javax.swing.SwingUtilities;
  * of the associated button, may be used in the run
  * method. 
  */
+@SuppressWarnings("serial")
 public class RadioItem<VAL> extends    JRadioButtonMenuItem 
                             
 { /** Current state */

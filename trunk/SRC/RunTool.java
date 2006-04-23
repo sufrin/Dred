@@ -13,7 +13,8 @@ public abstract class RunTool extends ToolExtension
 
   public abstract JComponent makeTool(EditorFrame session);
   
-  public static class Tool extends TextLine
+@SuppressWarnings("serial")
+public static class Tool extends TextLine
   {
     public Tool(String label, final String cmd, final boolean noSelection, 
                 final EditorFrame session)

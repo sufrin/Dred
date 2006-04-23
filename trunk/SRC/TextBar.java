@@ -14,6 +14,7 @@ import GUIBuilder.RowLayout;
  * "Repl". These lines provide the arguments for various
  * editor commands.
  */
+@SuppressWarnings("serial")
 public class TextBar extends JPanel
 {
   public    TextLine argument, find, repl;
