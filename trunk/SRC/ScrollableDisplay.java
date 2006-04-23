@@ -1,10 +1,17 @@
 package org.sufrin.dred;
-import javax.swing.*;
-import javax.swing.event.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
+
+import javax.swing.BoundedRangeModel;
+import javax.swing.JScrollBar;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import org.sufrin.logging.Logging;
-
-import java.awt.event.*;
 
 /**
         A Scrollable Display is a Display which can be linked to
@@ -17,16 +24,17 @@ import java.awt.event.*;
 */
 @SuppressWarnings("serial") 
 public class ScrollableDisplay extends Display implements DisplayComponent
-{  
+{  static boolean onMac = Dred.onMac();
+
    public ScrollableDisplay(int cols, int rows)
-   { super(cols, rows);
+   { super(cols, rows, onMac?0:0);
      addMouseWheelListener
      ( new MouseWheelListener()
        {
          public void mouseWheelMoved(MouseWheelEvent e) 
          { int rot = e.getWheelRotation();
            int amt = e.getScrollType()==MouseWheelEvent.WHEEL_UNIT_SCROLL ? e.getScrollAmount() : 1;
-           if (!passiveBar && bar!=null) 
+           if (bar!=null) 
            { bar.setValue(bar.getValue()+rot*amt);
              forceOrigin(bar.getValue());
            }
@@ -38,10 +46,29 @@ public class ScrollableDisplay extends Display implements DisplayComponent
      );
    }
    
+   protected Color scrollColor = new Color(0.0f, 0.15f, 0.75f, 0.65f);
+   
+   protected void paintCursor(Graphics g)
+   {  super.paintCursor(g);	 
+      // Simulate the vertical scrollbar
+      if (onMac)
+      {   int    h = fontHeight*rows;
+          int    w = 5*fontEmWidth/4;
+	      double doclength = Math.max(1, doc.length());
+	      double proploc  = originy/doclength;
+	      double propsize = Math.min(1.0, rows/doclength);
+	      int start = (int) (proploc * h);
+	      Color c = g.getColor();
+	      g.setColor(scrollColor);
+	      g.fillRect(dim.width-w, yborder+start, w, (int) (propsize * h));
+	      g.setColor(c);	   
+      }
+   }
+   
    public void dragBy(int dx, int dy)
    { if (dy!=0)
      {
-       if (!passiveBar && bar!=null)
+       if (bar!=null)
        {  bar.setValue(bar.getValue()+(dy>0?-1:1));
           forceOrigin(bar.getValue());
        }
@@ -50,7 +77,7 @@ public class ScrollableDisplay extends Display implements DisplayComponent
      };
      if (dx!=0)
      {
-       if (!passiveBar && xbar!=null)
+       if (xbar!=null)
        {  xbar.setValue(xbar.getValue()+(dx>0?-1:1));
           forceXOrigin(xbar.getValue());
        }
@@ -96,7 +123,6 @@ public class ScrollableDisplay extends Display implements DisplayComponent
 
    protected boolean syncing = false;
    protected boolean syncing() { return syncing; }
-   protected boolean passiveBar = "passive".equals(System.getProperty("scroll"));
 
    protected void syncScrollBar()
    {  if (bar==null) return;
@@ -135,8 +161,6 @@ public class ScrollableDisplay extends Display implements DisplayComponent
        }
      );
      
-     if (passiveBar) return bar;
-     
      bar.addAdjustmentListener
      ( new AdjustmentListener()
        { 
@@ -174,8 +198,6 @@ public class ScrollableDisplay extends Display implements DisplayComponent
          }
        }
      );
-     
-     if (passiveBar) return xbar;
      
      xbar.addAdjustmentListener
      ( new AdjustmentListener()

@@ -54,7 +54,7 @@ implements DocListener,
        </li>
        </ul>
    */
-   protected int xmargin=0, xborder=6, yborder=6;
+   int xmargin=5, xborder=5, yborder=5;
 
    /** Logging for the current class */
    static Logging log = Logging.getLog("Display");
@@ -280,11 +280,19 @@ implements DocListener,
    }
 
    /** Construct a new display with the given logical (character)
+   dimensions. 
+   */
+   public Display(int cols, int rows) 
+   {
+      this(cols, rows, 0);
+   }
+   /** Construct a new display with the given logical (character)
        dimensions. 
    */
-   public Display(int cols, int rows)
+   public Display(int cols, int rows, int xmargin)
    { originx=0;
      originy=0;
+     this.xmargin=xmargin;
      this.cols=cols;
      this.rows=rows;
      setFont(defaultFontName);
