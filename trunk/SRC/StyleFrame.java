@@ -75,7 +75,8 @@ public class StyleFrame extends JFrame
     pack();
   }
   
-  protected void addMenus()
+  @SuppressWarnings("serial")
+protected void addMenus()
   { 
     bar.setToolTipText("Styleframe actions");
     bar.add(new JButton

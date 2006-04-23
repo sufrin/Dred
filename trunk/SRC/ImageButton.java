@@ -1,12 +1,12 @@
 package GUIBuilder;
 import java.awt.*;
-import java.awt.event.*;
 import javax.swing.ImageIcon;
 
 /** Quick and dirty flat ImageButton implementation.
     Used for the stop button.
  */
 
+@SuppressWarnings("serial")
 public class ImageButton extends LightweightButton
 { 
   public ImageButton(ImageIcon arg) 

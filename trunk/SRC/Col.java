@@ -14,6 +14,7 @@ import  javax.swing.*;
         
         @version $Id$
 */
+@SuppressWarnings("serial")
 public class Col extends JPanel
 { public Col() { setLayout(new ColLayout()); }
   public Col(double just) { setLayout(new ColLayout(just)); }

@@ -13,7 +13,8 @@ public abstract class ToolExtension extends Extension
      session.addTool(new ToolExtensionItem(session, name));
    }
    
-   protected class ToolExtensionItem extends CheckItem
+   @SuppressWarnings("serial")
+protected class ToolExtensionItem extends CheckItem
    {    EditorFrame session;
         
         JComponent theTool = null;

@@ -1,15 +1,14 @@
 package org.sufrin.dred;
-import java.util.prefs.*;
+import java.io.File;
+import java.util.prefs.Preferences;
 
 import javax.swing.BorderFactory;
-import javax.swing.ComponentInputMap;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.border.BevelBorder;
-import java.io.File;
 
 /**
         Tool that puts up a Version Control Toolbar
@@ -27,7 +26,7 @@ public class VersionControlTool extends RunTool
 
   static enum VC { SVN, CVS, RCS, UNK }
   
-  class VersionControlToolBar extends TextLine
+  @SuppressWarnings("serial") class VersionControlToolBar extends TextLine
   {
     /**
      *  The EditorFrame to which this ToolBar is attached.
@@ -42,7 +41,8 @@ public class VersionControlTool extends RunTool
     String filePath = null;
     String lastName = null;
   
-    public VersionControlToolBar(EditorFrame session)
+    @SuppressWarnings("serial")
+	public VersionControlToolBar(EditorFrame session)
     {
       super(20, null, true, "VersionControl");
       this.session = session;
