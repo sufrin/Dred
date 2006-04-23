@@ -517,7 +517,7 @@ class SimpleEditor implements InteractionListener, Patient
       case 2:
         int dx = e.getX() - lastX,
         dy = e.getY() - lastY;
-        display.dragBy(dx, dy);
+        display.dragBy(3*dx, 3*dy); // Multiplier for fast scrolling
         lastX = e.getX();
         lastY = e.getY();
       break;

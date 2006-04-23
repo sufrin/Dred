@@ -114,17 +114,19 @@ in <code>$HOME/Bin</code>.
 <pre>
 exec java    -Xdock:icon="$HOME/Bin/dnought.png" \
              -Xdock:name="Dred"                  \
-             -Dapple.laf.growbox.intrudes=false  \
              -Dapple.laf.useScreenMenuBar=true -jar $HOME/Bin/Dred.jar "$@" 
 </pre>
 
 <p>
 There's a bug in the present Mac OS X implementation of scrollbars (in
 all look-and-feel variants) so (for the moment)
-we suppress scrollbars under Mac OS X. If you insist on
-experiencing the bug, then add <code>-Dscroll=mac</code>
-to the above command (just before the <code>-jar</code> switch).
+we replace the active scrollbars under Mac OS X
+with a passive indicator of the position and 
+relative size of the current view of the document.
+This indicator shows up as a narrow bluish rectangle
+in the right margin of the window. 
 </p>
+
 
 
 <a name="Windows (XP) Usage"><h2>Windows (XP) Usage</h2></a>
@@ -213,8 +215,8 @@ button. </p>
 <p> After every editing action the position of the document in the
 editor window is adjusted automatically so that <i>the document cursor
 is visible.</i> Between editing commands the position of the  document
-in the window can be adjusted manually by the scroll bars, and this can
-make the document cursor disappear temporarily.  </p>
+in the window can be adjusted manually by the scroll bars, the scrollwheel,
+or by middle-dragging and this can make the document cursor disappear temporarily.  </p>
 
 
 <p> There is a <i>cut-buffer</i> which holds at most one text. It is
@@ -789,6 +791,7 @@ Solaris on which that JVM can be installed.  </p>
 <b>$Date$</b>
 </pre>
 </body>
+
 
 
 

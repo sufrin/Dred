@@ -21,6 +21,10 @@ import org.sufrin.logging.Logging;
         <PRE>
         $Id$
         </PRE>
+        
+        TODO: Investigate whether the Mac OS X Java scrollbars are malfunctioning or whether I
+        simply got the wrong end of the JScrollBar API and miraculously made them work for
+        me in Windows, Linux and Solaris.
 */
 @SuppressWarnings("serial") 
 public class ScrollableDisplay extends Display implements DisplayComponent
