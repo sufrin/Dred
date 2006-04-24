@@ -462,10 +462,12 @@ public class Dred
   
   /* Is there no limit to my philistinism? */
   public static boolean simWindows = System.getProperty("DREDWINDOWS")!=null || System.getenv("DREDWINDOWS")!=null;
+  public static boolean simMac     = System.getProperty("DREDMAC")!=null || System.getenv("DREDMAC")!=null;
   public static boolean onUnix()    { return !simWindows && File.separator.equals("/"); }
   public static boolean onWindows() { return simWindows || File.separator.equals("\\"); }
-  public static boolean onMac()     { return System.getProperty("os.name").equals("Mac OS X"); }
+  public static boolean onMac()     { return simMac || System.getProperty("os.name").equals("Mac OS X"); }
 }
+
 
 
 
