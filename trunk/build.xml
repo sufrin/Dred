@@ -24,7 +24,6 @@
                            Server,
                            Reflect
                           "/>
-                          
         <target name        = "scp" 
                 description = "Copy Dred.jar to jape: and eclectic: using scp"
                 depends     = "Dred">
@@ -149,7 +148,7 @@
              haven't found one that does it, so  it's implemented
              by a little Python script.
         -->
-                                
+                <buildnumber/>              
                 <mkdir dir="${BUILD}"/>
                 <mkdir dir="${BUILD}/org/sufrin/dred/EXT"/>
                 <exec 
@@ -181,6 +180,7 @@
           </exec>
         </target>
 </project>
+
 
 
 
