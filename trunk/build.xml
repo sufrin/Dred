@@ -42,6 +42,7 @@
                     destdir="${BUILD}"
                     cache  ="${BUILD}/dependencies"
                     closure= "true"/>
+            <buildnumber/>              
             <javac srcdir    = "${BUILD}" 
                    debug     = "true"
                    debuglevel= "lines,vars,source"
@@ -148,7 +149,6 @@
              haven't found one that does it, so  it's implemented
              by a little Python script.
         -->
-                <buildnumber/>              
                 <mkdir dir="${BUILD}"/>
                 <mkdir dir="${BUILD}/org/sufrin/dred/EXT"/>
                 <exec 
@@ -156,6 +156,12 @@
                       executable = "python">
                   <arg value="../${SOURCE}/javatree"/>
                   <arg value="../${SOURCE}"/>
+                </exec>
+                
+                <exec 
+                      dir        = "."
+                      executable = "sh">
+                  <arg value="${SOURCE}/revision.sh"/>
                 </exec>
                 
                 <copy todir="${BUILD}/org/sufrin/dred">
