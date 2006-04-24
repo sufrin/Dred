@@ -53,19 +53,19 @@ public class ScrollableDisplay extends Display implements DisplayComponent
    protected Color scrollColor = new Color(0.0f, 0.15f, 0.75f, 0.65f);
    
    protected void paintCursor(Graphics g)
-   {  super.paintCursor(g);	 
+   {  super.paintCursor(g);      
       // Simulate the vertical scrollbar
       if (onMac)
       {   int    h = fontHeight*rows;
           int    w = 5*fontEmWidth/4;
-	      double doclength = Math.max(1, doc.length());
-	      double proploc  = originy/doclength;
-	      double propsize = Math.min(1.0, rows/doclength);
-	      int start = (int) (proploc * h);
-	      Color c = g.getColor();
-	      g.setColor(scrollColor);
-	      g.fillRect(dim.width-w, yborder+start, w, (int) (propsize * h));
-	      g.setColor(c);	   
+          double doclength = Math.max(1, doc.length());
+          double proploc  = originy/doclength;
+          double propsize = Math.min(1.0, rows/doclength);
+          int start = (int) (proploc * h);
+          Color c = g.getColor();
+          g.setColor(scrollColor);
+          g.fillRect(dim.width-w, yborder+start, w, (int) (propsize * h));
+          g.setColor(c);       
       }
    }
    
@@ -132,9 +132,9 @@ public class ScrollableDisplay extends Display implements DisplayComponent
    {  if (bar==null) return;
       syncing = true;
       if (debug) log.finer("oy=%d, adj=%s, rows=%d", originy, bar.getValueIsAdjusting(), rows);
-      bar.setValueIsAdjusting(true);
-      //bar.setVisibleAmount(rows); 
-      //bar.setBlockIncrement(rows); 
+      //bar.setValueIsAdjusting(true);
+      bar.setVisibleAmount(rows); 
+      bar.setBlockIncrement(rows); 
       bar.setUnitIncrement(1); 
       bar.setVisibleAmount(rows); 
       bar.setBlockIncrement(rows-1);  // Keep context on screen
@@ -142,7 +142,7 @@ public class ScrollableDisplay extends Display implements DisplayComponent
       xbar.setValue(originx); 
       if (doc!=null) bar.setMaximum(doc.length()+1); 
       syncing = false;
-      bar.setValueIsAdjusting(false);
+      //bar.setValueIsAdjusting(false);
    }
    
    public JScrollBar getYScrollBar()
@@ -221,5 +221,6 @@ public class ScrollableDisplay extends Display implements DisplayComponent
      return xbar;
    }
 }
+
 
 
