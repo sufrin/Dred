@@ -947,9 +947,11 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   @ActionMethod(label="About", tip="Show version details of the currently-running Dred")
   public void doAbout()
   {
-    String message = "<html>Dred $Revision$<br>"
-                     + "(C) 2004, 2005 Bernard Sufrin<br>"
-                     + "Bernard.Sufrin@sufrin.org.uk<br>"
+    String message = "<html>Dred<br>"
+                     + "(C) 2004, 2005, 2006 Bernard Sufrin<br>"
+                     + "Bernard.Sufrin@sufrin.org.uk<br><br>"
+                     + "SubVersion #"+REVISION.number+"<br>"
+                     + REVISION.date+"<br>"
                      + "<br></br>"
                      + (Dred.sessionSocket == null
                        ? ""
@@ -2105,6 +2107,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
 
 
 
