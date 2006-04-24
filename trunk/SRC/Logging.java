@@ -117,7 +117,7 @@ public class Logging
       }
     }
     // Configure loggers from the command-line
-    boolean needLogger = false;
+
     for (Object p: System.getProperties().keySet())
     { String prop = (String) p;
       if (prop.endsWith(".log"))
@@ -129,7 +129,6 @@ public class Logging
         {
            System.err.println("[Log property "+p+"="+System.getProperty(prop)+"]");
         }
-        needLogger=needLogger || true; // to get round an Eclipse warning
       }
     }       
   }
