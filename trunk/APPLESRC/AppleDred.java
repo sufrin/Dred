@@ -43,7 +43,7 @@ public class AppleDred
         }
         
         public void handleOpenApplication(ApplicationEvent e)
-        {  
+        {  if (!Dred.serverRunning()) Dred.startServer(0);
         }
       }
     );
@@ -56,6 +56,7 @@ public class AppleDred
     AppleDred dred = new AppleDred();
   }
 }
+
 
 
 

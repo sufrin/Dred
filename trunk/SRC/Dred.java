@@ -207,6 +207,8 @@ public class Dred
   
   protected static boolean serverRunning = false;
 
+  public static boolean serverRunning() { return serverRunning; }
+
   public synchronized static void loadBindings()
   { if (!fallBack && bindings.isEmpty())
     {
@@ -250,7 +252,7 @@ public class Dred
   }
 
   protected static Preferences prefs = Preferences.userRoot().node("Dred");
-  
+    
   /** After starting a server (if there is none running) on the default
       server port, start a remote editing session for the given path.
    */
@@ -469,6 +471,7 @@ public class Dred
   public static boolean onWindows() { return simWindows || File.separator.equals("\\"); }
   public static boolean onMac()     { return simMac || System.getProperty("os.name").equals("Mac OS X"); }
 }
+
 
 
 
