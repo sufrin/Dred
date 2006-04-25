@@ -428,9 +428,11 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     public ProcessFrame(String command)
     {
       super(80, 24, command);
-      setDoc(new FileDocument("UTF8", new File("Process Log"), true));
+      String fileName = EditorFrame.this.doc.getFileName().getName()+".dlog";
+      super.setTitle(fileName);
+      setDoc(new FileDocument("UTF8", new File(fileName), true));
       menuBar.add(Box.createHorizontalGlue());
-      if (Dred.onMac()) text.add(clearButton); else menuBar.add(clearButton);
+      if (Dred.onMac()) addToToolBar(clearButton); else menuBar.add(clearButton);
       this.command = command;
     }
 
@@ -467,7 +469,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
 
     /** NO-OP: we want the title to remain constant */
     public void setTitle(String title)
-    {
+    { // super.setTitle(title);
     }
       
   }
@@ -2107,6 +2109,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
 
 
 

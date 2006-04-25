@@ -1,4 +1,12 @@
 #!/bin/sh
+#################################################################################
+#
+#       If a file under svn control has changed revision recently 
+#       then generate a new REVISION.java with the latest svn revision and
+#       date as Strings.    
+#
+#################################################################################
+
 #
 #       If svn exists and the current directory is under svn control then 
 #       output the latest svn revision number
@@ -14,6 +22,20 @@ fi
 
 REVISION=`revision`
 DATE=`date`
+OLDREVISION=`cat build.revision`
+#
+#
+#
+if [ "$OLDREVISION" = "$REVISION" ]
+then
+   echo No need to generate new REVISION.java
+   exit
+fi
+echo Generating new REVISION.java ($REVISION)
+echo $REVISION > build.revision
+#
+#
+#
 cat > BUILD/org/sufrin/dred/REVISION.java <<END
 package org.sufrin.dred;
 class REVISION
@@ -22,4 +44,5 @@ class REVISION
   public static String date   = "$DATE";
 }
 END
+
 

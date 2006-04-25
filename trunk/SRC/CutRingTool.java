@@ -9,8 +9,10 @@ import java.util.prefs.Preferences;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
+import javax.swing.JPanel;
 
 /**
         The CutRingTool module has static methods that save the last
@@ -116,15 +118,17 @@ public void openSession(EditorFrame session)
       sizeTool.setSelectedItem(""+ringSize); 
       
       setDoc(new FileDocument("UTF8", new File("Dred Cut Ring"), true));
-      menuBar.add(sizeLabel);
-      menuBar.add(sizeTool);
-      menuBar.add(Box.createHorizontalGlue());
-      menuBar.add(prevTool);
-      menuBar.add(nextTool);
-      menuBar.add(refreshButton);
-      menuBar.add(clearButton);
+      JComponent buts = Dred.onMac() ? new JPanel() : menuBar;
+      buts.add(sizeLabel);
+      buts.add(sizeTool);
+      buts.add(Box.createHorizontalGlue());
+      buts.add(prevTool);
+      buts.add(nextTool);
+      buts.add(refreshButton);
+      buts.add(clearButton);
       ed.stopRecordingCuts();   // Don't record cuts from the cut ring!
-      ed.allowTypeOver(false); // Don't pay attention to typeover
+      ed.allowTypeOver(false);  // Don't pay attention to typeover
+      if (Dred.onMac()) { addToToolBar(buts); }
       addWindowListener(new WindowAdapter()
       {
         public void windowDeiconified(WindowEvent e)
@@ -253,6 +257,7 @@ public void openSession(EditorFrame session)
         
   }
 }
+
 
 
 

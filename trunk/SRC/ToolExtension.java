@@ -14,7 +14,7 @@ public abstract class ToolExtension extends Extension
    }
    
    @SuppressWarnings("serial")
-protected class ToolExtensionItem extends CheckItem
+   protected class ToolExtensionItem extends CheckItem
    {    EditorFrame session;
         
         JComponent theTool = null;
@@ -36,6 +36,7 @@ protected class ToolExtensionItem extends CheckItem
         }
    }
 }
+
 
 
 
