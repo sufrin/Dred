@@ -14,8 +14,8 @@ import javax.swing.border.BevelBorder;
         Tool that puts up a Version Control Toolbar
 */
 public class VersionControlTool extends RunTool
-{ public VersionControlTool() { super("SVN/CVS/RCS"); }
-  public VersionControlTool(Preferences prefs) { super("SVN/CVS/RCS"); this.prefs = prefs; }
+{ public VersionControlTool() { super("Version Control Bar"); }
+  public VersionControlTool(Preferences prefs) { super("Version Control Bar"); this.prefs = prefs; }
   protected Preferences prefs;
 
   @Override
@@ -24,7 +24,20 @@ public class VersionControlTool extends RunTool
     return new VersionControlToolBar(session);
   }
 
-  static enum VC { SVN, CVS, RCS, UNK }
+  static enum VC 
+   { SVN("svn"), CVS("cvs"), RCS("rcs"), UNK("Set Version Control System");
+  
+    
+    VC (String name)
+    {
+      this.name = name;
+    }
+
+    private String name;
+
+    public String toString() { return name; }
+
+   }
   
   @SuppressWarnings("serial") class VersionControlToolBar extends TextLine
   {
@@ -42,7 +55,7 @@ public class VersionControlTool extends RunTool
     String lastName = null;
   
     @SuppressWarnings("serial")
-	public VersionControlToolBar(EditorFrame session)
+    public VersionControlToolBar(EditorFrame session)
     {
       super(20, null, true, "VersionControl");
       this.session = session;
@@ -92,21 +105,39 @@ public class VersionControlTool extends RunTool
           doLog(getText().trim());
         }
       });
+      
+      JMenuItem add = but(new Act("Add", "Put this file under version control ")
+      {
+        public void run()
+        {
+          doAdd(getText().trim());
+        }
+      });
+      
+      JMenuItem diffY = but(new Act("Diffy (svn)", "Side-by-side diff this file and the current (or specified) revision ")
+      {
+        public void run()
+        {
+          doDiffY(getText().trim());
+        }
+      });
   
-      JMenu menu = new JMenu("VC:");
+      final JMenu menu = new JMenu("VCS");
       RadioItem.Group<VC> vcs = new RadioItem.Group<VC> ("VersionController", vcsName, "Set the version control system to this one")
       { { run(); }
-        public void run() { vcsName = value; }
+        public void run() { vcsName = value; menu.setText(value.toString()); }
       };
-      menu.setToolTipText("Version control actions: commit, diff, log");
+      menu.setToolTipText("Version control actions: commit, diff, diffy, log, add");
       menu.add(commit);
       menu.add(diff);
+      menu.add(diffY);
       menu.add(log);
+      menu.add(add);
       menu.addSeparator();
       menu.add(new RadioItem<VC>(vcs, "CVS", VC.CVS));
       menu.add(new RadioItem<VC>(vcs, "RCS", VC.RCS));
       menu.add(new RadioItem<VC>(vcs, "SVN", VC.SVN));
-      menu.add(new RadioItem<VC>(vcs, "???", VC.UNK));
+      menu.add(new RadioItem<VC>(vcs, "Unset Version Control System", VC.UNK));
       bar.add(menu);
       setLabel(bar);
       setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
@@ -160,11 +191,37 @@ public class VersionControlTool extends RunTool
       if (!revision.equals("")) revision = (vcsName==VC.RCS?"-r":"-r ")+revision;
       switch (vcsName)
       { case CVS: cmd = String.format("cvs diff %s %s", revision, lastName); cwd = parent; break;
-        case SVN: cmd = String.format("svn diff %s %s", revision, filePath); break;
+        case SVN: cmd = String.format("svn diff --diff-cmd diff -x \"-w -B\" %s %s", revision, filePath); break;
         case RCS: cmd = String.format("rcsdiff %s %s", revision, filePath); break;
         default:  cmd = String.format("echo unknown VCS diff %s %s", revision, filePath); break;
       }      
       this.session.startProcess(cwd, cmd, "", null, null);
+    } 
+     
+    /**
+     * Diff -y the current document.
+     */
+    public void doDiffY(String revision)
+    {
+      this.session.doSave();
+      @SuppressWarnings("unused") 
+      String fileName = session.doc.getFileName().getAbsolutePath();
+      String cmd = null;
+      File   cwd = session.getCWD();
+      if (!revision.equals("")) revision = (vcsName==VC.RCS?"-r":"-r ")+revision;
+      switch (vcsName)
+      { 
+        case SVN: cmd = String.format("svn diff --diff-cmd diff -x \"-B -y -W 150\" %s %s", revision, filePath); break;
+        default:  cmd = String.format("echo %s cannot diff -y %s %s", vcsName, revision, filePath); break;
+      }
+      Runnable next = new Runnable()
+      { public void run()
+        {
+         session.processFrame.text.find.setText("^.{73} [^ ]");
+         session.processFrame.text.setFindRegEx(true);
+        }
+      };      
+      this.session.startProcess(cwd, cmd, "", next, null);
     }  
     
     /**
@@ -186,19 +243,26 @@ public class VersionControlTool extends RunTool
       }      
       this.session.startProcess(cwd, cmd, "", null, null);
     }  
+    
+    /**
+     * Add the current document.
+     */
+    public void doAdd(String revision)
+    {
+      // this.session.doSave();
+      @SuppressWarnings("unused") 
+      String fileName = session.doc.getFileName().getAbsolutePath();
+      String cmd = null;
+      File   cwd = session.getCWD();
+      if (!revision.equals("")) revision = (vcsName==VC.RCS?"-r":"-r ")+revision;
+      switch (vcsName)
+      { 
+        case SVN: cmd = String.format("svn log %s %s", revision, filePath); break;
+        default:  cmd = String.format("echo VCS %s doesn't have an add command for %s", vcsName, filePath); break;
+      }      
+      this.session.startProcess(cwd, cmd, "", null, null);
+    }  
   }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
