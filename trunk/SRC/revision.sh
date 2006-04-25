@@ -28,10 +28,10 @@ OLDREVISION=`cat build.revision`
 #
 if [ "$OLDREVISION" = "$REVISION" ]
 then
-   echo No need to generate new REVISION.java
+   echo Using REVISION.java "($REVISION)"
    exit
 fi
-echo Generating new REVISION.java "($REVISION)"
+echo Generating REVISION.java "($REVISION)"
 echo $REVISION > build.revision
 #
 #
