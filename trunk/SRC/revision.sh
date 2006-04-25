@@ -31,7 +31,7 @@ then
    echo No need to generate new REVISION.java
    exit
 fi
-echo Generating new REVISION.java ($REVISION)
+echo Generating new REVISION.java "($REVISION)"
 echo $REVISION > build.revision
 #
 #
