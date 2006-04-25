@@ -456,19 +456,21 @@ class SimpleEditor implements InteractionListener, Patient
           doc.setCursor(p.x, p.y);
           deliberateSelection();
         }
-        else switch (e.getClickCount())
-        {
-          case 1:
+        else switch ((e.getClickCount() - 1)%4)
+        { case 0:
             deliberateSelection();
             doc.setCursorAndMark(p.x, p.y);
           break;
-          case 2:
+          case 1:
             doc.selectWord(p.x, p.y);
             deliberateSelection();
           break;
-          case 3:
+          case 2:
             doc.selectLine(p.x, p.y);
             deliberateSelection();
+          break;
+          case 3:
+            doSelectParagraph();
           break;
         }
       break;
@@ -682,6 +684,8 @@ class SimpleEditor implements InteractionListener, Patient
     
   }
 }
+
+
 
 
 

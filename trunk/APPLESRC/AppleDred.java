@@ -1,34 +1,55 @@
 import com.apple.eawt.*;
-import java.awt.*;
+import javax.swing.*;
 
 /**
-        Apple Application to drive the Dred server.
+        Apple Application trial
 */
 public class AppleDred
-{ 
-  Application app = Application.getApplication();
-  { app.addApplicationListener
+{ JLabel       b    = new JLabel("AppleDred");
+  JFrame       f    = new JFrame("AppleDred");
+  Application app;
+
+  public AppleDred()
+  { 
+    System.err.println("AppleDred2");
+    System.err.flush();
+    f.add(b);
+    f.pack();
+    f.setVisible(true);      
+    
+    app = Application.getApplication();
+    app.addApplicationListener
     ( new ApplicationAdapter()
       { public void handleQuit(ApplicationEvent e) 
         {
            System.err.println("QUIT");
+           System.err.flush();
            e.setHandled(true);
         }
         
         public void handleOpenFile(ApplicationEvent e) 
-        {  System.err.println(e.getFilename());
-           e.setHandled(true);
+        {  System.err.println("OPEN FILE "+e.getFilename()+e);
+           System.err.flush();
+           
+        }
+        
+        public void handleOpenApplication(ApplicationEvent e)
+        {  System.err.println("OPEN APPLICATION "+e.getFilename());
+           System.err.flush();
         }
       }
     );
+
+    
   }
   
   public static void main(String[] args)
-  { AppleDred dred = new AppleDred();
-    Frame f = new Frame("AppleDred");
-    Button b = new Button("AppleDred");
-    f.add(b);
-    f.pack();
-    f.setVisible(true);
+  { 
+    System.err.println("AppleDred");
+    System.err.flush();
+   
+    AppleDred dred = new AppleDred();
+
   }
 }
+
