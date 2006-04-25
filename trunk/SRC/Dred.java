@@ -56,7 +56,7 @@ import org.sufrin.urlfactory.ClassURLFactory;
  */
 
 public class Dred
-{
+{ static { URL.setURLStreamHandlerFactory(new ClassURLFactory()); }
 
   protected static Logging log   = Logging.getLog("Dred");
   public    static boolean debug = log.isLoggable("FINE");
@@ -83,7 +83,7 @@ public class Dred
    * anonymous session if there are no arguments.
    */
   public static void main(String[] args) throws Exception
-  { URL.setURLStreamHandlerFactory(new ClassURLFactory());
+  { 
     boolean wait    = false;    // are we running standalone?
     int     started = 0;        // the number of sessions started from the command line
     { for (String arg : args)
@@ -299,7 +299,7 @@ public class Dred
   }
   
   /** Close all the editing sessions, and quit the server */
-  public static void closeServer()
+  public static boolean closeServer()
   {
     closeAll();
     if (sessions.isEmpty()) 
@@ -307,7 +307,9 @@ public class Dred
       serverRunning = false;  
       ActionMethod.Action.shutdownNow();      
       System.exit(0); 
+      return true;
     }
+    else return false;
   }
   
   /** Returns the name of my host */
@@ -467,6 +469,8 @@ public class Dred
   public static boolean onWindows() { return simWindows || File.separator.equals("\\"); }
   public static boolean onMac()     { return simMac || System.getProperty("os.name").equals("Mac OS X"); }
 }
+
+
 
 
 

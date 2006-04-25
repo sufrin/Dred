@@ -12,7 +12,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
-import java.io.File;
+import java.io.File; 
 import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
@@ -136,6 +136,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       bind("doEdit");
       bind("doSaveAs");
       bind("doCWD");
+      bind("doLocalCWD");
       bind("doNewView");
       menu.addSeparator();
       bind("doEditChoose");
@@ -1071,6 +1072,18 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   public void doCWD()
   {
     File newcwd = new File(desugarFilename(text.argument.getText()));
+    if (newcwd.isDirectory())
+    {
+      cwd = canonical(newcwd);
+      tempCaption(String.format("Directory: %s", cwd));
+    }
+    else tempCaption(String.format("%s is not a directory.", cwd));
+  }
+
+  @ActionMethod(label="cd .", tip="Change the directory of this session to the folder of the file being edited")
+  public void doLocalCWD()
+  {
+    File newcwd = doc.getFileName().getParentFile();
     if (newcwd.isDirectory())
     {
       cwd = canonical(newcwd);
@@ -2109,6 +2122,8 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
+
 
 
 

@@ -1,3 +1,4 @@
+package org.sufrin.dred;
 import com.apple.eawt.*;
 import javax.swing.*;
 
@@ -5,37 +6,44 @@ import javax.swing.*;
         Apple Application trial
 */
 public class AppleDred
-{ JLabel       b    = new JLabel("AppleDred");
-  JFrame       f    = new JFrame("AppleDred");
-  Application app;
+{ Application app;
 
   public AppleDred()
   { 
-    System.err.println("AppleDred2");
-    System.err.flush();
-    f.add(b);
-    f.pack();
-    f.setVisible(true);      
     
     app = Application.getApplication();
     app.addApplicationListener
     ( new ApplicationAdapter()
       { public void handleQuit(ApplicationEvent e) 
         {
-           System.err.println("QUIT");
-           System.err.flush();
-           e.setHandled(true);
+           System.err.println("APPLEDRED QUIT REQUEST");
+           System.err.flush();           
+           e.setHandled(Dred.closeServer());
+           System.err.println("APPLEDRED");
+           System.err.flush();           
         }
         
         public void handleOpenFile(ApplicationEvent e) 
-        {  System.err.println("OPEN FILE "+e.getFilename()+e);
+        {  
+           String fileName = e.getFilename();
+           System.err.println("APPLEDRED OPEN FILE "+fileName);
            System.err.flush();
-           
+           try 
+           {
+             if (fileName!=null) 
+                Dred.startRemoteSession(fileName, "UTF8");
+             else
+                Dred.startRemoteSession("Untitled", "UTF8");
+           }
+           catch (Exception ex)
+           {
+             ex.printStackTrace(System.err);
+             System.exit(1);
+           }
         }
         
         public void handleOpenApplication(ApplicationEvent e)
-        {  System.err.println("OPEN APPLICATION "+e.getFilename());
-           System.err.flush();
+        {  
         }
       }
     );
@@ -45,11 +53,13 @@ public class AppleDred
   
   public static void main(String[] args)
   { 
-    System.err.println("AppleDred");
-    System.err.flush();
-   
     AppleDred dred = new AppleDred();
-
   }
 }
+
+
+
+
+
+
 

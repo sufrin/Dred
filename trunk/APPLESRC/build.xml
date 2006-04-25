@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- ===========================================================================================
+        
+This builds an Apple Application bundle from the Dred.jar file and local code designed to
+provide an interface between OS X and the core of Dred.
+
+============================================================================================ -->
+
+<project name="AppleDred" default="app" basedir=".">
+
+  <property name="version" value="Apple V1"/>
+  <property name="buildnumber" value="April 2006"/>
+  <property name="copyright" value="Copyright &#xa9; 2006 Bernard Sufrin, Oxford University"/>
+
+   
+  <target name="compile" description="Compile the classes">
+    <mkdir dir="classes"/>
+    <unjar src="../BUILD/Dred.jar" dest="classes"/>
+    <javac srcdir="."  extdirs = "../BUILD/Dred.jar" destdir="classes" source="1.5"/>
+  </target>
+
+
+  <target name="jar" depends="compile" description="Create JAR file">
+    <mkdir dir="build"/>
+    
+    <jar jarfile="build/${ant.project.name}.jar" 
+         basedir="classes"
+         update="false"
+          includes = "**/*.class **/*.jpg **/*.png **/*.html **/*.xml **/*.bindings">
+         <manifest>
+             <attribute name="Main-Class" value="org.sufrin.dred.Dred"/>
+         </manifest>         
+    </jar>
+  </target>
+
+
+  <!-- Create a simple application to see if all the bits came together properly -->
+  
+  <target name="app" depends="jar" description="Build an example application">
+
+    <taskdef name=      "jarbundler"
+             classpath= "${jarbundler.jar}" 
+             classname= "net.sourceforge.jarbundler.JarBundler"/>
+
+    <jarbundler dir=            "${basedir}" 
+                verbose=        "true"
+                name=           "${ant.project.name}"
+                mainclass=      "org.sufrin.dred.AppleDred"
+                jar=            "build/${ant.project.name}.jar"
+                jvmversion=     "1.5+"
+                shortname=      "AppleDred"
+                icon=           "AppleDred.icns"
+                infostring=     "AppleDred Text Editor ${copyright}"
+                version=        "${version}"
+                workingdirectory="/">
+      
+      <javaproperty name="apple.laf.useScreenMenuBar" value="true"/>
+      <javaproperty name="apple.awt.brushMetal"       value="true"/>
+      <javaproperty name="apple.awt.showGrowBox"      value="true"/>
+      
+      <documenttype name=       "Dred text document"
+                    extensions= "*" 
+                    ostypes=    "TEXT sEXT ttro" 
+                    role=       "Editor"/>
+          
+    </jarbundler>
+    
+  </target>
+
+  <target name="clean" description="Clean up anything we can rebuild">
+    <delete dir="${ant.project.name}.app" quiet="true"/>
+    <delete dir="build" quiet="true"/> 
+    <delete dir="classes" quiet="true"/> 
+  </target>
+
+</project>
+
+
+
+
+
+
+
+
+
+
+
+
