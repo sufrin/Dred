@@ -256,7 +256,7 @@ public class Dred
    */
   public static void startRemoteSession(String path, String EncodingName) throws Exception
   {     String cwd  = System.getProperty("user.dir");
-        if (cwd==null || cwd.equals("")) cwd = System.getProperty("user.home");
+        if (cwd==null || cwd.equals("") || cwd.equals("/")) cwd = System.getProperty("user.home");
         File   file = new File(path);
         int    port = prefs.getInt("port", 0);  
         
@@ -469,6 +469,7 @@ public class Dred
   public static boolean onWindows() { return simWindows || File.separator.equals("\\"); }
   public static boolean onMac()     { return simMac || System.getProperty("os.name").equals("Mac OS X"); }
 }
+
 
 
 
