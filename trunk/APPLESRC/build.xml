@@ -89,12 +89,13 @@ provide an interface between OS X and the core of Dred.
   
   <target name="clean" description="Clean up anything we can rebuild">
     <delete dir="${ant.project.name}.app" quiet="true"/>
-    <delete dir="${ant.project.name}.dmg" quiet="true"/>
+    <delete file="${ant.project.name}.dmg" quiet="true"/>
     <delete dir="build"                   quiet="true"/> 
     <delete dir="classes"                 quiet="true"/> 
   </target>
 
 </project>
+
 
 
 
