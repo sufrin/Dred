@@ -1,6 +1,6 @@
 package org.sufrin.dred;
 class REVISION
 { 
-  public static String number = "173";
-  public static String date   = "Tue Apr 25 22:52:40 BST 2006";
+  public static String number = "174";
+  public static String date   = "Tue Apr 25 23:44:47 BST 2006";
 }

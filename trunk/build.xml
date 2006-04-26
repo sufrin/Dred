@@ -25,13 +25,21 @@
                            Reflect
                           "/>
         <target name        = "scp" 
-                description = "Copy Dred.jar to jape: and eclectic: using scp"
+                description = "Copy Dred.jar to jape and eclectic bin using scp"
                 depends     = "Dred">
                 <exec executable = "scp">
-                      <arg line="-p ${BUILD}/Dred.jar eclectic:bin"/>
+                      <arg line="-p ${BUILD}/Dred.jar sufrin@eclectic:bin"/>
                 </exec>
                 <exec executable = "scp">
-                      <arg line="-p ${BUILD}/Dred.jar jape:bin"/>
+                      <arg line="-p ${BUILD}/Dred.jar sufrin@jape:bin"/>
+                </exec>
+       </target>
+       
+       <target name        = "dist" 
+                description = "Copy Dred.jar to jape website using scp"
+                depends     = "Dred">
+                <exec executable = "scp">
+                      <arg line="-p DOC/*.* ${BUILD}/Dred.jar sufrin@jape::WEB/jape.org/DRED/"/>
                 </exec>
        </target>
                                   
@@ -186,6 +194,8 @@
           </exec>
         </target>
 </project>
+
+
 
 
 

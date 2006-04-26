@@ -105,7 +105,7 @@ loading and configuration of Dred extensions
 <br></br>
 
 <a name="MACOS"><h2>Mac OS X Usage</h2></a>
-Usage is much the same as Linux/Unix usage (as outlined above), except that
+Command-line usage is much the same as Linux/Unix usage (as outlined above), except that
 it makes sense to drive <code>dred</code> with a shell script containing
 the following command -- which enables some of the OS X specific
 features of java, and assumes <code>Dred.jar</code> is 
@@ -116,7 +116,20 @@ exec java    -Xdock:icon="$HOME/Bin/dnought.png" \
              -Xdock:name="Dred"                  \
              -Dapple.laf.useScreenMenuBar=true -jar $HOME/Bin/Dred.jar "$@" 
 </pre>
-
+<p>
+The <code>AppleDred.app</code> application directory is available from the
+website and can also be installed into your local <code>Applications</code> directory
+or the system-wide <code>/Applications</code> directory. It is registered as handling all files.
+It's a good idea to pin it to the taskbar and start it on login, but it isn't necessary. 
+</p>
+<p>
+The application file <code>AppleDred.app/Contents/Resources/Java/AppleDred.jar</code> can be
+started from the command-line as described elsewhere in the documentation. If the application is already running,
+then it will be used to service the command given on the command-line; if it isn't then a non-Application
+server will be started and thenceforth used to service command-line commands and subsequent invocations
+of the application. The important difference is that a server started from the application is a little more 
+careful when <code>Apple-Q</code> is pressed. 
+</p>
 <p>
 There's a bug in the present Mac OS X implementation of scrollbars (in
 all look-and-feel variants) so (for the moment)
@@ -124,7 +137,8 @@ we replace the active scrollbars under Mac OS X
 with a passive indicator of the position and 
 relative size of the current view of the document.
 This indicator shows up as a narrow bluish rectangle
-in the right margin of the window. 
+in the right margin of the window. Vertical and horizontal scrolling can be accomplished with
+the scrollwheel and/or by dragging with button-2 pressed.
 </p>
 
 
@@ -791,6 +805,7 @@ Solaris on which that JVM can be installed.  </p>
 <b>$Date$</b>
 </pre>
 </body>
+
 
 
 

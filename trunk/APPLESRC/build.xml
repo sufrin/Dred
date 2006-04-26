@@ -15,9 +15,10 @@ provide an interface between OS X and the core of Dred.
    
   <target name="compile" description="Compile the classes" depends="prepare">
     <depend srcdir ="." destdir= "classes"
-                        cache  = "build"
+                        cache=   "build"
                         closure= "true"/>
-    <javac srcdir="."  extdirs = "../BUILD/Dred.jar" destdir="classes" source="1.5">
+                        
+    <javac srcdir="."  extdirs = "build" destdir="classes" source="1.5">
                <compilerarg line="-Xlint:unchecked"/>
                <include name="**/*.java"/>
     </javac>
@@ -35,16 +36,16 @@ provide an interface between OS X and the core of Dred.
                      prefix=  "${ant.project.name}.app" 
                    />
                 </tar>
-                <!--exec executable = "scp">
+                <exec executable = "scp">
                       <arg line="-p ${ant.project.name}.tgz sufrin@jape:WEB/jape.org/DRED/"/>
-                </exec-->
+                </exec>
   </target>
 
   <target name="jar" depends="compile" description="Create JAR file">    
     <jar jarfile="build/${ant.project.name}.jar" 
          basedir="classes"
-         update="false"
-         includes = "**/*.class **/*.jpg **/*.png **/*.html **/*.xml **/*.bindings">
+         update="yes"
+         includes = "**/*.class **/*.bindings">
          <manifest>
              <attribute name="Main-Class" value="org.sufrin.dred.Dred"/>
          </manifest>         
@@ -52,7 +53,6 @@ provide an interface between OS X and the core of Dred.
   </target>
 
 
-  <!-- Create a simple application to see if all the bits came together properly -->
   
   <target name="app" depends="jar" description="Build an example application">
 
@@ -88,13 +88,13 @@ provide an interface between OS X and the core of Dred.
   <target name="prepare">
     <mkdir dir="classes"/>
     <mkdir dir="build"/>
-    <unjar src="../BUILD/Dred.jar" dest="classes" overwrite="false"/>
+    <copy overwrite="true" file="../BUILD/Dred.jar" tofile="build/AppleDred.jar"/>
   </target>
   
   <target name="clean" description="Clean up anything we can rebuild">
     <delete dir="${ant.project.name}.app" quiet="true"/>
-    <delete dir="build" quiet="true"/> 
-    <delete dir="classes" quiet="true"/> 
+    <delete dir="build"                   quiet="true"/> 
+    <delete dir="classes"                 quiet="true"/> 
   </target>
 
 </project>
