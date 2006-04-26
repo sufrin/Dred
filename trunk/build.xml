@@ -34,14 +34,6 @@
                       <arg line="-p ${BUILD}/Dred.jar sufrin@jape:bin"/>
                 </exec>
        </target>
-       
-       <target name        = "dist" 
-                description = "Copy Dred.jar to jape website using scp"
-                depends     = "Dred">
-                <exec executable = "scp">
-                      <arg line="-p DOC/*.* ${BUILD}/Dred.jar sufrin@jape::WEB/jape.org/DRED/"/>
-                </exec>
-       </target>
                                   
         <target name        = "compile" 
                 description = "Compile all .java files below ${BUILD}"
@@ -190,7 +182,7 @@
         
         <target name="dist" depends="Dred">
           <exec executable="sh" output="/dev/tty" error="/dev/tty">
-            <arg line="-c 'rsync -v -t -e ssh DOC/*.html DOC/*g BUILD/Dred.jar jape:JAPEWEBHOME/jape.org/DRED'"/>
+            <arg line="-c 'rsync -v -t -e ssh DOC/*.html DOC/*g BUILD/Dred.jar sufrin@jape:JAPEWEBHOME/jape.org/DRED'"/>
           </exec>
         </target>
 </project>

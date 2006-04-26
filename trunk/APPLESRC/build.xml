@@ -25,8 +25,8 @@ provide an interface between OS X and the core of Dred.
                
   </target>
 
-  <target       name        = "scp" 
-                description = "Copy Dred.jar to jape: website using scp"
+  <target       name        = "dist" 
+                description = "Copy AppleDred.app to jape: website using scp"
                 depends     = "app">
                 <tar compression= "gzip"
                      destfile=    "${ant.project.name}.tgz"
@@ -37,7 +37,7 @@ provide an interface between OS X and the core of Dred.
                    />
                 </tar>
                 <exec executable = "scp">
-                      <arg line="-p ${ant.project.name}.tgz sufrin@jape:WEB/jape.org/DRED/"/>
+                      <arg line="-p ${ant.project.name}.tgz sufrin@jape:JAPEWEBHOME/jape.org/DRED/"/>
                 </exec>
   </target>
 
