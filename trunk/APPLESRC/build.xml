@@ -11,7 +11,8 @@ provide an interface between OS X and the core of Dred.
 
   <property name="version" value="Apple V1"/>
   <property name="buildnumber" value="April 2006"/>
-  <property name="copyright" value="Copyright &#xa9; 2006 Bernard Sufrin, Oxford University"/>
+  <property name="copyright"   value="Copyright &#xa9; 2006 Bernard Sufrin, Oxford University"/>
+  <property name="mainclass"   value="org.sufrin.dred.AppleDred"/>
    
   <target name="compile" description="Compile the classes" depends="prepare">
     <depend srcdir ="." destdir= "classes"
@@ -28,17 +29,12 @@ provide an interface between OS X and the core of Dred.
   <target       name        = "dist" 
                 description = "Copy AppleDred.app to jape: website using scp"
                 depends     = "app">
-                <tar compression= "gzip"
-                     destfile=    "${ant.project.name}.tgz"
-                     >
-                   <tarfileset
-                     dir=     "${ant.project.name}.app" 
-                     prefix=  "${ant.project.name}.app" 
-                   />
-                </tar>
-                <exec executable = "scp">
-                      <arg line="-p ${ant.project.name}.tgz sufrin@jape:JAPEWEBHOME/jape.org/DRED/"/>
+                <exec executable = "sh" >
+                      <arg line="makedmg ${ant.project.name}"/>
                 </exec>
+                <!--exec executable = "scp">
+                      <arg line="-p ${ant.project.name}.dmg sufrin@jape:JAPEWEBHOME/jape.org/DRED/"/>
+                </exec-->
   </target>
 
   <target name="jar" depends="compile" description="Create JAR file">    
@@ -63,12 +59,12 @@ provide an interface between OS X and the core of Dred.
     <jarbundler dir=            "${basedir}" 
                 verbose=        "true"
                 name=           "${ant.project.name}"
-                mainclass=      "org.sufrin.dred.AppleDred"
+                mainclass=      "${mainclass}"
                 jar=            "build/${ant.project.name}.jar"
                 jvmversion=     "1.5+"
-                shortname=      "AppleDred"
-                icon=           "AppleDred.icns"
-                infostring=     "AppleDred Text Editor ${copyright}"
+                shortname=      "${ant.project.name}"
+                icon=           "${ant.project.name}.icns"
+                infostring=     "${ant.project.name} ${copyright}"
                 version=        "${version}"
                 workingdirectory="/">
       
@@ -88,16 +84,18 @@ provide an interface between OS X and the core of Dred.
   <target name="prepare">
     <mkdir dir="classes"/>
     <mkdir dir="build"/>
-    <copy overwrite="true" file="../BUILD/Dred.jar" tofile="build/AppleDred.jar"/>
+    <copy overwrite="true" file="../BUILD/Dred.jar" tofile="build/${ant.project.name}.jar"/>
   </target>
   
   <target name="clean" description="Clean up anything we can rebuild">
     <delete dir="${ant.project.name}.app" quiet="true"/>
+    <delete dir="${ant.project.name}.dmg" quiet="true"/>
     <delete dir="build"                   quiet="true"/> 
     <delete dir="classes"                 quiet="true"/> 
   </target>
 
 </project>
+
 
 
 
