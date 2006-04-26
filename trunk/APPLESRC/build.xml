@@ -32,9 +32,9 @@ provide an interface between OS X and the core of Dred.
                 <exec executable = "sh" >
                       <arg line="makedmg ${ant.project.name}"/>
                 </exec>
-                <!--exec executable = "scp">
+                <exec executable = "scp">
                       <arg line="-p ${ant.project.name}.dmg sufrin@jape:JAPEWEBHOME/jape.org/DRED/"/>
-                </exec-->
+                </exec>
   </target>
 
   <target name="jar" depends="compile" description="Create JAR file">    
@@ -95,6 +95,7 @@ provide an interface between OS X and the core of Dred.
   </target>
 
 </project>
+
 
 
 
