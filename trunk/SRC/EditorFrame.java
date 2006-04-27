@@ -2122,27 +2122,3 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
