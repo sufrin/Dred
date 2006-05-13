@@ -124,7 +124,7 @@ public class Pipe
   */
   public interface Continue 
   { /** Invoked when the running process terminates. The ``exitcode'' is the
-        opoerating-system-specific termination code of the process. The
+        operating-system-specific termination code of the process. The
         ``output'' is the accumulated output of the process (if the
         output was being collected).
     */

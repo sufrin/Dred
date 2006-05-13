@@ -249,27 +249,27 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       menu = addMenu("Etc");
       bind("doShell");
       if (Dred.onUnix()) 
-      {
+      {  final String crown = Dred.onMac() ? " -p" : " -c";
          menu.addSeparator();
-         menu.add(new Act("fmt -75 -c  < sel'n", "Use an external formatter (fmt) to format the current selection")
+         menu.add(new Act("fmt -75 < sel'n", "Use an external formatter (fmt) to format the current selection")
          {
            public void run()
            {
-             doShell("fmt -c");
+             doShell("fmt"+crown);
            }
          });
-         menu.add(new Act("fmt -60 -c  < sel'n")
+         menu.add(new Act("fmt -60 < sel'n")
          {
            public void run()
            {
-             doShell("fmt -60 -c");
+             doShell("fmt -60"+crown);
            }
          });
-         menu.add(new Act("fmt -40 -c  < sel'n")
+         menu.add(new Act("fmt -40 < sel'n")
          {
            public void run()
            {
-             doShell("fmt -40 -c");
+             doShell("fmt -40"+crown);
            }
          });
       }
