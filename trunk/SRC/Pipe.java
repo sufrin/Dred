@@ -3,9 +3,9 @@ import java.util.*;
 import java.io.*;
 
 /** This module provides the means by which operating system commands
-    can be invoked. Its methods are all static.
+    can be invoked; its methods are all static.
     
-    $Id$
+    <code>$Id$</code>
 */
 
 public class Pipe
@@ -25,7 +25,7 @@ public class Pipe
             Start running the given command as a native process in
             the given working directory, and return the corresponding
             Process object (so that the native process can be stopped
-            from the GUI). The String input is passed to the process on
+            from the GUI). The <code>String</code> input is passed to the process on
             its standard input channel. The ``cont'' parameter is used
             to communicate the output and/or outcome of the process back
             to the caller.
