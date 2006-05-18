@@ -3,7 +3,7 @@ import com.apple.eawt.*;
 import javax.swing.*;
 
 /**
-        Apple Application trial
+        Apple Application root for Dred.
 */
 public class AppleDred
 { Application app;
@@ -56,6 +56,7 @@ public class AppleDred
     AppleDred dred = new AppleDred();
   }
 }
+
 
 
 
