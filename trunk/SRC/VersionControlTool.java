@@ -53,16 +53,23 @@ public class VersionControlTool extends RunTool
     File   parent   = null;
     String filePath = null;
     String lastName = null;
+      
   
+    @SuppressWarnings("serial")
+    protected void refreshFileName()
+    {
+      fileName     = session.doc.getFileName();
+      parent       = fileName.getParentFile();
+      lastName     = fileName.getName();
+      filePath     = fileName.getAbsolutePath();
+    }
+    
     @SuppressWarnings("serial")
     public VersionControlToolBar(EditorFrame session)
     {
       super(20, null, true, "VersionControl");
       this.session = session;
-      fileName     = session.doc.getFileName();
-      parent       = fileName.getParentFile();
-      lastName     = fileName.getName();
-      filePath     = fileName.getAbsolutePath();
+      refreshFileName();
       
       // set up the menu bar
       JMenuBar bar = new JMenuBar();
@@ -166,6 +173,7 @@ public class VersionControlTool extends RunTool
     public void doCheckin(String message)
     {
       this.session.doSave();
+      refreshFileName();
       message = message.replaceAll("(['\\\\\"])", "\\\\$1");
       String cmd = null;
       File   cwd = session.getCWD();
@@ -184,8 +192,8 @@ public class VersionControlTool extends RunTool
     public void doDiff(String revision)
     {
       this.session.doSave();
+      refreshFileName();
       @SuppressWarnings("unused") 
-      String fileName = session.doc.getFileName().getAbsolutePath();
       String cmd = null;
       File   cwd = session.getCWD();
       if (!revision.equals("")) revision = (vcsName==VC.RCS?"-r":"-r ")+revision;
@@ -204,8 +212,7 @@ public class VersionControlTool extends RunTool
     public void doDiffY(String revision)
     {
       this.session.doSave();
-      @SuppressWarnings("unused") 
-      String fileName = session.doc.getFileName().getAbsolutePath();
+      refreshFileName();
       String cmd = null;
       File   cwd = session.getCWD();
       if (!revision.equals("")) revision = (vcsName==VC.RCS?"-r":"-r ")+revision;
@@ -230,8 +237,7 @@ public class VersionControlTool extends RunTool
     public void doLog(String revision)
     {
       // this.session.doSave();
-      @SuppressWarnings("unused") 
-      String fileName = session.doc.getFileName().getAbsolutePath();
+      refreshFileName();
       String cmd = null;
       File   cwd = session.getCWD();
       if (!revision.equals("")) revision = (vcsName==VC.RCS?"-r":"-r ")+revision;
@@ -250,14 +256,13 @@ public class VersionControlTool extends RunTool
     public void doAdd(String revision)
     {
       // this.session.doSave();
-      @SuppressWarnings("unused") 
-      String fileName = session.doc.getFileName().getAbsolutePath();
+      refreshFileName();
       String cmd = null;
       File   cwd = session.getCWD();
       if (!revision.equals("")) revision = (vcsName==VC.RCS?"-r":"-r ")+revision;
       switch (vcsName)
       { 
-        case SVN: cmd = String.format("svn log %s %s", revision, filePath); break;
+        case SVN: cmd = String.format("svn add %s", filePath); break;
         default:  cmd = String.format("echo VCS %s doesn't have an add command for %s", vcsName, filePath); break;
       }      
       this.session.startProcess(cwd, cmd, "", null, null);
@@ -265,4 +270,5 @@ public class VersionControlTool extends RunTool
   }
 
 }
+
 

@@ -10,8 +10,12 @@ provide an interface between OS X and the core of Dred.
 <project name="AppleDred" default="app" basedir=".">
 
   <property name="version" value="Apple V1"/>
-  <property name="buildnumber" value="April 2006"/>
+  <property name="buildnumber" value="August 2006"/>
   <property name="copyright"   value="Copyright &#xa9; 2006 Bernard Sufrin, Oxford University"/>
+  
+  <!-- The main class to be invoked by the Apple Application launcher.
+       This need not be the same as the main class to be invoked from a java -jar command.
+  -->
   <property name="mainclass"   value="org.sufrin.dred.AppleDred"/>
    
   <target name="compile" description="Compile the classes" depends="prepare">
@@ -50,7 +54,7 @@ provide an interface between OS X and the core of Dred.
 
 
   
-  <target name="app" depends="jar" description="Build an example application">
+  <target name="app" depends="jar" description="Build the application">
 
     <taskdef name=      "jarbundler"
              classpath= "${jarbundler.jar}" 
@@ -95,6 +99,7 @@ provide an interface between OS X and the core of Dred.
   </target>
 
 </project>
+
 
 
 
