@@ -7,6 +7,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Insets;
 import java.awt.Rectangle;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -317,6 +318,13 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
           }
         }
       });
+      
+      if (Dred.onMac())
+      { menu = addMenu("Window");
+        bind("doMax");
+        bind("doGrow");
+        bind("doShrink");
+      }
       
       menu = addMenu("View");
       menu.add(new CheckItem("Antialiasing", false, "Enable high-quality (antialiased) rendering of text.", prefs)
@@ -658,6 +666,8 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       bindAll("alt U",                  "doUnicode");
       bindAll("control OPEN_BRACKET",   "doMatchDown");
       bindAll("control CLOSE_BRACKET",  "doMatchUp");
+      bindAll("ctrl SLASH",             "doGrow");
+      bindAll("ctrl shift SLASH",       "doShrink");
     }
     else
     { for (Bindings.Binding binding: protoBindings) 
@@ -1195,6 +1205,18 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   
   @ActionMethod(offline=true, label="Find previous sel", tip="Set the find field to the selection, then find its previous instance")
   public void doFindSelUp() { doMarkPosition(); doFindSel(true); }
+  
+  @ActionMethod(label="Maximize height", tip="maximize window height")
+  public void doMax() 
+  { Dimension d = java.awt.Toolkit.getDefaultToolkit().getScreenSize(); 
+    setSize(getSize().width, d.height); 
+  }
+  
+  @ActionMethod(label="Increase height", tip="window height*=3/2")
+  public void doGrow() { Dimension d = getSize(); setSize(d.width, (d.height*3)/2); }
+  
+  @ActionMethod(label="Decrease height", tip="window height*=2/3")
+  public void doShrink() { Dimension d = getSize(); setSize(d.width, (d.height*2)/3); }
   
   /**
    * Find and select the next instance of the pattern
@@ -2122,3 +2144,4 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+

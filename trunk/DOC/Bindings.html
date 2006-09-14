@@ -64,6 +64,7 @@ editor action   doFindSelDown        ctrl alt  F          # Set the find field t
 editor action   doFindSelUp          shift ctrl alt  F    # Set the find field to the selection, then find its previous instance
 editor action   doFindUp             shift ctrl  F        # Find the previous instance of the pattern in the Find field
 editor action   doGoToXY             ctrl  G              # Go to the row.col specified by the .... field
+editor action   doGrow               #keystroke#          # window height*=3/2
 editor action   doHelp               #keystroke#          # Browse Dred help using Dred's built-in browser
 editor action   doIndent             ctrl  RIGHT          # Add a leading space to each line of the selection
 editor action   doKillProcess        ctrl  K              # Kill any currently-running background process
@@ -71,6 +72,7 @@ editor action   doLogger             #keystroke#          # Start the HTTP loggi
 editor action   doLowercase          #keystroke#          # Swap the current selection with its lowercased translation
 editor action   doMatchDown          ctrl  OPEN_BRACKET   # Find next (balanced) bracket that matches the opening bracket at the cursor
 editor action   doMatchUp            ctrl  CLOSE_BRACKET  # Find previous (balanced) bracket that matches the opening bracket at the cursor
+editor action   doMax                #keystroke#          # maximize window height
 editor action   doMozilla            #keystroke#          # Browse the help text (from Dred's built-in server) using mozilla.
 editor action   doNewView            #keystroke#          # Open another view on the document being edited
 editor action   doPrefix             ctrl alt  RIGHT      # Add the text in .... to the start of each line of the selection
@@ -83,6 +85,7 @@ editor action   doSaveAs             #keystroke#          # Save the document be
 editor action   doSaveAsChoose       #keystroke#          # Browse for a filename in which to save the document being edited
 editor action   doSavePrefs          #keystroke#          # Save the current state of all preferences now
 editor action   doShell              #keystroke#          # Pipe the current selection through the shell command given in the .... field
+editor action   doShrink             #keystroke#          # window height*=2/3
 editor action   doUnPrefix           ctrl alt  LEFT       # Remove the text in .... from the start of each line of the selection
 editor action   doUndent             ctrl  LEFT           # Remove a leading space from each line of the selection
 editor action   doUnicode            alt  U               # Insert Unicode character whose (hex) code is in ....
@@ -352,6 +355,7 @@ pre-empt some keystroke combinations for their own purposes.
 
 </body>
 </html>
+
 
 
 
