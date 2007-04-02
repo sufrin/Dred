@@ -706,7 +706,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
 
   // ///////////// Latex
 
-  protected boolean usepdf = false, smallscale = true;
+  protected boolean usepdf = false, smallscale = true, useacro = true;
 
   protected Process viewer = null;
 
@@ -1889,7 +1889,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
         smallscale = smallscale || 
                       doc.lineAt(i).toString().matches(".*documentclass.*foil.*");
     String command = usepdf
-                           ? "xpdf "
+                           ? (useacro ? "pdfopen --file ": "xpdf ")
                            : ("gv -spartan -scale " + (smallscale ? -2 : -1) + " -geometry -1+0 ");
     viewer = Pipe.execute(cwd, command + name, "", cont);
   }
@@ -2144,4 +2144,6 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
+
 

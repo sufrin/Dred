@@ -77,6 +77,7 @@ style block figure  \begin{figure}[ht]%SEL%\caption{...}\n\label{...}\n\end{figu
 style -
 style latex env smaller
 style latex env center
+style block slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\begin{slide}\n\n\end{slide}
 style latex env foil
 style -
 style form  block ? \begin{%ARG%}%SEL%\end{%ARG%} 
@@ -94,6 +95,7 @@ style block html       <html>\n<head>\n\s\s\s\s<title>\n\s\s\s\s</title>\n</head
 style sheet java                #####################################
 style form  block class         /**\s\s\s*/\npublic\sclass\s%ARG%\n{\n\s\s\spublic\s%ARG%()\s{\s}%SEL%}  
 style form  block method        /**\s\s\s*/\npublic\sTYPE\s%ARG%()\n{%SEL%}  
+
 
 
 

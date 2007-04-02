@@ -65,15 +65,24 @@ public class LatexTool extends RunTool
       menu.add(view);
       menu.addSeparator();
       CheckItem usePdf = 
-      new CheckItem("Use PDF", this.session.usepdf, "Generate pdf using pdflatex; view with acroread", prefs)
+      new CheckItem("Use PDF", this.session.usepdf, "Generate pdf using pdflatex; view with an appropriate pdf viewer", prefs)
       {
         public void run()
         {
           LatexToolBar.this.session.usepdf = state;
         }
       };
+      CheckItem useACRO = 
+      new CheckItem("Use pdfopen", this.session.useacro, "Use pdfopen to start viewer", prefs)
+      { 
+        public void run()
+        {
+          LatexToolBar.this.session.useacro = state;
+        }
+      };
       usePdf.run();
       menu.add(usePdf);
+      menu.add(useACRO);
       bar.add(menu);
       setLabel(bar);
       setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
@@ -85,14 +94,14 @@ public class LatexTool extends RunTool
       return new JMenuItem(a);
     }
     
-    /** Save the current document, then run tex2ps on it. */
+    /** Save the current document, then run tex2ps or pdflatex on it. */
     public void doTranslate()
     {
       doTranslate("");
     }
   
     /**
-     * Save the current document, then run tex2ps on the
+     * Save the current document, then run tex2ps or pdflatex on the
      * specified file. If the spec is empty, the file is
      * taken to be the one being edited; if nonempty then
      * "./xxxx" is interpreted as "xxxx" in the current
@@ -108,12 +117,16 @@ public class LatexTool extends RunTool
                                        : spec;
       if (new File(texName).getParent() == null)
         texName = new File(session.doc.getFileName().getParent(), spec).getAbsolutePath();
-  
-      this.session.startProcess((this.session.usepdf ? "pdflatex -interaction=errorstopmode " : "tex2ps ") + texName, "");
+      
+      String pdfName = texName.replaceAll("\\.tex$", ".pdf");
+      this.session.startProcess((this.session.usepdf ? "pdflatex -interaction=errorstopmode " : "tex2ps ") + texName + 
+                     (this.session.useacro ? ("; (pdfopen --file "+pdfName+" 2> /dev/null)") : ""), "");
     }  
   }
 
 }
+
+
 
 
 
