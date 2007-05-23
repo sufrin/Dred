@@ -672,7 +672,9 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     else
     { for (Bindings.Binding binding: protoBindings) 
           if (binding.length()>=3 && binding.matches("Editor", "action"))
+          {  
              bindAll(binding.toKey(3), binding.getField(2));
+          }
           else
           if (binding.length()>=4 && binding.matches("Editor", "minitext", "action"))  
              bindAll(binding.toKey(4), binding.getField(3), false);    
@@ -810,6 +812,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     
     log.finer("Building action map");
     buildActionMap();
+    // for (String key: actions.keySet()) System.err.println(key+" "+actions.get(key));
     log.finer("Binding keys");
     bindKeys();
     

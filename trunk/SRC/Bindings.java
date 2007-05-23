@@ -113,6 +113,7 @@ public class Bindings implements Iterable<Bindings.Binding>
       { line = stripComment(line);
         if (!line.equals("")) 
         { String[] fields = line.split("[ \t]+");
+          // System.err.print(line+"=>"); for (String f:fields) System.err.print("'"+f+"' "); System.err.println(); //**
           for (int i=0; i<fields.length; i++) fields[i]=stripEscapes(fields[i]);
           Binding binding = new Binding(fields);
           bindings.add(binding);
@@ -208,7 +209,14 @@ public class Bindings implements Iterable<Bindings.Binding>
       return new Binding(getFields(n).split(pattern));
     }
     
-    public String toKey(int n)    { return toKey(n, fields); }
+    public String toKey(int n)    
+    { if (n>=fields.length) 
+      { System.err.printf("Bad binding:%s%n", this);
+        return "";
+      }
+      String s = toKey(n, fields); 
+      return s;
+    }
                     
     static public String toKey(int n, String[] spec)
     { String s = " "+spec[spec.length-1].toUpperCase()

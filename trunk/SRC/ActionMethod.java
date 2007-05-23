@@ -5,6 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -152,7 +153,7 @@ import javax.swing.KeyStroke;
         of an object under their own names. 
     */
     @SuppressWarnings("serial")
-	public static class Map extends ActionMap
+	public static class Map extends Hashtable<String, AbstractAction> // ActionMap
     { public Map()                    {}    
       public Map(final Object object) { register(object); }
             
@@ -204,7 +205,8 @@ import javax.swing.KeyStroke;
           {  for (Annotation annotation: method.getAnnotations())  
              {   if (annotation instanceof ActionMethod) 
                  { 
-                   put(method.getName(), new Action(object, method, (ActionMethod) annotation));
+                 put(method.getName(), new Action(object, method, (ActionMethod) annotation));
+                 // put(method.getName().toUpperCase(), new Action(object, method, (ActionMethod) annotation)); //**
                  }           
              } 
           }

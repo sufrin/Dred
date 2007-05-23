@@ -159,7 +159,6 @@ class SimpleEditor implements InteractionListener, Patient
              .replace("pressed",  "")
              .replace("released", "");
     KeyStroke k = KeyStroke.getKeyStroke(key);  
-    if (k == null) throw new RuntimeException("Unknown key: " + key);
     return k;
   }
    
@@ -189,7 +188,11 @@ class SimpleEditor implements InteractionListener, Patient
    */
   protected void bind(String key, Action action)
   { 
-    bind(keyPress(key), action);
+    KeyStroke k = keyPress(key);
+    if (k==null && !key.equals("")) 
+       System.err.printf("Unknown key: %s bound to action: %s%n", key, action);
+    else
+       bind(k, action);
   }
   
   /** Bind the given KeyStroke to the given action */
