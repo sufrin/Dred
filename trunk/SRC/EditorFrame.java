@@ -724,7 +724,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   public void bindAll(String key, String actionName, boolean bindEd)
   {
     Action act = actions.get(actionName);
-    if (act==null) throw new RuntimeException(String.format("Binding Key %s to unknown action: %s", key, actionName));
+    if (act==null) log.warning("Binding Key %s to unknown action: %s", key, actionName);
     text.bind(key, act);
     if (bindEd) ed.bind(key, act);
   }

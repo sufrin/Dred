@@ -211,7 +211,7 @@ public class Bindings implements Iterable<Bindings.Binding>
     
     public String toKey(int n)    
     { if (n>=fields.length) 
-      { System.err.printf("Bad binding:%s%n", this);
+      { log.warning("Bad binding:%s%n", this);
         return "";
       }
       String s = toKey(n, fields); 

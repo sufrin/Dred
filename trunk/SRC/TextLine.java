@@ -149,7 +149,7 @@ public class TextLine extends JPanel
     }
     else
     { // why doesn't this work?
-    System.err.println("BIG");
+    // System.err.println("BIG");
     ed.setLines(3);
     validate();
     invalidate();

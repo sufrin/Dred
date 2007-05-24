@@ -190,7 +190,7 @@ class SimpleEditor implements InteractionListener, Patient
   { 
     KeyStroke k = keyPress(key);
     if (k==null && !key.equals("")) 
-       System.err.printf("Unknown key: %s bound to action: %s%n", key, action);
+       log.warning("Unknown key: %s bound to action: %s%n", key, action);
     else
        bind(k, action);
   }
