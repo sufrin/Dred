@@ -131,6 +131,24 @@ of the application. The important difference is that a server started from the a
 careful when <code>Apple-Q</code> is pressed. 
 </p>
 <p>
+The following shell script can be used from the command line. It facilitates ''equal opportunity'' operation
+of <code>dred</code> from command line and finder.
+</p>
+<pre>
+<code>
+DRED=/Applications/AppleDred.app/Contents/Resources/Java/AppleDred.jar
+if java -jar $DRED --serving > /dev/null
+then 
+   echo -n
+else 
+   echo Starting AppleDred
+   open -a AppleDred
+   sleep 2
+fi
+java -jar $DRED "$@" 
+</code>
+</pre>
+<p>
 There's a bug in the present Mac OS X implementation of scrollbars (in
 all look-and-feel variants) so (for the moment)
 we replace the active scrollbars under Mac OS X
@@ -805,6 +823,7 @@ Solaris on which that JVM can be installed.  </p>
 <b>$Date$</b>
 </pre>
 </body>
+
 
 
 
