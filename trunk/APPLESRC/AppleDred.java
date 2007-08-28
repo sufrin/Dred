@@ -16,17 +16,17 @@ public class AppleDred
     ( new ApplicationAdapter()
       { public void handleQuit(ApplicationEvent e) 
         {
-           System.err.println("APPLEDRED QUIT REQUEST");
+           System.err.println("APPLEDRED SERVER QUIT REQUESTED");
            System.err.flush();           
            e.setHandled(Dred.closeServer());
-           System.err.println("APPLEDRED");
+           System.err.println("APPLEDRED SERVER QUIT DENIED");
            System.err.flush();           
         }
         
         public void handleOpenFile(ApplicationEvent e) 
         {  
            String fileName = e.getFilename();
-           System.err.println("APPLEDRED OPEN FILE "+fileName);
+           System.err.println("APPLEDRED OPEN FILE (FINDER)"+fileName);
            System.err.flush();
            try 
            {
@@ -56,6 +56,7 @@ public class AppleDred
     AppleDred dred = new AppleDred();
   }
 }
+
 
 
 
