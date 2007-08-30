@@ -1,0 +1,143 @@
+#
+#       Bernard's bindings are the distributed ones
+#
+include dred-bs.bindings
+extension load ExtTool
+extension load MarkTool
+#
+#       Modifications for MacOSX with UK keyboard and also with Apple Keyboard
+#
+editor action   doClearArgument      ctrl ENTER           # Clear the .... field and send focus there
+editor action   doClearArgument      NUMPAD3              # Clear the .... field and send focus there
+editor action   doClearFind          NUMPAD1              # Clear the find field and send focus there
+editor action   doClearRepl          NUMPAD2              # Clear the repl field and send focus there
+#
+#
+#
+editor action   doFindDown           NUMPAD0             
+editor action   doFindDown           ctrl  F              
+editor action   doFindDown           meta  F              
+editor action   doFindUp             shift NUMPAD0        
+editor action   doFindUp             shift ctrl F        
+editor action   doFindUp             shift meta F      
+editor action   doFindSelDown        alt  NUMPAD0             
+editor action   doFindSelDown        ctrl NUMPAD0              
+editor action   doFindSelDown        meta NUMPAD0              
+editor action   doFindSelDown        alt ctrl  F              
+editor action   doFindSelDown        alt meta  F              
+editor action   doFindSelDown        ctrl meta  F              
+editor action   doFindSelUp          alt shift NUMPAD0        
+editor action   doFindSelUp          ctrl shift NUMPAD0       
+editor action   doFindSelUp          meta shift NUMPAD0       
+editor action   doFindSelUp          alt shift ctrl F        
+editor action   doFindSelUp          alt shift meta F      
+editor action   doReplaceDown        DECIMAL             
+editor action   doReplaceUp          shift DECIMAL
+editor action   doReplaceDown        ctrl R              
+editor action   doReplaceUp          shift ctrl R
+editor action   doReplaceDown        meta R              
+editor action   doReplaceUp          shift meta R
+#
+#     
+#
+text action     doCopy               F3                   # Set the system clipboard from the document selection
+text action     doCopy               ctrl  C              # Set the system clipboard from the document selection
+text action     doCopy               meta  C              # Set the system clipboard from the document selection
+text action     doCut                F1                   # Set the system clipboard from the document selection, and remove the document selection
+text action     doCut                ctrl  X              # Set the system clipboard from the document selection, and remove the document selection
+text action     doCut                meta  X              # Set the system clipboard from the document selection, and remove the document selection
+text action     doPaste              F2                   # Insert the system clipboard into the document at the cursor, and select it
+text action     doPaste              ctrl  V              # Insert the system clipboard into the document at the cursor, and select it
+text action     doPaste              meta  V              # Insert the system clipboard into the document at the cursor, and select it
+text action     doSwap2              ctrl  BACK_SPACE     # Swap the two characters preceding the cursor
+text action     doSwap2              ctrl  DELETE         # Swap the two characters preceding the cursor
+text action     doSwapCursorAndMark  F12                  # Swap the cursor and the mark
+text action     doSwapCursorAndMark  ctrl  M              # Swap the cursor and the mark
+text action     doSwapCursorAndMark  meta  M              # Swap the cursor and the mark
+text action     doSwapSel            F4                   # Swap the system clipboard with the document selection
+text action     doSwapSel            ctrl Z               # Swap the system clipboard with the document selection
+text action     doSwapSel            meta Z               # Swap the system clipboard with the document selection
+text action     doInsertTab          TAB                  # Insert a TAB
+
+editor action   doMax                F8                  # maximize window height
+editor action   doGrow               ctrl F8             # increase window height
+editor action   doShrink             shift F8            # decrease window height
+
+#
+# Duplications for MacOSX
+#
+editor action   doEdit               ctrl  E              # Edit the file named in the ... field
+editor action   doEdit               meta  E              # Edit the file named in the ... field
+editor action   doGoToXY             ctrl  G              # Go to the row.col specified by the .... field
+editor action   doGoToXY             meta  G              # Go to the row.col specified by the .... field
+editor action   doIndent             ctrl  RIGHT          # Add a leading space to each line of the selection
+editor action   doKillProcess        ctrl  C              # Kill any currently-running background process or long-running editor activity
+editor action   doKillProcess        ctrl  K              # Kill any currently-running background process or long-running editor activity
+editor action   doMarkPosition       ctrl  M              # Add the current document position to the position ring
+editor action   doMatchDown          ctrl  OPEN_BRACKET   # Find next (balanced) bracket that matches the opening bracket at the cursor
+editor action   doMatchUp            ctrl  CLOSE_BRACKET  # Find previous (balanced) bracket that matches the opening bracket at the cursor
+editor action   doNextPosition       PAGE_DOWN            # Step forwards round the position ring
+editor action   doPrefix             ctrl alt  RIGHT      # Add the text in .... to the start of each line of the selection
+editor action   doPrevPosition       PAGE_UP              # Step backwards round the position ring
+editor action   doQuit               ctrl  Q              # Quit the current file-editing window. Offers a dialogue if the document being edited has channged since it was last saved.
+editor action   doQuit               ctrl  W              # Quit the current file-editing window. Offers a dialogue if the document being edited has channged since it was last saved.
+editor action   doQuit               meta  W              # Quit the current file-editing window. Offers a dialogue if the document being edited has channged since it was last saved.
+editor action   doQuit               meta  Q              # Quit the current file-editing window. Offers a dialogue if the document being edited has channged since it was last saved.
+editor action   doReplaceDown        F10                  # Replace the current instance of the find pattern with the replacement text
+editor action   doSave               ctrl  S              # Save the document being edited if it has changed since it was last saved
+editor action   doSave               meta  S              # Save the document being edited if it has changed since it was last saved
+editor action   doUnPrefix           ctrl alt  LEFT       # Remove the text in .... from the start of each line of the selection
+editor action   doUndent             ctrl  LEFT           # Remove a leading space from each line of the selection
+editor action   doUnicode            alt  U               # Insert Unicode character whose (hex) code is in ....
+text action     doAbbrev             ESCAPE               # Find the longest abbreviation that matches text at the left of the cursor and insert the corresponding insertion text. This is undone by doSwapSel.
+text action     doDeleteLineLeft     ctrl  U              # Delete the line to the left of the cursor
+text action     doDeleteLineLeft     meta  U              # Delete the line to the left of the cursor
+text action     doDownMove           DOWN                 # Move cursor down (in the same column if possible)
+text action     doEndMove            END                  # Move cursor to the start of the last line of the document
+text action     doHomeMove           HOME                 # Move cursor to the start of the document
+text action     doIndentNewline      ENTER                # Insert a newline and copy current indentation
+text action     doInsertNewline      ctrl  ENTER          # Insert a newline without copying current indentation
+text action     doInsertTab          TAB                  # Simulate the insertion of a tab character
+                                                          # (Tabs never appear in Dred documents)
+text action     doLeftDelete         BACK_SPACE           # Delete the character to the left of the cursor
+text action     doLeftDelete         DELETE               # Delete the character to the left of the cursor
+text action     doLeftMove           LEFT                 # Move cursor to the previous location in the document
+text action     doRightMove          RIGHT                # Move cursor to the next location in the document
+text action     doSelectLine         ctrl  L              # Select the line under the cursor (also triple-click)
+text action     doSelectLine         meta  L              # Select the line under the cursor (also triple-click)
+text action     doSelectParagraph    ctrl  P              # Select the paragraph(s) that contain the selection or cursor
+text action     doSelectParagraph    meta  P              # Select the paragraph(s) that contain the selection or cursor
+text action     doSelectWord         ctrl  W              # Select the word under the cursor (also double-click)
+text action     doSelectWord         meta  W              # Select the word under the cursor (also double-click)
+text action     doUpMove             UP                   # Move cursor up (in the same column if possible)
+minitext action doBig                ctrl  ENTER          # to make a multiline-view minitext of this 
+                                                          # one-line-view minitext
+minitext action doBig                shift ctrl  B        # to make a multiline-view minitext of this 
+                                                          # one-line-view minitext
+minitext action doClear              ctrl  U              # Clear this text field
+minitext action doClear              meta  U              # Clear this text field
+minitext action doTellBig            ENTER                # Tell the user how to make a new big window onto this text field
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
