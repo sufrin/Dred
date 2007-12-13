@@ -426,7 +426,9 @@ implements DocListener,
          int length = line.length();
          char [] ch = new char[1];
          for (int c=originx, x=xmargin+xborder; c<length; c++, x+=charWidth(ch[0]))
-         {  ch[0]=line.charAt(c);
+         {  try { ch[0]=line.charAt(c); } 
+             catch (StringIndexOutOfBoundsException ex) { ch[0]='?'; } // Avoid a messy (but infrequent) race between UI thread and application
+             catch (ArrayIndexOutOfBoundsException ex)  { ch[0]='?'; } // Avoid a messy (but infrequent) race between UI thread and application
             if (ch[0]=='\t')
             {
                g.drawRect(x, baseLine-4, 6, 6); x+=6;
