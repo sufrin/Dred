@@ -9,14 +9,21 @@ provide an interface between OS X and the core of Dred.
 
 <project name="AppleDred" default="app" basedir=".">
 
-  <property name="version" value="Apple V1"/>
   <property name="buildnumber" value="August 2006"/>
   <property name="copyright"   value="Copyright &#xa9; 2006 Bernard Sufrin, Oxford University"/>
+  <propertyfile  file   ="appledred.properties"
+                 comment="Build details for the About menu entry">
+     <entry key="builddate" type="date" value="now" pattern="dd MMM yyyy, HH:mm"/>
+  </propertyfile>
+  <property file="appledred.properties"/>
+  <property name="version" value="Apple V1: (${builddate})"/>
   
   <!-- The main class to be invoked by the Apple Application launcher.
        This need not be the same as the main class to be invoked from a java -jar command.
   -->
   <property name="mainclass"   value="org.sufrin.dred.AppleDred"/>
+  
+  
    
   <target name="compile" description="Compile the classes" depends="prepare">
     <depend srcdir ="." destdir= "classes"
@@ -68,7 +75,7 @@ provide an interface between OS X and the core of Dred.
                 jvmversion=     "1.5+"
                 shortname=      "${ant.project.name}"
                 icon=           "${ant.project.name}.icns"
-                infostring=     "${ant.project.name} ${copyright}"
+                infostring=     "${ant.project.name} ${builddate} ${copyright}"
                 version=        "${version}"
                 workingdirectory="/">
       
@@ -78,7 +85,7 @@ provide an interface between OS X and the core of Dred.
       
       <documenttype name=       "Dred text document"
                     extensions= "*" 
-                    ostypes=    "TEXT sEXT ttro" 
+                    ostypes=    "****" 
                     role=       "Editor"/>
           
     </jarbundler>
@@ -99,6 +106,7 @@ provide an interface between OS X and the core of Dred.
   </target>
 
 </project>
+
 
 
 
