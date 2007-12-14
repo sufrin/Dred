@@ -207,6 +207,7 @@ public class Logging
     getLevel();
   }
   protected Logger log;
+  @SuppressWarnings("unchecked")
   protected Class  klass; // For use by dynamic configurers that need to switch on a debug boolean
   protected Level  level; 
   
@@ -292,6 +293,7 @@ public class Logging
   }
   
   /** Returns the Class object describing the class from which it was called */
+  @SuppressWarnings("unchecked")
   private static Class discoverCallerClass()
   { StackTraceElement frame = discoverCaller();
     try

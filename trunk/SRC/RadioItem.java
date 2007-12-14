@@ -72,7 +72,7 @@ public class RadioItem<VAL> extends    JRadioButtonMenuItem
     /** The name of the group */
     String name    = null;
     /** A parser */
-    Parser parser  = null;
+    Parser<VAL> parser  = null;
     /** The preferences that this group is associated with */
     Preferences prefs = null;
     

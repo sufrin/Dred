@@ -10,7 +10,8 @@ public class DredLoader extends ClassLoader
 { public static Logging log = Logging.getLog("DredLoader");
   public static boolean debug = log.isLoggable("FINE");
   
-  protected Hashtable<String,Class> classes = new Hashtable<String,Class>();
+  @SuppressWarnings("unchecked")
+protected Hashtable<String,Class> classes = new Hashtable<String,Class>();
   
   protected Vector<String> roots = new Vector<String>();
   
@@ -77,7 +78,8 @@ public class DredLoader extends ClassLoader
   }
   
   // Override
-  public Class<?> findClass(String className) throws ClassNotFoundException
+  @SuppressWarnings("unchecked")
+public Class<?> findClass(String className) throws ClassNotFoundException
   { Class klass;
     byte  byteCode[];
 

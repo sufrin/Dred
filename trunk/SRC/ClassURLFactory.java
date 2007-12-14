@@ -48,7 +48,8 @@ public class ClassURLFactory implements URLStreamHandlerFactory
 
   static class ClassUrlConnection extends URLConnection
   {
-    private Class klass;
+    @SuppressWarnings("unchecked")
+	private Class klass;
 
     public ClassUrlConnection(URL url)
     {

@@ -48,7 +48,7 @@ import javax.swing.KeyStroke;
         <code>label</code> value. 
     */  
     @SuppressWarnings("serial")
-	public static class Action extends AbstractAction implements Comparable
+	public static class Action extends AbstractAction implements Comparable<Action>
     { public Action(Object object, Method method, ActionMethod act) 
       { super(act.label()); 
         this.method = method; 
@@ -92,7 +92,7 @@ import javax.swing.KeyStroke;
         return r;
       }
       
-      public int compareTo(Object action) { return compareTo((Action) action); }
+      //public int compareTo(Object action) { return compareTo((Action) action); }
       
       public int compareTo(Action action) { return getName().compareTo(action.getName()); }
       
@@ -160,7 +160,8 @@ import javax.swing.KeyStroke;
           of a class (defined locally if declared is true, inherited
           or declared otherwise) to its annotation.
       */
-      public static java.util.Map<String, ActionMethod> getActionMethods
+      @SuppressWarnings("unchecked")
+	public static java.util.Map<String, ActionMethod> getActionMethods
                                                         (Class klass, boolean declared)
       { java.util.Map<String, ActionMethod> methods = new TreeMap<String, ActionMethod>();
         for (Method method: declared ? klass.getDeclaredMethods() : klass.getMethods())
@@ -182,7 +183,8 @@ import javax.swing.KeyStroke;
           or declared otherwise) in the given class
           that are recorded in this Map.
       */
-      public  java.util.Set<Action> getActions
+      @SuppressWarnings("unchecked")
+	public  java.util.Set<Action> getActions
                                     (Class klass, boolean declared)
       { java.util.Set<Action> methods = new TreeSet<Action>();
         for (Method method: declared ? klass.getDeclaredMethods() : klass.getMethods())
