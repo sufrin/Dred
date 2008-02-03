@@ -160,7 +160,7 @@
                 
                 <exec 
                       dir        = "."
-                      executable = "sh">
+                      executable = "bash">
                   <arg value="${SOURCE}/revision.sh"/>
                 </exec>
                 
@@ -186,6 +186,7 @@
           </exec>
         </target>
 </project>
+
 
 
 
