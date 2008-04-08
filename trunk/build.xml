@@ -160,7 +160,7 @@
                 
                 <exec 
                       dir        = "."
-                      executable = "bash">
+                      executable = "sh">
                   <arg value="${SOURCE}/revision.sh"/>
                 </exec>
                 
