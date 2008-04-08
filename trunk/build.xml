@@ -180,7 +180,7 @@
                 <delete dir="${BUILD}" />
         </target>
         
-        <target name="dist" depends="Dred">
+        <target name="dist" depends="Dred" description="Synchronize with the jape.org.uk site">
           <exec executable="sh" output="/dev/tty" error="/dev/tty">
             <arg line="-c 'rsync -v -t -e ssh DOC/*.html DOC/*g BUILD/Dred.jar sufrin@jape:JAPEWEBHOME/jape.org/DRED'"/>
           </exec>
