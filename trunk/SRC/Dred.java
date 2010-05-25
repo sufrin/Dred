@@ -440,12 +440,14 @@ public class Dred
     public abstract void pressed();
   }
   
+  /** This is only called from the OS/X top level; it sets up a menu for the dock */
   static public java.awt.PopupMenu getDockMenu()
   { final java.awt.PopupMenu menu = new java.awt.PopupMenu();
     final JFrame frame = new JFrame();
-    //menu.add((System.getProperty("user.name")+"@"+currentHost()));
+    frame.add(new JLabel("Dred "+System.getProperty("user.name")+"@"+currentHost()));
     frame.add(menu);
     frame.pack();
+    frame.setLocationRelativeTo(null);
     frame.setVisible(true);
     frame.setState(JFrame.ICONIFIED);
     //menu.addSeparator();
@@ -500,6 +502,8 @@ public class Dred
   public static boolean onWindows() { return simWindows || File.separator.equals("\\"); }
   public static boolean onMac()     { return simMac || System.getProperty("os.name").equals("Mac OS X"); }
 }
+
+
 
 
 
