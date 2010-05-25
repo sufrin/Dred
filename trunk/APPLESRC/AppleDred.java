@@ -6,12 +6,15 @@ import javax.swing.*;
         Apple Application root for Dred.
 */
 public class AppleDred
-{ Application app;
+{ final Application app;
+
+  
 
   public AppleDred()
   { 
     
     app = Application.getApplication();
+    
     app.addApplicationListener
     ( new ApplicationAdapter()
       { public void handleQuit(ApplicationEvent e) 
@@ -43,7 +46,11 @@ public class AppleDred
         }
         
         public void handleOpenApplication(ApplicationEvent e)
-        {  if (!Dred.serverRunning()) Dred.startServer(0);
+        {  if (!Dred.serverRunning()) 
+           { Dred.startServer(0); 
+             java.awt.PopupMenu menu = Dred.getDockMenu();
+             app.setDockMenu(menu);
+           }
         }
       }
     );
@@ -56,6 +63,7 @@ public class AppleDred
     AppleDred dred = new AppleDred();
   }
 }
+
 
 
 

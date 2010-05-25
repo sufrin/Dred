@@ -48,7 +48,7 @@ import org.sufrin.urlfactory.ClassURLFactory;
   <li>Bindings visitor</li>
 
   </ul>
- * 
+ * 1
  * <PRE> 
  * $Id$
  * </PRE>
@@ -346,78 +346,83 @@ public class Dred
       else
         pseudoServer = true;
       
-      final JFrame frame = new JFrame(pseudoServer ? "[[[Dred]]]" : "[[[Dred " + user + "@"+currentHost()+ "]]]");
-      frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-      frame.addWindowListener(new WindowAdapter()
+      if (!onMac())
       {
-        public void windowClosed(WindowEvent e)
-        {
-          closeServer();
-        }
-      });
-      frame.setLayout(new GUIBuilder.ColLayout(-1));
-      
-      JLabel label = new JLabel
-      ("<html><center>Dred<br></br> " 
-      + user 
-      + "@" + currentHost()
-      + (pseudoServer ? "" : (":"+ port))
-      +"</center></html>"
-      );
-      label.setHorizontalAlignment(SwingConstants.CENTER);
-      label.setBorder(BorderFactory.createEtchedBorder());
-      frame.getRootPane().setBorder(BorderFactory.createEtchedBorder());
-      frame.add(label);
-      
-      JButton button = new JButton("Open");
-      button.addActionListener(new ActionListener()
-      {
-        public void actionPerformed(ActionEvent ev)
-        {
-          EditorFrame.openSession(frame, null);
-        }
-      });
-      frame.add(button);
-      button.setToolTipText("Open an editing session on an existing file");
-      
-      button = new JButton("New");
-      button.addActionListener(new ActionListener()
-      {
-        public void actionPerformed(ActionEvent ev)
-        {
-          startLocalSession(null, EncodingName);
-        }
-      });
-      frame.add(button);
-      button.setToolTipText("Open an editing session on a new file");
-            
-      button = new JButton("Close All");
-      frame.add(button);
-      button.addActionListener(new ActionListener()
-      {
-        public void actionPerformed(ActionEvent ev)
-        {
-          closeAll();
-        }
-      });
-      button.setToolTipText("Close all editing sessions but keep the server running.");
-      
-      button = new JButton("Exit Server");
-      frame.add(button);
-      button.addActionListener(new ActionListener()
-      {
-        public void actionPerformed(ActionEvent ev)
-        {
-          closeServer();
-        }
-      });
-      button.setToolTipText("Close all editing sessions and shut down the server.");
-
-      frame.setIconImage(EditorFrame.dnought.getImage());
-      frame.pack();
-      frame.setLocationRelativeTo(null);
-      frame.setVisible(true);
-      if (port!=0) frame.setState(JFrame.ICONIFIED);
+          final JFrame frame = new JFrame(pseudoServer ? "[[[Dred]]]" : "[[[Dred " + user + "@"+currentHost()+ "]]]");
+          frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+          frame.addWindowListener(new WindowAdapter()
+          {
+            public void windowClosed(WindowEvent e)
+            {
+              closeServer();
+            }
+          });
+          frame.setLayout(new GUIBuilder.ColLayout(-1));
+          
+          JLabel label = new JLabel
+          ("<html><center>Dred<br></br> " 
+          + user 
+          + "@" + currentHost()
+          + (pseudoServer ? "" : (":"+ port))
+          +"</center></html>"
+          );
+          label.setHorizontalAlignment(SwingConstants.CENTER);
+          label.setBorder(BorderFactory.createEtchedBorder());
+          frame.getRootPane().setBorder(BorderFactory.createEtchedBorder());
+          frame.add(label);
+          
+          if (!onMac())
+          {          
+              JButton button = new JButton("Open");
+              button.addActionListener(new ActionListener()
+              {
+                public void actionPerformed(ActionEvent ev)
+                {
+                  EditorFrame.openSession(frame, null);
+                }
+              });
+              frame.add(button);
+              button.setToolTipText("Open an editing session on an existing file");
+              
+              button = new JButton("New");
+              button.addActionListener(new ActionListener()
+              {
+                public void actionPerformed(ActionEvent ev)
+                {
+                  startLocalSession(null, EncodingName);
+                }
+              });
+              frame.add(button);
+              button.setToolTipText("Open an editing session on a new file");
+                    
+              button = new JButton("Close All");
+              frame.add(button);
+              button.addActionListener(new ActionListener()
+              {
+                public void actionPerformed(ActionEvent ev)
+                {
+                  closeAll();
+                }
+              });
+              button.setToolTipText("Close all editing sessions but keep the server running.");
+              
+              button = new JButton("Exit Server");
+              frame.add(button);
+              button.addActionListener(new ActionListener()
+              {
+                public void actionPerformed(ActionEvent ev)
+                {
+                  closeServer();
+                }
+              });
+              button.setToolTipText("Close all editing sessions and shut down the server.");
+          }   
+          frame.setIconImage(EditorFrame.dnought.getImage());
+          frame.pack();
+          frame.setLocationRelativeTo(null);
+          frame.setVisible(true);
+          if (port!=0) frame.setState(JFrame.ICONIFIED);
+      }
     }
     catch (IOException ex)
     {
@@ -426,6 +431,30 @@ public class Dred
     }
     return port;
   }
+  
+  static abstract class But extends java.awt.MenuItem 
+  { public But(String title) 
+    { super(title); 
+      addActionListener(new ActionListener() {  public void actionPerformed(ActionEvent ev) {  pressed(); } });
+    }
+    public abstract void pressed();
+  }
+  
+  static public java.awt.PopupMenu getDockMenu()
+  { final java.awt.PopupMenu menu = new java.awt.PopupMenu();
+    final JFrame frame = new JFrame();
+    //menu.add((System.getProperty("user.name")+"@"+currentHost()));
+    frame.add(menu);
+    frame.pack();
+    frame.setVisible(true);
+    frame.setState(JFrame.ICONIFIED);
+    //menu.addSeparator();
+    menu.add(new But("New")       { public void pressed() { startLocalSession(null, EncodingName); } });
+    menu.add(new But("Open")      { public void pressed() { EditorFrame.openSession(frame, null); } });
+    menu.addSeparator();
+    menu.add(new But("Close All") { public void pressed() { closeAll(); } });
+    return menu;
+  } 
   
   /** Start the HTTP logger interface on the given port */  
   static void startLogger(String port) { startLogger(Integer.parseInt(port)); }
@@ -471,6 +500,10 @@ public class Dred
   public static boolean onWindows() { return simWindows || File.separator.equals("\\"); }
   public static boolean onMac()     { return simMac || System.getProperty("os.name").equals("Mac OS X"); }
 }
+
+
+
+
 
 
 
