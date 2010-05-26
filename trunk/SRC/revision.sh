@@ -3,7 +3,7 @@
 #
 #       If a file under svn control has changed revision recently 
 #       then generate a new REVISION.java with the latest svn revision and
-#       date as Strings.    
+#       date as Strings.   Also generate dredrevision.properties 
 #
 #################################################################################
 
