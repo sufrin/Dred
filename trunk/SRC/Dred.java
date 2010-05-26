@@ -444,7 +444,11 @@ public class Dred
   static public java.awt.PopupMenu getDockMenu()
   { final java.awt.PopupMenu menu = new java.awt.PopupMenu();
     final JFrame frame = new JFrame();
-    frame.add(new JLabel("Dred "+System.getProperty("user.name")+"@"+currentHost()));
+    frame.setLayout(new java.awt.GridLayout(0, 1));
+    frame.add(new JLabel("Dred "));
+    frame.add(new JLabel(System.getProperty("user.name")+"@"+currentHost()));
+    if (sessionSocket!=null)    
+       frame.add(new JLabel("Port "+sessionSocket.getPort()));
     frame.add(menu);
     frame.pack();
     frame.setLocationRelativeTo(null);
@@ -502,6 +506,7 @@ public class Dred
   public static boolean onWindows() { return simWindows || File.separator.equals("\\"); }
   public static boolean onMac()     { return simMac || System.getProperty("os.name").equals("Mac OS X"); }
 }
+
 
 
 
