@@ -706,11 +706,6 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
 
   // /////////////////////////////////////////////////////////////////////
 
-  // ///////////// Latex
-
-  protected boolean usepdf = false, smallscale = true, useacro = true;
-
-  protected Process viewer = null;
 
   protected Semaphore wait = new Semaphore(0);
 
@@ -953,8 +948,6 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     if (styleFrame != null)
       styleFrame.dispose();
     Dred.removeSession(this);
-    if (viewer != null)
-      viewer.destroy();
     if (process != null) process.destroy();
     wait.release();
   }
@@ -1850,51 +1843,13 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
                          true);
     }
   }
-
-  /** View the output of the most recent Latex translation. */
-  public void doView(String spec)
-  {
-    Pipe.Continue cont = new Pipe.Continue()
-    {
-      public void consumeOutput(BufferedReader reader)
-      {
-      }
-
-      public void fail(Exception ex)
-      {
-        Dred.showWarning(session, ex.toString());
-        viewer = null;
-      }
-
-      public void result(int exitCode, String output)
-      { // System.err.printf("%s Dred viewer terminated:
-        // %s%n", new Date(), output);
-        tempCaption(String.format("[%d] %s", exitCode, output));
-        viewer = null;
-      }
-    };
-
-    if (viewer != null)
-    {
-      viewer.destroy();
-      viewer = null;
-    }
-
-    String name = spec.equals("") ? doc.getFileName().getAbsolutePath()
-                                 : spec;
-    if (new File(name).getParent() == null)
-      name = new File(doc.getFileName().getParent(), spec).getAbsolutePath();
-    name = name.replaceAll("\\.tex$", "");
-    name += usepdf ? ".pdf" : ".ps";
-    // Automatic scaling is based on a heuristic
-    smallscale = false;
-    for (int i=0; i<Math.min(doc.length(), 4); i++)
-        smallscale = smallscale || 
-                      doc.lineAt(i).toString().matches(".*documentclass.*foil.*");
-    String command = usepdf
-                           ? (useacro ? "pdfopen --file ": "xpdf ")
-                           : ("gv -spartan -scale " + (smallscale ? -2 : -1) + " -geometry -1+0 ");
-    viewer = Pipe.execute(cwd, command + name, "", cont);
+  
+  /** If the document matches pattern in one of the first (lines) lines */
+  public boolean docMatches(int lines, String pattern)
+  { int times = Math.min(doc.length(), lines);
+    for (int i=0; i<times; i++)
+        if (doc.lineAt(i).toString().matches(".*documentclass.*foil.*")) return true;
+    return false;
   }
   
   /**
@@ -2147,6 +2102,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
 
 
 

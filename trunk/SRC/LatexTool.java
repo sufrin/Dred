@@ -17,7 +17,7 @@ public class LatexTool extends RunTool
 { public LatexTool() { super("Latex Bar"); }
   public LatexTool(Preferences prefs) { super("Latex Bar"); this.prefs = prefs; }
   protected Preferences prefs;
-
+  
   @Override
   public JComponent makeTool(EditorFrame session)
   {
@@ -31,7 +31,10 @@ public class LatexTool extends RunTool
      *  The EditorFrame to which this ToolBar is attached.
      */
     private final EditorFrame session;
+    private boolean usetex2pdf = false;
   
+    private boolean usepdf = true, useopen = true;    
+
     public LatexToolBar(EditorFrame session)
     {
       super(20, null, true, "Latex Bar");
@@ -44,45 +47,48 @@ public class LatexTool extends RunTool
       bar.setInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT, m);
       bar.setInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW, m);
   
-      JMenuItem trans = but(new Act("Translate", "Translate using tex2ps or pdflatex")
+      JMenuItem trans = but(new Act("Translate", "Translate to ps or pdf")
       {
         public void run()
         {
           doTranslate(getText().trim());
         }
       });
-      JMenuItem view = but(new Act("View", "View using gv or acroread")
-      {
-        public void run()
-        {
-          LatexToolBar.this.session.doView(getText().trim());
-        }
-      });
   
       JMenu menu = new JMenu("Latex");
       menu.setToolTipText("Translate and view latex");
       menu.add(trans);
-      menu.add(view);
       menu.addSeparator();
-      CheckItem usePdf = 
-      new CheckItem("Use PDF", this.session.usepdf, "Generate pdf using pdflatex; view with an appropriate pdf viewer", prefs)
+      final CheckItem useTex2Pdf = 
+      new CheckItem("Use tex2pdf", usetex2pdf, "Generate pdf using tex2pdf script instead of pdflatex", prefs)
       {
         public void run()
         {
-          LatexToolBar.this.session.usepdf = state;
+          usetex2pdf = state;
         }
       };
-      CheckItem useACRO = 
-      new CheckItem("Use pdfopen", this.session.useacro, "Use pdfopen to start viewer", prefs)
+      final CheckItem usePdf = 
+      new CheckItem("Use PDF", usepdf, "Generate pdf using either pdflatex or tex2pdf; view with an appropriate pdf viewer", prefs)
+      {
+        public void run()
+        {
+          usepdf = state;
+          if (!usepdf) { useTex2Pdf.setState(false); }
+          useTex2Pdf.setEnabled(usepdf); 
+        }
+      };
+      final CheckItem useOPEN = 
+      new CheckItem("View output", useopen, "Use pdfopen (or psopen) to start viewer after generating pdf (or ps) file", prefs)
       { 
         public void run()
         {
-          LatexToolBar.this.session.useacro = state;
+          useopen = state;
         }
       };
       usePdf.run();
       menu.add(usePdf);
-      menu.add(useACRO);
+      menu.add(useTex2Pdf);
+      menu.add(useOPEN);
       bar.add(menu);
       setLabel(bar);
       setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
@@ -94,7 +100,7 @@ public class LatexTool extends RunTool
       return new JMenuItem(a);
     }
     
-    /** Save the current document, then run tex2ps or pdflatex on it. */
+    /** Save the current document, then run tex2ps or tex2pdf or pdflatex on it. */
     public void doTranslate()
     {
       doTranslate("");
@@ -119,12 +125,19 @@ public class LatexTool extends RunTool
         texName = new File(session.doc.getFileName().getParent(), spec).getAbsolutePath();
       
       String pdfName = texName.replaceAll("\\.tex$", ".pdf");
-      this.session.startProcess((this.session.usepdf ? "pdflatex -interaction=errorstopmode " : "tex2ps ") + texName + 
-                     (this.session.useacro ? ("; (pdfopen --file "+pdfName+" 2> /dev/null)") : ""), "");
+      String psName  = texName.replaceAll("\\.tex$", ".ps");
+      String open    = usepdf ? ("; (pdfopen --file "+pdfName+" 2> /dev/null)") 
+                              : ("; (psopen --file "+psName+" 2> /dev/null)");
+      this.session.startProcess((usepdf ? (usetex2pdf ? "tex2pdf " : "pdflatex -interaction=errorstopmode " ) 
+                                        : "tex2ps ") + texName + (useopen ? open : ""), "");
     }  
   }
 
 }
+
+
+
+
 
 
 
