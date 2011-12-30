@@ -31,8 +31,7 @@ public class LatexTool extends RunTool
      *  The EditorFrame to which this ToolBar is attached.
      */
     private final EditorFrame session;
-    private boolean usetex2pdf = false;
-  
+    private boolean usetex2pdf = false;  
     private boolean usepdf = true, useopen = true;    
 
     public LatexToolBar(EditorFrame session)
@@ -73,7 +72,7 @@ public class LatexTool extends RunTool
         public void run()
         {
           usepdf = state;
-          if (!usepdf) { useTex2Pdf.setState(false); }
+          if (!usepdf) { usetex2pdf=false; useTex2Pdf.setState(false); }
           useTex2Pdf.setEnabled(usepdf); 
         }
       };
@@ -85,7 +84,9 @@ public class LatexTool extends RunTool
           useopen = state;
         }
       };
+      useTex2Pdf.run();
       usePdf.run();
+      useOPEN.run();
       menu.add(usePdf);
       menu.add(useTex2Pdf);
       menu.add(useOPEN);
@@ -134,6 +135,8 @@ public class LatexTool extends RunTool
   }
 
 }
+
+
 
 
 
