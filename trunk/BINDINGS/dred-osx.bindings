@@ -11,8 +11,11 @@ editor action   doClearArgument      ctrl ENTER           # Clear the .... field
 editor action   doClearArgument      NUMPAD3              # Clear the .... field and send focus there
 editor action   doClearFind          NUMPAD1              # Clear the find field and send focus there
 editor action   doClearRepl          NUMPAD2              # Clear the repl field and send focus there
+editor action   doClearArgument      NUMPAD3              # Clear the .... field and send focus there
+editor action   doClearFind          ctrl NUMPAD0         # Clear the find field and send focus there
+editor action   doClearRepl          ctrl DECIMAL         # Clear the repl field and send focus there
 #
-#
+# Hard to be consistent across all kinds of keyboards Mac & PC
 #
 editor action   doFindDown           NUMPAD0             
 editor action   doFindDown           ctrl  F              
@@ -21,13 +24,13 @@ editor action   doFindUp             shift NUMPAD0
 editor action   doFindUp             shift ctrl F        
 editor action   doFindUp             shift meta F      
 editor action   doFindSelDown        alt  NUMPAD0             
-editor action   doFindSelDown        ctrl NUMPAD0              
+#editor action   doFindSelDown        ctrl NUMPAD0              
 editor action   doFindSelDown        meta NUMPAD0              
 editor action   doFindSelDown        alt ctrl  F              
 editor action   doFindSelDown        alt meta  F              
 editor action   doFindSelDown        ctrl meta  F              
 editor action   doFindSelUp          alt shift NUMPAD0        
-editor action   doFindSelUp          ctrl shift NUMPAD0       
+#editor action   doFindSelUp          ctrl shift NUMPAD0       
 editor action   doFindSelUp          meta shift NUMPAD0       
 editor action   doFindSelUp          alt shift ctrl F        
 editor action   doFindSelUp          alt shift meta F      
@@ -37,6 +40,7 @@ editor action   doReplaceDown        ctrl R
 editor action   doReplaceUp          shift ctrl R
 editor action   doReplaceDown        meta R              
 editor action   doReplaceUp          shift meta R
+
 #
 #     
 #
@@ -59,9 +63,13 @@ text action     doSwapSel            ctrl Z               # Swap the system clip
 text action     doSwapSel            meta Z               # Swap the system clipboard with the document selection
 text action     doInsertTab          TAB                  # Insert a TAB
 
-editor action   doMax                F8                  # maximize window height
-editor action   doGrow               ctrl F8             # increase window height
-editor action   doShrink             shift F8            # decrease window height
+# Post May 2010 -- silly ever to use f8 for this
+editor action   doMax                F11                  # maximize window height
+editor action   doGrow               ctrl F11             # increase window height
+editor action   doShrink             meta F11             # decrease window height
+###editor action   doMax                F8                  # maximize window height
+###editor action   doGrow               ctrl F8             # increase window height
+###editor action   doShrink             shift F8            # decrease window height
 
 #
 # Duplications for MacOSX
@@ -95,6 +103,10 @@ text action     doDeleteLineLeft     meta  U              # Delete the line to t
 text action     doDownMove           DOWN                 # Move cursor down (in the same column if possible)
 text action     doEndMove            END                  # Move cursor to the start of the last line of the document
 text action     doHomeMove           HOME                 # Move cursor to the start of the document
+text action     doEndMove            meta DOWN            # Move cursor to the start of the last line of the document
+text action     doHomeMove           meta UP              # Move cursor to the start of the document
+text action     doEndMove            ctrl DOWN            # Move cursor to the start of the last line of the document
+text action     doHomeMove           ctrl UP              # Move cursor to the start of the document
 text action     doIndentNewline      ENTER                # Insert a newline and copy current indentation
 text action     doInsertNewline      ctrl  ENTER          # Insert a newline without copying current indentation
 text action     doInsertTab          TAB                  # Simulate the insertion of a tab character
@@ -117,6 +129,31 @@ minitext action doBig                shift ctrl  B        # to make a multiline-
 minitext action doClear              ctrl  U              # Clear this text field
 minitext action doClear              meta  U              # Clear this text field
 minitext action doTellBig            ENTER                # Tell the user how to make a new big window onto this text field
+
+
+# For the benefit of the tiny Mac keyboard
+
+text     action     doEndMove            meta DOWN            # Move cursor to the start of the last line of the document
+text     action     doHomeMove           meta UP              # Move cursor to the start of the document
+minitext action     doEndMove            meta DOWN            # Move cursor to the start of the last line of the document
+minitext action     doHomeMove           meta UP              # Move cursor to the start of the document
+
+editor action   doNextPosition       meta RIGHT            # Step forwards round the position ring
+editor action   doPrevPosition       meta LEFT             # Step back round the position ring
+
+#
+# For the tiny Mac keyboard and others
+#
+editor action   doFindDown           F7            
+editor action   doFindUp             shift F7        
+editor action   doReplaceDown        F8             
+editor action   doReplaceUp          shift F8
+editor action   doFindSelDown        meta F7             
+editor action   doFindSelUp          meta shift F7        
+editor action   doFindSelDown        alt F7             
+editor action   doFindSelUp          alt shift F7        
+editor action   doClearFind          ctrl F7              # Clear the find field and send focus there
+editor action   doClearRepl          ctrl F8              # Clear the repl field and send focus there
 
 
 
