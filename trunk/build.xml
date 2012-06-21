@@ -24,16 +24,20 @@
                            Server,
                            Reflect
                           "/>
-        <target name        = "scp" 
-                description = "Copy Dred.jar to jape and eclectic bin using scp"
+                          
+        <target name        = "labdist" 
+                description = "Copy Dred.jar to linux:bin and to my website using scp"
                 depends     = "Dred">
                 <exec executable = "scp">
-                      <arg line="-p ${BUILD}/Dred.jar sufrin@eclectic:bin"/>
-                </exec>
-                <exec executable = "scp">
-                      <arg line="-p ${BUILD}/Dred.jar sufrin@jape:bin"/>
+                      <arg line="-p ${BUILD}/Dred.jar sufrin@linux:bin"/>
                 </exec>
        </target>
+       
+       <target name="webdist" depends="Dred" description="Synchronize with my website">
+          <exec executable="sh" output="/dev/tty" error="/dev/tty">
+            <arg line="-c 'rsync -v -t -e ssh DOC/*.html DOC/*g ${BUILD}/Dred.jar sufrin@linux:=WEBSITES/personal/jape.org/DRED'"/>
+          </exec>
+        </target>
                                   
         <target name        = "compile" 
                 description = "Compile all .java files below ${BUILD}"
@@ -180,12 +184,8 @@
                 <delete dir="${BUILD}" />
         </target>
         
-        <target name="dist" depends="Dred" description="Synchronize with the jape.org.uk site">
-          <exec executable="sh" output="/dev/tty" error="/dev/tty">
-            <arg line="-c 'rsync -v -t -e ssh DOC/*.html DOC/*g BUILD/Dred.jar sufrin@jape:JAPEWEBHOME/jape.org/DRED'"/>
-          </exec>
-        </target>
 </project>
+
 
 
 
