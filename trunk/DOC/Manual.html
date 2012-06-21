@@ -294,7 +294,7 @@ The <i>FindDown</i> (C-f) action selects the next (<i>FindUp</i> (C-F) previous)
 pattern specified by the <i>Find</i> minitext. 
 </p>
 If the checkbox adjacent to the <i>Find</i> minitext is checked then
-the pattern is interpreted as a regular expression, otherwise it is interpreted
+the pattern is interpreted as a (Java-style) regular expression, otherwise it is interpreted
 literally.
 
 <p> If the current selection is an instance of the Find text then the
@@ -304,12 +304,12 @@ leaving the cursor to the right of the mark. The <i>ReplaceUp</i> (C-A) (C-R)
 button is analogous and leaves the cursor to the left of the mark in
 the replacement text.</p>
 
-<p>The meaning of the  <i>Repl</i> minitext is the text itself
-if the checkbox adjacent to it is NOT checked. Otherwise its meaning is
-the text obtained by substituting each instance of <tt>$n</tt> in it
-by the text that matched the <tt>n</tt>th bracketed expression in the 
-instance of the pattern that is being replaced.
-</p>
+<p>The meaning of the  <i>Repl</i> minitext is the text itself if
+the checkbox adjacent to it is NOT checked. Otherwise its meaning
+is the text obtained (using standard Java regular-expression
+substitution rules) by substituting each instance of <tt>$n</tt>
+in it by the text that matched the <tt>n</tt>th bracketed expression
+in the instance of the pattern that is being replaced.  </p>
 
 <p>The <i>FindUp</i> action is usually bound to the SHIFTED key that
 the <i>FindDown</i> action is bound to; likewise the <i>ReplaceUp</i>
@@ -361,7 +361,8 @@ set to the right pattern and replacement.
 
 <h3>Treatment of the Selection</h3>
 Dred offers two modes of treating the selection. Most users will
-decide on one of them and stick to it forever.
+decide on one of them and stick to it forever. (I use the second, having 
+grown accustomed to it in my homegrown editors for more than thirty years.)
 <ol>
        <li>
        <b>Typing-cuts-selection:</b> Typing new material automatically
@@ -412,7 +413,9 @@ Dred invocations.
 <h3>Undoing and the Cut Ring</h3>
 <p>
 Dred has no <i>general</i> mechanism for undoing, but all the commands
-that insert, remove, or transform text are individually undoable.
+that operate <i>by inserting, removing, or transforming the selection</i> are individually undoable.
+(This can feel uncomfortable for people who are accustomed to hitting <i>the</I> undo key whenever they
+make a mistake or change their minds about something, but one soon adapts) 
 </p>
 
 For example: when the selection is non-null
@@ -471,7 +474,7 @@ bindings files:
            extension path class:/MarkTool/
            extension load MarkTool                  
 </pre>
-<h3>"Small" Changes</h3>
+<h3>Undoing "Small" Changes</h3>
 <p>
 Any single character insertion can be undone by the <i>Delete</i> action.
 </p>
@@ -763,6 +766,33 @@ The bracket-matching settings on the <b>Edit</b> menu, and the
 </p>
 
 <a name="Etc"><h2>Etc</h2></a>
+<h4>Automatic bracket matching</h4>
+When automatic bracket matching is enabled (I usually enable it), it is triggered
+when the cursor is moved (by the mouse) to the left of a left bracket, (respectively moved to
+the right of a right bracket, or when the last character of a right bracket is typed). The mark is then moved to the right of the corresponding right bracket
+(respectively to the left of the corresponding left bracket). Dred's interpretation of 'corresponding' respects nesting of the 
+triggering bracket, but ignores others. The built-in correspondences are as follows.
+<pre><tt>
+        (               )
+        {               }
+        [               ]
+        &lt;.*&gt;            &lt;/.*&gt;
+        \begin{.*}      \end{.*}
+</tt></pre>
+
+At present there is no necessary link between the text matching ".*" that appears in
+an opening LaTeX or XML bracket and that which appears in
+the corresponding closing bracket.
+
+<p>
+The above behavioural ''specification'' is ambiguous, for it says nothing about what
+would happen if the cursor were placed just after the closing <tt>&lt;h2&gt;</tt> in a text such as
+<pre>
+&lt;a name="Etc">&lt;h2>Etc&lt;/h2>&lt;/a>
+</pre>
+
+In fact the <tt>h2</tt>-tagged text will be chosen. 
+</p>
 <h4>Interrupting long-running tasks</h4>
 The <i>KillProcess</i> action, invoked by pressing the little red
 button at the bottom right of the frame,  will abort a long-running
@@ -831,6 +861,7 @@ Solaris on which they can be installed.  </p>
 <b>$PrevDate: 2007-07-05 18:10:51 +0100 (Thu, 05 Jul 2007) $</b>
 </pre>
 </body>
+
 
 
 
