@@ -34,7 +34,7 @@
 
 <p> Dred is a <i>lightweight</i>, customizeable, and extensible Unicode text
 editor. It comes, complete with documentation, in a single (256K) jar, and needs
-a 1.5 JRE to run.
+a 1.5 (or later) JRE to run.
 </p>
 
 <a name="Unix/Linux Usage"><h2>Unix/Linux Usage</h2></a>
@@ -44,10 +44,6 @@ a 1.5 JRE to run.
 or 
 <pre>
         java -jar Dred.jar [--enc=<i>encoding</i>] [--bindings=<i>bindings-url</i>] -w <i>files</i> 
-</pre>
-or        
-<pre>
-        ted [--enc=<i>encoding</i>] [--bindings=<i>bindings-url</i>] <i>files</i>
 </pre>  
 <p> This starts edit sessions for each of the files. The
 program exits when the last session terminates.  
@@ -56,10 +52,7 @@ program exits when the last session terminates.
 <pre>
         java -jar Dred.jar [--enc=<i>encoding</i>] [--bindings=<i>bindings-url</i>] <i>files</i>  &amp;
 </pre>  
-or        
-<pre>
-        dred [--enc=<i>encoding</i>] [--bindings=<i>bindings-url</i>] <i>files</i>
-</pre>  
+</p>
 <p>
 This starts edit sessions for each of the given files, <i>using the user's
 existing Dred server if one is running</i>, then exits immediately. If no
@@ -68,10 +61,10 @@ server is running then it starts itself in server mode, puts up an
 filenames. 
 
 
-
 Files are usually specified by paths in the local filestore, but can also be specifed by URL: 
 see <a href="#Opening a URL">Opening a URL</a> for details.  
 </p>
+
 
 <p>
 If  <tt>--bindings=...</tt>
@@ -102,6 +95,11 @@ loading and configuration of Dred extensions
 <A href="Underhood.html">Under the Hood</A>)
 </p>
 
+
+<p>
+The above commands are often embedded in simple shell scripts. 
+</p>
+
 <br></br>
 
 <a name="MACOS"><h2>Mac OS X Usage</h2></a>
@@ -117,10 +115,15 @@ exec java    -Xdock:icon="$HOME/Bin/dnought.png" \
              -Dapple.laf.useScreenMenuBar=true -jar $HOME/Bin/Dred.jar "$@" 
 </pre>
 <p>
-The <code>AppleDred.app</code> application directory is available from the
-website and can also be installed into your local <code>Applications</code> directory
+The <code>AppleDred.app</code> application  is available from the
+Dred website and can also be installed into your local <code>Applications</code> directory
 or the system-wide <code>/Applications</code> directory. It is registered as handling all files.
-It's a good idea to pin it to the taskbar and start it on login, but it isn't necessary. 
+It's a good idea to pin it to the taskbar but it isn't necessary. Launching AppleDred on login can be slightly
+problematic unless you have ensured that it will pick up the right shell environment by editing 
+<tt>$HOME/.launchd.conf</tt>. The most important shell environment variables it uses are
+<tt>PATH</tt> and (if you use the Latex Tool) <tt>TEXINPUTS</tt>. Launching it for the first time 
+(ie starting it in server mode)
+in a login session from a terminal window will cause it to pick these up from the terminal's shell envionment. 
 </p>
 <p>
 The application file <code>AppleDred.app/Contents/Resources/Java/AppleDred.jar</code> can be
@@ -808,12 +811,12 @@ I had tried a number of public domain editors written in Java, but found
 that they made editing mathematical texts quite tedious,  had very long
 startup times, or were insufficiently customizeable for me.</p>
 
-<p> I've been using Dred (on Redhat 9, SuSe 9.2, Solaris, and Windows)
-for all my editing since mid-February, and have found it completely
+<p> I've been using Dred (on various x86 Linux distros, Solaris, OS/X (Tiger, Snow Leopard, Lion), and Windows)
+for all my editing since mid-May (2005), and have found it completely
 reliable.</p>
 
-<p> It runs on the Sun 1.5 JVM on all variants of Linux, Windows, and
-Solaris on which that JVM can be installed.  </p>
+<p> It runs on the (Sun/Oracle) Java 1.5 and later JVMs on all variants of Linux, Windows, and
+Solaris on which they can be installed.  </p>
 
 <p>
 </p>
@@ -821,8 +824,11 @@ Solaris on which that JVM can be installed.  </p>
 <b>Bernard Sufrin</b>
 <b>$Revision$</b>
 <b>$Date$</b>
+<b>$PrevRevision: 194 $</b>
+<b>$PrevDate: 2007-07-05 18:10:51 +0100 (Thu, 05 Jul 2007) $</b>
 </pre>
 </body>
+
 
 
 
