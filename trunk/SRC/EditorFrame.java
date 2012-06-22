@@ -1009,13 +1009,18 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       throw new RuntimeException(ex);
     }
   }
-
+  
+  public int chooseFile(String button, String framelabel)
+  {  fileChooser.setDialogTitle(framelabel);
+     return fileChooser.showDialog(this, button);
+  }
+  
   @ActionMethod(label="cd (browse)", tip="Browse for a directory then change directory to it")
   public void doChooseCWD()
   {
     fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
     fileChooser.setCurrentDirectory(cwd); // doc.getFileName().getParentFile());
-    int res = fileChooser.showOpenDialog(this);
+    int res = chooseFile("Change Session Directory", "Change Session Directory");
     if (res == JFileChooser.APPROVE_OPTION)
     {
       File newcwd = fileChooser.getSelectedFile();
@@ -1109,16 +1114,17 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   { 
     String name = text.argument.getText();
     if (!name.matches("[A-Za-z]+:/.*"))
-    {
-       name = desugarFilename(name);
+    {  
        if ("".equals(name))
        {
          doEditChoose();
          return;
        }
+       name = desugarFilename(name);
        name = new File(name).getAbsolutePath();
     }
-    Dred.startLocalSession(name, Dred.EncodingName);
+    EditorFrame f = Dred.startLocalSession(name, Dred.EncodingName);
+    f.doLocalCWD();
   }
 
   /**
@@ -1138,6 +1144,8 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
     fileChooser.setCurrentDirectory(cwd); // doc.getFileName().getParentFile());
     fileChooser.setFileHidingEnabled(false);
+    fileChooser.setDialogTitle("Edit");
+    fileChooser.setApproveButtonText("Edit");
     int res = fileChooser.showOpenDialog(frame);
     if (res == JFileChooser.APPROVE_OPTION)
       Dred.startLocalSession(fileChooser.getSelectedFile().getAbsolutePath(), fileChooser.getCoding());
@@ -1152,7 +1160,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
     fileChooser.setCurrentDirectory(cwd); // doc.getFileName().getParentFile());
     fileChooser.setFileHidingEnabled(false);
-    int res = fileChooser.showOpenDialog(this);
+    int res = chooseFile("Read Bindings", "Read Bindings");
     if (res == JFileChooser.APPROVE_OPTION)  
     { Dred.readBindings(fileChooser.getSelectedFile().getAbsolutePath(), true);
     }
@@ -1350,7 +1358,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   { 
     fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
     fileChooser.setCurrentDirectory(cwd); // doc.getFileName().getParentFile());
-    int res = fileChooser.showOpenDialog(this);
+    int res = chooseFile("Unpack Documentation", "Unpack Documentation");
     if (res == JFileChooser.APPROVE_OPTION)
     {
       File newcwd = fileChooser.getSelectedFile();
@@ -1734,7 +1742,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     fileChooser.setCurrentDirectory(cwd); // doc.getFileName().getParentFile());
     fileChooser.setFileHidingEnabled(true);
     fileChooser.setCoding(doc.getEncoding());
-    int res = fileChooser.showSaveDialog(this);
+    int res = chooseFile("Save", "Save Document");
     if (res == JFileChooser.APPROVE_OPTION)
       doSaveItAs(fileChooser.getSelectedFile().getAbsoluteFile(), fileChooser.getCoding());
   }
@@ -2102,6 +2110,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
 
 
 
