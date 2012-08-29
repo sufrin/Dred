@@ -53,6 +53,7 @@
                    classpath = "${CLASSPATH}"
                    source    = "1.5"
                    encoding  = "UTF-8"
+                   includeantruntime = "no"
                    > 
                <compilerarg line="-Xlint:unchecked"/>
                <include name="**/*.java"
@@ -89,6 +90,7 @@
                    classpath = "${BUILD}/"
                    source    = "1.5"
                    encoding  = "UTF-8"
+                   includeantruntime = "no"
                    > 
                <compilerarg line="-Xlint:unchecked"/>
                <include name="**/*.java"/>
@@ -185,6 +187,7 @@
         </target>
         
 </project>
+
 
 
 
