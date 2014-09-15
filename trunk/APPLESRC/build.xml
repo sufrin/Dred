@@ -99,26 +99,28 @@ provide an interface between OS X and the core of Dred.
              classpath= "${appbundler.jar}" 
              classname= "com.oracle.appbundler.AppBundlerTask"/>
 
-    <jarbundler outputdirectory= "${basedir}" 
-                name=           "${ant.project.name}"
-                displayname=    "${ant.project.name}"
+    <bundleapp  outputdirectory= "${basedir}" 
+                name=           "AppleDred"
+                displayname=    "AppleDred"
                 mainclassname=  "${mainclass}"
-                jar=            "build/${ant.project.name}.jar"
+                identifier=     "org.sufrin.dred.AppleDred"
                 icon=           "${ant.project.name}.icns"
-                infostring=     "${ant.project.name} ${builddate} ${copyright}"
-                version=        "${version}"
-                workingdirectory="/">
+                copyright=       "${ant.project.name} ${builddate} ${copyright}"
+                shortversion=   "${version}"
+                >
       
-      <javaproperty name="apple.laf.useScreenMenuBar" value="true"/>
-      <javaproperty name="apple.awt.brushMetal"       value="true"/>
-      <javaproperty name="apple.awt.showGrowBox"      value="true"/>
+      <classpath file="build/${ant.project.name}.jar"/>
+
+
+      <!-- For some godwaful reason this packages the entire runtime (>100mb) -->
+      <runtime dir="/Library/Java/JavaVirtualMachines/jdk1.7.0_17.jdk/Contents/Home/" />
       
-      <documenttype name=       "Dred text document"
-                    extensions= "*" 
-                    ostypes=    "****" 
-                    role=       "Editor"/>
-          
-    </jarbundler>
+      <option value="-Dapple.laf.useScreenMenuBar=true"/>
+      <option value="-Dapple.awt.brushMetal=true"/>
+      <option value="-Dapple.awt.showGrowBox=true"/>
+      <!-- -->
+                
+    </bundleapp>
     
   </target>
 
@@ -136,6 +138,8 @@ provide an interface between OS X and the core of Dred.
   </target>
 
 </project>
+
+
 
 
 
