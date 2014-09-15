@@ -62,7 +62,7 @@ provide an interface between OS X and the core of Dred.
 
 
   
-  <target name="app" depends="jar" description="Build the application">
+  <target name="oldapp" depends="jar" description="Build the application (for older jvm)">
 
     <taskdef name=      "jarbundler"
              classpath= "${jarbundler.jar}" 
@@ -75,6 +75,35 @@ provide an interface between OS X and the core of Dred.
                 jar=            "build/${ant.project.name}.jar"
                 jvmversion=     "1.5+"
                 shortname=      "${ant.project.name}"
+                icon=           "${ant.project.name}.icns"
+                infostring=     "${ant.project.name} ${builddate} ${copyright}"
+                version=        "${version}"
+                workingdirectory="/">
+      
+      <javaproperty name="apple.laf.useScreenMenuBar" value="true"/>
+      <javaproperty name="apple.awt.brushMetal"       value="true"/>
+      <javaproperty name="apple.awt.showGrowBox"      value="true"/>
+      
+      <documenttype name=       "Dred text document"
+                    extensions= "*" 
+                    ostypes=    "****" 
+                    role=       "Editor"/>
+          
+    </jarbundler>
+    
+  </target>
+  
+  <target name="app" depends="jar" description="Build the application using Oracle application bundler">
+
+    <taskdef name=      "bundleapp"
+             classpath= "${appbundler.jar}" 
+             classname= "com.oracle.appbundler.AppBundlerTask"/>
+
+    <jarbundler outputdirectory= "${basedir}" 
+                name=           "${ant.project.name}"
+                displayname=    "${ant.project.name}"
+                mainclassname=  "${mainclass}"
+                jar=            "build/${ant.project.name}.jar"
                 icon=           "${ant.project.name}.icns"
                 infostring=     "${ant.project.name} ${builddate} ${copyright}"
                 version=        "${version}"
@@ -107,6 +136,7 @@ provide an interface between OS X and the core of Dred.
   </target>
 
 </project>
+
 
 
 
