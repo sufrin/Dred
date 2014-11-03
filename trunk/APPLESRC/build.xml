@@ -31,7 +31,7 @@ provide an interface between OS X and the core of Dred.
                         cache=   "build"
                         closure= "true"/>
                         
-    <javac srcdir="."  extdirs = "build" destdir="classes" classpath="appleeawt.jar">
+    <javac srcdir="."  extdirs = "build" destdir="classes" source="1.5">
                <compilerarg line="-Xlint:unchecked -Xlint:deprecation"/>
                <include name="**/*.java"/>
     </javac>
@@ -62,7 +62,7 @@ provide an interface between OS X and the core of Dred.
 
 
   
-  <target name="app1.6" depends="jar" description="Build the application (for older jvm)">
+  <target name="app" depends="jar" description="Build the application (for older jvm)">
 
     <taskdef name=      "jarbundler"
              classpath= "${jarbundler.jar}" 
@@ -70,9 +70,10 @@ provide an interface between OS X and the core of Dred.
 
     <jarbundler dir=            "${basedir}" 
                 verbose=        "true"
-                name=           "${ant.project.name}-16"
+                name=           "${ant.project.name}"
                 mainclass=      "${mainclass}"
                 jar=            "build/${ant.project.name}.jar"
+                jvmversion=     "1.5+"
                 shortname=      "${ant.project.name}"
                 icon=           "${ant.project.name}.icns"
                 infostring=     "${ant.project.name} ${builddate} ${copyright}"
@@ -92,7 +93,7 @@ provide an interface between OS X and the core of Dred.
     
   </target>
   
-  <target name="app" depends="jar" description="Build the application using Oracle application bundler, for java 1.8">
+  <target name="newapp" depends="jar" description="Build the application using Oracle application bundler">
 
     <taskdef name=      "bundleapp"
              classpath= "${appbundler.jar}" 
@@ -112,9 +113,7 @@ provide an interface between OS X and the core of Dred.
 
 
       <!-- For some godwaful reason this packages the entire runtime (>100mb) -->
-      <!--
-        <runtime dir="/Library/Java/JavaVirtualMachines/jdk1.7.0_67.jdk/Contents/Home/" />
-      -->
+      <!-- <runtime dir="/Library/Java/JavaVirtualMachines/jdk1.7.0_17.jdk/Contents/Home/" /> -->
       
       <option value="-Dapple.laf.useScreenMenuBar=true"/>
       <option value="-Dapple.awt.brushMetal=true"/>
@@ -141,16 +140,13 @@ provide an interface between OS X and the core of Dred.
 </project>
 
 
-
-
-
-
-
 <!--
+Notes written during an attempt to regularise the distribution(s)
+of OS/X variants of the Jape proof tool (late October 2014)
 
-
-I have been sitting at an OSX 10.7 machine (agonistes) with an OSX 10.9
-machine (mimi) to my left. Both machines have all java installations
+I have been sitting at an OSX 10.7 machine (agonistes) with an OSX
+10.9 machine (mimi) to my left. Both machines have all java
+installations
 
 mimi 10.9
 > 616 $ /usr/libexec/java_home -V
@@ -223,18 +219,10 @@ not inclined to do it tonight.
 
 B.
 
-
-
-B.
-
-
-
-
-
-
-
-
 -->
+
+
+
 
 
 
