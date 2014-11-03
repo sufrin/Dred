@@ -45,7 +45,7 @@ provide an interface between OS X and the core of Dred.
                       <arg line="makedmg ${ant.project.name}"/>
                 </exec>
                 <exec executable="sh" output="/dev/tty" error="/dev/tty">
-                  <arg line="-c 'rsync -v -t -e ssh ${ant.project.name}.dmg sufrin@linux:=WEBSITES/personal/jape.org/DRED'"/>
+                  <arg line="-c 'rsync -v -t -e ssh ${ant.project.name}.dmg sufrin@linux.cs.ox.ac.uk:=WEBSITES/personal/jape.org/DRED'"/>
                 </exec>
   </target>
 
@@ -220,6 +220,7 @@ not inclined to do it tonight.
 B.
 
 -->
+
 
 
 

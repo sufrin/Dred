@@ -35,7 +35,7 @@
        
        <target name="webdist" depends="Dred" description="Synchronize with my website">
           <exec executable="sh" output="/dev/tty" error="/dev/tty">
-            <arg line="-c 'rsync -v -t -e ssh DOC/*.html DOC/*g ${BUILD}/Dred.jar sufrin@linux:=WEBSITES/personal/jape.org/DRED'"/>
+            <arg line="-c 'rsync -v -t -e ssh DOC/*.html DOC/*g ${BUILD}/Dred.jar sufrin@linux.cs.ox.ac.uk:=WEBSITES/personal/jape.org/DRED'"/>
           </exec>
         </target>
                                   
@@ -187,6 +187,7 @@
         </target>
         
 </project>
+
 
 
 
