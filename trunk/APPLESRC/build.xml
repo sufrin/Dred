@@ -17,6 +17,7 @@ provide an interface between OS X and the core of Dred.
   </propertyfile>
   <property file="appledred.properties"/>
   <property file="../dredrevision.properties"/>
+  <property name="appbundler.jar" value="./appbundler-1.0.jar"/>
   <property name="version" value="SVN Revision ${subversion.revision} (${builddate})"/>
   
   <!-- The main class to be invoked by the Apple Application launcher.
@@ -32,7 +33,7 @@ provide an interface between OS X and the core of Dred.
                         closure= "true"/>
                         
     <javac srcdir="."  extdirs = "build" destdir="classes" source="1.5">
-               <compilerarg line="-Xlint:unchecked -Xlint:deprecation"/>
+               <compilerarg line="-XDignore.symbol.file -Xlint:unchecked -Xlint:deprecation"/>
                <include name="**/*.java"/>
     </javac>
                
@@ -220,6 +221,7 @@ not inclined to do it tonight.
 B.
 
 -->
+
 
 
 
