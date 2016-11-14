@@ -51,7 +51,6 @@
                    debug     = "true"
                    debuglevel= "lines,vars,source"
                    classpath = "${CLASSPATH}"
-                   source    = "1.5"
                    encoding  = "UTF-8"
                    includeantruntime = "no"
                    > 
@@ -65,7 +64,6 @@
                 description  = "Javadoc for (nearly) all .java files in ${SOURCE}"
                 depends="compile">
           <javadoc Encoding     = "UTF-8"
-                   source       = "1.5"
                    destdir      = "JAVADOC">
              <fileset   dir     ="${SOURCE}" 
                         includes="*.java" 
@@ -88,7 +86,6 @@
                    debug     = "true"
                    debuglevel= "lines,vars,source"
                    classpath = "${BUILD}/"
-                   source    = "1.5"
                    encoding  = "UTF-8"
                    includeantruntime = "no"
                    > 
@@ -187,6 +184,7 @@
         </target>
         
 </project>
+
 
 
 

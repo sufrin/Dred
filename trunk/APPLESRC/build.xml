@@ -41,7 +41,7 @@ provide an interface between OS X and the core of Dred.
 
   <target       name        = "webdist" 
                 description = "Copy AppleDred.app to jape: website using scp"
-                depends     = "app">
+                depends     = "newapp">
                 <exec executable = "sh" >
                       <arg line="makedmg ${ant.project.name}"/>
                 </exec>
@@ -221,6 +221,7 @@ not inclined to do it tonight.
 B.
 
 -->
+
 
 
 
