@@ -17,7 +17,7 @@ provide an interface between OS X and the core of Dred.
   </propertyfile>
   <property file="appledred.properties"/>
   <property file="../dredrevision.properties"/>
-  <property name="appbundler.jar" value="./appbundler-1.0.jar"/>
+  <property name="appbundler.jar" value="./appbundler-1.0ea.jar"/>
   <property name="version" value="SVN Revision ${subversion.revision} (${builddate})"/>
   
   <!-- The main class to be invoked by the Apple Application launcher.
@@ -41,7 +41,7 @@ provide an interface between OS X and the core of Dred.
 
   <target       name        = "webdist" 
                 description = "Copy AppleDred.app to jape: website using scp"
-                depends     = "newapp">
+                depends     = "app">
                 <exec executable = "sh" >
                       <arg line="makedmg ${ant.project.name}"/>
                 </exec>
@@ -63,7 +63,7 @@ provide an interface between OS X and the core of Dred.
 
 
   
-  <target name="app" depends="jar" description="Build the application (for older jvm)">
+  <target name="oldapp" depends="jar" description="Build the application (for older jvm)">
 
     <taskdef name=      "jarbundler"
              classpath= "${jarbundler.jar}" 
@@ -84,17 +84,16 @@ provide an interface between OS X and the core of Dred.
       <javaproperty name="apple.laf.useScreenMenuBar" value="true"/>
       <javaproperty name="apple.awt.brushMetal"       value="true"/>
       <javaproperty name="apple.awt.showGrowBox"      value="true"/>
-      
       <documenttype name=       "Dred text document"
                     extensions= "*" 
                     ostypes=    "****" 
-                    role=       "Editor"/>
-          
+                    role=       "Editor"/>          
     </jarbundler>
     
   </target>
   
-  <target name="newapp" depends="jar" description="Build the application using Oracle application bundler">
+  <target name="app" depends="jar" 
+          description="Build the application using Oracle application bundler and universal launch stub">
 
     <taskdef name=      "bundleapp"
              classpath= "${appbundler.jar}" 
@@ -104,9 +103,10 @@ provide an interface between OS X and the core of Dred.
                 name=           "AppleDred"
                 displayname=    "AppleDred"
                 mainclassname=  "${mainclass}"
+                executableName= "universalJavaApplicationStub"
                 identifier=     "org.sufrin.dred.AppleDred"
                 icon=           "${ant.project.name}.icns"
-                copyright=       "${ant.project.name} ${builddate} ${copyright}"
+                copyright=      "${ant.project.name} ${builddate} ${copyright}"
                 shortversion=   "${version}"
                 >
       
@@ -120,8 +120,12 @@ provide an interface between OS X and the core of Dred.
       <option value="-Dapple.awt.brushMetal=true"/>
       <option value="-Dapple.awt.showGrowBox=true"/>
       <!-- -->
-                
+                      
     </bundleapp>
+    <!-- Now install the Universal stub: because it works better than the Oracle stub -->
+    <copy file="${basedir}/universalJavaApplicationStub" 
+          todir="${basedir}/${ant.project.name}/Contents/MacOS" 
+          />
     
   </target>
 
@@ -221,6 +225,10 @@ not inclined to do it tonight.
 B.
 
 -->
+
+
+
+
 
 
 
