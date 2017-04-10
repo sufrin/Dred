@@ -652,6 +652,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
       bindAll("ctrl alt F",             "doFindSelDown");
       bindAll("ctrl alt shift F",       "doFindSelUp");
       bindAll("control G",              "doGoToXY");
+      bindAll("shift control G",        "doGoToClipboard");
       bindAll("control K",              "doKillProcess");
       bindAll("control Q",              "doQuit");
       bindAll("ctrl R",                 "doReplaceDown");
@@ -1285,7 +1286,27 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   @ActionMethod(label="Goto", tip="Go to the row.col specified by the .... field")
   public void doGoToXY()
   { doMarkPosition(); 
-    String arg = text.argument.getText();
+    String arg = text.argument.getText().replaceAll("\\s*", "");
+    Scanner s = new Scanner(arg).useDelimiter("\\s*\\.\\s*");
+    try
+    {
+      int y = s.nextInt() - 1; // World does 1-origin
+      // addressing
+      int x = s.hasNextInt() ? s.nextInt() : 0;
+      edFocus();
+      doc.setCursorAndMark(x, y, x, y);
+    }
+    catch (Exception ex)
+    {
+      tempCaption("Not a location: " + ex);
+    }
+  }
+  
+  /** Go to the row.col specified in the paste buffer. */
+  @ActionMethod(label="GotoClipboard", tip="Go to the row.col specified by the clipboard")
+  public void doGoToClipboard()
+  { doMarkPosition(); 
+    String arg = SystemClipboard.get().replaceAll("\\s*", "");
     Scanner s = new Scanner(arg).useDelimiter("\\s*\\.\\s*");
     try
     {
@@ -2073,6 +2094,19 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   {
     startProcess(cwd, command, input, null, null);
   }
+  
+  /** Run command2 if command 1 is successful */
+  public void startProcesses(final String command1, final String input1, final String command2, final String input2)
+  { final Runnable cont = new Runnable()
+    {
+      public void run()
+      {
+        startProcess(cwd, command2, input2, null, null);
+      }    
+    };
+  
+    startProcess(cwd, command1, input1, cont, null);
+  }
 
   /**
    * Show the given string as feedback for about 5
@@ -2110,6 +2144,8 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
+
 
 
 

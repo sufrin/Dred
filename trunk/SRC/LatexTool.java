@@ -32,7 +32,7 @@ public class LatexTool extends RunTool
      */
     private final EditorFrame session;
     private boolean usetex2pdf = false;  
-    private boolean usepdf = true, useopen = true;    
+    private boolean usepdf = true, useopen = true, usedisplayline = true;    
 
     public LatexToolBar(EditorFrame session)
     {
@@ -84,12 +84,22 @@ public class LatexTool extends RunTool
           useopen = state;
         }
       };
+      final CheckItem useDISPLAYLINE = 
+      new CheckItem("Show current line in pdf display", usedisplayline, "Use displayline to position viewer at location corresponding to current source", prefs)
+      { 
+        public void run()
+        {
+          usedisplayline = state;
+        }
+      };
       useTex2Pdf.run();
       usePdf.run();
       useOPEN.run();
+      useDISPLAYLINE.run();
       menu.add(usePdf);
       menu.add(useTex2Pdf);
       menu.add(useOPEN);
+      menu.add(useDISPLAYLINE);
       bar.add(menu);
       setLabel(bar);
       setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
@@ -129,12 +139,19 @@ public class LatexTool extends RunTool
       String psName  = texName.replaceAll("\\.tex$", ".ps");
       String open    = usepdf ? ("; (pdfopen --file "+pdfName+" 2> /dev/null)") 
                               : ("; (psopen --file "+psName+" 2> /dev/null)");
-      this.session.startProcess((usepdf ? (usetex2pdf ? "tex2pdf " : "pdflatex -interaction=errorstopmode " ) 
-                                        : "tex2ps ") + texName + (useopen ? open : ""), "");
+      String texCommand = (usepdf ? (usetex2pdf ? "tex2pdf " : "pdflatex -interaction=errorstopmode " ) 
+                                   : "tex2ps ") + texName + (useopen ? open : "");
+      if (usedisplayline) 
+         this.session.startProcesses(texCommand, "", "linedisplay "+this.session.doc.getY()+" "+pdfName+" "+texName, "");
+      else
+         this.session.startProcess(texCommand, "");
     }  
   }
 
 }
+
+
+
 
 
 
