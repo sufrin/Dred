@@ -74,6 +74,8 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   
   protected static boolean syncPrefs = true;
   
+  public File getFileName() { return doc.getFileName(); }
+  
   /** A local class that defines the menu bar. */
   protected class MenuBar extends JMenuBar
   {
@@ -1298,7 +1300,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     }
     catch (Exception ex)
     {
-      tempCaption("Not a location: " + ex);
+      tempCaption(arg + " is not a location: " + ex);
     }
   }
   
@@ -1318,7 +1320,26 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     }
     catch (Exception ex)
     {
-      tempCaption("Not a location: " + ex);
+      tempCaption(arg + " is not a location: " + ex);
+    }
+  }
+  
+  /** Go to the row.col specified by the argument */ 
+  public void navigateTo(String arg)
+  { doMarkPosition(); 
+    Scanner s = new Scanner(arg.replaceAll("\\s*", "")).useDelimiter("\\s*\\.\\s*");
+    try
+    {
+      int y = s.nextInt() - 1; // World does 1-origin
+      // addressing
+      int x = s.hasNextInt() ? s.nextInt() : 0;
+      doc.setCursorAndMark(x, y, x, y);
+      toFront();
+      edFocus();
+    }
+    catch (Exception ex)
+    {
+      tempCaption(arg + " is not a location: " + ex);
     }
   }
   
@@ -2144,6 +2165,9 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
+
+
 
 
 

@@ -117,6 +117,10 @@ public class Dred
           fallBack=true;
         else if (arg.startsWith("--bindings="))
           readBindings(arg.substring("--bindings=".length()), true);
+        else if (arg.startsWith("--position="))
+        { navigateRemote(arg.substring("--position=".length()));
+          System.exit(0);
+        }
         else 
         { if (wait) 
              startLocalSession(arg, EncodingName); 
@@ -297,6 +301,37 @@ public class Dred
     for (EditorFrame frame : new Vector<EditorFrame>(sessions))
     {
       frame.doQuit();
+    }
+  }
+  
+ 
+  public static void navigateRemote(String arg) throws Exception
+  {  String[] parts = arg.split("@");
+     if (parts.length<2) return;
+     String path = parts[0];
+     String position = parts[1];
+     File   file = new File(path);
+     int    port = prefs.getInt("port", 0);  
+     try
+     {
+       URL              url    = new URL("http", "localhost", port, ("/navigate?FILE="+NanoHTTPD.encodeUri(file.getAbsolutePath())+"&POSITION="+position));
+       LineNumberReader reader = new LineNumberReader(new InputStreamReader(url.openStream(), "UTF8")); 
+       reader.close();
+       return;
+     }
+     catch (ConnectException ex)
+     { 
+       System.err.println("[DRED: NO SERVER AT: "+port+"]"); 
+     }
+ 
+  }
+  
+  /** Navigate within one (or more) specific editing sessions */
+  public static void navigateTo(String path, String location)
+  { File target = new File(path);
+    for (EditorFrame frame : new Vector<EditorFrame>(sessions))
+    { if (frame.getFileName().equals(target))
+         { frame.navigateTo(location); }
     }
   }
   
@@ -506,3 +541,5 @@ public class Dred
   public static boolean onWindows() { return simWindows || File.separator.equals("\\"); }
   public static boolean onMac()     { return simMac || System.getProperty("os.name").equals("Mac OS X"); }
 }
+
+

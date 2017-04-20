@@ -78,6 +78,15 @@ public class SessionSocket extends NanoHTTPD
                           String.format("Dred %s in %s ", fileName,startCWD));
     }
     else
+    if (method.equalsIgnoreCase("FORM") && uri.equalsIgnoreCase("/navigate"))
+    { 
+      final String fileName     = params.get("FILE");
+      final String position     = params.get("POSITION");
+      Dred.navigateTo(fileName, position);
+      return new Response(HTTP_OK, MIME_PLAINTEXT,
+                          String.format("Navigating to %s: %s ", fileName, position));
+    }
+    else
     if (method.equalsIgnoreCase("GET") && uri.toUpperCase().startsWith("/HELP"))
     { URL url = Dred.class.getResource("index.html");
       return new Response(HTTP_OK, MIME_HTML+"; charset=UTF8", url.openStream());
@@ -135,6 +144,7 @@ public class SessionSocket extends NanoHTTPD
 
   
 }
+
 
 
 
