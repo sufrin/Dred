@@ -8,8 +8,6 @@ import javax.swing.*;
 public class AppleDred
 { final Application app;
 
-  
-
   public AppleDred()
   { 
     
@@ -58,11 +56,17 @@ public class AppleDred
     
   }
   
+  /*
   public static void main(String[] args)
   { 
     AppleDred dred = new AppleDred();
   }
+  */
 }
+
+
+
+
 
 
 

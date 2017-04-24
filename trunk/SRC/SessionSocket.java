@@ -52,39 +52,55 @@ public class SessionSocket extends NanoHTTPD
          ) 
   throws IOException, UnsupportedEncodingException
   { String addr = header.get("REMOTE_ADDR");
+    String host = header.get("HOST");
     if (debug) log.fine("%s %s %s %s", method, uri, params, header);
     if (!(addr.equals(IPV6LOOP) || addr.equals(IPV4LOOP)))
     { 
        return new Response(HTTP_FORBIDDEN, MIME_PLAINTEXT, 
-                           String.format("%s %s %s", HTTP_FORBIDDEN, method, uri)); 
+                           String.format("%s %s %s-%s-%s", HTTP_FORBIDDEN, method, uri, addr, host)); 
     }
     
     if (method.equalsIgnoreCase("GET") && uri.equalsIgnoreCase("/serving"))
     {
       return new Response(HTTP_OK, MIME_PLAINTEXT, "OK");
     }
-    else
-    if (method.equalsIgnoreCase("FORM") && uri.equalsIgnoreCase("/edit"))
-    { 
-      final File startCWD       = new File(params.get("CWD"));
-      final String fileName     = params.get("FILE");
-      final String encoding     = params.get("ENCODING");
-      final EditorFrame session = Dred.startLocalSession(fileName, encoding==null?"UTF8":encoding);
-      final String waitParam    = params.get("WAIT");
-      final boolean wait        = waitParam!=null && waitParam.equals("true");
-      session.setCWD(startCWD);
-      if (wait) session.await();
-      return new Response(HTTP_OK, MIME_PLAINTEXT,
-                          String.format("Dred %s in %s ", fileName,startCWD));
-    }
+    
     else
     if (method.equalsIgnoreCase("FORM") && uri.equalsIgnoreCase("/navigate"))
     { 
+      final String fileName     = (String) params.get("FILE");
+      final String position     = (String) params.get("POS");
+      try 
+      { 
+         Dred.navigateTo(fileName, position); 
+         return new Response(HTTP_OK, MIME_PLAINTEXT,
+                             String.format("Navigating to %s: %s ", fileName, position));
+      } 
+      catch (Throwable thr) 
+        {
+          return new Response(HTTP_OK, MIME_PLAINTEXT,
+                          String.format("Error Navigating to %s: %s (%s)", fileName, position, thr));
+        }
+      
+    }
+    else
+    
+    if (method.equalsIgnoreCase("FORM") && uri.equalsIgnoreCase("/edit"))
+    { final String wd           = params.get("CWD");
       final String fileName     = params.get("FILE");
-      final String position     = params.get("POSITION");
-      Dred.navigateTo(fileName, position);
+      final String encoding     = params.get("ENCODING");
+      final String  position    = params.get("POS");
+      final String waitParam    = params.get("WAIT");
+      final boolean wait        = waitParam!=null && waitParam.equals("true");
+      EditorFrame session       = null;
+      if (!Dred.existsSession(fileName)) 
+      { session = Dred.startLocalSession(fileName, encoding==null?"UTF8":encoding);
+        if (wd!=null) session.setCWD(new File(wd));
+      }
+      if (wait && session!=null) session.await();
+      if (position!=null) Dred.navigateTo(fileName, position);
       return new Response(HTTP_OK, MIME_PLAINTEXT,
-                          String.format("Navigating to %s: %s ", fileName, position));
+                          String.format("Dred %s%s in %s ", fileName, position==null?"":("@"+position), wd==null?new File("."):new File(wd)));
     }
     else
     if (method.equalsIgnoreCase("GET") && uri.toUpperCase().startsWith("/HELP"))
@@ -112,9 +128,9 @@ public class SessionSocket extends NanoHTTPD
       return serveURL("class://org.sufrin.dred.Dred"+uri, MIME_HTML+"; charset=UTF8");
     }
     else
-      return new Response(HTTP_FORBIDDEN,
+      return new Response(HTTP_OK,
                           MIME_PLAINTEXT,
-                          String.format("%s %s %s", HTTP_FORBIDDEN, method, uri));
+                          String.format("%s %s %s-%s-%s in SessionServer", HTTP_OK, method, uri, addr, host)); 
   }
   
   public void close() 
@@ -144,6 +160,20 @@ public class SessionSocket extends NanoHTTPD
 
   
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

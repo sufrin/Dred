@@ -145,10 +145,11 @@ public class LoggingSocket extends NanoHTTPD
   public Response serve(String uri, String method, Properties header, Properties params, LineReader reader) 
   throws IOException, UnsupportedEncodingException
   {
-    if (!("/127.0.0.1".equals(header.get("REMOTE_ADDR")))) 
+    /*if (!("/127.0.0.1".equals(header.get("REMOTE_ADDR")))) 
     { 
       return new Response(HTTP_FORBIDDEN, MIME_PLAINTEXT, String.format("%s %s %s", HTTP_FORBIDDEN, method, uri)); 
     }
+    */
     if (method.equalsIgnoreCase("GET") && uri.equalsIgnoreCase("/log"))
       return publishLog();
     else if (method.equalsIgnoreCase("GET") && uri.equalsIgnoreCase("/"))
@@ -161,6 +162,8 @@ public class LoggingSocket extends NanoHTTPD
       setLoggerStates(params);
       return new Response(HTTP_OK, MIME_HTML, debugForm(header.get("HOST"), params));
     }
-    return new Response(HTTP_FORBIDDEN, MIME_PLAINTEXT, String.format("%s %s %s", HTTP_FORBIDDEN, method, uri));
+    return new Response(HTTP_FORBIDDEN, MIME_PLAINTEXT, String.format("%s %s %s -- by logger", HTTP_FORBIDDEN, method, uri));
   }
 }
+
+

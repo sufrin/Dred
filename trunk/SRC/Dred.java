@@ -78,6 +78,19 @@ public class Dred
   /** True if forced to use fallback bindings */
   protected static boolean fallBack = false;
   
+  /** If on Mac, set it up as an app */
+  public static Object appleDred = null;
+  static void setupUI() {
+   try {
+     String dredapp = System.getProperty("org.sufrin.dred.app");
+     if (dredapp!=null && dredapp.equals("true"))
+        appleDred = Class.forName("org.sufrin.dred.AppleDred").newInstance(); 
+   }
+   catch (Exception ex) {
+      ex.printStackTrace();
+   }   
+  }
+  
   /**
    * Start a session (or listener) for each argument, or an
    * anonymous session if there are no arguments.
@@ -86,13 +99,21 @@ public class Dred
   { 
     boolean wait    = false;    // are we running standalone?
     int     started = 0;        // the number of sessions started from the command line
-    { for (String arg : args)
-        if (arg.equals("-w") || arg.equals("--wait"))
-          wait=true;
-        else if (arg.equals("--serving"))
+    setupUI(); // for Mac, unless we're setting up a command
+    for (String arg : args)
+    {
+        if (arg.equals("--serving"))
         { System.out.println(prefs.getInt("port", 0));
           System.exit(isServing() ? 0 : 1);
         }
+        else if (arg.startsWith("--position="))
+        { navigateRemote(arg.substring("--position=".length()));
+          System.exit(0);
+        }
+        
+        else
+        if (arg.equals("-w") || arg.equals("--wait"))
+          wait=true;
         else if (arg.startsWith("--serve="))
         { int port = Integer.parseInt(arg.substring("--serve=".length()));
           if (!(prefs.getInt("port", 0)==port && isServing()))
@@ -117,10 +138,6 @@ public class Dred
           fallBack=true;
         else if (arg.startsWith("--bindings="))
           readBindings(arg.substring("--bindings=".length()), true);
-        else if (arg.startsWith("--position="))
-        { navigateRemote(arg.substring("--position=".length()));
-          System.exit(0);
-        }
         else 
         { if (wait) 
              startLocalSession(arg, EncodingName); 
@@ -128,7 +145,9 @@ public class Dred
              startRemoteSession(arg, EncodingName);
           started++;
         }
-          
+      }  
+      
+      {  
         if (wait) 
         {  // standalone mode
            if (sessions.isEmpty())  startLocalSession(null, EncodingName); 
@@ -307,14 +326,12 @@ public class Dred
  
   public static void navigateRemote(String arg) throws Exception
   {  String[] parts = arg.split("@");
-     if (parts.length<2) return;
-     String path = parts[0];
-     String position = parts[1];
-     File   file = new File(path);
+     String position = (parts.length<2) ? "0" : parts[1];
+     File   file = new File(parts[0]);
      int    port = prefs.getInt("port", 0);  
      try
      {
-       URL              url    = new URL("http", "localhost", port, ("/navigate?FILE="+NanoHTTPD.encodeUri(file.getAbsolutePath())+"&POSITION="+position));
+       URL              url    = new URL("http", "localhost", port, "/edit?FILE="+NanoHTTPD.encodeUri(file.getAbsolutePath())+"&POS="+position);
        LineNumberReader reader = new LineNumberReader(new InputStreamReader(url.openStream(), "UTF8")); 
        reader.close();
        return;
@@ -326,12 +343,22 @@ public class Dred
  
   }
   
+  /** Returns true if we are already editing a session at this path */
+  public static boolean existsSession(String path)
+  { File target = new File(path);
+    for (EditorFrame frame : new Vector<EditorFrame>(sessions))
+        if (frame.getFileName().equals(target))
+             { return true; }
+    return false;
+  }
+  
   /** Navigate within one (or more) specific editing sessions */
   public static void navigateTo(String path, String location)
   { File target = new File(path);
     for (EditorFrame frame : new Vector<EditorFrame>(sessions))
     { if (frame.getFileName().equals(target))
          { frame.navigateTo(location); }
+      else System.err.println(frame.getFileName());
     }
   }
   
@@ -541,5 +568,16 @@ public class Dred
   public static boolean onWindows() { return simWindows || File.separator.equals("\\"); }
   public static boolean onMac()     { return simMac || System.getProperty("os.name").equals("Mac OS X"); }
 }
+
+
+
+
+
+
+
+
+
+
+
 
 

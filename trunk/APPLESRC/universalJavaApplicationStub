@@ -485,6 +485,19 @@ elif [ -f "$JAVACMD" ] && [ -x "$JAVACMD" ] ; then
         # change to Working Directory based upon Apple/Oracle Plist info
         cd "${WorkingDirectory}"
 
+        EXECCOMMAND="$JAVACMD \
+                        -cp ${JVMClassPath} \
+                        -splash:${ResourcesFolder}/${JVMSplashFile} \
+                        -Xdock:icon=${ResourcesFolder}/${CFBundleIconFile} \
+                        -Xdock:name=${CFBundleName} \
+                        ${JVMOptions:+$JVMOptions }\
+                        ${JVMDefaultOptions:+$JVMDefaultOptions }\
+                        ${JVMMainClass}\
+                        ${JVMArguments:+ $JVMArguments}\
+                        ${ArgsPassthru:+ $ArgsPassthru}"
+                        
+        # osascript -e "display alert \"$EXECCOMMAND\" with title \"Starting Java App\""
+
         # execute Java and set
         #       - classpath
         #       - dock icon
@@ -515,4 +528,7 @@ else
         # exit with error
         exit 1
 fi
+
+
+
 

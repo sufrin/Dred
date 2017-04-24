@@ -23,7 +23,7 @@ provide an interface between OS X and the core of Dred.
   <!-- The main class to be invoked by the Apple Application launcher.
        This need not be the same as the main class to be invoked from a java -jar command.
   -->
-  <property name="mainclass"   value="org.sufrin.dred.AppleDred"/>
+  <property name="mainclass"   value="org.sufrin.dred.Dred"/>
   
   
    
@@ -32,9 +32,13 @@ provide an interface between OS X and the core of Dred.
                         cache=   "build"
                         closure= "true"/>
                         
-    <javac srcdir="."  extdirs = "build" destdir="classes" source="1.5">
-               <compilerarg line="-XDignore.symbol.file -Xlint:unchecked -Xlint:deprecation"/>
-               <include name="**/*.java"/>
+    <javac srcdir = "."  
+          extdirs = "build" 
+          destdir = "classes" 
+          includeantruntime = "false"
+          >
+         <compilerarg line="-XDignore.symbol.file -Xlint:unchecked -Xlint:deprecation"/>
+         <include name="**/*.java"/>
     </javac>
                
   </target>
@@ -120,6 +124,8 @@ provide an interface between OS X and the core of Dred.
       <option value="-Dapple.laf.useScreenMenuBar=true"/>
       <option value="-Dapple.awt.brushMetal=true"/>
       <option value="-Dapple.awt.showGrowBox=true"/>
+      <option value="-Dorg.sufrin.dred.app=true"/>
+
       <!-- -->
                       
     </bundleapp>
@@ -232,6 +238,9 @@ not inclined to do it tonight.
 B.
 
 -->
+
+
+
 
 
 
