@@ -27,7 +27,9 @@ provide an interface between OS X and the core of Dred.
   
   
    
-  <target name="compile" description="Compile the classes" depends="prepare">
+  <target name="compile" 
+          depends="prepare"
+          description="Compile the classes">
     <depend srcdir ="." destdir= "classes"
                         cache=   "build"
                         closure= "true"/>
@@ -130,8 +132,9 @@ provide an interface between OS X and the core of Dred.
                       
     </bundleapp>
     <!-- Now install the Universal stub: because it works better than the Oracle stub -->
-    <copy file="${basedir}/universalJavaApplicationStub" 
-          todir="${basedir}/${ant.project.name}/Contents/MacOS" 
+    <copy overwrite="true"
+          file="${basedir}/universalJavaApplicationStub" 
+          todir="${basedir}/${ant.project.name}.app/Contents/MacOS" 
           />
     
   </target>
@@ -238,6 +241,8 @@ not inclined to do it tonight.
 B.
 
 -->
+
+
 
 
 

@@ -20,6 +20,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+import java.nio.file.Path;
 
 import org.sufrin.logging.Dialog;
 import org.sufrin.logging.Logging;
@@ -80,7 +81,7 @@ public class Dred
   
   /** If on Mac, set it up as an app */
   public static Object appleDred = null;
-  static void setupUI() {
+  public static void setupUI() {
    try {
      String dredapp = System.getProperty("org.sufrin.dred.app");
      if (dredapp!=null && dredapp.equals("true"))
@@ -345,20 +346,20 @@ public class Dred
   
   /** Returns true if we are already editing a session at this path */
   public static boolean existsSession(String path)
-  { File target = new File(path);
+  { Path target = new File(path).toPath();
     for (EditorFrame frame : new Vector<EditorFrame>(sessions))
-        if (frame.getFileName().equals(target))
+        if (frame.getFileName().toPath().equals(target))
              { return true; }
     return false;
   }
   
   /** Navigate within one (or more) specific editing sessions */
   public static void navigateTo(String path, String location)
-  { File target = new File(path);
+  { Path target = new File(path).toPath();
     for (EditorFrame frame : new Vector<EditorFrame>(sessions))
-    { if (frame.getFileName().equals(target))
+    { if (frame.getFileName().toPath().equals(target))
          { frame.navigateTo(location); }
-      else System.err.println(frame.getFileName());
+      // else System.err.println(frame.getFileName());
     }
   }
   
@@ -411,7 +412,7 @@ public class Dred
       if (!onMac())
       {
           final JFrame frame = new JFrame(pseudoServer ? "[[[Dred]]]" : "[[[Dred " + user + "@"+currentHost()+ "]]]");
-          frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+          frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
           frame.addWindowListener(new WindowAdapter()
           {
             public void windowClosed(WindowEvent e)
@@ -568,6 +569,10 @@ public class Dred
   public static boolean onWindows() { return simWindows || File.separator.equals("\\"); }
   public static boolean onMac()     { return simMac || System.getProperty("os.name").equals("Mac OS X"); }
 }
+
+
+
+
 
 
 

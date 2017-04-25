@@ -1,0 +1,5 @@
+#called from dred with arguments linenumber pdffile texfile -- synctex is needed.
+#echo linedisplay "$@"
+displayline -b "$@"
+
+

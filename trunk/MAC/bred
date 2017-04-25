@@ -1,0 +1,9 @@
+#!/bin/sh
+# OSX shell command to invoke dred outside the dock from the developer location
+#
+exec java -Xdock:name=AppleDred -Xdock:icon=/Users/sufrin/bin/xred.png \
+          -jar /Users/sufrin/Develop/Dred/trunk/BUILD/Dred.jar "$@"
+# -Dscroll=mac if you want the Mac scrollbar bug
+
+
+

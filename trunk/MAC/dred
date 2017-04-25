@@ -1,0 +1,28 @@
+#!/bin/sh
+# OSX shell command to invoke dred
+#
+# (osascript complains about deallocation of a pointer)
+xred --serving || /usr/bin/osascript -e 'activate application "AppleDred"' 
+#2>/dev/null
+sleep 1
+exec xred "$@"
+# -Dscroll=mac if you want the Mac scrollbar bug
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

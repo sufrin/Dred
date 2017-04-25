@@ -1,0 +1,33 @@
+# pdfsync %file %line -- order the dred server to (open if necessary) and position a session for file at line
+# pdflatex outputs synctex file
+# skim invokes pdfsync %file %line at the right gesture
+#
+file=$1
+line=$2
+#
+#
+SERVER=$($HOME/bin/xred --serving)
+OUT=$(/usr/bin/curl -s http://localhost:$SERVER/edit?CWD=$PWD\&FILE="$file"\&POS="$line")
+#
+# for debugging
+# osascript -e "display notification \"$OUT\" with title \"Server Said\""
+#
+# osascript -e "display notification \"$file $line\" with title \"Source Position\""
+#/usr/local/bin/growlnotify -m "$line $file" -t Position
+#
+#
+# Old variant
+# /bin/echo -n "$line.0" | pbcopy -pboard general
+#
+# Via dred itself
+# xred --position=$file@$line
+
+
+
+
+
+
+
+
+
+
