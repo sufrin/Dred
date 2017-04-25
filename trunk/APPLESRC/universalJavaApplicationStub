@@ -455,10 +455,7 @@ fi
 # fallback fallback: /usr/bin/java
 # but this would prompt to install deprecated Apple Java 6
 
-if [ -e $HOME/.dred.profile ] 
-then
-  . $HOME/.dred.profile
-fi
+[ -e $HOME/.dred_profile ] && . $HOME/.dred_profile
 
 #
 # execute JAVA commandline and do some pre-checks
@@ -531,6 +528,7 @@ else
         # exit with error
         exit 1
 fi
+
 
 
 
