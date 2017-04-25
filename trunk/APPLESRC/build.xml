@@ -90,10 +90,13 @@ provide an interface between OS X and the core of Dred.
       <javaproperty name="apple.laf.useScreenMenuBar" value="true"/>
       <javaproperty name="apple.awt.brushMetal"       value="true"/>
       <javaproperty name="apple.awt.showGrowBox"      value="true"/>
+      
+      <!-- Has no effect on dragging/dropping, so pointless
       <documenttype name=       "Dred text document"
                     extensions= "*" 
                     ostypes=    "****" 
-                    role=       "Editor"/>          
+                    role=       "Editor"/>  
+      -->      
     </jarbundler>
     
   </target>
@@ -248,6 +251,7 @@ not inclined to do it tonight.
 B.
 
 -->
+
 
 
 
