@@ -118,6 +118,11 @@ provide an interface between OS X and the core of Dred.
       
       <classpath file="build/${ant.project.name}.jar"/>
 
+      <bundledocument extensions="tex,sty,cls,md,java,c,scala,html,xml"
+          icon="${ant.project.name}.icns" 
+          name="Source files"
+          role="editor"
+      />
 
       <!-- The next line packages the entire runtime (>100mb) -->
       <!-- <runtime dir="/Library/Java/JavaVirtualMachines/jdk1.7.0_17.jdk/Contents/Home/" /> -->
@@ -131,11 +136,13 @@ provide an interface between OS X and the core of Dred.
       <!-- -->
                       
     </bundleapp>
-    <!-- Now install the Universal stub: because it works better than the Oracle stub -->
+    <!-- Now install the Universal stub: because it sometimes works better than the Oracle stub -->
+    <!--
     <copy overwrite="true"
           file="${basedir}/universalJavaApplicationStub" 
           todir="${basedir}/${ant.project.name}.app/Contents/MacOS" 
           />
+    -->
     
   </target>
 
@@ -241,6 +248,7 @@ not inclined to do it tonight.
 B.
 
 -->
+
 
 
 
