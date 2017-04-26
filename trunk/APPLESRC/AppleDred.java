@@ -2,6 +2,7 @@ package org.sufrin.dred;
 import com.apple.eawt.*;
 import com.apple.eawt.AppEvent.*;
 import javax.swing.*;
+import java.io.File;
 
 /**
         Apple Application root for Dred.
@@ -23,7 +24,30 @@ public class AppleDred
              else
                  qr.cancelQuit();  
           }
-        });
+       });
+        
+    app.setOpenFileHandler(
+        new OpenFilesHandler() 
+        {
+          @Override
+          public void openFiles(OpenFilesEvent e) 
+          {
+             for (File file: e.getFiles())
+             try 
+             { String fileName = file.getAbsolutePath();
+               if (fileName!=null) 
+                  Dred.startRemoteSession(fileName, "UTF8");
+               else
+                  Dred.startRemoteSession("Untitled", "UTF8");
+             }
+             catch (Exception ex)
+             {
+               ex.printStackTrace(System.err);
+             }
+          }                       
+       });
+ 
+
         
         { Dred.startServer(0); 
           java.awt.PopupMenu menu = Dred.getDockMenu();
@@ -83,6 +107,7 @@ public class AppleDred
   }
   */
 }
+
 
 
 

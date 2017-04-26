@@ -944,7 +944,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
    */
   public void dispose()
   { 
-    super.dispose();
+    try { super.dispose(); } catch (Exception ex) {} // when closing down permanently
     // Decouple the associated document 
     ed.removeDoc(); 
     // Remove associated windows
@@ -2167,6 +2167,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
 
 
 
