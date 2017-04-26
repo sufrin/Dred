@@ -1,4 +1,4 @@
-package org.sufrin.dred;
+package org.sufrin.dred; 
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -84,8 +84,8 @@ public class Dred
   public static void setupUI() {
    try {
      String dredapp = System.getProperty("org.sufrin.dred.app");
-     if (dredapp!=null && dredapp.equals("true"))
-        appleDred = Class.forName("org.sufrin.dred.AppleDred").newInstance(); 
+     if (dredapp!=null)
+        appleDred = Class.forName("org.sufrin.dred.AppleDred").newInstance();
    }
    catch (Exception ex) {
       ex.printStackTrace();
@@ -99,6 +99,7 @@ public class Dred
   public static void main(String[] args) throws Exception
   { 
     boolean wait    = false;    // are we running standalone?
+    boolean server  = false;    // are we just forking a server
     int     started = 0;        // the number of sessions started from the command line
     setupUI(); // for Mac, unless we're setting up a command
     for (String arg : args)
@@ -122,7 +123,7 @@ public class Dred
         }
         else if (arg.equals("--serve"))
         { 
-             startServer(0);       
+             server = true;
         }
         else if (arg.startsWith("--enc="))
         { String name = arg.substring("--enc=".length());
@@ -155,7 +156,7 @@ public class Dred
         }
         else
         {  // server mode (except on Windows)
-           if (started==0)
+           if (started==0 && !server)
            {  startServer(0);
               if (onUnix()) 
                  startRemoteSession("Untitled", EncodingName); 
@@ -371,7 +372,7 @@ public class Dred
     { if (sessionSocket!=null) sessionSocket.close(); 
       serverRunning = false;  
       ActionMethod.Action.shutdownNow();      
-      System.exit(0); 
+      if (!onMac()) System.exit(0); 
       return true;
     }
     else return false;
@@ -569,6 +570,12 @@ public class Dred
   public static boolean onWindows() { return simWindows || File.separator.equals("\\"); }
   public static boolean onMac()     { return simMac || System.getProperty("os.name").equals("Mac OS X"); }
 }
+
+
+
+
+
+
 
 
 

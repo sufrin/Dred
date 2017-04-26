@@ -139,13 +139,15 @@ provide an interface between OS X and the core of Dred.
       <!-- -->
                       
     </bundleapp>
-    <!-- Now install the Universal stub: because it sometimes works better than the Oracle stub -->
+    
+    <!-- Now install the Universal stub: because it sometimes works better than the Oracle stub -->    
     <!--
     <copy overwrite="true"
           file="${basedir}/universalJavaApplicationStub" 
           todir="${basedir}/${ant.project.name}.app/Contents/MacOS" 
           />
     -->
+    
     
   </target>
 
@@ -251,6 +253,8 @@ not inclined to do it tonight.
 B.
 
 -->
+
+
 
 
 

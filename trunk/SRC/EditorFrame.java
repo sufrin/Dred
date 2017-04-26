@@ -789,7 +789,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     getContentPane().add(ed.getComponent(), "Center");
     getContentPane().add(feedback, "South");
 
-    setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+    setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     addWindowListener(new WindowAdapter()
     {
       public void windowClosing(WindowEvent e)
@@ -1592,7 +1592,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
    * the chance to save it if it has been changed since it
    * was last saved.
    */
-  @ActionMethod(label="Quit", tip="Quit the current file-editing window. Offers a dialogue if the document being edited has channged since it was last saved.")
+  @ActionMethod(label="Quit", tip="Quit the current file-editing window. Offers a dialogue if the document being edited has changed since it was last saved.")
   public void doQuit()
   { // Close any open process frames and  kill their processes
     // This is making heavy weather of it
@@ -1608,8 +1608,10 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
         closeProcessFrame();
       }
     };
+    
     SwingUtilities.invokeLater(flushProcess);
     SwingUtilities.invokeLater(flushFrame);
+    
 
     ////////////////////////
     if (doc.hasChanged())
@@ -2066,7 +2068,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
     int length = doc == null ? 0 : doc.length();
     int x = doc == null ? 0 : doc.getX();
     int y = doc == null ? 0 : doc.getY();
-    String feedbackText = String.format("[%s] %d.%d/%d", doc.getEncoding(), y, x, length);
+    String feedbackText = String.format("[%s] %d.%d/%d", doc.getEncoding(), y+1, x, length);
     labelR.setText(feedbackText);
   }
 
@@ -2165,6 +2167,10 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
+
+
+
 
 
 

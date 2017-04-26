@@ -1,5 +1,6 @@
 package org.sufrin.dred;
 import com.apple.eawt.*;
+import com.apple.eawt.AppEvent.*;
 import javax.swing.*;
 
 /**
@@ -9,10 +10,28 @@ public class AppleDred
 { final Application app;
 
   public AppleDred()
-  { 
-    
+  { String dredapp = System.getProperty("org.sufrin.dred.app");    
     app = Application.getApplication();
     
+    app.setQuitHandler(
+       new QuitHandler() 
+       {  @Override
+          public void handleQuitRequestWith(QuitEvent qe, QuitResponse qr) 
+          {
+             if (Dred.closeServer())
+                 qr.performQuit();
+             else
+                 qr.cancelQuit();  
+          }
+        });
+        
+        { Dred.startServer(0); 
+          java.awt.PopupMenu menu = Dred.getDockMenu();
+          app.setDockMenu(menu);
+        }
+
+
+    /*
     app.addApplicationListener
     ( new ApplicationAdapter()
       { public void handleQuit(ApplicationEvent e) 
@@ -52,6 +71,7 @@ public class AppleDred
         }
       }
     );
+    */
 
     
   }
@@ -63,6 +83,10 @@ public class AppleDred
   }
   */
 }
+
+
+
+
 
 
 
