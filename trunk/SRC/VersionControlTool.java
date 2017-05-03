@@ -80,7 +80,7 @@ public class VersionControlTool extends RunTool
       
       // Heuristically establish what kind of VCS we are using
       // Resolve ambiguity with priority: RCS(,v), RCS(directory), SVN, CVS
-      boolean svn = new File(parent, ".svn").exists();
+      boolean svn = new File(parent, ".svn").exists() || new File(parent, "SVN").exists();
       boolean rcs = new File(parent, "RCS").exists();
       boolean cvs = new File(parent, "CVS").exists();
       vcsName  = rcs ? VC.RCS : svn ? VC.SVN : cvs ? VC.CVS : VC.UNK;
@@ -270,5 +270,8 @@ public class VersionControlTool extends RunTool
   }
 
 }
+
+
+
 
 
