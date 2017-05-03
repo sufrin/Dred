@@ -91,24 +91,14 @@ public class VersionControlTool extends RunTool
           new File(parent, fileName.getName()+",v").exists()) vcsName = VC.RCS;
       
       if (vcsName==VC.UNK)
-      {
+      {  // see if subversion thinks this is a working copy directory
          Pipe.Continue cont = new Pipe.Continue()
          {
-           public void consumeOutput(BufferedReader reader)
-           {
-           }
-     
-           public void fail(Exception ex)
-           {
-             ex.printStackTrace();
-           }
-     
-           public void result(int exitCode, String output)
-           {
-             if (exitCode==0) vcsName=VC.SVN;
-           }
+           public void consumeOutput(BufferedReader reader)     { }
+           public void fail(Exception ex)                       { ex.printStackTrace(); }
+           public void result(int exitCode, String output)      { if (exitCode==0) vcsName=VC.SVN; }
          };
-         Pipe.execute(new File("."), "svn info '"+filePath+"'", "", cont);
+         Pipe.execute(session.getCWD(), "svn info '"+parent+"'", "", cont);
       }
   
       JMenuItem commit = but(new Act("Commit", "Commit this file using the text field as a comment")
@@ -292,6 +282,7 @@ public class VersionControlTool extends RunTool
   }
 
 }
+
 
 
 
