@@ -1,5 +1,6 @@
 package org.sufrin.dred;
 import java.io.File;
+import java.io.BufferedReader;
 import java.util.prefs.Preferences;
 
 import javax.swing.BorderFactory;
@@ -88,6 +89,27 @@ public class VersionControlTool extends RunTool
       if (vcsName!=VC.RCS 
           &&
           new File(parent, fileName.getName()+",v").exists()) vcsName = VC.RCS;
+      
+      if (vcsName==VC.UNK)
+      {
+         Pipe.Continue cont = new Pipe.Continue()
+         {
+           public void consumeOutput(BufferedReader reader)
+           {
+           }
+     
+           public void fail(Exception ex)
+           {
+             ex.printStackTrace();
+           }
+     
+           public void result(int exitCode, String output)
+           {
+             if (exitCode==0) vcsName=VC.SVN;
+           }
+         };
+         Pipe.execute(new File("."), "svn info '"+filePath+"'", "", cont);
+      }
   
       JMenuItem commit = but(new Act("Commit", "Commit this file using the text field as a comment")
       {
@@ -270,6 +292,7 @@ public class VersionControlTool extends RunTool
   }
 
 }
+
 
 
 
