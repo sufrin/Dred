@@ -53,13 +53,14 @@ public class Pipe
     {
       args.add("cmd");
       args.add("/c");
+      args.add(command);
     }
     else
     {
       args.add("/bin/sh");
       args.add("-c");
+      args.add(". ~/.dred_profile; "+command);
     }
-    args.add(command);
     ProcessBuilder pb = new ProcessBuilder(args);
     pb.directory(cwd);
     try
@@ -140,6 +141,7 @@ public class Pipe
     void consumeOutput(BufferedReader reader);
   }
 }
+
 
 
 
