@@ -21,14 +21,14 @@ public abstract class ToolExtension extends Extension
                 
         public ToolExtensionItem(EditorFrame session, String title) 
         { super(title, false); 
-          this.session=session; 
-          theTool = makeTool(session);
+          this.session=session;           
         }
         
         public void run()
         {
           if (state)
-          { GUI.updateComponent(theTool);
+          { if (theTool == null) theTool = makeTool(session);
+            GUI.updateComponent(theTool);
             session.addToToolBar(theTool);
           }
           else 
@@ -36,6 +36,7 @@ public abstract class ToolExtension extends Extension
         }
    }
 }
+
 
 
 

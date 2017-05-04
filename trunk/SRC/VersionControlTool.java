@@ -21,8 +21,9 @@ public class VersionControlTool extends RunTool
 
   @Override
   public JComponent makeTool(EditorFrame session)
-  {
-    return new VersionControlToolBar(session);
+  { VersionControlToolBar tool = new VersionControlToolBar(session);
+    tool.trySVN();
+    return tool;
   }
 
   static enum VC 
@@ -54,7 +55,7 @@ public class VersionControlTool extends RunTool
     File   parent   = null;
     String filePath = null;
     String lastName = null;
-      
+    RadioItem.Group<VC> vcs = null;       
   
     @SuppressWarnings("serial")
     protected void refreshFileName()
@@ -85,22 +86,12 @@ public class VersionControlTool extends RunTool
       boolean rcs = new File(parent, "RCS").exists();
       boolean cvs = new File(parent, "CVS").exists();
       vcsName  = rcs ? VC.RCS : svn ? VC.SVN : cvs ? VC.CVS : VC.UNK;
+      
       // ,v files for RCS take priority over all other clues
       if (vcsName!=VC.RCS 
           &&
           new File(parent, fileName.getName()+",v").exists()) vcsName = VC.RCS;
       
-      if (vcsName==VC.UNK)
-      {  // see if subversion thinks this is a working copy directory
-         Pipe.Continue cont = new Pipe.Continue()
-         {
-           public void consumeOutput(BufferedReader reader)     { }
-           public void fail(Exception ex)                       { ex.printStackTrace(); }
-           public void result(int exitCode, String output)      { if (exitCode==0) vcsName=VC.SVN; }
-         };
-         Pipe.execute(session.getCWD(), "svn info '"+parent+"'", "", cont);
-      }
-  
       JMenuItem commit = but(new Act("Commit", "Commit this file using the text field as a comment")
       {
         public void run()
@@ -142,7 +133,7 @@ public class VersionControlTool extends RunTool
       });
   
       final JMenu menu = new JMenu("VCS");
-      RadioItem.Group<VC> vcs = new RadioItem.Group<VC> ("VersionController", vcsName, "Set the version control system to this one")
+      vcs = new RadioItem.Group<VC> ("VersionController", vcsName, "Set the version control system to this one")
       { { run(); }
         public void run() { vcsName = value; menu.setText(value.toString()); }
       };
@@ -161,7 +152,20 @@ public class VersionControlTool extends RunTool
       setLabel(bar);
       setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
       setToolTipText("The checkin message or the revision number");
+      
     }
+    
+    public void trySVN()
+    { if (vcs.getValue()==VC.UNK)
+      {  
+       Runnable andThen = new Runnable() {
+         public void run() { vcs.setValue(VC.SVN); }
+       };
+       session.startProcess(session.getCWD(), "svn info '"+parent+"'", "", andThen, null);
+      }
+    }
+
+
   
     JMenuItem but(Act a)
     {
@@ -282,6 +286,8 @@ public class VersionControlTool extends RunTool
   }
 
 }
+
+
 
 
 

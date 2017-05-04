@@ -106,6 +106,11 @@ public class RadioItem<VAL> extends    JRadioButtonMenuItem
       if (prefs!=null) prefs.put(name, value.toString());
     }  
     
+    /** Get the value associated with the group */
+    public VAL getValue()
+    { return this.value;
+    }  
+    
     /** Invoked when the value associated with  the group changes */
     abstract public void run();
     
@@ -134,6 +139,7 @@ public class RadioItem<VAL> extends    JRadioButtonMenuItem
   };
   
 }
+
 
 
 
