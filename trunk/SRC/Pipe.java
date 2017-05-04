@@ -59,7 +59,10 @@ public class Pipe
     {
       args.add("/bin/sh");
       args.add("-c");
-      args.add(". ~/.dred_profile; "+command);
+      if (new File(System.getenv("HOME")+"/.dred_profile").canRead())
+         args.add(". ~/.dred_profile; "+command);
+      else
+         args.add(command);
     }
     ProcessBuilder pb = new ProcessBuilder(args);
     pb.directory(cwd);
@@ -141,6 +144,8 @@ public class Pipe
     void consumeOutput(BufferedReader reader);
   }
 }
+
+
 
 
 
