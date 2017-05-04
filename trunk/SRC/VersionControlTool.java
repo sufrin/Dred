@@ -12,7 +12,8 @@ import javax.swing.JMenuItem;
 import javax.swing.border.BevelBorder;
 
 /**
-        Tool that puts up a Version Control Toolbar
+        Tool that puts up a Version Control Toolbar and tries to
+        ensure that the VCS system is set to the one being used.
 */
 public class VersionControlTool extends RunTool
 { public VersionControlTool() { super("Version Control Bar"); }
@@ -286,6 +287,7 @@ public class VersionControlTool extends RunTool
   }
 
 }
+
 
 
 
