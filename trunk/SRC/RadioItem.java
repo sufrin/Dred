@@ -104,6 +104,9 @@ public class RadioItem<VAL> extends    JRadioButtonMenuItem
     { this.value=value;
       run();
       if (prefs!=null) prefs.put(name, value.toString());
+      // Buttons up to date
+      for (RadioItem item: items)
+          item.setState(item.value!=null && item.value.equals(this.value));
     }  
     
     /** Get the value associated with the group */
@@ -139,6 +142,7 @@ public class RadioItem<VAL> extends    JRadioButtonMenuItem
   };
   
 }
+
 
 
 
