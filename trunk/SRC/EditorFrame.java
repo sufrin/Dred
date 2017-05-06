@@ -2163,10 +2163,12 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   { 
     long lm = doc==null ? 0: doc.lastModified();
     String mod = lm == 0 ? "(unsaved)" : new Date(lm).toString();
-    return doc.getFileName().toString() + " " + mod;
+    return doc==null?"<anonymous>" : doc.getFileName().toString() + " " + mod;
   }
 
 }
+
+
 
 
 

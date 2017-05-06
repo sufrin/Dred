@@ -1,0 +1,22 @@
+#
+# shell command to invok dred (as a server if necessary)
+#
+nohup java -jar ~/bin/Dred.jar "$@" > /dev/null 2>&1 & 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
