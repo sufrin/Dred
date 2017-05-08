@@ -11,7 +11,7 @@
 <body>  
 <center>
         <image alt="" src="dnought.png"></image>
-        <h1>Dred </h1>
+        <h1>Dred </h1> (May 2017)
 </center>
 
 <h2>Contents</h2>
@@ -19,6 +19,7 @@
 <li><a href="#Unix/Linux Usage">Unix/Linux Usage</a></li>
 <li><a href="#Windows (XP) Usage">Windows (XP) Usage</a></li>
 <li><a href="#MACOS">Mac OS X Usage</a></li>
+<li><a href="#PDFSync">PDFSync</a></li>
 <li><a href="#The Dred Editing Session Window">The Dred Editing Session Window</a></li>
 <li><a href="#Editing Model">Editing Model</a></li>
 <li><a href="#Editing Actions">Editing Actions</a></li>
@@ -33,8 +34,8 @@
 
 
 <p> Dred is a <i>lightweight</i>, customizeable, and extensible Unicode text
-editor. It comes, complete with documentation, in a single (256K) jar, and needs
-a 1.5 (or later) JRE to run.
+editor. It comes, complete with documentation, in a single (350K) jar, and needs
+a 1.8 (or later) JRE to run.
 </p>
 
 <a name="Unix/Linux Usage"><h2>Unix/Linux Usage</h2></a>
@@ -64,7 +65,6 @@ filenames.
 Files are usually specified by paths in the local filestore, but can also be specifed by URL: 
 see <a href="#Opening a URL">Opening a URL</a> for details.  
 </p>
-
 
 <p>
 If  <tt>--bindings=...</tt>
@@ -100,6 +100,19 @@ loading and configuration of Dred extensions
 The above commands are often embedded in simple shell scripts. 
 </p>
 
+<p>
+<b>Remark (May 2017)</b>: I have, in recent years, used the following script (named <tt>dred</tt>)
+to invoke the editor. Using this script the first invocation automatically 
+establishes a server.
+<pre>
+#/bin/sh
+#
+# shell command to invoke dred (as a server if necessary)
+#
+nohup java -jar ~/bin/Dred.jar "$@" > /dev/null 2>&1 &
+</pre>
+</p>
+
 <br></br>
 
 <a name="MACOS"><h2>Mac OS X Usage</h2></a>
@@ -108,7 +121,6 @@ it makes sense to drive <code>dred</code> with a shell script containing
 the following command -- which enables some of the OS X specific
 features of java, and assumes <code>Dred.jar</code> is 
 in <code>$HOME/Bin</code>.
-
 <pre>
 exec java    -Xdock:icon="$HOME/Bin/dnought.png" \
              -Xdock:name="Dred"                  \
@@ -119,52 +131,76 @@ The <code>AppleDred.app</code> application  is available from the
 Dred website and can also be installed into your local <code>Applications</code> directory
 or the system-wide <code>/Applications</code> directory. It is registered as handling all files.
 It's a good idea to pin it to the taskbar but it isn't necessary. Launching AppleDred on login can be slightly
-problematic unless you have ensured that it will pick up the right shell environment by editing 
-<tt>$HOME/.launchd.conf</tt>. The most important shell environment variables it uses are
+problematic unless you have ensured that it will pick up the right shell environment. 
+The most important shell environment variables it uses are
 <tt>PATH</tt> and (if you use the Latex Tool) <tt>TEXINPUTS</tt>. Launching it for the first time 
 (ie starting it in server mode)
 in a login session from a terminal window will cause it to pick these up from the terminal's shell envionment. 
+<b>Remark (May 2017)</b>: the most recent variants of (Unix) Dred execute all the shell commands
+that it uses in the environment set by <tt>source ~/.dred_profile</tt> (if such a file exists).
+The one I use looks like this:
+<pre><code>
+# Establish the environment for shell-calls from Dred
+# Prefix a path if it isn't already present
+function CONSPATH ()
+{ (printenv PATH | grep -q -F ":${1}
+${1}:") || export PATH=${1}:$PATH
+}
+
+# Append a path if it isn't already present
+function PATHCONS ()
+{ (printenv PATH | grep -q -F ":${1}
+${1}:") || export PATH=$PATH:${1}
+}
+
+PATHCONS           /usr/texbin
+CONSPATH           $HOME/bin
+
+export TEXINPUTS=.:~/Tex//:
+export TEXFONTS=:.:~/Tex//:
+</code></pre>
 </p>
 <p>
-The application file <code>AppleDred.app/Contents/Resources/Java/AppleDred.jar</code> can be
+The application file <code>AppleDred.app/Contents/Java/AppleDred.jar</code> can be
 started from the command-line as described elsewhere in the documentation. If the application is already running,
 then it will be used to service the command given on the command-line; if it isn't then a non-Application
 server will be started and thenceforth used to service command-line commands and subsequent invocations
-of the application. The important difference is that a server started from the application is a little more 
-careful when <code>Apple-Q</code> is pressed. 
+of the application. <b>The important difference is that a server started as the application is a little more 
+careful when <code>Apple-Q</code> is pressed, and will not let you lose your work without asking
+whether this is what you mean.</b>
 </p>
 <p>
 The following shell script can be used from the command line. It facilitates ''equal opportunity'' operation
-of <code>dred</code> from command line and finder.
+of <code>dred</code> from command line and Finder.
 </p>
 <pre>
 <code>
-DRED=/Applications/AppleDred.app/Contents/Resources/Java/AppleDred.jar
-if java -jar $DRED --serving > /dev/null
-then 
-   echo -n
-else 
-   echo Starting AppleDred
-   open -a AppleDred
-   sleep 2
-fi
-java -jar $DRED "$@" 
+#!/bin/sh
+# OSX shell command to invoke dred
+#
+DRED=/Applications/AppleDred.app/Contents/Java/AppleDred.jar
+java -jar $DRED --serving || (open -a AppleDred; sleep 2)
+exec java -jar $DRED "$@" 
 </code>
 </pre>
 <p>
-There's a bug in the present Mac OS X implementation of scrollbars (in
-all look-and-feel variants) so (for the moment)
-we replace the active scrollbars under Mac OS X
-with a passive indicator of the position and 
-relative size of the current view of the document.
-This indicator shows up as a narrow bluish rectangle
-in the right margin of the window. Vertical and horizontal scrolling can be accomplished with
-the scrollwheel and/or by dragging with button-2 pressed.
+There's a bug in the present Mac OS X implementation of scrollbars
+(in all look-and-feel variants) so (for the moment) we replace the
+active scrollbars under Mac OS X with a passive indicator of the
+position and relative size of the current view of the document.
+This indicator shows up as a narrow bluish rectangle in the right
+margin of the window. Vertical and horizontal scrolling can be
+accomplished with the scrollwheel and/or by dragging with button-2
+pressed. (Remark (May 2017): I confess that I'm no longer interested in solvig this problem: it hasn't bothered
+me for a long time).
 </p>
 
 
 
 <a name="Windows (XP) Usage"><h2>Windows (XP) Usage</h2></a>
+
+<i>(Warning: written in 2005: now probably obsolete)</i>
+<br/>
 
 Put the Dred.jar somewhere sensible, and make a shortcut to it whose target and
 start-in fields looks something like this:
@@ -197,6 +233,32 @@ any other server, and change the shortcut to:
 Target:   C:\WINDOWS\system32\javaw.exe -jar "C:\Documents and Settings\sufrin\Desktop\DRED\Dred.jar" --serve==####
 </pre>
 
+
+<a name="PDFSync"><h2>PDFSync</h2></a>
+Dred is compatible with <tt>pdfsync</tt> (at least on OS/X and Linux).
+On my Mac I use the Skim pdf viewer, and my <tt>linedisplay</tt>
+script calls the Skim <tt>displayline</tt> script to position
+the viewer at the location generated from the current text editing position.
+I have configured Skim to invoke the following shell script when
+the mouse is pointed at a position in the viewer.
+<pre>
+file=$1
+line=$2
+dred --position=$file@$line
+</pre>
+The script opens the named <tt>$file</tt> (if there is not already an open session for it),
+and positions it at the specified <tt>$line</tt>. 
+<p>
+The Latex tool
+gives the option of using the shell command <tt>linedisplay</tt>
+automatically whenever the manuscript file the tool is managing
+is latexed. 
+<pre>
+# linedisplay script: called from dred's Latex tool with arguments linenumber pdffile texfile -- synctex is needed.
+# echo linedisplay "$@"
+displayline -b "$@"
+</pre>
+</p>
 
 <a name="The Dred Editing Session Window"><h2>The Dred Editing Session Window</h2></a>
 <p> In each editing session window you will see the main text editing
@@ -851,16 +913,27 @@ reliable.</p>
 <p> It runs on the (Sun/Oracle) Java 1.5 and later JVMs on all variants of Linux, Windows, and
 Solaris on which they can be installed.  </p>
 
+
 <p>
+Remark (May 2017): I recently implemented <tt>pdfsync</tt> compatibility, and 
+did some maintenance enabling the editor to run on OS/X with Java 1.[78], and
+to use recent variants of <tt>subversion</tt>. In
+doing so I corrected a couple of long-unnnoticed bugs.
 </p>
 <pre>
 <b>Bernard Sufrin</b>
 <b>$Revision$</b>
 <b>$Date$</b>
+<b>$PrevRevision: 225 $</b>
+<b>$PrevDate: 2012-06-21 17:31:54 +0100 (Thu, 21 Jun 2012) $</b>
 <b>$PrevRevision: 194 $</b>
 <b>$PrevDate: 2007-07-05 18:10:51 +0100 (Thu, 05 Jul 2007) $</b>
 </pre>
 </body>
+
+
+
+
 
 
 
