@@ -159,7 +159,7 @@ public class Dred
            if (started==0 && !server)
            {  startServer(0);
               if (onUnix()) 
-                 startRemoteSession("Untitled", EncodingName); 
+                 {} //   startRemoteSession("Untitled", EncodingName); 
               else
                  startLocalSession(null, EncodingName); 
            }
@@ -255,8 +255,9 @@ public class Dred
    * with the given path (or an anonymous document if the
    * given path is null)
    */
-  public synchronized static EditorFrame startLocalSession(final String path, String encoding)
+  public synchronized static EditorFrame startLocalSession(final String _path, String encoding)
   { loadBindings();
+    final String path = toPathString(_path);
     FileDocument doc = new FileDocument(encoding);
     EditorFrame f = path == null ? new EditorFrame(80, 24)
                                  : new EditorFrame(80, 24, path);
@@ -345,9 +346,23 @@ public class Dred
  
   }
   
+  /** String representing the real path corresponding to path */
+  public static String toPathString(String path)
+  { return toPath(path).toString(); }
+  
+  /** The real path corresponding to path: with symbolic links traversed,
+      and the appropriate alphabetic cases for letters. 
+  */
+  public static Path toPath(String path)
+  { Path target = new File(path).toPath();
+    try    { return target.toRealPath(); }
+    catch 
+           (IOException ex) { return target; }
+  }
+  
   /** Returns true if we are already editing a session at this path */
   public static boolean existsSession(String path)
-  { Path target = new File(path).toPath();
+  { Path target = toPath(path);
     for (EditorFrame frame : new Vector<EditorFrame>(sessions))
         if (frame.getFileName().toPath().equals(target))
              { return true; }
@@ -356,7 +371,7 @@ public class Dred
   
   /** Navigate within one (or more) specific editing sessions */
   public static void navigateTo(String path, String location)
-  { Path target = new File(path).toPath();
+  { Path target = toPath(path);
     for (EditorFrame frame : new Vector<EditorFrame>(sessions))
     { if (frame.getFileName().toPath().equals(target))
          { frame.navigateTo(location); }
@@ -570,6 +585,12 @@ public class Dred
   public static boolean onWindows() { return simWindows || File.separator.equals("\\"); }
   public static boolean onMac()     { return simMac || System.getProperty("os.name").equals("Mac OS X"); }
 }
+
+
+
+
+
+
 
 
 

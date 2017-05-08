@@ -1,35 +1,8 @@
 #!/bin/sh
 # OSX shell command to invoke dred
 #
-$HOME/bin/xred --serving || /usr/bin/osascript -e 'activate application "AppleDred"' 
-sleep 1
-exec $HOME/bin/xred "$@"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+DRED=/Applications/AppleDred.app/Contents/Java/AppleDred.jar
+java -jar $DRED --serving || (open -a AppleDred; sleep 2)
+exec java -jar $DRED "$@" 
 
 
