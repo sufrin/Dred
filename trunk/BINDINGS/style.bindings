@@ -1,6 +1,95 @@
 #
 #       Miscellaneous style-sheet bindings
 #
+style sheet \begin      #####################################
+style transform \\begin...\\end→... (?s)^\\\\begin\\{[^\\}]+\\}(.*)\\\\end\\{[^\\}]+\\}$ $1
+style -
+style latex env note 
+style latex env exercise 
+style latex env answer 
+style -
+style latex env comment
+style latex env alltt
+style latex env verbatim
+style -
+style latex env itemize
+style latex env enumerate
+style line  \item   \item\s
+style block tabular \begin{tabular}{XXX}%SEL%\end{tabular}
+style block array   \begin{array}{XXX}%SEL%\end{array}
+style block figure  \begin{figure}[ht]%SEL%\caption{...}\n\label{...}\n\end{figure}
+style -
+style block code   \begin{code}[...]%SEL%\n\end{code}
+style block code*  \begin{code*}[...]%SEL%\n\end{code*}
+style block break  \end{code}\begin{code}[]
+style block hide   \end{code}\n\begin{code*}[]%SEL%\end{code*}\n\begin{code}[]
+style -
+style latex env center
+style block foil  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\begin{foil}[]\n%SEL%\end{foil}
+style block slide  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\begin{slide}[]\n%SEL%\end{slide}
+style -
+style form  block ? \begin{%ARG%}%SEL%\end{%ARG%} 
+style form  block ? \begin{%ARG%}%SEL%\end{%ARG%} 
+style form  block ? \begin{%ARG%}%SEL%\end{%ARG%} 
+style form  block ? \begin{%ARG%}%SEL%\end{%ARG%} 
+
+style sheet \...{       #####################################
+style latex macro       textbf
+style latex macro       textit
+style latex macro       textrm
+style latex macro       textsl
+style latex macro       texttt
+style -
+style latex macro       mathbf
+style latex macro       mathit
+style latex macro       mathrm
+style latex macro       mathsl
+style latex macro       mathtt
+style -
+style latex macro       paragraph
+style latex macro       subsubsection
+style latex macro       subsection
+style latex macro       section
+style latex macro       chapter
+style -
+style form  block ? \begin{%ARG%}%SEL%\end{%ARG%} 
+style form  block ? \begin{%ARG%}%SEL%\end{%ARG%} 
+style form  block ? \begin{%ARG%}%SEL%\end{%ARG%} 
+style form  block ? \begin{%ARG%}%SEL%\end{%ARG%} 
+
+style sheet ZED         #####################################
+style transform \\begin...\\end→... (?s)^\\\\begin\\{[^\\}]+\\}(.*)\\\\end\\{[^\\}]+\\}$ $1
+style -
+style -
+style -
+style latex env   zed
+style       block axdef     \n\begin{axdef}\n%SEL%\where\n\end{axdef}
+style form  block gendef    \n\begin{gendef}[%ARG%]\n%SEL%\where\n\end{gendef}
+style form  block schema[X] \n\begin{schema}{%ARG%}[X]\n%SEL%\where\n\end{schema}
+style form  block schema    \n\begin{schema}{%ARG%}\n%SEL%\where\n\end{schema}
+style -
+style -
+style -
+style latex macro setext
+style latex macro setcomp
+style latex macro seqext
+style line \\<...\\>   \\<%SEL%\\>
+style line (\\<...\\>) \\left(\\<%SEL%\\>\\right
+style -
+style -
+style -
+style form block tabular \begin{tabular}{%ARG%}%SEL%\end{tabular}
+style form block array   \begin{array}{%ARG%}%SEL%\end{array}
+style block foil\\item  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\begin{foil}\n\begin{itemize}\n\item%SEL%\end{itemize}\n\end{foil}
+style block foil  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\begin{foil}%SEL%\end{foil}
+style -
+style -
+style -
+style latex env note
+style latex env itemize
+style latex env center
+
+
 style sheet <...>       #####################################
 style transform <>...</>→... (?s)^<[^>]+>(.*)</[^>]+>$ $1
 style -
@@ -31,58 +120,6 @@ style form block ? <%ARG%>%SEL%</%ARG%>
 style form block ? <%ARG%>%SEL%</%ARG%>
 
 
-style sheet \...{       #####################################
-style latex macro       textbf
-style latex macro       textit
-style latex macro       textrm
-style latex macro       textsl
-style latex macro       texttt
-style -
-style latex macro       mathbf
-style latex macro       mathit
-style latex macro       mathrm
-style latex macro       mathsl
-style latex macro       mathtt
-style -
-style latex macro       paragraph
-style latex macro       subsubsection
-style latex macro       subsection
-style latex macro       section
-style latex macro       chapter
-
-style sheet \begin      #####################################
-style transform \\begin...\\end→... (?s)^\\\\begin\\{[^\\}]+\\}(.*)\\\\end\\{[^\\}]+\\}$ $1
-style -
-style latex env note 
-style latex env ex 
-style latex env ex** 
-style latex env ans 
-style latex env ans*
-style -
-style latex env java
-style latex env class
-style latex env hideclass
-style -
-style latex env alltt
-style latex env smalltt
-style latex env comment
-style latex env verbatim
-style -
-style latex env itemize
-style latex env enumerate
-style line  \item   \item\s
-style block tabular \begin{tabular}{XXX}%SEL%\end{tabular}
-style block array   \begin{array}{XXX}%SEL%\end{array}
-style block figure  \begin{figure}[ht]%SEL%\caption{...}\n\label{...}\n\end{figure}
-style -
-style latex env smaller
-style latex env center
-style block slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\begin{slide}\n\n\end{slide}
-style latex env foil
-style -
-style form  block ? \begin{%ARG%}%SEL%\end{%ARG%} 
-style form  block ? \begin{%ARG%}%SEL%\end{%ARG%} 
-
 style sheet \document  #####################################
 style block article    \documentclass[11pt]{article}\n\begin{document}%SEL%\end{document} 
 style block letter     \documentclass[11pt,wor,lab]{letter}\n\To{}\n\Dear[]{}\n\Re{}\n\Cc{}%SEL%\Sign[Yours\ssincerely]{Bernard\sSufrin}
@@ -95,6 +132,23 @@ style block html       <html>\n<head>\n\s\s\s\s<title>\n\s\s\s\s</title>\n</head
 style sheet java                #####################################
 style form  block class         /**\s\s\s*/\npublic\sclass\s%ARG%\n{\n\s\s\spublic\s%ARG%()\s{\s}%SEL%}  
 style form  block method        /**\s\s\s*/\npublic\sTYPE\s%ARG%()\n{%SEL%}  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
