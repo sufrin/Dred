@@ -257,7 +257,7 @@ public class Dred
    */
   public synchronized static EditorFrame startLocalSession(final String _path, String encoding)
   { loadBindings();
-    final String path = toPathString(_path);
+    final String path = toPathString((_path==null) ? "NEW" : _path);
     FileDocument doc = new FileDocument(encoding);
     EditorFrame f = path == null ? new EditorFrame(80, 24)
                                  : new EditorFrame(80, 24, path);
@@ -585,6 +585,7 @@ public class Dred
   public static boolean onWindows() { return simWindows || File.separator.equals("\\"); }
   public static boolean onMac()     { return simMac || System.getProperty("os.name").equals("Mac OS X"); }
 }
+
 
 
 
