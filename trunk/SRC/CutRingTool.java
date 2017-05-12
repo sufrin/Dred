@@ -219,7 +219,7 @@ public void openSession(EditorFrame session)
     
     JLabel    sizeLabel = new JLabel("Ring Size: ");
     /** Sets the size of the ring */
-    JComboBox sizeTool = new JComboBox
+    JComboBox<String> sizeTool = new JComboBox<String>
     (new String[]{"2", "4","8","16","32","64","128","256","512","1024"});
     { sizeTool.addActionListener
       ( new Act("Set Size")
@@ -257,6 +257,7 @@ public void openSession(EditorFrame session)
         
   }
 }
+
 
 
 

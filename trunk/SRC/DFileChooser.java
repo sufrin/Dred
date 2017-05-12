@@ -15,7 +15,7 @@ import javax.swing.JFileChooser;
 @SuppressWarnings("serial")
 public class DFileChooser extends JFileChooser
 {
-  public JComboBox theSelector = null; 
+  public JComboBox<String> theSelector = null; 
   
   /** The available codings : UTF8 and the various ISO-8859 codings come first in the list */
   protected Vector<String> codings = new Vector<String>();
@@ -34,7 +34,7 @@ public class DFileChooser extends JFileChooser
     for (String n:names) if (n.matches("ISO-8859-[0-9]|UTF-16.*|US.*")) codings.add(n);
     for (String n:names) if (!codings.contains(n)) codings.add(n);
     codings.remove("UTF-8");
-    theSelector = new JComboBox(codings);
+    theSelector = new JComboBox<String>(codings);
     theSelector.setMaximumSize(new Dimension((int)theSelector.getPreferredSize().getWidth(), 40));
     Box b = Box.createVerticalBox();
     b.add(Box.createVerticalGlue());
@@ -47,3 +47,4 @@ public class DFileChooser extends JFileChooser
   /** Set the currently-selected coding */
   public void   setCoding(String coding) { theSelector.setSelectedItem(coding); }
 }
+
