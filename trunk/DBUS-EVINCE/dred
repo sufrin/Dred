@@ -1,0 +1,24 @@
+#
+# shell command to invoke dred (as a server if necessary)
+#
+#notify-send DRED "'""$@""'"
+nohup $HOME/bin/java -jar ~/bin/Dred.jar "$@" > /dev/null 2>&1 & 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

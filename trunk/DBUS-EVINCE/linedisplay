@@ -1,0 +1,21 @@
+# linedisplay line-number pdf-path source-path -- invoked by dred
+#exec ~/bin/evince_dbus $2 $1 $3
+
+
+# (so instead I will forego backward searching; and use this one-time call into evince)
+if ! (ps aux | grep evince_dbus | grep $2)> /dev/null
+then
+        echo Starting proxy "$@"
+        exec ~/bin/evince_dbus $2 $1 $3 -p &
+else
+        exec ~/bin/evince_dbus $2 $1 $3
+fi
+
+
+
+
+
+
+
+
+

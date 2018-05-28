@@ -1,0 +1,8 @@
+# pdfopen --file filename
+# run evince from dred, in backward compatibility mode if necessary
+# -- assumption: 
+exec linedisplay 1 $2 ${2%%pdf}tex
+
+
+
+
