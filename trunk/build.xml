@@ -48,13 +48,14 @@
                     closure= "true"/>
             <buildnumber/>              
             <javac srcdir    = "${BUILD}" 
+                   destdir   = "${BUILD}"
                    debug     = "true"
                    debuglevel= "lines,vars,source"
                    classpath = "${CLASSPATH}"
                    encoding  = "UTF-8"
                    includeantruntime = "no"
                    > 
-               <compilerarg line="-Xlint:unchecked"/>
+               <compilerarg line="-Xlint"/>
                <include name="**/*.java"
                />
             </javac> 
@@ -89,14 +90,14 @@
                    encoding  = "UTF-8"
                    includeantruntime = "no"
                    > 
-               <compilerarg line="-Xlint:unchecked"/>
+               <compilerarg line="-Xlint"/>
                <include name="**/*.java"/>
             </javac>
         </target>
 
         <target name = "Dred" 
                 description  = "Make a self-contained runnable Dred.jar in ${BUILD}"
-                depends="compile,ext">
+                depends="compile">
             <jar    basedir  ="${BUILD}" 
                     destfile ="${BUILD}/Dred.jar"
                     includes = "**/*.class **/*.jpg **/*.png **/*.html **/*.xml **/*.bindings"
@@ -184,6 +185,7 @@
         </target>
         
 </project>
+
 
 
 

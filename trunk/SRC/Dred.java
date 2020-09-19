@@ -19,6 +19,8 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
 import javax.swing.SwingConstants;
 import java.nio.file.Path;
 
@@ -425,7 +427,7 @@ public class Dred
       else
         pseudoServer = true;
       
-      if (!onMac())
+      if (true) // (!onMac())
       {
           final JFrame frame = new JFrame(pseudoServer ? "[[[Dred]]]" : "[[[Dred " + user + "@"+currentHost()+ "]]]");
           frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -450,7 +452,7 @@ public class Dred
           frame.getRootPane().setBorder(BorderFactory.createEtchedBorder());
           frame.add(label);
           
-          if (!onMac())
+          if (true) // (!onMac())
           {          
               JButton button = new JButton("Open");
               button.addActionListener(new ActionListener()
@@ -484,17 +486,19 @@ public class Dred
                 }
               });
               button.setToolTipText("Close all editing sessions but keep the server running.");
-              
-              button = new JButton("Exit Server");
-              frame.add(button);
-              button.addActionListener(new ActionListener()
+              if (!onMac())
               {
-                public void actionPerformed(ActionEvent ev)
-                {
-                  closeServer();
-                }
-              });
-              button.setToolTipText("Close all editing sessions and shut down the server.");
+                 button = new JButton("Exit Server");
+                 frame.add(button);
+                 button.addActionListener(new ActionListener()
+                 {
+                   public void actionPerformed(ActionEvent ev)
+                   {
+                     closeServer();
+                   }
+                 });
+                 button.setToolTipText("Close all editing sessions and shut down the server.");
+              }
           }   
           frame.setIconImage(EditorFrame.dnought.getImage());
           frame.pack();
@@ -511,7 +515,7 @@ public class Dred
     return port;
   }
   
-  static abstract class But extends java.awt.MenuItem 
+  static abstract class But extends javax.swing.JMenuItem 
   { public But(String title) 
     { super(title); 
       addActionListener(new ActionListener() {  public void actionPerformed(ActionEvent ev) {  pressed(); } });
@@ -520,25 +524,22 @@ public class Dred
   }
   
   /** This is only called from the OS/X top level; it sets up a menu for the dock */
-  static public java.awt.PopupMenu getDockMenu()
-  { final java.awt.PopupMenu menu = new java.awt.PopupMenu();
-    final JFrame frame = new JFrame();
-    frame.setLayout(new java.awt.GridLayout(0, 1));
-    frame.add(new JLabel("Dred "));
-    frame.add(new JLabel(System.getProperty("user.name")+"@"+currentHost()));
+  static public JMenuBar getDockMenu()
+  { final JMenuBar bar = new JMenuBar();
+    final JMenu menu = new JMenu();
+    menu.add(new JLabel("Dred "));
+    menu.add(new JLabel(System.getProperty("user.name")+"@"+currentHost()));
     if (sessionSocket!=null)    
-       frame.add(new JLabel("Port "+sessionSocket.getPort()));
-    frame.add(menu);
-    frame.pack();
-    frame.setLocationRelativeTo(null);
-    frame.setVisible(true);
-    frame.setState(JFrame.ICONIFIED);
-    //menu.addSeparator();
+       menu.add(new JLabel("Port "+sessionSocket.getPort()));
+    bar.add(menu);
+    
+    menu.addSeparator();
     menu.add(new But("New")       { public void pressed() { startLocalSession(null, EncodingName); } });
-    menu.add(new But("Open")      { public void pressed() { EditorFrame.openSession(frame, null); } });
+    //menu.add(new But("Open")      { public void pressed() { EditorFrame.openSession(frame, null); } });
     menu.addSeparator();
     menu.add(new But("Close All") { public void pressed() { closeAll(); } });
-    return menu;
+    
+    return bar;
   } 
   
   /** Start the HTTP logger interface on the given port */  
@@ -585,6 +586,10 @@ public class Dred
   public static boolean onWindows() { return simWindows || File.separator.equals("\\"); }
   public static boolean onMac()     { return simMac || System.getProperty("os.name").equals("Mac OS X"); }
 }
+
+
+
+
 
 
 

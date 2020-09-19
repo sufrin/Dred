@@ -47,7 +47,7 @@ def linkPaths(src, dst):
      src = "/".join(linkpath)
      dst = "/".join(dstpath)
      os.symlink(src, dst)
-     print "ln -s %-20s %s"%(src,dst)
+     print "ln -f %-20s %s"%(src,dst)
     except OSError, e:
      if e.errno is not 17:      # link already exists
         print e, dst
@@ -111,6 +111,7 @@ else:
    """)
       
     
+
 
 
 

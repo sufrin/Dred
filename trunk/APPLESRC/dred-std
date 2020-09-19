@@ -1,0 +1,29 @@
+#!/bin/sh
+# OSX shell command to invoke dred
+#
+# (osascript complains about deallocation of a pointer)
+#export JAVA_HOME=`/usr/libexec/java_home 1.8`
+/usr/bin/osascript -e 'activate application "AppleDred-std"'
+sleep 1
+exec java -jar AppleDred-std.app/Contents/Java//AppleDred.jar "$@"
+# -Dscroll=mac if you want the Mac scrollbar bug
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
