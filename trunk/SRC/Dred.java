@@ -427,9 +427,36 @@ public class Dred
       else
         pseudoServer = true;
       
-      if (true) // (!onMac())
-      {
-          final JFrame frame = new JFrame(pseudoServer ? "[[[Dred]]]" : "[[[Dred " + user + "@"+currentHost()+ "]]]");
+      if (!onMac())
+      {  final JFrame frame = getDockFrame(pseudoServer);
+         frame.setIconImage(EditorFrame.dnought.getImage());
+         frame.pack();
+         frame.setLocationRelativeTo(null);
+         frame.setVisible(true);
+         if (port!=0) frame.setState(JFrame.ICONIFIED);
+      }
+      
+    }
+    catch (IOException ex)
+    {
+      System.err.println("[Dred: cannot start server on port "+port+"]");
+      System.exit(1);
+    }
+    return port;
+  }
+  
+  static abstract class But extends javax.swing.JMenuItem 
+  { public But(String title) 
+    { super(title); 
+      addActionListener(new ActionListener() {  public void actionPerformed(ActionEvent ev) {  pressed(); } });
+    }
+    public abstract void pressed();
+  }
+  
+  static public JFrame getDockFrame(boolean pseudoServer)
+  {       String user = System.getProperty("user.name");
+          int port = prefs.getInt("port", 0);
+          final JFrame frame = new JFrame("[[Dred]]");
           frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
           frame.addWindowListener(new WindowAdapter()
           {
@@ -452,7 +479,6 @@ public class Dred
           frame.getRootPane().setBorder(BorderFactory.createEtchedBorder());
           frame.add(label);
           
-          if (true) // (!onMac())
           {          
               JButton button = new JButton("Open");
               button.addActionListener(new ActionListener()
@@ -499,30 +525,10 @@ public class Dred
                  });
                  button.setToolTipText("Close all editing sessions and shut down the server.");
               }
-          }   
-          frame.setIconImage(EditorFrame.dnought.getImage());
-          frame.pack();
-          frame.setLocationRelativeTo(null);
-          frame.setVisible(true);
-          if (port!=0) frame.setState(JFrame.ICONIFIED);
-      }
-    }
-    catch (IOException ex)
-    {
-      System.err.println("[Dred: cannot start server on port "+port+"]");
-      System.exit(1);
-    }
-    return port;
+          }
+          return frame;   
   }
-  
-  static abstract class But extends javax.swing.JMenuItem 
-  { public But(String title) 
-    { super(title); 
-      addActionListener(new ActionListener() {  public void actionPerformed(ActionEvent ev) {  pressed(); } });
-    }
-    public abstract void pressed();
-  }
-  
+
   /** This is only called from the OS/X top level; it sets up a menu for the dock */
   static public JMenuBar getDockMenu()
   { final JMenuBar bar = new JMenuBar();
@@ -535,7 +541,7 @@ public class Dred
     
     menu.addSeparator();
     menu.add(new But("New")       { public void pressed() { startLocalSession(null, EncodingName); } });
-    //menu.add(new But("Open")      { public void pressed() { EditorFrame.openSession(frame, null); } });
+    // menu.add(new But("Open")      { public void pressed() { EditorFrame.openSession(frame, null); } });
     menu.addSeparator();
     menu.add(new But("Close All") { public void pressed() { closeAll(); } });
     
@@ -586,6 +592,8 @@ public class Dred
   public static boolean onWindows() { return simWindows || File.separator.equals("\\"); }
   public static boolean onMac()     { return simMac || System.getProperty("os.name").equals("Mac OS X"); }
 }
+
+
 
 
 

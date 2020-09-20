@@ -19,11 +19,16 @@
         <property name="BUILD"        value="BUILD"/>
         <property name="HOME"         value="${user.home}"/>
 
+        <target name    = "jar" 
+                depends = "ext"
+                description = "Build Dred.jar with extensions (DEFAULT)"/>
+                          
         <target name    = "all" 
                 depends = "Dred,
                            Server,
                            Reflect
-                          "/>
+                          "
+                description = "Build jar,Server,Reflect"/>
                           
         <target name        = "labdist" 
                 description = "Copy Dred.jar to linux:bin and to my website using scp"
@@ -185,6 +190,7 @@
         </target>
         
 </project>
+
 
 
 

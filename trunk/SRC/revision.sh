@@ -17,7 +17,8 @@ if which svn > /dev/null 2> /dev/null && svn info 1>/dev/null 2>/dev/null
 then
    svn info -R | grep Revision | sort | tail -1 | sed -e 's/Revision: //'
 else 
-   echo "(no svn revision)"
+   BUILD=`tail -1 build.number`
+   echo "(none) $BUILD" 
 fi
 }
 
@@ -55,6 +56,7 @@ class REVISION
   public static String date   = "$DATE";
 }
 END
+
 
 
 

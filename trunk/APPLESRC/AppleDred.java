@@ -60,6 +60,14 @@ public class AppleDred
 
           JMenuBar menu = Dred.getDockMenu();
           desk.setDefaultMenuBar(menu);
+          
+          JFrame frame = Dred.getDockFrame(false);
+          frame.setIconImage(EditorFrame.dnought.getImage());
+          frame.pack();
+          frame.setLocationRelativeTo(null);
+          frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+          frame.setVisible(true);
+          frame.setState(JFrame.ICONIFIED);
         }
     
   }
@@ -71,6 +79,7 @@ public class AppleDred
   }
   */
 }
+
 
 
 

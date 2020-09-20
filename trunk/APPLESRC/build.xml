@@ -17,17 +17,31 @@ provide an interface between OS X and the core of Dred.
   </propertyfile>
   <property file="appledred.properties"/>
   <property file="../dredrevision.properties"/>
-  <property name="appbundler.jar" value="./appbundler-1.1.0.jar"/>
-  <property name="jarbundler.jar" value="./jarbundler-3.3.0-forjape.jar"/>
-  <property name="version" value="SVN Revision ${subversion.revision} (${builddate})"/>
+  <property name="appbundler.jar"       value="./appbundler-1.1.0.jar"/>
+  <property name="jarbundler.jar"       value="./jarbundler-3.3.0-forjape.jar"/>
+  <property name="version"              value="SVN Revision ${subversion.revision} (${builddate})"/>
+  <!-- <property name="AppleDred"            value="AppleDred-new"/> -->
   
   <!-- The main class to be invoked by the Apple Application launcher.
        This need not be the same as the main class to be invoked from a java -jar command.
   -->
   <property name="mainclass"   value="org.sufrin.dred.Dred"/>
   
+  <target name="new" 
+          description="Make the app: AppleDred-new (for testing)" >
+          <antcall target="makeapp">
+               <param name="AppleDred" value="AppleDred-new"/>
+         </antcall>
+  </target>
   
-   
+  <target name="app" 
+          description="Make the app: AppleDred" >
+          <antcall target="makeapp">
+               <param name="AppleDred" value="AppleDred"/>
+         </antcall>
+  </target>
+  
+    
   <target name="compile" 
           depends="prepare"
           description="Compile the classes">
@@ -56,7 +70,6 @@ provide an interface between OS X and the core of Dred.
                 </exec>
   </target>
   
-  <target name="app" description="Make the app" depends="app-new"/>
 
   <target name="jar" depends="compile" description="Create JAR file">    
     <jar jarfile="build/${ant.project.name}.jar" 
@@ -71,15 +84,15 @@ provide an interface between OS X and the core of Dred.
 
 
   
-  <target name="app-new" depends="jar" description="Build the application with name AppleDred-new">
+  <target name="makeapp" depends="jar" description="Build the application with name as specified by the parameter AppleDred">
 
     <taskdef name=      "jarbundler"
              classpath= "${jarbundler.jar}" 
              classname= "com.ultramixer.jarbundler.JarBundler"/>
-
+    
     <jarbundler dir=            "${basedir}" 
                 verbose=        "true"
-                name=           "${ant.project.name}-new"
+                name=           "${AppleDred}"
                 mainclass=      "${mainclass}"
                 jvmversion=     "1.9+"
                 shortname=      "${ant.project.name}"
@@ -100,66 +113,21 @@ provide an interface between OS X and the core of Dred.
       </jarfileset>
 
       
-      <!-- Has no effect on dragging/dropping, so pointless -->
-      <documenttype name=       "Dred text document"
-                    extensions= "*" 
+      <documenttype name=       "Dred editable document"
+                    extensions= "txt java xml tex sty cls scala" 
                     ostypes=    "****" 
-                    role=       "Editor"/>  
-      <!-- -->      
+                    iconFile=   "${ant.project.name}.icns"
+                    role=       "Editor"
+      />  
+                    
     </jarbundler>
+    
+    <echo message="Made ${AppleDred}" />
     
   </target>
    
   
-  <target name="app-std" depends="jar" 
-          description="Build the application using Oracle application bundler and launch stub">
-
-    <taskdef name=      "bundleapp"
-             classpath= "${appbundler.jar}" 
-             classname= "com.oracle.appbundler.AppBundlerTask"/>
-     <bundleapp  outputdirectory= "${basedir}" 
-                name=           "AppleDred-std"
-                displayname=    "AppleDred"
-                mainclassname=  "${mainclass}"
-                identifier=     "org.sufrin.dred.AppleDred"
-                icon=           "${ant.project.name}.icns"
-                copyright=      "${ant.project.name} ${builddate} ${copyright}"
-                shortversion=   "${version}"
-                >
-      
-      <classpath file="build/${ant.project.name}.jar"/>
-
-      <!--
-       <bundledocument extensions="tex,sty,cls,md,java,c,scala,html,xml"
-          icon="${ant.project.name}.icns" 
-          name="Source files"
-          role="editor"
-      />
-      -->
-
-      <!-- The next line packages the entire runtime (>100mb) -->
-      <!-- <runtime dir="/Library/Java/JavaVirtualMachines/jdk1.7.0_17.jdk/Contents/Home/" /> -->
-
-      
-      <option value="-Dapple.laf.useScreenMenuBar=true"/>
-      <option value="-Dapple.awt.brushMetal=true"/>
-      <option value="-Dapple.awt.showGrowBox=true"/>
-      <option value="-Dorg.sufrin.dred.app=true"/>
-
-      <!-- -->
-                      
-    </bundleapp>
-    
-    <!-- Now install the Universal stub: because it sometimes works better than the Oracle stub -->    
-    <!--
-    <copy overwrite="true"
-          file="${basedir}/universalJavaApplicationStub" 
-          todir="${basedir}/${ant.project.name}.app/Contents/MacOS" 
-          />
-    -->
-    
-    
-  </target>
+  
 
   <target name="prepare">
     <mkdir dir="classes"/>
@@ -176,10 +144,10 @@ provide an interface between OS X and the core of Dred.
   </target>
   
   <target name="clean" description="Clean up anything we can rebuild">
-    <delete dir="${ant.project.name}.app" quiet="true"/>
+    <delete dir="${ant.project.name}.app"  quiet="true"/>
     <delete file="${ant.project.name}.dmg" quiet="true"/>
-    <delete dir="build"                   quiet="true"/> 
-    <delete dir="classes"                 quiet="true"/> 
+    <delete dir="build"                    quiet="true"/> 
+    <delete dir="classes"                  quiet="true"/> 
   </target>
 
 </project>
@@ -272,6 +240,8 @@ On github there's a more or less standard Oracle app bundler. I am going to stic
 https://github.com/ome/appbundler
 
 -->
+
+
 
 
 
