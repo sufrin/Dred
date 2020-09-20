@@ -321,7 +321,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
         }
       });
       
-      if (Dred.onMac())
+      //if (Dred.onMac())
       { menu = addMenu("Window");
         bind("doMax");
         bind("doGrow");
@@ -2167,6 +2167,7 @@ public class EditorFrame extends JFrame implements FileDocument.Listener
   }
 
 }
+
 
 
 
