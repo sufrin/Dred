@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>CFBundleName</key>
+    <string>AppleDred</string>
+    <key>CFBundleShortVersionString</key>
+    <string>SVN Revision (none) build.number=65 (17 Nov 2020, 15:38)</string>
+    <key>CFBundleAllowMixedLocalizations</key>
+    <string>false</string>
+    <key>CFBundleInfoDictionaryVersion</key>
+    <string>6.0</string>
+    <key>CFBundleExecutable</key>
+    <string>newJavaApplicationStub</string>
+    <key>CFBundleDevelopmentRegion</key>
+    <string>English</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    <key>CFBundleSignature</key>
+    <string>????</string>
+    <key>CFBundleIconFile</key>
+    <string>AppleDred.icns</string>
+    <key>NSHumanReadableCopyright</key>
+    <string>AppleDred 17 Nov 2020, 15:38 Copyright ©  1994-2017 Bernard Sufrin, Oxford University</string>
+    <key>CFBundleDocumentTypes</key>
+    <array>
+      <dict>
+        <key>CFBundleTypeName</key>
+        <string>Dred editable document</string>
+        <key>CFBundleTypeRole</key>
+        <string>Editor</string>
+        <key>CFBundleTypeIconFile</key>
+        <string>AppleDred.icns</string>
+        <key>CFBundleTypeExtensions</key>
+        <array>
+          <string>txt</string>
+          <string>java</string>
+          <string>xml</string>
+          <string>tex</string>
+          <string>sty</string>
+          <string>cls</string>
+          <string>scala</string>
+          <string>jt</string>
+          <string>jp</string>
+          <string>j</string>
+        </array>
+        <key>CFBundleTypeOSTypes</key>
+        <array>
+          <string>****</string>
+        </array>
+      </dict>
+    </array>
+    <key>JVMMainClassName</key>
+    <string>org.sufrin.dred.Dred</string>
+    <key>JVMOptions</key>
+    <array>
+      <string>-Dorg.sufrin.dred.app=true</string>
+      <string>-Dapple.awt.brushMetal=true</string>
+      <string>-Dapple.laf.useScreenMenuBar=true</string>
+      <string>-Dapple.awt.showGrowBox=true</string>
+    </array>
+  </dict>
+</plist>

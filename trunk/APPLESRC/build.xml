@@ -19,6 +19,7 @@ provide an interface between OS X and the core of Dred.
   <property file="../dredrevision.properties"/>
   <property name="appbundler.jar"       value="./appbundler-1.1.0.jar"/>
   <property name="jarbundler.jar"       value="./jarbundler-3.3.0-forjape.jar"/>
+  <property name="stubFile"             value="universalJavaApplicationStub"/>
   <property name="version"              value="SVN Revision ${subversion.revision} (${builddate})"/>
   <!-- <property name="AppleDred"            value="AppleDred-new"/> -->
   
@@ -31,6 +32,7 @@ provide an interface between OS X and the core of Dred.
           description="Make the app: AppleDred-new (for testing)" >
           <antcall target="makeapp">
                <param name="AppleDred" value="AppleDred-new"/>
+               <param name="stubFile"  value="newJavaApplicationStub"/>
          </antcall>
   </target>
   
@@ -94,11 +96,11 @@ provide an interface between OS X and the core of Dred.
                 verbose=        "true"
                 name=           "${AppleDred}"
                 mainclass=      "${mainclass}"
-                jvmversion=     "1.9+"
+                jvmversion=     "9.1.3+"
                 shortname=      "${ant.project.name}"
                 icon=           "${ant.project.name}.icns"
                 copyright=      "${ant.project.name} ${builddate} ${copyright}"
-                stubfile=       "universalJavaApplicationStub"
+                stubfile=       "${stubFile}"
                 version=        "${version}"
                 workingdirectory="/">
       
@@ -114,7 +116,7 @@ provide an interface between OS X and the core of Dred.
 
       
       <documenttype name=       "Dred editable document"
-                    extensions= "txt java xml tex sty cls scala" 
+                    extensions= "txt java xml tex sty cls scala jt jp j" 
                     ostypes=    "****" 
                     iconFile=   "${ant.project.name}.icns"
                     role=       "Editor"
@@ -240,6 +242,9 @@ On github there's a more or less standard Oracle app bundler. I am going to stic
 https://github.com/ome/appbundler
 
 -->
+
+
+
 
 
 
